@@ -1,0 +1,12 @@
+{
+  "name": "claim-clone-space",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Clone 1: top-down space sandbox (GTA 1/2 in space x Total Annihilation dystopia) for the Claim Avenue concept. Static site, no build step.",
+  "type": "module",
+  "scripts": {
+    "world": "node scripts/gen-world.mjs",
+    "tick": "node scripts/tick.mjs",
+    "serve": "python3 -m http.server 8080"
+  }
+}

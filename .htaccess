@@ -1,0 +1,10 @@
+# Hostinger (LiteSpeed/Apache): never cache the live data files, cache the rest briefly.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(json)$">
+    Header set Cache-Control "no-store"
+  </FilesMatch>
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=300"
+  </FilesMatch>
+</IfModule>
+AddType application/javascript .js .mjs
