@@ -4,6 +4,19 @@ import { KINDS } from './entities.js';
 import { plotRect, plotPad, spineRect, SPRAWL, flyBounds, region, hutRect, hutPad } from './world.js';
 import { mulberry32 } from './rng.js';
 import { PLAYER } from './economy.js';
+import { roofFor, shipSpriteName } from './sprites.js';
+
+// Sprites are optional; every draw below falls back to canvas shapes when one is missing.
+let SPR = null;
+const spr = (name) => (SPR ? SPR.get(name) : null);
+const hashNum = (x, y) => Math.abs(Math.floor(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453));
+const patterns = {};
+function pattern(ctx, name) {
+  if (patterns[name] !== undefined) return patterns[name];
+  const img = spr(name);
+  patterns[name] = img ? ctx.createPattern(img, 'repeat') : null;
+  return patterns[name];
+}
 
 export function shade(hex, f) {
   const n = parseInt(hex.slice(1), 16);
@@ -25,7 +38,9 @@ export function makeStars() {
 export function drawScene(ctx, W, H, cam, scene) {
   const { world, time } = scene;
   ctx.setTransform(scene.dpr, 0, 0, scene.dpr, 0, 0);
-  ctx.imageSmoothingEnabled = false;
+  SPR = scene.sprites || null;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
 
   // backdrop: smog + stars
   ctx.fillStyle = '#060708';
@@ -54,14 +69,23 @@ export function drawScene(ctx, W, H, cam, scene) {
 
   drawGrid(ctx, world, cam, W, H);
 
+  const viewR = Math.hypot(W, H) / 2 / cam.zoom + 100;
   for (const r of scene.deco.rocks) {
+    if (Math.abs(r.x - cam.x) > viewR || Math.abs(r.y - cam.y) > viewR) continue;
     ctx.save();
     ctx.translate(r.x, r.y);
-    ctx.fillStyle = `rgb(${r.shade},${r.shade - 4},${r.shade - 8})`;
-    ctx.beginPath();
-    r.pts.forEach(([px, py], i) => (i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
-    ctx.closePath();
-    ctx.fill();
+    const img = spr(`rock_${(r.shade % 4) + 1}`);
+    if (img) {
+      ctx.rotate((r.x % 628) / 100);
+      const sz = r.r * 2.6;
+      ctx.drawImage(img, -sz / 2, -sz / 2, sz, sz * (img.height / img.width));
+    } else {
+      ctx.fillStyle = `rgb(${r.shade},${r.shade - 4},${r.shade - 8})`;
+      ctx.beginPath();
+      r.pts.forEach(([px, py], i) => (i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
+      ctx.closePath();
+      ctx.fill();
+    }
     ctx.restore();
   }
 
@@ -76,10 +100,16 @@ export function drawScene(ctx, W, H, cam, scene) {
   for (const p of world.plots) {
     const pad = plotPad(world, p);
     const near = scene.nearPlot && scene.nearPlot.id === p.id;
-    ctx.strokeStyle = near ? '#e8c547' : 'rgba(200,180,120,0.25)';
+    const padImg = spr('pad');
+    if (padImg) {
+      ctx.globalAlpha = near ? 1 : 0.55;
+      ctx.drawImage(padImg, pad.x - 22, pad.y - 20, 44, 44 * (padImg.height / padImg.width));
+      ctx.globalAlpha = 1;
+    }
+    ctx.strokeStyle = near ? '#e8c547' : padImg ? 'rgba(0,0,0,0)' : 'rgba(200,180,120,0.25)';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(pad.x, pad.y, 18, 0, Math.PI * 2);
+    ctx.arc(pad.x, pad.y, near && padImg ? 26 : 18, 0, Math.PI * 2);
     ctx.stroke();
     if (near) {
       ctx.fillStyle = '#e8c547';
@@ -175,12 +205,26 @@ function drawGrid(ctx, world, cam, W, H) {
 
 function drawSpine(ctx, world, time) {
   const r = spineRect(world);
-  ctx.fillStyle = '#17191c';
-  ctx.fillRect(r.x, r.y, r.w, r.h);
-  ctx.fillStyle = '#22252a';
-  for (let x = r.x; x < r.x + r.w; x += 40) ctx.fillRect(x, r.y + 10, 30, r.h - 20);
-  ctx.fillStyle = '#2c2f33';
-  ctx.fillRect(r.x, -4, r.w, 8);
+  const tiles = [spr('spine_plain'), spr('spine_beacon'), spr('spine_cross')];
+  if (tiles[0]) {
+    // corridor tiles run vertically in the art; the Spine runs east-west, so rotate them
+    const t = r.h;
+    for (let x = r.x, i = 0; x < r.x + r.w; x += t, i++) {
+      const img = (i % 7 === 3 && tiles[2]) || (i % 5 === 0 && tiles[1]) || tiles[0];
+      ctx.save();
+      ctx.translate(x + t / 2, 0);
+      ctx.rotate(Math.PI / 2);
+      ctx.drawImage(img, -t / 2, -t / 2, t, Math.min(t, r.x + r.w - x));
+      ctx.restore();
+    }
+  } else {
+    ctx.fillStyle = '#17191c';
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = '#22252a';
+    for (let x = r.x; x < r.x + r.w; x += 40) ctx.fillRect(x, r.y + 10, 30, r.h - 20);
+    ctx.fillStyle = '#2c2f33';
+    ctx.fillRect(r.x, -4, r.w, 8);
+  }
   // hazard edges
   for (let x = r.x, i = 0; x < r.x + r.w; x += 16, i++) {
     ctx.fillStyle = i % 2 ? '#1a1a1a' : '#b8962e';
@@ -202,8 +246,12 @@ function drawSpine(ctx, world, time) {
 function drawPlot(ctx, world, p, cam, time, scene) {
   const r = plotRect(world, p);
   if (!p.owner) {
-    ctx.fillStyle = '#131416';
-    ctx.fillRect(r.x, r.y, r.w, r.h);
+    const lot = spr('lot_empty');
+    if (lot) ctx.drawImage(lot, r.x, r.y, r.w, r.h);
+    else {
+      ctx.fillStyle = '#131416';
+      ctx.fillRect(r.x, r.y, r.w, r.h);
+    }
     ctx.strokeStyle = 'rgba(184,150,46,0.35)';
     ctx.setLineDash([8, 6]);
     ctx.lineWidth = 2;
@@ -253,14 +301,28 @@ function drawPlot(ctx, world, p, cam, time, scene) {
   const [rx, ry] = roof[0];
   const rw = roof[1][0] - roof[0][0];
   const rh = roof[3][1] - roof[0][1];
-  ctx.fillStyle = shade(color, 0.85);
-  ctx.fillRect(rx, ry, rw, rh);
-  ctx.fillStyle = shade(color, 0.65);
-  ctx.fillRect(rx + 8, ry + 8, rw - 16, rh - 16);
-  // rooftop junk
-  ctx.fillStyle = shade(color, 0.5);
-  ctx.fillRect(rx + rw - 34, ry + 12, 18, 14);
-  ctx.fillRect(rx + 14, ry + rh - 26, 24, 12);
+  const roofImg = spr(roofFor(color));
+  if (roofImg) {
+    // mirror every other lot so a corp's towers don't all look identical
+    if (p.id % 2) {
+      ctx.save();
+      ctx.translate(rx + rw, ry);
+      ctx.scale(-1, 1);
+      ctx.drawImage(roofImg, 0, 0, rw, rh);
+      ctx.restore();
+    } else ctx.drawImage(roofImg, rx, ry, rw, rh);
+    ctx.fillStyle = 'rgba(8,8,9,0.62)';
+    ctx.fillRect(rx + 10, ry + rh / 2 - 17, rw - 20, 36);
+  } else {
+    ctx.fillStyle = shade(color, 0.85);
+    ctx.fillRect(rx, ry, rw, rh);
+    ctx.fillStyle = shade(color, 0.65);
+    ctx.fillRect(rx + 8, ry + 8, rw - 16, rh - 16);
+    // rooftop junk
+    ctx.fillStyle = shade(color, 0.5);
+    ctx.fillRect(rx + rw - 34, ry + 12, 18, 14);
+    ctx.fillRect(rx + 14, ry + rh - 26, 24, 12);
+  }
 
   const mine = p.owner === PLAYER;
   if (mine) {
@@ -295,7 +357,12 @@ function drawDrop(ctx, d, time, progress) {
   ctx.beginPath();
   ctx.arc(0, 0, 60 * pulse, 0, Math.PI * 2);
   ctx.fill();
-  if (/turd|dung/.test(d.noun)) {
+  const DROP_SPR = { 'bear turd': 'drop_turd', 'whale dung': 'drop_whale', 'drone wreck': 'drop_drone', 'cargo spill': 'drop_cargo', 'slag vent': 'drop_slag' };
+  const dimg = spr(DROP_SPR[d.noun]);
+  if (dimg) {
+    const sz = 58 * pulse;
+    ctx.drawImage(dimg, -sz / 2, -sz / 2, sz, sz * (dimg.height / dimg.width));
+  } else if (/turd|dung/.test(d.noun)) {
     // the turd, rendered with the dignity it deserves
     ctx.fillStyle = '#6b4a2b';
     [[0, 8, 16, 7], [0, 0, 12, 6], [0, -7, 8, 5], [2, -12, 3, 3]].forEach(([x, y, rx, ry]) => {
@@ -328,10 +395,29 @@ function drawDrop(ctx, d, time, progress) {
   ctx.restore();
 }
 
+const SHIP_LEN = { skiff: 42, hauler: 60, interceptor: 38, eva: 22 };
+
 function drawShip(ctx, s, scene, time) {
   const spec = KINDS[s.kind];
   const corp = s.corp ? scene.corpsById[s.corp] : null;
   const col = corp ? corp.color : spec.color;
+  const name = shipSpriteName(s);
+  const img = spr(name);
+  if (img) {
+    // art faces right with a baked flame; show the flame only while thrusting
+    const meta = SPR.meta(name) || {};
+    const cut = s.thrusting ? 0 : meta.cut || 0;
+    const bodyW = img.width - (meta.cut || 0);
+    const sc = SHIP_LEN[s.kind] / bodyW;
+    const cx = ((meta.cut || 0) + img.width) / 2;
+    ctx.save();
+    ctx.translate(s.x, s.y);
+    ctx.rotate(s.angle);
+    ctx.drawImage(img, cut, 0, img.width - cut, img.height, (cut - cx) * sc, (-img.height / 2) * sc, (img.width - cut) * sc, img.height * sc);
+    ctx.restore();
+    drawShipMarks(ctx, s, scene, spec);
+    return;
+  }
   ctx.save();
   ctx.translate(s.x, s.y);
   ctx.rotate(s.angle);
@@ -392,6 +478,10 @@ function drawShip(ctx, s, scene, time) {
     ctx.fillRect(3, -2, 6, 4);
   }
   ctx.restore();
+  drawShipMarks(ctx, s, scene, spec);
+}
+
+function drawShipMarks(ctx, s, scene, spec) {
   if (s === scene.me && s.kind !== 'eva') {
     ctx.strokeStyle = 'rgba(232,197,71,0.6)';
     ctx.lineWidth = 1.5;
@@ -413,6 +503,11 @@ function drawCorridor(ctx, world, time) {
   const on = Math.floor(time / 500) % 2 === 0;
   for (let x = start; x < end; x += 1800) {
     for (const y of [-260, 260]) {
+      const b = spr(on ? 'buoy_on' : 'buoy_off');
+      if (b) {
+        ctx.drawImage(b, x - 18, y - 22, 36, 36 * (b.height / b.width));
+        continue;
+      }
       ctx.fillStyle = on ? '#e8a33a' : '#5a3d14';
       ctx.fillRect(x - 5, y - 5, 10, 10);
       ctx.strokeStyle = 'rgba(232,163,58,0.25)';
@@ -434,13 +529,19 @@ function drawCorridor(ctx, world, time) {
 function drawSprawl(ctx, scene, time) {
   const { sprawl } = scene;
   // ground: a scab of slag and junk floating in the void
-  ctx.fillStyle = '#17110c';
+  ctx.fillStyle = pattern(ctx, 'ground_slag') || '#17110c';
   ctx.beginPath();
   ctx.ellipse(SPRAWL.x, SPRAWL.y, SPRAWL.radius, SPRAWL.radius * 0.85, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = '#1e1610';
+  ctx.fillStyle = pattern(ctx, 'ground_mud') || '#1e1610';
+  ctx.globalAlpha = 0.7;
   ctx.beginPath();
   ctx.ellipse(SPRAWL.x - 300, SPRAWL.y + 200, SPRAWL.radius * 0.8, SPRAWL.radius * 0.6, 0.4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = 'rgba(10,8,6,0.35)'; // darken the tiles so huts read on top
+  ctx.beginPath();
+  ctx.ellipse(SPRAWL.x, SPRAWL.y, SPRAWL.radius, SPRAWL.radius * 0.85, 0, 0, Math.PI * 2);
   ctx.fill();
   // dirt tracks between rows/cols
   ctx.strokeStyle = 'rgba(90,70,45,0.35)';
@@ -463,7 +564,18 @@ function drawSprawl(ctx, scene, time) {
   ctx.fillText('RESIDENTIAL · NO CORPS · NO LOGOS · NO BRANDING · BUILD WITH SCRAP', SPRAWL.x, SPRAWL.y - 1420);
 
   // burn barrels
-  for (const f of sprawl.fires) {
+  for (const pr of sprawl.props || []) {
+    const img = spr(pr.kind);
+    if (!img) continue;
+    const sz = pr.kind === 'fence' || pr.kind === 'laundry' ? 70 : 56;
+    ctx.save();
+    ctx.translate(pr.x, pr.y);
+    if (pr.flip) ctx.scale(-1, 1);
+    ctx.drawImage(img, -sz / 2, -sz / 2, sz, sz * (img.height / img.width));
+    ctx.restore();
+  }
+
+  for (const [fi, f] of sprawl.fires.entries()) {
     const flick = 0.7 + Math.random() * 0.3;
     const g = ctx.createRadialGradient(f.x, f.y, 2, f.x, f.y, 70 * flick);
     g.addColorStop(0, 'rgba(255,150,50,0.5)');
@@ -472,10 +584,14 @@ function drawSprawl(ctx, scene, time) {
     ctx.beginPath();
     ctx.arc(f.x, f.y, 70 * flick, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = '#3a2a1a';
-    ctx.fillRect(f.x - 6, f.y - 6, 12, 12);
-    ctx.fillStyle = '#ff9a3a';
-    ctx.fillRect(f.x - 3, f.y - 4, 6, 4);
+    const barrel = spr(`barrel_${(Math.floor(time / 140) + fi) % 3}`);
+    if (barrel) ctx.drawImage(barrel, f.x - 13, f.y - 18, 26, 26 * (barrel.height / barrel.width));
+    else {
+      ctx.fillStyle = '#3a2a1a';
+      ctx.fillRect(f.x - 6, f.y - 6, 12, 12);
+      ctx.fillStyle = '#ff9a3a';
+      ctx.fillRect(f.x - 3, f.y - 4, 6, 4);
+    }
   }
 
   for (const site of sprawl.sites) {
@@ -498,7 +614,7 @@ function drawSprawl(ctx, scene, time) {
       ctx.fillStyle = occ.mine ? '#e8c547' : 'rgba(220,200,150,0.55)';
       ctx.font = '10px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(`${site.id} · ${occ.mine ? 'YOU' : occ.who}`, site.x, site.y - hutRect(site, occ.tier).h / 2 - 8);
+      ctx.fillText(`${site.id} · ${occ.mine ? 'YOU' : occ.who}`, site.x, site.y - hutRect(site, occ.tier).w * 0.72 - 6);
     }
     if (near) {
       ctx.strokeStyle = '#e8c547';
@@ -516,6 +632,18 @@ function drawSprawl(ctx, scene, time) {
 // Huts are deliberately generic: tier decides the shape, nobody decides the logo.
 function drawHut(ctx, site, tier, mine, time) {
   const r = hutRect(site, tier);
+  const img = spr(`hut${tier}_${hashNum(site.x, site.y) % 2 ? 'a' : 'b'}`);
+  if (img) {
+    const w = r.w * 1.3;
+    const h = w * (img.height / img.width);
+    ctx.drawImage(img, site.x - w / 2, site.y - h / 2, w, h);
+    if (mine) {
+      ctx.strokeStyle = 'rgba(232,197,71,0.85)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(site.x - w / 2 - 3, site.y - h / 2 - 3, w + 6, h + 6);
+    }
+    return;
+  }
   ctx.fillStyle = 'rgba(0,0,0,0.4)';
   ctx.fillRect(r.x + 5, r.y + 5, r.w, r.h);
   if (tier === 0) {

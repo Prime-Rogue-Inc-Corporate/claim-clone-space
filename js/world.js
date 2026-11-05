@@ -103,7 +103,16 @@ export function sprawlSites(world) {
     }
   }
   const fires = Array.from({ length: 14 }, () => ({ x: SPRAWL.x + (rng() - 0.5) * 3000, y: SPRAWL.y + (rng() - 0.5) * 2400 }));
-  return { sites, fires };
+  // street clutter: sits on the tracks between huts, purely decorative
+  const KINDS = ['junk', 'junk', 'dish', 'laundry', 'planter', 'fence'];
+  const props = [];
+  for (let i = -5; i <= 5; i++) {
+    for (let j = -4; j <= 4; j++) {
+      if (rng() > 0.32) continue;
+      props.push({ x: SPRAWL.x + i * 300 + (rng() - 0.5) * 30, y: SPRAWL.y + j * 300 + 150 + (rng() - 0.5) * 60, kind: pick(rng, KINDS), flip: rng() < 0.5 });
+    }
+  }
+  return { sites, fires, props };
 }
 
 export const HUT_SIZE = [ [40, 30], [54, 40], [68, 52] ];

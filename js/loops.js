@@ -14,7 +14,7 @@ const RACE = [
 ];
 const RING = 70;
 
-export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust }) {
+export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites }) {
   const saved = load();
   const persist = { bestLap: null, raceDay: '', jobsDone: 0, escapes: 0, ...saved };
   const save = () => {
@@ -98,6 +98,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
 
   function addHeat(n, why, now) {
     const before = heat.level;
+    if (before === 0) heat.nextSpawn = now + 2500; // a head start: the first drone launches after 2.5s
     heat.level = Math.min(5, heat.level + n);
     heat.peak = Math.max(heat.peak, heat.level);
     heat.calmSince = now;
@@ -106,7 +107,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
 
   function spawnDrone(body) {
     const a = rng() * Math.PI * 2;
-    heat.drones.push({ x: body.x + Math.cos(a) * 1000, y: body.y + Math.sin(a) * 1000, vx: 0, vy: 0, angle: a + Math.PI });
+    heat.drones.push({ x: body.x + Math.cos(a) * 1500, y: body.y + Math.sin(a) * 1500, vx: 0, vy: 0, angle: a + Math.PI });
   }
 
   function updateHeat(dt, now, body) {
@@ -122,7 +123,8 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       heat.nextSpawn = now + 1500;
     }
     const k = dt * 60;
-    const max = 6 + heat.level * 1.1;
+    // 1 star: slower than a skiff. 3 stars: a boosting skiff just keeps ahead. 5: only an interceptor escapes.
+    const max = 5.6 + heat.level * 0.85;
     let anyClose = false;
     for (const d of heat.drones) {
       const lead = 20;
@@ -296,10 +298,17 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         }
       });
       // drones
+      const droneImg = sprites?.get('drone');
       for (const d of heat.drones) {
         ctx.save();
         ctx.translate(d.x, d.y);
         ctx.rotate(d.angle);
+        if (droneImg) {
+          const w = 40, h = w * (droneImg.height / droneImg.width);
+          ctx.drawImage(droneImg, -w * 0.6, -h / 2, w, h);
+          ctx.restore();
+          continue;
+        }
         ctx.fillStyle = '#c0392b';
         ctx.beginPath();
         ctx.moveTo(12, 0); ctx.lineTo(0, -9); ctx.lineTo(-10, 0); ctx.lineTo(0, 9);

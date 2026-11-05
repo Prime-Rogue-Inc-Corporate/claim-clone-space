@@ -58,6 +58,7 @@ jobs:
             **/.git*/**
             .github/**
             scripts/**
+            assets/src/**
             package.json
             README.md
             **/node_modules/**

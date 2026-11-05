@@ -22,11 +22,12 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #banner::before { content: ""; position: absolute; inset: 2px; background: #b8962e; z-index: -1; }
 
 #hud {
-  position: fixed; top: 12px; left: 12px; width: 260px; padding: 10px 12px;
+  position: fixed; top: 12px; left: 12px; width: 290px; padding: 10px 12px;
   background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--amber);
 }
 #hud .row { display: flex; gap: 8px; align-items: baseline; }
-#hud .k { width: 70px; color: var(--dim); font-size: 11px; letter-spacing: 0.1em; }
+#hud .k img { width: 16px; height: 16px; vertical-align: -3px; margin-right: 5px; }
+#hud .k { width: 92px; color: var(--dim); font-size: 11px; letter-spacing: 0.1em; }
 #hud .v { font-weight: bold; font-size: 15px; min-width: 64px; }
 #hud .tag { color: var(--dim); font-size: 10px; }
 #hud .small { color: var(--dim); font-size: 11px; margin-top: 4px; }
