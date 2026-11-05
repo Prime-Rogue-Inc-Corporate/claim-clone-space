@@ -1,7 +1,7 @@
 // Canvas renderer. Top-down GTA1/2 trick: buildings are footprints whose roofs are
 // pushed away from the camera by their height, so towers lean as you fly past.
 import { KINDS } from './entities.js';
-import { plotRect, plotPad, spineRect } from './world.js';
+import { plotRect, plotPad, spineRect, SPRAWL, flyBounds, region, hutRect, hutPad } from './world.js';
 import { mulberry32 } from './rng.js';
 import { PLAYER } from './economy.js';
 
@@ -66,6 +66,8 @@ export function drawScene(ctx, W, H, cam, scene) {
   }
 
   drawSpine(ctx, world, time);
+  drawCorridor(ctx, world, time);
+  if (cam.x > SPRAWL.x - SPRAWL.radius - 2500) drawSprawl(ctx, scene, time);
 
   // buildings, far-to-near so near walls overlap correctly
   const plots = [...world.plots].sort((a, b) => Math.abs(b.x - cam.x) - Math.abs(a.x - cam.x));
@@ -95,6 +97,8 @@ export function drawScene(ctx, W, H, cam, scene) {
     ctx.fillRect(p.x - 1.5, p.y - 1.5, 3, 3);
   }
   ctx.globalAlpha = 1;
+
+  scene.extraWorld?.(ctx);
 
   for (const s of scene.ships) drawShip(ctx, s, scene, time);
   if (scene.pilot) drawShip(ctx, scene.pilot, scene, time);
@@ -150,9 +154,18 @@ function drawGrid(ctx, world, cam, W, H) {
     ctx.lineTo(b.maxX, y);
   }
   ctx.stroke();
+  const fb = flyBounds(world);
   ctx.strokeStyle = 'rgba(180,60,40,0.4)';
   ctx.lineWidth = 6;
-  ctx.strokeRect(b.minX, b.minY, b.maxX - b.minX, b.maxY - b.minY);
+  ctx.strokeRect(fb.minX, fb.minY, fb.maxX - fb.minX, fb.maxY - fb.minY);
+  ctx.strokeStyle = 'rgba(184,150,46,0.25)';
+  ctx.setLineDash([30, 20]);
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(b.maxX, b.minY);
+  ctx.lineTo(b.maxX, b.maxY);
+  ctx.stroke();
+  ctx.setLineDash([]);
   ctx.fillStyle = 'rgba(160,120,80,0.18)';
   ctx.font = 'bold 48px monospace';
   ctx.textAlign = 'left';
@@ -393,7 +406,222 @@ function drawShip(ctx, s, scene, time) {
   }
 }
 
+// Buoys across the void so you always know which way home is.
+function drawCorridor(ctx, world, time) {
+  const start = world.bounds.maxX + 900;
+  const end = SPRAWL.x - SPRAWL.radius - 300;
+  const on = Math.floor(time / 500) % 2 === 0;
+  for (let x = start; x < end; x += 1800) {
+    for (const y of [-260, 260]) {
+      ctx.fillStyle = on ? '#e8a33a' : '#5a3d14';
+      ctx.fillRect(x - 5, y - 5, 10, 10);
+      ctx.strokeStyle = 'rgba(232,163,58,0.25)';
+      ctx.beginPath();
+      ctx.arc(x, y, 16, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.fillStyle = 'rgba(232,200,140,0.5)';
+    ctx.font = 'bold 18px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`THE SPRAWL ${((SPRAWL.x - x) / 6000).toFixed(1)} KM →`, x, -290);
+    ctx.fillText(`← THE SPINE ${((x - world.bounds.maxX) / 6000 + 0.4).toFixed(1)} KM`, x, 300);
+  }
+  ctx.fillStyle = 'rgba(232,200,140,0.35)';
+  ctx.font = 'bold 28px monospace';
+  ctx.fillText('CITY LIMIT · CORP JURISDICTION ENDS', world.bounds.maxX + 300, -420);
+}
+
+function drawSprawl(ctx, scene, time) {
+  const { sprawl } = scene;
+  // ground: a scab of slag and junk floating in the void
+  ctx.fillStyle = '#17110c';
+  ctx.beginPath();
+  ctx.ellipse(SPRAWL.x, SPRAWL.y, SPRAWL.radius, SPRAWL.radius * 0.85, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#1e1610';
+  ctx.beginPath();
+  ctx.ellipse(SPRAWL.x - 300, SPRAWL.y + 200, SPRAWL.radius * 0.8, SPRAWL.radius * 0.6, 0.4, 0, Math.PI * 2);
+  ctx.fill();
+  // dirt tracks between rows/cols
+  ctx.strokeStyle = 'rgba(90,70,45,0.35)';
+  ctx.lineWidth = 26;
+  ctx.beginPath();
+  for (let i = -5; i <= 5; i++) {
+    ctx.moveTo(SPRAWL.x + i * 300, SPRAWL.y - 1300);
+    ctx.lineTo(SPRAWL.x + i * 300, SPRAWL.y + 1300);
+  }
+  for (let j = -4; j <= 4; j++) {
+    ctx.moveTo(SPRAWL.x - 1600, SPRAWL.y + j * 300);
+    ctx.lineTo(SPRAWL.x + 1600, SPRAWL.y + j * 300);
+  }
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(232,200,140,0.55)';
+  ctx.font = 'bold 30px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('THE SPRAWL', SPRAWL.x, SPRAWL.y - 1450);
+  ctx.font = 'bold 15px monospace';
+  ctx.fillText('RESIDENTIAL · NO CORPS · NO LOGOS · NO BRANDING · BUILD WITH SCRAP', SPRAWL.x, SPRAWL.y - 1420);
+
+  // burn barrels
+  for (const f of sprawl.fires) {
+    const flick = 0.7 + Math.random() * 0.3;
+    const g = ctx.createRadialGradient(f.x, f.y, 2, f.x, f.y, 70 * flick);
+    g.addColorStop(0, 'rgba(255,150,50,0.5)');
+    g.addColorStop(1, 'rgba(255,90,20,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, 70 * flick, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#3a2a1a';
+    ctx.fillRect(f.x - 6, f.y - 6, 12, 12);
+    ctx.fillStyle = '#ff9a3a';
+    ctx.fillRect(f.x - 3, f.y - 4, 6, 4);
+  }
+
+  for (const site of sprawl.sites) {
+    const occ = scene.hutOf(site);
+    const near = scene.nearHut === site;
+    const pad = hutPad(site);
+    if (!occ) {
+      const r = hutRect(site, 0);
+      ctx.strokeStyle = near ? '#e8c547' : 'rgba(184,150,46,0.3)';
+      ctx.setLineDash([5, 5]);
+      ctx.lineWidth = 2;
+      ctx.strokeRect(r.x, r.y, r.w, r.h);
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(220,200,150,0.45)';
+      ctx.font = '10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${site.id} · VACANT`, site.x, site.y + 4);
+    } else {
+      drawHut(ctx, site, occ.tier, occ.mine, time);
+      ctx.fillStyle = occ.mine ? '#e8c547' : 'rgba(220,200,150,0.55)';
+      ctx.font = '10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${site.id} · ${occ.mine ? 'YOU' : occ.who}`, site.x, site.y - hutRect(site, occ.tier).h / 2 - 8);
+    }
+    if (near) {
+      ctx.strokeStyle = '#e8c547';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(pad.x, pad.y, 14, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = '#e8c547';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText('E', pad.x, pad.y + 4);
+    }
+  }
+}
+
+// Huts are deliberately generic: tier decides the shape, nobody decides the logo.
+function drawHut(ctx, site, tier, mine, time) {
+  const r = hutRect(site, tier);
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.fillRect(r.x + 5, r.y + 5, r.w, r.h);
+  if (tier === 0) {
+    ctx.fillStyle = '#5a3b26';
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = '#6e4a30';
+    for (let x = r.x + 2; x < r.x + r.w; x += 6) ctx.fillRect(x, r.y, 3, r.h);
+    ctx.fillStyle = '#2f4a5a'; // tarp
+    ctx.fillRect(r.x + 4, r.y + 4, r.w * 0.45, r.h * 0.5);
+  } else if (tier === 1) {
+    ctx.fillStyle = '#6b5a45';
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = '#7d6a52';
+    ctx.fillRect(r.x + 4, r.y + 4, r.w - 8, r.h - 8);
+    ctx.fillStyle = '#3a2f24';
+    ctx.fillRect(site.x - 5, r.y + r.h - 10, 10, 10);
+    ctx.fillStyle = '#4a4a4a'; // chimney
+    ctx.fillRect(r.x + r.w - 14, r.y + 4, 8, 8);
+    ctx.fillStyle = 'rgba(160,160,160,0.25)';
+    ctx.beginPath();
+    ctx.arc(r.x + r.w - 10 + Math.sin(time / 400) * 3, r.y - 6, 7, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.fillStyle = '#4b4f52';
+    ctx.fillRect(r.x, r.y, r.w, r.h);
+    ctx.fillStyle = '#5c6165';
+    ctx.fillRect(r.x + 6, r.y + 6, r.w - 12, r.h - 12);
+    ctx.fillStyle = '#7a6a48'; // sandbags
+    for (let x = r.x - 4; x < r.x + r.w + 4; x += 10) ctx.fillRect(x, r.y + r.h, 8, 5);
+    ctx.strokeStyle = '#999';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(r.x + 12, r.y + 12);
+    ctx.lineTo(r.x + 12, r.y - 14);
+    ctx.stroke();
+    ctx.fillStyle = Math.floor(time / 700) % 2 ? '#ff3b1f' : '#4a140c';
+    ctx.fillRect(r.x + 10, r.y - 17, 4, 4);
+  }
+  if (mine) {
+    ctx.strokeStyle = 'rgba(232,197,71,0.8)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(r.x - 3, r.y - 3, r.w + 6, r.h + 6);
+  }
+}
+
 export function drawMinimap(mctx, MW, MH, scene) {
+  const reg = region(scene.world, scene.me.x);
+  if (reg === 'void') return drawMinimapLong(mctx, MW, MH, scene);
+  if (reg === 'sprawl') return drawMinimapSprawl(mctx, MW, MH, scene);
+  return drawMinimapCity(mctx, MW, MH, scene);
+}
+
+function drawMinimapLong(mctx, MW, MH, scene) {
+  const { world, me } = scene;
+  const fb = flyBounds(world);
+  const tx = (x) => ((x - fb.minX) / (fb.maxX - fb.minX)) * MW;
+  const ty = (y) => ((y - fb.minY) / (fb.maxY - fb.minY)) * MH;
+  mctx.fillStyle = 'rgba(8,9,10,0.92)';
+  mctx.fillRect(0, 0, MW, MH);
+  mctx.fillStyle = '#3a3d42';
+  mctx.fillRect(tx(world.bounds.minX), ty(-200), tx(world.bounds.maxX) - tx(world.bounds.minX), ty(200) - ty(-200));
+  mctx.fillStyle = '#3a2a1c';
+  mctx.fillRect(tx(SPRAWL.x - SPRAWL.radius), ty(-1800), tx(SPRAWL.x + SPRAWL.radius) - tx(SPRAWL.x - SPRAWL.radius), ty(1800) - ty(-1800));
+  mctx.fillStyle = '#8f8670';
+  mctx.font = '10px monospace';
+  mctx.textAlign = 'left';
+  mctx.fillText('SPINE', 4, 14);
+  mctx.textAlign = 'right';
+  mctx.fillText('SPRAWL', MW - 4, 14);
+  mctx.textAlign = 'center';
+  mctx.fillText(`${((SPRAWL.x - me.x) / 6000).toFixed(1)} km to Sprawl`, MW / 2, MH - 8);
+  mctx.fillStyle = '#fff';
+  mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
+}
+
+function drawMinimapSprawl(mctx, MW, MH, scene) {
+  const { me } = scene;
+  const span = SPRAWL.radius * 2.4;
+  const s = MW / span;
+  const tx = (x) => MW / 2 + (x - SPRAWL.x) * s;
+  const ty = (y) => MH / 2 + (y - SPRAWL.y) * s;
+  mctx.fillStyle = 'rgba(8,9,10,0.92)';
+  mctx.fillRect(0, 0, MW, MH);
+  mctx.fillStyle = '#2a1f16';
+  mctx.beginPath();
+  mctx.ellipse(tx(SPRAWL.x), ty(SPRAWL.y), SPRAWL.radius * s, SPRAWL.radius * 0.85 * s, 0, 0, Math.PI * 2);
+  mctx.fill();
+  for (const site of scene.sprawl.sites) {
+    const occ = scene.hutOf(site);
+    if (!occ) {
+      mctx.strokeStyle = 'rgba(184,150,46,0.5)';
+      mctx.strokeRect(tx(site.x) - 1.5, ty(site.y) - 1.5, 3, 3);
+    } else {
+      mctx.fillStyle = occ.mine ? '#e8c547' : '#6b5a45';
+      mctx.fillRect(tx(site.x) - 2, ty(site.y) - 2, 4, 4);
+    }
+  }
+  mctx.fillStyle = '#8f8670';
+  mctx.font = '10px monospace';
+  mctx.textAlign = 'left';
+  mctx.fillText('← SPINE', 4, 14);
+  mctx.fillStyle = '#fff';
+  mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
+}
+
+function drawMinimapCity(mctx, MW, MH, scene) {
   const { world, me } = scene;
   const b = world.bounds;
   const sx = MW / (b.maxX - b.minX);
@@ -435,6 +663,7 @@ export function drawMinimap(mctx, MW, MH, scene) {
   mctx.beginPath();
   mctx.arc(tx(me.x), ty(me.y), scene.sight * sx, 0, Math.PI * 2);
   mctx.stroke();
+  scene.extraMinimap?.(mctx, tx, ty);
   if (scene.waypoint) {
     mctx.strokeStyle = '#ff3b1f';
     mctx.beginPath();

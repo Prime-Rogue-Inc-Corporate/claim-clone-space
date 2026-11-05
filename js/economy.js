@@ -43,6 +43,7 @@ export function createEconomy(world) {
     brandConsent: false,
     claimedDrops: {},
     overrides: {},
+    hut: null,
     ...saved,
   };
 
@@ -155,6 +156,50 @@ export function createEconomy(world) {
     return { ok: true };
   }
 
+  // Game-only rewards (jobs, races, escapes). Scrap + XP, nothing with outside value.
+  function reward(amount) {
+    const before = levelFor(state.xp);
+    const n = Math.max(1, Math.round(amount));
+    state.scrap += n;
+    state.xp += n;
+    save();
+    const after = levelFor(state.xp);
+    return { amount: n, levelUp: after > before ? after : null };
+  }
+
+  function fine(amount) {
+    state.scrap = Math.max(0, state.scrap - Math.round(amount));
+    save();
+  }
+
+  // ---- The Sprawl: huts built with scrap only. Free to anyone who plays. Never branded. ----
+  const HUT_TIERS = [
+    { name: 'Scrap shack', cost: 150 },
+    { name: 'Hab hut', cost: 300 },
+    { name: 'Bunker', cost: 600 },
+  ];
+
+  function buildHut(siteId) {
+    if (state.hut) return { ok: false, reason: `You already have a hut (${state.hut.site}). One per pilot.` };
+    const cost = HUT_TIERS[0].cost;
+    if (state.scrap < cost) return { ok: false, reason: `Need ${cost} scrap. You have ${state.scrap}.` };
+    state.scrap -= cost; // spends scrap only; XP is kept
+    state.hut = { site: siteId, tier: 0, built: Date.now() };
+    save();
+    return { ok: true };
+  }
+
+  function upgradeHut() {
+    if (!state.hut) return { ok: false, reason: 'No hut.' };
+    const next = HUT_TIERS[state.hut.tier + 1];
+    if (!next) return { ok: false, reason: 'Already a bunker. This is as good as it gets out here.' };
+    if (state.scrap < next.cost) return { ok: false, reason: `Need ${next.cost} scrap. You have ${state.scrap}.` };
+    state.scrap -= next.cost;
+    state.hut.tier++;
+    save();
+    return { ok: true };
+  }
+
   function claimDrop(drop, multiplier = 1) {
     if (state.claimedDrops[drop.key]) return null;
     const before = levelFor(state.xp);
@@ -200,6 +245,11 @@ export function createEconomy(world) {
     takeover,
     brand,
     claimDrop,
+    reward,
+    fine,
+    HUT_TIERS,
+    buildHut,
+    upgradeHut,
     npcTick,
     save,
     reset,

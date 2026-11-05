@@ -1,6 +1,7 @@
 import { mulberry32 } from './rng.js';
 import { createEconomy, takeoverPrice, buildPrice, levelFor, xpForLevel, sightRadius, PLAYER } from './economy.js';
-import { solids, collide, plotPad, sectorName, dropsForWindow, decorations, DROP_WINDOW_MS } from './world.js';
+import { solids, collide, plotPad, sectorName, dropsForWindow, decorations, DROP_WINDOW_MS, flyBounds, sprawlSites, hutRect, hutPad, region } from './world.js';
+import { createLoops } from './loops.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -34,8 +35,17 @@ function start(world, bulletin) {
   const econ = createEconomy(world);
   const S = econ.state;
   const rng = mulberry32((Date.now() & 0xffffffff) >>> 0);
-  const rects = () => solids(world); // geometry changes when lots are built
+  // ---- the Sprawl ----
+  const sprawl = sprawlSites(world);
+  const hutOf = (site) => {
+    if (S.hut && S.hut.site === site.id) return { tier: S.hut.tier, mine: true };
+    if (site.squatter) return { tier: site.npcTier, mine: false, who: site.squatter.toUpperCase() };
+    return null;
+  };
+  const hutRects = () => sprawl.sites.filter(hutOf).map((s) => hutRect(s, hutOf(s).tier));
+  const rects = () => [...solids(world), ...hutRects()]; // geometry changes when lots/huts are built
   let solidCache = rects();
+  const FLY = flyBounds(world);
 
   const canvas = $('game');
   const ctx = canvas.getContext('2d');
@@ -52,7 +62,9 @@ function start(world, bulletin) {
   resize();
 
   // ---- entities ----
-  const myShip = makeShip('skiff', 0, 640, -Math.PI / 2);
+  const homeSite = S.hut && sprawl.sites.find((s) => s.id === S.hut.site);
+  const spawn = homeSite ? { x: hutPad(homeSite).x, y: hutPad(homeSite).y + 60, a: -Math.PI } : { x: 0, y: 640, a: -Math.PI / 2 };
+  const myShip = makeShip('skiff', spawn.x, spawn.y, spawn.a);
   const ships = [myShip, ...world.parked.map((p) => makeShip(p.kind, p.x, p.y, p.angle)), ...makeTraffic(rng, world.corps, 12)];
   const player = { mode: 'ship', ship: myShip, eva: null };
   const me = () => (player.mode === 'ship' ? player.ship : player.eva);
@@ -102,6 +114,8 @@ function start(world, bulletin) {
 
   $('bulletin').innerHTML = `<b>CORP BULLETIN ${esc(bulletin.day)}</b> · ${esc(bulletin.event.headline)}${bulletin.event.dropMultiplier !== 1 ? ` · drops ×${bulletin.event.dropMultiplier}` : ''}`;
 
+  const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust });
+
   // ---- drops ----
   let windowIndex = -1;
   let drops = [];
@@ -124,6 +138,7 @@ function start(world, bulletin) {
 
   // ---- interactions ----
   let nearPlot = null;
+  let nearHut = null;
   let nearDrop = null;
   let boardable = null;
 
@@ -131,7 +146,21 @@ function start(world, bulletin) {
     if (k === 'h') return openHelp();
     if (k === 'tab') return openLedger();
     if (k === 'f') return toggleBoard();
+    if (k === 'x') return loops.onKey('x', performance.now());
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
+    if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
+  }
+
+  // Busted by Corp drones: ship impounded, you're on EVA.
+  function bust() {
+    const body = me();
+    if (player.mode === 'ship') {
+      const i = ships.indexOf(player.ship);
+      if (i >= 0) ships.splice(i, 1);
+      player.eva = makeShip('eva', body.x, body.y + 30, body.angle);
+      player.ship = null;
+      player.mode = 'eva';
+    }
   }
 
   function toggleBoard() {
@@ -148,6 +177,7 @@ function start(world, bulletin) {
       if (s.npc) {
         const corp = econ.corpsById[s.corp];
         log(`You jacked a ${esc(corp?.name || 'corp')} ${KINDS[s.kind].label.toLowerCase()}. The pilot has been… relocated.`);
+        loops.onJack(performance.now());
         s.npc = false;
         s.ai = null;
       } else {
@@ -363,6 +393,39 @@ function start(world, bulletin) {
     );
   }
 
+  function openHut(site) {
+    const occ = hutOf(site);
+    const T = econ.HUT_TIERS;
+    let body;
+    if (occ && !occ.mine) {
+      body = `<div class="explain">${esc(site.squatter)} lives here in a ${T[occ.tier].name.toLowerCase()}. Squatters' rights are the only rights out here. Find a vacant site.</div>
+              <div class="buttons"><button id="x">Leave</button></div>`;
+    } else if (occ && occ.mine) {
+      const next = T[S.hut.tier + 1];
+      body = `<div class="explain">Your ${T[S.hut.tier].name.toLowerCase()}. Free players' housing: built with scrap, never branded, no logos, no links. You respawn here when you load in.</div>
+              ${next ? `<div>Upgrade to <b>${next.name}</b>: ${next.cost} scrap (you have ${S.scrap}).</div>` : '<div>Bunker. Top tier.</div>'}
+              <div class="buttons">${next ? `<button class="primary" id="up" ${S.scrap >= next.cost ? '' : 'disabled'}>Upgrade</button>` : ''}<button id="x">Close</button></div>
+              <div class="err" id="err"></div>`;
+    } else {
+      body = `<div class="explain">Vacant. Build a <b>${T[0].name.toLowerCase()}</b> for <b>${T[0].cost} scrap</b> (you have ${S.scrap}).
+              Scrap only: no cash, no credits. One hut per pilot. Huts can't be branded or bought out, and they're yours while you play.</div>
+              ${S.hut ? `<div class="err">You already have a hut at ${esc(S.hut.site)}.</div>` : ''}
+              <div class="buttons"><button class="primary" id="build" ${!S.hut && S.scrap >= T[0].cost ? '' : 'disabled'}>Build</button><button id="x">Close</button></div>
+              <div class="err" id="err"></div>`;
+    }
+    openModal(`<h2>SITE ${esc(site.id)}</h2><div class="sub">The Sprawl · residential</div>${body}`, (el) => {
+      el.querySelector('#x')?.addEventListener('click', closeModal);
+      const after = (res) => {
+        if (!res.ok) return (el.querySelector('#err').textContent = res.reason);
+        solidCache = rects();
+        log(`Home sweet hovel: ${esc(econ.HUT_TIERS[S.hut.tier].name)} at ${esc(site.id)}.`, 'money');
+        openHut(site);
+      };
+      el.querySelector('#build')?.addEventListener('click', () => after(econ.buildHut(site.id)));
+      el.querySelector('#up')?.addEventListener('click', () => after(econ.upgradeHut()));
+    });
+  }
+
   function openLedger() {
     const claimed = world.plots.filter((p) => p.owner).sort((a, b) => b.value - a.value);
     const total = claimed.reduce((s, p) => s + p.value, 0);
@@ -399,12 +462,19 @@ function start(world, bulletin) {
          <span class="k"><kbd>SPACE</kbd></span><span>Brake</span>
          <span class="k"><kbd>F</kbd></span><span>Bail out / board any parked or slow ship (yes, NPC ones too)</span>
          <span class="k"><kbd>E</kbd></span><span>At a lot's pad: open the terminal. At a drop: hold to claim.</span>
+         <span class="k"><kbd>X</kbd></span><span>Decline / abandon a freight job</span>
          <span class="k"><kbd>TAB</kbd></span><span>The ledger: every lot and price</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
        <h3>THE GAME</h3>
        <div>Fly the Spine. Hunt drops: when something craps out a load of scrap, the first pilot to reach it and hold <kbd>E</kbd> gets it.
        Scrap gives XP; levels widen your sight radius, the only edge anyone gets. Buy lots, brand them, get bought out, buy them back.</div>
+       <h3>SIDE HUSTLES (scrap + XP only)</h3>
+       <div><b>Freight jobs:</b> fly to the blue pickup beacon, slow down to load, deliver to the yellow beacon before the clock runs out. Every wall you hit damages the cargo.<br/>
+       <b>Heat:</b> jacking ships or speeding in the Spine zone brings Corp drones after you. Lose them for 10s to drop a star; shake them all for a payout. Get caught and your ship is impounded.<br/>
+       <b>Spine Run:</b> fly through the gold ring at the west end of the Spine and race the gates. Best time is saved.</div>
+       <h3>THE SPRAWL</h3>
+       <div>About a minute's flight east, past the city limit. Free housing for anyone who plays: build a hut with scrap (150), upgrade to a hab hut (300) or bunker (600). Huts are never branded and can't be bought out. You respawn at yours.</div>
        <div class="buttons"><button class="primary" id="x">Fly</button></div>`,
       (el) => el.querySelector('#x').addEventListener('click', closeModal)
     );
@@ -413,6 +483,7 @@ function start(world, bulletin) {
   // ---- main loop ----
   let last = performance.now();
   let lastHud = '';
+  let lastLoops = null;
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
@@ -422,8 +493,9 @@ function start(world, bulletin) {
     const body = me();
     const input = modalOpen ? {} : inputState();
     fly(body, input, dt, !modalOpen && keys.has('shift'));
-    collide(body, KINDS[body.kind].radius, solidCache);
+    const hit = collide(body, KINDS[body.kind].radius, solidCache);
     clampToBounds(body);
+    if (!modalOpen) loops.update(dt, now, body, hit);
 
     for (const s of ships) {
       if (s === body) continue;
@@ -447,6 +519,13 @@ function start(world, bulletin) {
     for (const p of world.plots) {
       const pad = plotPad(world, p);
       if (Math.hypot(pad.x - body.x, pad.y - body.y) < 40) nearPlot = p;
+    }
+    nearHut = null;
+    if (region(world, body.x) === 'sprawl') {
+      for (const site of sprawl.sites) {
+        const pad = hutPad(site);
+        if (Math.hypot(pad.x - body.x, pad.y - body.y) < 36) nearHut = site;
+      }
     }
     boardable = null;
     if (player.mode === 'eva') {
@@ -501,6 +580,9 @@ function start(world, bulletin) {
       sight, nearPlot, boardable, featured: bulletin.featuredPlot,
       holdDrop: hold.drop, holdProgress: hold.progress,
       corpsById: econ.corpsById, waypoint,
+      sprawl, hutOf, nearHut,
+      extraWorld: (c) => loops.drawWorld(c, body, now),
+      extraMinimap: (m, tx, ty) => loops.drawMinimap(m, tx, ty),
     };
     drawScene(ctx, W, H, cam, scene);
     drawMinimap(mctx, 200, 150, scene);
@@ -509,11 +591,20 @@ function start(world, bulletin) {
     let prompt = '';
     if (nearDrop) prompt = `Hold E to claim ${nearDrop.amount} scrap${sp >= 3.5 ? ' (slow down)' : ''}`;
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
+    else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
+    else if (loops.prompt(body)) prompt = loops.prompt(body);
     else if (boardable) prompt = `F · board ${boardable.npc ? 'and jack ' : ''}${KINDS[boardable.kind].label.toLowerCase()}`;
     else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y))}m`;
     const pe = $('prompt');
     pe.style.display = prompt && !modalOpen ? 'block' : 'none';
     pe.textContent = prompt;
+
+    const ls = loops.status(now);
+    if (ls !== lastLoops) {
+      lastLoops = ls;
+      $('h-loops').innerHTML = ls;
+      $('h-loops').style.display = ls ? 'block' : 'none';
+    }
 
     // HUD (only touch the DOM when something changed)
     const hudKey = [S.cash, S.credits, S.scrap, S.xp, player.mode, sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
@@ -535,7 +626,7 @@ function start(world, bulletin) {
   }
 
   function clampToBounds(b) {
-    const B = world.bounds;
+    const B = FLY;
     if (b.x < B.minX) { b.x = B.minX; b.vx = Math.abs(b.vx) * 0.5; }
     if (b.x > B.maxX) { b.x = B.maxX; b.vx = -Math.abs(b.vx) * 0.5; }
     if (b.y < B.minY) { b.y = B.minY; b.vy = Math.abs(b.vy) * 0.5; }
@@ -544,7 +635,7 @@ function start(world, bulletin) {
 
   log('Welcome to the Spine. Press <b>H</b> for controls. All money is fake.');
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl };
 }
 
 boot();

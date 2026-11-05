@@ -72,8 +72,57 @@ export function insideAny(x, y, rects, pad = 0) {
   return rects.some((r) => x > r.x - pad && x < r.x + r.w + pad && y > r.y - pad && y < r.y + r.h + pad);
 }
 
+// ---- The Sprawl: residential zone ~1 minute's flight east of the Spine (skiff at cruise). ----
+export const SPRAWL = { x: 30000, y: 0, radius: 2200 };
+
+export function flyBounds(world) {
+  const b = world.bounds;
+  return { minX: b.minX, maxX: SPRAWL.x + SPRAWL.radius + 600, minY: b.minY, maxY: b.maxY };
+}
+
+export function region(world, x) {
+  if (x <= world.bounds.maxX) return 'city';
+  if (x >= SPRAWL.x - SPRAWL.radius - 400) return 'sprawl';
+  return 'void';
+}
+
+const SQUATTERS = ['Vel', 'Orrin', 'Mother Kade', 'the twins', 'Pike', 'Old Sorrow', 'Jessop', 'nobody you know', 'Rook', 'Ninefingers'];
+
+// Hut sites on a ragged grid. Roughly half are already squatted by NPCs.
+export function sprawlSites(world) {
+  const rng = mulberry32(hashStr(`sprawl:${world.seed}`));
+  const sites = [];
+  const cols = 10, rows = 8, gap = 300;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = SPRAWL.x + (c - (cols - 1) / 2) * gap + (rng() - 0.5) * 80;
+      const y = SPRAWL.y + (r - (rows - 1) / 2) * gap + (rng() - 0.5) * 80;
+      const id = `H-${r + 1}${'ABCDEFGHIJ'[c]}`;
+      const squatted = rng() < 0.5;
+      sites.push({ id, x, y, squatter: squatted ? pick(rng, SQUATTERS) : null, npcTier: squatted ? randInt(rng, 0, 2) : null });
+    }
+  }
+  const fires = Array.from({ length: 14 }, () => ({ x: SPRAWL.x + (rng() - 0.5) * 3000, y: SPRAWL.y + (rng() - 0.5) * 2400 }));
+  return { sites, fires };
+}
+
+export const HUT_SIZE = [ [40, 30], [54, 40], [68, 52] ];
+
+export function hutRect(site, tier) {
+  const [w, h] = HUT_SIZE[tier];
+  return { x: site.x - w / 2, y: site.y - h / 2, w, h };
+}
+
+// Where you stop to use a hut site (just below it).
+export function hutPad(site) {
+  return { x: site.x, y: site.y + 58 };
+}
+
 const COLS = 'ABCDEFGH';
 export function sectorName(world, x, y) {
+  const reg = region(world, x);
+  if (reg === 'sprawl') return 'THE SPRAWL';
+  if (reg === 'void') return 'DEEP VOID';
   const b = world.bounds;
   const c = Math.max(0, Math.min(7, Math.floor(((x - b.minX) / (b.maxX - b.minX)) * 8)));
   const r = Math.max(0, Math.min(5, Math.floor(((y - b.minY) / (b.maxY - b.minY)) * 6)));
@@ -121,10 +170,13 @@ export function decorations(world) {
   const rects = solids(world);
   const b = world.bounds;
   const rocks = [];
-  for (let i = 0; i < 140; i++) {
-    const x = randInt(rng, b.minX, b.maxX);
+  const fb = flyBounds(world);
+  for (let i = 0; i < 420; i++) {
+    // ~1/3 in the city, the rest scattered along the long haul to the Sprawl
+    const x = i < 140 ? randInt(rng, b.minX, b.maxX) : randInt(rng, b.maxX, fb.maxX);
     const y = randInt(rng, b.minY, b.maxY);
     if (insideAny(x, y, rects, 120)) continue;
+    if (Math.hypot(x - SPRAWL.x, (y - SPRAWL.y) / 0.85) < SPRAWL.radius + 150) continue;
     const r = randInt(rng, 6, 34);
     const pts = [];
     const n = randInt(rng, 6, 9);

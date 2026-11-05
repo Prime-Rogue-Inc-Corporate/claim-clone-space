@@ -1,0 +1,326 @@
+// Three gameplay loops. All rewards are scrap/XP: game-only, never credits or cash.
+//  1. Freight jobs  — GTA courier missions. Pick up at one pad, deliver to another, beat the clock.
+//  2. Heat          — GTA wanted level. Jack ships or speed on the Spine and Corp drones hunt you.
+//  3. Spine Run     — checkpoint race lap around the station. Beat your best time.
+import { plotPad, collide } from './world.js';
+import { speedOf } from './entities.js';
+
+const KEY = 'claim-clone-space:loops:v1';
+const CARGO = ['coolant cells', 'unmarked crates', 'ration bricks', 'reactor slag', 'a sealed casket', 'contraband prayer beads', 'fifty litres of recycled water'];
+
+const RACE = [
+  [-2900, -700], [-1000, -820], [1000, -650], [2900, -720], [3350, 0],
+  [2900, 720], [1000, 820], [-1000, 650], [-2900, 720], [-3350, 0],
+];
+const RING = 70;
+
+export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust }) {
+  const saved = load();
+  const persist = { bestLap: null, raceDay: '', jobsDone: 0, escapes: 0, ...saved };
+  const save = () => {
+    try { localStorage.setItem(KEY, JSON.stringify(persist)); } catch {}
+  };
+  const claimed = () => world.plots.filter((p) => p.owner);
+  const fmt = (ms) => `${(ms / 1000).toFixed(2)}s`;
+
+  function pay(amount, why) {
+    const res = econ.reward(amount);
+    log(`+${res.amount} scrap · ${why}`, 'good');
+    if (res.levelUp) log(`LEVEL ${res.levelUp}. Your sight widens.`, 'money');
+  }
+
+  // ---------------- 1. Freight jobs ----------------
+  const freight = { offer: null, job: null, nextOffer: 0 };
+
+  function newOffer(body) {
+    const lots = claimed();
+    if (lots.length < 2) return;
+    const near = lots.filter((p) => Math.hypot(plotPad(world, p).x - body.x, plotPad(world, p).y - body.y) < 2500);
+    const from = (near.length ? near : lots)[Math.floor(rng() * (near.length || lots.length))];
+    let to = from;
+    while (to === from) to = lots[Math.floor(rng() * lots.length)];
+    const a = plotPad(world, from), b = plotPad(world, to);
+    const dist = Math.hypot(a.x - b.x, a.y - b.y) + 400;
+    freight.offer = {
+      from: from.id, to: to.id,
+      cargo: CARGO[Math.floor(rng() * CARGO.length)],
+      reward: Math.round(15 + dist / 70),
+      seconds: Math.round(dist / 230 + 12),
+    };
+    log(`JOB: ${esc(econ.ownerName(to.owner))} needs ${esc(freight.offer.cargo)} moved, Lot ${from.id} → Lot ${to.id}. ${freight.offer.reward} scrap. Blue beacon = pickup.`);
+  }
+
+  function updateFreight(now, body, hit) {
+    if (!freight.job && !freight.offer && now > freight.nextOffer) newOffer(body);
+    if (freight.offer && !freight.job) {
+      const pad = plotPad(world, econ.plotById(freight.offer.from));
+      if (Math.hypot(pad.x - body.x, pad.y - body.y) < 50) {
+        if (player.mode !== 'ship') return;
+        if (speedOf(body) > 4) return;
+        freight.job = { ...freight.offer, deadline: now + freight.offer.seconds * 1000, damage: 0, hitCooldown: 0 };
+        freight.offer = null;
+        log(`Loaded ${esc(freight.job.cargo)}. ${freight.job.seconds}s to Lot ${freight.job.to}. Don't scrape the paint.`);
+      }
+    }
+    const job = freight.job;
+    if (!job) return;
+    if (player.mode !== 'ship') {
+      log(`You bailed out with the cargo still aboard. Job failed.`);
+      return endJob(now);
+    }
+    if (hit && now > job.hitCooldown) {
+      job.damage = Math.min(0.9, job.damage + 0.15);
+      job.hitCooldown = now + 600;
+      log(`Cargo damaged (${Math.round(job.damage * 100)}%).`);
+    }
+    if (now > job.deadline) {
+      log(`Too slow. ${esc(econ.ownerName(econ.plotById(job.to).owner))} has noted your name.`);
+      return endJob(now);
+    }
+    const pad = plotPad(world, econ.plotById(job.to));
+    if (Math.hypot(pad.x - body.x, pad.y - body.y) < 50 && speedOf(body) < 4) {
+      const timeBonus = Math.round(((job.deadline - now) / 1000) * 0.5);
+      persist.jobsDone++;
+      save();
+      pay(Math.max(1, Math.round((job.reward + timeBonus) * (1 - job.damage))), `delivered ${job.cargo}${job.damage ? `, ${Math.round(job.damage * 100)}% damaged` : ''}`);
+      endJob(now);
+    }
+  }
+
+  function endJob(now) {
+    freight.job = null;
+    freight.offer = null;
+    freight.nextOffer = now + 8000;
+  }
+
+  // ---------------- 2. Heat ----------------
+  const heat = { level: 0, peak: 0, drones: [], calmSince: 0, speedCooldown: 0, nextSpawn: 0 };
+
+  function addHeat(n, why, now) {
+    const before = heat.level;
+    heat.level = Math.min(5, heat.level + n);
+    heat.peak = Math.max(heat.peak, heat.level);
+    heat.calmSince = now;
+    if (heat.level > before) log(`HEAT ${'★'.repeat(heat.level)} · ${why}`);
+  }
+
+  function spawnDrone(body) {
+    const a = rng() * Math.PI * 2;
+    heat.drones.push({ x: body.x + Math.cos(a) * 1000, y: body.y + Math.sin(a) * 1000, vx: 0, vy: 0, angle: a + Math.PI });
+  }
+
+  function updateHeat(dt, now, body) {
+    // speeding through the Spine traffic zone
+    if (Math.abs(body.y) < 520 && speedOf(body) > 9.5 && now > heat.speedCooldown) {
+      addHeat(1, 'speeding in the Spine zone', now);
+      heat.speedCooldown = now + 6000;
+    }
+    if (heat.level === 0) return;
+
+    while (heat.drones.length < heat.level && now > heat.nextSpawn) {
+      spawnDrone(body);
+      heat.nextSpawn = now + 1500;
+    }
+    const k = dt * 60;
+    const max = 6 + heat.level * 1.1;
+    let anyClose = false;
+    for (const d of heat.drones) {
+      const lead = 20;
+      const tx = body.x + body.vx * lead, ty = body.y + body.vy * lead;
+      const want = Math.atan2(ty - d.y, tx - d.x);
+      let diff = Math.atan2(Math.sin(want - d.angle), Math.cos(want - d.angle));
+      d.angle += Math.max(-0.07, Math.min(0.07, diff)) * k;
+      d.vx += Math.cos(d.angle) * 0.28 * k;
+      d.vy += Math.sin(d.angle) * 0.28 * k;
+      d.vx *= Math.pow(0.97, k);
+      d.vy *= Math.pow(0.97, k);
+      const s = Math.hypot(d.vx, d.vy);
+      if (s > max) { d.vx = (d.vx / s) * max; d.vy = (d.vy / s) * max; }
+      d.x += d.vx * k;
+      d.y += d.vy * k;
+      collide(d, 10, getSolids());
+      const dist = Math.hypot(d.x - body.x, d.y - body.y);
+      if (dist < 700) anyClose = true;
+      if (dist < 24) return busted(now);
+    }
+    if (anyClose) heat.calmSince = now;
+    else if (now - heat.calmSince > 10000) {
+      heat.level--;
+      heat.drones.pop();
+      heat.calmSince = now;
+      if (heat.level === 0) {
+        persist.escapes++;
+        save();
+        pay(15 * heat.peak, `shook a ${heat.peak}-star Corp pursuit`);
+        heat.peak = 0;
+        heat.drones = [];
+      } else log(`Heat dropping: ${'★'.repeat(heat.level)}`);
+    }
+  }
+
+  function busted(now) {
+    const fine = Math.min(econ.state.scrap, 10 * heat.level);
+    econ.fine(fine);
+    log(`BUSTED. Corp drones impounded your ship${fine ? ` and fined you ${fine} scrap` : ''}. Have a nice EVA.`);
+    heat.level = 0;
+    heat.peak = 0;
+    heat.drones = [];
+    if (freight.job) endJob(now);
+    if (race.active) race.active = false;
+    bust();
+  }
+
+  // ---------------- 3. Spine Run ----------------
+  const race = { active: false, next: 1, start: 0, armedAt: 0 };
+
+  function updateRace(now, body) {
+    const [sx, sy] = RACE[0];
+    if (!race.active) {
+      if (player.mode === 'ship' && Math.hypot(sx - body.x, sy - body.y) < RING && now > race.armedAt) {
+        race.active = true;
+        race.next = 1;
+        race.start = now;
+        log(`SPINE RUN started. ${RACE.length} gates, then back here.${persist.bestLap ? ` Best: ${fmt(persist.bestLap)}` : ''}`);
+      }
+      return;
+    }
+    if (player.mode !== 'ship' || now - race.start > 240000) {
+      race.active = false;
+      race.armedAt = now + 3000;
+      return log('Spine Run abandoned.');
+    }
+    const idx = race.next % RACE.length;
+    const [cx, cy] = RACE[idx];
+    if (Math.hypot(cx - body.x, cy - body.y) < RING) {
+      if (idx === 0) {
+        const lap = now - race.start;
+        race.active = false;
+        race.armedAt = now + 3000;
+        const today = new Date().toISOString().slice(0, 10);
+        let reward = 5;
+        let why = `Spine Run ${fmt(lap)}`;
+        if (!persist.bestLap || lap < persist.bestLap) {
+          if (persist.bestLap) { reward += 20; why += ` · NEW BEST (was ${fmt(persist.bestLap)})`; }
+          persist.bestLap = lap;
+        }
+        if (persist.raceDay !== today) { reward += 30; why += ' · first lap today'; persist.raceDay = today; }
+        save();
+        pay(reward, why);
+      } else race.next++;
+    }
+  }
+
+  // ---------------- shared ----------------
+  return {
+    update(dt, now, body, hit) {
+      updateFreight(now, body, hit);
+      updateHeat(dt, now, body);
+      updateRace(now, body);
+    },
+    onJack(now) {
+      addHeat(2, 'grand theft spacecraft', now);
+    },
+    onKey(k, now) {
+      if (k === 'x' && (freight.job || freight.offer)) {
+        log(freight.job ? 'You dumped the cargo. Job abandoned.' : 'Job declined.');
+        endJob(now);
+        return true;
+      }
+      return false;
+    },
+    prompt(body) {
+      if (freight.offer && !freight.job) {
+        const pad = plotPad(world, econ.plotById(freight.offer.from));
+        if (Math.hypot(pad.x - body.x, pad.y - body.y) < 120) return player.mode === 'ship' ? 'Slow down on the blue pad to load cargo' : 'Need a ship to haul cargo';
+      }
+      return null;
+    },
+    status(now) {
+      const parts = [];
+      if (heat.level) parts.push(`<span style="color:#ff5a3a">HEAT ${'★'.repeat(heat.level)}${'☆'.repeat(5 - heat.level)}</span>`);
+      if (freight.job) parts.push(`JOB → Lot ${freight.job.to} · ${Math.max(0, Math.ceil((freight.job.deadline - now) / 1000))}s${freight.job.damage ? ` · ${Math.round(freight.job.damage * 100)}% dmg` : ''}`);
+      else if (freight.offer) parts.push(`OFFER: pickup Lot ${freight.offer.from} · X to decline`);
+      if (race.active) parts.push(`RUN ${fmt(now - race.start)} · gate ${race.next % RACE.length || RACE.length}/${RACE.length}`);
+      else if (persist.bestLap) parts.push(`best lap ${fmt(persist.bestLap)}`);
+      return parts.join('<br/>');
+    },
+    drawWorld(ctx, body, time) {
+      // freight beacons
+      const beacon = (p, color, label) => {
+        const pad = plotPad(world, p);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(pad.x, pad.y, 30 + Math.sin(time / 180) * 6, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = color;
+        ctx.font = 'bold 13px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, pad.x, pad.y - 44);
+        return pad;
+      };
+      let target = null;
+      if (freight.job) target = beacon(econ.plotById(freight.job.to), '#ffd166', `DELIVER · ${freight.job.cargo.toUpperCase()}`);
+      else if (freight.offer) target = beacon(econ.plotById(freight.offer.from), '#4fc3f7', `PICKUP · ${freight.offer.reward} SCRAP`);
+      if (target) {
+        ctx.strokeStyle = freight.job ? 'rgba(255,209,102,0.35)' : 'rgba(79,195,247,0.3)';
+        ctx.setLineDash([4, 14]);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(body.x, body.y);
+        ctx.lineTo(target.x, target.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      // race gates
+      RACE.forEach(([x, y], i) => {
+        const isNext = race.active && i === race.next % RACE.length;
+        const isStart = i === 0;
+        if (!race.active && !isStart) return;
+        ctx.strokeStyle = isNext ? '#d6f08a' : isStart ? '#e8c547' : 'rgba(214,240,138,0.25)';
+        ctx.lineWidth = isNext ? 6 : 3;
+        ctx.beginPath();
+        ctx.arc(x, y, RING, 0, Math.PI * 2);
+        ctx.stroke();
+        if (isStart && !race.active) {
+          ctx.fillStyle = '#e8c547';
+          ctx.font = 'bold 14px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('SPINE RUN · FLY THROUGH', x, y - RING - 10);
+        }
+        if (isNext) {
+          ctx.fillStyle = '#d6f08a';
+          ctx.font = 'bold 14px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(i === 0 ? 'FINISH' : `GATE ${i}`, x, y + 5);
+        }
+      });
+      // drones
+      for (const d of heat.drones) {
+        ctx.save();
+        ctx.translate(d.x, d.y);
+        ctx.rotate(d.angle);
+        ctx.fillStyle = '#c0392b';
+        ctx.beginPath();
+        ctx.moveTo(12, 0); ctx.lineTo(0, -9); ctx.lineTo(-10, 0); ctx.lineTo(0, 9);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = Math.floor(time / 120) % 2 ? '#ff3b1f' : '#3b6bff';
+        ctx.fillRect(-3, -3, 6, 6);
+        ctx.restore();
+      }
+    },
+    drawMinimap(mctx, tx, ty) {
+      const dot = (x, y, c, s = 4) => { mctx.fillStyle = c; mctx.fillRect(tx(x) - s / 2, ty(y) - s / 2, s, s); };
+      if (freight.job) { const p = plotPad(world, econ.plotById(freight.job.to)); dot(p.x, p.y, '#ffd166', 5); }
+      else if (freight.offer) { const p = plotPad(world, econ.plotById(freight.offer.from)); dot(p.x, p.y, '#4fc3f7', 5); }
+      if (race.active) { const [x, y] = RACE[race.next % RACE.length]; dot(x, y, '#d6f08a', 5); }
+      else dot(RACE[0][0], RACE[0][1], '#e8c547', 4);
+      for (const d of heat.drones) dot(d.x, d.y, '#ff3b1f', 3);
+    },
+  };
+}
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+}

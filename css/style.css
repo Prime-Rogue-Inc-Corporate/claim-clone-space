@@ -30,6 +30,7 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #hud .v { font-weight: bold; font-size: 15px; min-width: 64px; }
 #hud .tag { color: var(--dim); font-size: 10px; }
 #hud .small { color: var(--dim); font-size: 11px; margin-top: 4px; }
+#hud .loops { display: none; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); color: #ffd166; font-size: 11px; }
 #hud .xp { height: 5px; background: #222; margin: 4px 0 2px; overflow: hidden; }
 #hud .xp div { height: 100%; background: var(--green); width: 0; }
 
