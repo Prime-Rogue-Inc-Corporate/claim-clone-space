@@ -844,10 +844,10 @@ function start(world, bulletin, sprites, devData) {
     // prompt
     let prompt = '';
     if (nearDrop) prompt = sp >= GRAB_SPEED ? `Slow down to grab ${nearDrop.amount} scrap (SPACE)` : `E · grab ${nearDrop.amount} scrap`;
+    else if (loops.prompt(body)) prompt = loops.prompt(body) + (nearPlot ? ` · E: Lot ${nearPlot.id} terminal` : '');
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
-    else if (loops.prompt(body)) prompt = loops.prompt(body);
     else if (boardable) prompt = boardable === player.home ? `F · jump back into your skiff ${player.home.reg}` : `F · jump ${boardable.npc ? 'and jack the ' : 'into the '}${KINDS[boardable.kind].label.toLowerCase()}`;
     else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y))}m`;
     const pe = $('prompt');

@@ -13,6 +13,9 @@ const RACE = [
   [2900, 720], [1000, 820], [-1000, 650], [-2900, 720], [-3350, 0],
 ];
 const RING = 70;
+// Pads: same rule as grabbing a drop. Close-ish and slowed down; the starter skiff drifts a lot.
+const PAD_RADIUS = 75;
+const PAD_SPEED = 5;
 
 export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites, hullLevel = () => 0 }) {
   const saved = load();
@@ -45,7 +48,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       from: from.id, to: to.id,
       cargo: CARGO[Math.floor(rng() * CARGO.length)],
       reward: Math.round(15 + dist / 70),
-      seconds: Math.round(dist / 230 + 12),
+      seconds: Math.round(dist / 150 + 20), // generous: tuned for the starter skiff, not an upgraded one
     };
     log(`JOB: ${esc(econ.ownerName(to.owner))} needs ${esc(freight.offer.cargo)} moved, Lot ${from.id} → Lot ${to.id}. ${freight.offer.reward} scrap. Blue beacon = pickup.`);
   }
@@ -54,9 +57,9 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     if (!freight.job && !freight.offer && now > freight.nextOffer) newOffer(body);
     if (freight.offer && !freight.job) {
       const pad = plotPad(world, econ.plotById(freight.offer.from));
-      if (Math.hypot(pad.x - body.x, pad.y - body.y) < 50) {
+      if (Math.hypot(pad.x - body.x, pad.y - body.y) < PAD_RADIUS) {
         if (player.mode !== 'ship') return;
-        if (speedOf(body) > 4) return;
+        if (speedOf(body) >= PAD_SPEED) return;
         freight.job = { ...freight.offer, deadline: now + freight.offer.seconds * 1000, damage: 0, hitCooldown: 0 };
         freight.offer = null;
         log(`Loaded ${esc(freight.job.cargo)}. ${freight.job.seconds}s to Lot ${freight.job.to}. Don't scrape the paint.`);
@@ -78,7 +81,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       return endJob(now);
     }
     const pad = plotPad(world, econ.plotById(job.to));
-    if (Math.hypot(pad.x - body.x, pad.y - body.y) < 50 && speedOf(body) < 4) {
+    if (Math.hypot(pad.x - body.x, pad.y - body.y) < PAD_RADIUS && speedOf(body) < PAD_SPEED) {
       const timeBonus = Math.round(((job.deadline - now) / 1000) * 0.5);
       persist.jobsDone++;
       save();
@@ -247,10 +250,16 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       return false;
     },
     prompt(body) {
-      if (freight.offer && !freight.job) {
-        const pad = plotPad(world, econ.plotById(freight.offer.from));
-        if (Math.hypot(pad.x - body.x, pad.y - body.y) < 120) return player.mode === 'ship' ? 'Slow down on the blue pad to load cargo' : 'Need a ship to haul cargo';
+      const near = (id) => {
+        const pad = plotPad(world, econ.plotById(id));
+        return Math.hypot(pad.x - body.x, pad.y - body.y) < 140;
+      };
+      const fast = speedOf(body) >= PAD_SPEED;
+      if (freight.offer && !freight.job && near(freight.offer.from)) {
+        if (player.mode !== 'ship') return 'Need a ship to haul cargo';
+        return fast ? 'Too fast to load: brake (SPACE) on the blue pad' : 'Ease onto the blue pad to load cargo';
       }
+      if (freight.job && near(freight.job.to)) return fast ? 'Too fast to unload: brake (SPACE) on the yellow pad' : 'Ease onto the yellow pad to deliver';
       return null;
     },
     status(now) {
