@@ -13,6 +13,7 @@ import { createWarmth } from './warmth.js';
 import { createTouch } from './touch.js';
 import { ensurePilots, createPilots } from './pilots.js';
 import { createScooters } from './scooters.js';
+import { createPlot } from './plot.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -41,20 +42,21 @@ async function boot() {
     return;
   }
   const DEV = devEnabled();
-  const [bulletin, sprites, lore, achievements, passengers, roadmap, costs, build] = await Promise.all([
+  const [bulletin, sprites, lore, achievements, passengers, plotData, roadmap, costs, build] = await Promise.all([
     loadJSON('data/bulletin.json', DEFAULT_BULLETIN),
     loadSprites(),
     loadJSON('data/lore.json', null),
     loadJSON('data/achievements.json', null),
     loadJSON('data/passengers.json', null),
+    loadJSON('data/plot-unlocks.json', null),
     DEV ? loadJSON('data/roadmap.json', null) : null,
     DEV ? loadJSON('data/costs.json', null) : null,
     DEV ? loadJSON('data/build.json', { sha: 'local', built: '' }) : null,
   ]);
-  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null, lore, achievements, passengers);
+  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null, lore, achievements, passengers, plotData);
 }
 
-function start(world, bulletin, sprites, devData, lore, achievements, passengers) {
+function start(world, bulletin, sprites, devData, lore, achievements, passengers, plotData) {
   const econ = createEconomy(world);
   const S = econ.state;
   const rng = mulberry32((Date.now() & 0xffffffff) >>> 0);
@@ -207,6 +209,18 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     },
     onScootersEjected: (x, y, n) => scooters.ejected(x, y, n),
   });
+  // ---- your plot: hut-tier unlocks (cosmetics + allotment fixtures) ----
+  const plot = createPlot({
+    econ, data: plotData, log, esc, sprites, emit: (t, d) => emit(t, d),
+    // other huts near yours: every squatted hut runs a magnet (competes); bigger ones run detectors (resonate)
+    neighbours: (site) => {
+      const near = sprawl.sites.filter((o) => o !== site && o.sprawl === site.sprawl && o.squatter && Math.hypot(o.x - site.x, o.y - site.y) < 650);
+      return { collectors: near.length, detectors: near.filter((o) => o.npcTier >= 4).length };
+    },
+    conditions: () => ({ bulletin: dropMult(), drops: drops.filter((d) => !S.claimedDrops[d.key] && S.hut && Math.abs(d.x - (sprawl.sites.find((x) => x.id === S.hut.site)?.x ?? 0)) < 4000).length }),
+  });
+  const homeSiteNow = () => (S.hut ? sprawl.sites.find((x) => x.id === S.hut.site) : null);
+  plot.accrue();
   // ---- Last Mile Scoot: rental scooters + the juicing gig ----
   const scooters = createScooters({ world, econ, log, esc, player, ships, makeShip, emit, sprites, returnToSkiff: (msg) => returnToSkiff(msg) });
 
@@ -576,6 +590,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     solidCache = rects();
     log(`Home sweet hovel: ${esc(econ.HUT_TIERS[S.hut.tier].name)} at ${esc(site.id)}.`, 'money');
     emit(upgraded ? 'hut-upgrade' : 'hut', { tier: S.hut.tier, sprawl: site.sprawl });
+    plot.onTier(S.hut.tier);
     if (!upgraded) waypoint = hutPad(site);
     if (res.missionDone) {
       econ.reward(50);
@@ -675,7 +690,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       body = `<div class="explain">Your ${T[S.hut.tier].name.toLowerCase()}. Free players' housing: built with scrap, never branded, no logos, no links. You respawn here when you load in.</div>
               ${next ? `<div>Tier ${roman(S.hut.tier + 1)} of ${T.length}. Upgrade to <b>${next.name}</b> (${roman(S.hut.tier + 2)}): ${next.cost} scrap (you have ${S.scrap}).</div>` : '<div>The Big Bunker. Tier XIII. Top tier.</div>'}
               <div class="buttons">${next ? `<button class="primary" id="up" ${S.scrap >= next.cost ? '' : 'disabled'}>Upgrade</button>` : ''}<button id="x">Close</button></div>
-              <div class="err" id="err"></div>`;
+              <div class="err" id="err"></div>
+              ${plot.section(site)}`;
     } else {
       body = `<div class="explain">Vacant. Build a <b>${T[0].name.toLowerCase()}</b> for <b>${T[0].cost} scrap</b> (you have ${S.scrap}).
               Scrap only: no cash, no credits. One hut per pilot. Huts can't be branded or bought out, and they're yours while you play.</div>
@@ -691,6 +707,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       };
       el.querySelector('#build')?.addEventListener('click', () => after(econ.buildHut(site.id), false));
       el.querySelector('#up')?.addEventListener('click', () => after(econ.upgradeHut(), true));
+      if (occ && occ.mine) plot.bind(el, () => openHut(site), site);
     });
   }
 
@@ -929,7 +946,11 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   gigs = createGigs({
     world, econ, loops, circuits, progress, registries: REGISTRIES, sectorName, sectorCentre,
     getDrops: () => drops, mission: (b) => objective(b), onboarding, esc, log, $,
-    extraRows: (at) => [...shuttle.gigRows(at), ...scooters.gigRows(at)], citizen: () => warmth.citizen(), startClosed: !!touch?.active,
+    extraRows: (at) => {
+      const hs = homeSiteNow(), pile = hs ? plot.magnetPile(hs) : 0;
+      const magnet = pile >= 13 || (pile && plot.magnetRusting()) ? [{ id: 'magnet', type: 'magnet', title: `Scrap magnet: ${pile} waiting${plot.magnetRusting() ? ' (rusting!)' : ''}`, sub: 'collect at your hut before it rusts', pay: `${pile}`, target: { x: hs.x, y: hs.y + 58, label: 'Your hut · scrap magnet' } }] : [];
+      return [...magnet, ...shuttle.gigRows(at), ...scooters.gigRows(at)];
+    }, citizen: () => warmth.citizen(), startClosed: !!touch?.active,
   });
   // what the flag + arrow point at: the tracked gig (the mission during onboarding), unless hidden
   function currentTarget(body) {
@@ -1150,7 +1171,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
-      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); if (S.hut) { const hs = sprawl.sites.find((x) => x.id === S.hut.site); if (hs && Math.abs(cam.x - hs.x) < 2500) plot.draw(c, hs, now); } drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
       extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
@@ -1187,7 +1208,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     }
 
     // HUD (only touch the DOM when something changed)
-    const hudKey = [S.cash, S.credits, S.scrap, S.xp, progress.stampCount(), S.warmth, S.souls?.count, modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
+    const hudKey = [S.cash, S.credits, S.scrap, S.xp, progress.stampCount(), S.warmth, S.souls?.count, plot.amount(), plot.rate(), modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
     if (hudKey !== lastHud) {
       lastHud = hudKey;
       $('h-cash').textContent = money(S.cash);
@@ -1198,6 +1219,9 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       const n = progress.stampCount();
       $('h-level').textContent = progress.processed() ? lv : residencyLevel(n);
       $('h-warmth').textContent = S.warmth;
+      $('h-allotrow').hidden = !plot.amount() && !plot.rate();
+      $('h-allot').textContent = plot.amount();
+      $('h-allottag').textContent = plot.rate() ? `+${plot.rate()}/day · collect at hut` : '';
       const souls = S.souls?.count || 0;
       $('h-soulsrow').hidden = !souls;
       $('h-souls').textContent = souls;

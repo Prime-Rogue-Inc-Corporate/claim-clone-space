@@ -254,6 +254,11 @@
           "id": "p2-live-population",
           "text": "Shuttle crowds (and other 'pilots around' modifiers) use the real online count from the server instead of the simulated daily curve",
           "status": "later"
+        },
+        {
+          "id": "p2-allotment-resource",
+          "text": "Decide what the allotment resource is (water / air / rations / power?) and what it's for; tie the magnet's neighbours to real players' huts",
+          "status": "later"
         }
       ]
     },
@@ -402,10 +407,23 @@
   ],
   "releases": [
     {
+      "version": "0.1.11",
+      "date": "2026-11-06",
+      "name": "Your plot: hut-tier unlocks, scrap magnet, house number colour",
+      "status": "now",
+      "items": [
+        "Every hut tier unlocks one thing on your plot (data/plot-unlocks.json): preset cosmetics (never branding) and allotment fixtures",
+        "Tier 1: scrap magnet: passive scrap in 13-minute windows shaped by magnetic weather, hut tier, the bulletin, nearby drops, neighbours' magnets (compete) and detectors (resonate); random surges and oddities; rusts if you don't collect (faster after 13 h); runs while you're away, seeded so reloads can't reroll it",
+        "Tier 2: house number colour (only the colour; nobody tells you why)",
+        "Allotment fixtures guarantee a minimum of the allotment resource (name TBD) per day, banked up to 13 days, collected at the hut; HUD row",
+        "Magnet pile shows on the gig board when it's worth collecting or rusting"
+      ]
+    },
+    {
       "version": "0.1.10",
       "date": "2026-11-06",
       "name": "Overcrowding, the manifest, souls count, scooters",
-      "status": "now",
+      "status": "done",
       "items": [
         "Shuttles can be overcrowded: 13 seats, up to 26 aboard; standing passengers make it heavier, slower to stop, touchier (comfort losses up to 2×, slower recovery) and pay more fares; crowd chatter",
         "Passengers are people: name, faction, age (18+), job, home, one detail; speech bubbles name the speaker",

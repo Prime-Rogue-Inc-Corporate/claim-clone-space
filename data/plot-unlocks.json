@@ -1,0 +1,19 @@
+{
+  "note": "Every hut tier unlocks one thing on your plot. Tier 1: the scrap magnet (kind 'magnet'): passive scrap shaped by magnetic weather, neighbours' magnets (compete) and detectors (resonate), the bulletin, nearby drops, random surges and oddities, and rust if you don't collect. Tier 2: house number colour (cosmetic; 'k' is a yield factor on everything the plot produces; never explained in-game). 'cosmetic' = pick a preset option (never branding: no text, logos or links). 'allotment' = a guaranteed minimum of the allotment resource per real day, collected at the hut; the resource is TBD: rename it here. Uncollected allotment banks up to 13 days.",
+  "resource": { "id": "allotment", "name": "Allotment", "unit": "units", "tbd": true, "bankDays": 13 },
+  "unlocks": [
+    { "tier": 0, "id": "magnet", "name": "Scrap magnet", "kind": "magnet", "baseRatePerHour": 6, "tierBoost": 0.08, "compete": 0.25, "resonate": 0.15, "radius": 650, "surgeChance": 0.04, "surge": [13, 39], "oddityChance": 0.03, "pileCap": 169, "decayPerWindow": 0.003, "rustAfterHours": 13, "rustPerWindow": 0.02 },
+    { "tier": 1, "id": "number", "name": "House number colour", "kind": "cosmetic", "hint": "Only the colour. Nobody will tell you why.", "options": [["white", "White"], ["red", "Red"], ["amber", "Amber"], ["green", "Green"], ["blue", "Blue"], ["black", "Black"]], "k": { "blue": 2 } },
+    { "tier": 2, "id": "rainbarrel", "name": "Rain-catch barrel", "kind": "allotment", "min": 1 },
+    { "tier": 3, "id": "laundry", "name": "Laundry line", "kind": "cosmetic", "options": [["none", "Nothing hanging"], ["grey", "Greys"], ["rags", "Rags"], ["bright", "Somehow bright colours"]] },
+    { "tier": 4, "id": "burnbarrel", "name": "Burn barrel", "kind": "allotment", "min": 1 },
+    { "tier": 5, "id": "planter", "name": "Planter", "kind": "cosmetic", "options": [["fern", "Dead fern"], ["cactus", "Suspicious cactus"], ["fungus", "Glowing fungus"], ["empty", "Empty pot (aspirational)"]] },
+    { "tier": 6, "id": "scrubber", "name": "Air scrubber", "kind": "allotment", "min": 2 },
+    { "tier": 7, "id": "porchlight", "name": "Porch light", "kind": "cosmetic", "options": [["amber", "Amber"], ["blue", "Cold blue"], ["red", "Red (ominous)"], ["off", "Off (saves power)"]] },
+    { "tier": 8, "id": "rationcrate", "name": "Ration crate", "kind": "allotment", "min": 2 },
+    { "tier": 9, "id": "dish", "name": "Satellite dish", "kind": "cosmetic", "options": [["spine", "Aimed at the Spine"], ["void", "Aimed at the void"], ["neighbour", "Aimed at the neighbour"], ["down", "Aimed at the ground"]] },
+    { "tier": 10, "id": "battery", "name": "Battery bank", "kind": "allotment", "min": 3 },
+    { "tier": 11, "id": "flag", "name": "Flag pole", "kind": "cosmetic", "options": [["white", "Plain white"], ["black", "Plain black"], ["amber", "Plain amber"], ["green", "Plain green"]] },
+    { "tier": 12, "id": "garden", "name": "Garden plot", "kind": "allotment", "min": 4 }
+  ]
+}

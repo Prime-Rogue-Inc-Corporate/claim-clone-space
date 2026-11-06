@@ -20,6 +20,7 @@ const TYPES = {
   stamp: { label: 'Stamps', icon: 'ach_residency', color: '#e6dcc4' },
   shuttle: { label: 'Shuttle', icon: 'logo_ministry', color: '#d6f08a' },
   scooter: { label: 'Scooters', icon: 'logo_lastmile', color: '#4fc3f7' },
+  magnet: { label: 'Magnet', icon: 'ach_scrounge', color: '#ffb347' },
 };
 const TOGGLES = ['freight', 'drop', 'race', 'stamp', 'scooter'];
 
@@ -133,7 +134,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     for (const r of rows) seen.add(r.id);
     const el = $('gigs');
     // keep a mix: no single type can take over the 13 rows
-    const CAP = { mission: 1, freight: 5, drop: 4, race: 3, stamp: 3, shuttle: 2, scooter: 3 };
+    const CAP = { mission: 1, freight: 5, drop: 4, race: 3, stamp: 3, shuttle: 2, scooter: 3, magnet: 1 };
     const used = {};
     const list = rows.filter((r) => (used[r.type] = (used[r.type] || 0) + 1) <= CAP[r.type]).slice(0, T13);
     const head = `<div class="gh"><b>GIGS</b> <span class="sub">${rows.length} open</span><span class="sp"></span>
