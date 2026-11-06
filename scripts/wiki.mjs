@@ -13,6 +13,12 @@ for (const o of w.organizations) {
   if (o.renameNote) out.push(`- **Note:** ${o.renameNote}`);
   out.push('');
 }
+if (w.recreation) {
+  out.push('## The 13 recreation zones', '', `> ${w.recreation_note}`, '', '| # | Zone | Host | Status |', '|---|---|---|---|');
+  for (const z of w.recreation) out.push(`| ${z.n} | ${z.name} | ${z.host} | ${z.status} |`);
+  out.push('');
+  for (const z of w.recreation) out.push(`### ${z.n}. ${z.name}`, '', `_${z.host} · ${z.status}_`, '', `**Do:** ${z.activity}`, '', z.lore, '');
+}
 out.push('## Places', '');
 for (const p of w.places) out.push(`- **${p.name}:** ${p.text}`);
 out.push('', '## Glossary', '');

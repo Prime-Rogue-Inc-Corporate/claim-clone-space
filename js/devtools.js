@@ -101,6 +101,12 @@ export function createDevTools({ roadmap, costs, build, esc, log, openModal, clo
               .join('')}</table>`
           )
           .join('') +
+        (roadmap.tracks || [])
+          .map(
+            (t) => `<h3 style="color:#c98b5a">${esc(t.name.toUpperCase())}</h3><div class="sub">${esc(t.note || '')}</div>
+            <table>${t.items.map((it) => `<tr><td style="width:62px;color:${STATUS_COLOR[it.status]}">${it.status}</td><td>${esc(it.text)}</td></tr>`).join('')}</table>`
+          )
+          .join('') +
         `<h3>PARKING LOT</h3><ul>${roadmap.parking.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>`
       : '<div class="err">data/roadmap.json did not load.</div>';
 

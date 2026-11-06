@@ -204,5 +204,112 @@
       "term": "13",
       "text": "Everything is 13, except the maximum building height. Nobody knows why."
     }
+  ],
+  "recreation_note": "13 designated recreation zones. Zones 1–8 are Kevin's; 9–13 are suggestions until confirmed. Every zone gets a record board (local bests now, global leaderboards with the server).",
+  "recreation": [
+    {
+      "n": 1,
+      "name": "The Redundant Terrestrial Gravitational Driving Range",
+      "host": "Last Mile Freight",
+      "status": "idea",
+      "activity": "Drive actual cars, on wheels, under simulated planetary gravity. Lap times on a record board.",
+      "lore": "Last Mile built it to test delivery vans for planets nobody delivers to anymore. The gravity is fake, the asphalt is fake, and the nostalgia is extremely real."
+    },
+    {
+      "n": 2,
+      "name": "The Official Church of 13",
+      "host": "Bureau of Public Cheer",
+      "status": "idea",
+      "activity": "Worship the number 13.",
+      "lore": "The state faith. Services last 13 minutes, there are 13 commandments, and the collection plate takes exactly 13 scrap. Nobody knows why it's 13. Doubting it is not recommended."
+    },
+    {
+      "n": 3,
+      "name": "The Underground Church of the Dog",
+      "host": "Nobody (counter-culture)",
+      "status": "idea",
+      "activity": "Worship the dog. Literally, a dog.",
+      "lore": "The minority religion, and the badass one. Meets in a hollowed-out Kessler ore hauler under the Spine. The dog is a good boy. The dog has always been a good boy. Null Sector pretends not to know where it is."
+    },
+    {
+      "n": 4,
+      "name": "The Collective Fauna & Flora Regeneration Center",
+      "host": "Cinder Collective (catering by Gullet Provisions)",
+      "status": "idea",
+      "activity": "Run the obstacle course for the record board. Eat some genuinely disgusting food.",
+      "lore": "The last living things on the Spine, kept in a dome and used as an obstacle course. The café serves 'regenerated' cuisine. Do not ask what was regenerated."
+    },
+    {
+      "n": 5,
+      "name": "Black Site Number 13",
+      "host": "Null Sector Trust (officially does not exist)",
+      "status": "idea",
+      "activity": "You can't go in. Fly close and you hear screams. Walk up to the fence and there's a machine: a scrap-themed game of Snake.",
+      "lore": "There is no Black Site Number 13. The screaming is ambient audio. The Snake machine is a recreational amenity. Your high score has been noted."
+    },
+    {
+      "n": 6,
+      "name": "The AstroTurf Center for Community Formation",
+      "host": "Ministry of the Gentry",
+      "status": "tbd",
+      "activity": "TBD. Suggestion: organise a 'spontaneous grassroots' rally in under 13 minutes (recruit NPCs, hand out pre-printed signs, hit the cheer quota).",
+      "lore": "Where communities are formed, professionally. All spontaneity is scheduled in advance."
+    },
+    {
+      "n": 7,
+      "name": "The Non-Volunteer Volunteer Militia",
+      "host": "Chartered by the corps (you swear allegiance to one)",
+      "status": "idea",
+      "activity": "Weekly shooting qualification. Skip it and you're fined scrap. Go as often as you like. Has its own rank progression (separate roadmap track).",
+      "lore": "Membership is voluntary and mandatory. Every resident is a volunteer; every volunteer qualifies weekly; every absence is invoiced. The truly devoted rise through the ranks of their corporation's company."
+    },
+    {
+      "n": 8,
+      "name": "The Innocuous Center for Imaging Research",
+      "host": "Vantablack Holdings × Mercy Unlimited (medical) / Null Sector Trust (military)",
+      "status": "idea",
+      "activity": "Hidden-object mini-game. Medical track: find it in a body (X-ray scans). Military track: find it on a map.",
+      "lore": "Nothing about this building is suspicious. The scans are anonymised. The maps are of nowhere in particular. The objects are whatever you find."
+    },
+    {
+      "n": 9,
+      "name": "Kessler Demolition Pit",
+      "host": "Kessler Mining Co.",
+      "status": "suggestion",
+      "activity": "Bumper-skiff derby in a ring of wrecks. Last skiff still flying wins.",
+      "lore": "Kessler calls it 'pre-salvage'. Everything that loses gets smelted by morning."
+    },
+    {
+      "n": 10,
+      "name": "Ash & Iron Hall of Hymns",
+      "host": "Ash & Iron",
+      "status": "suggestion",
+      "activity": "Rhythm game to the factory hymn. Every verse is a worker who died on shift; the song gets longer.",
+      "lore": "Shifts begin with the hymn. The hall is where you practise, because getting it wrong on the floor is a disciplinary matter."
+    },
+    {
+      "n": 11,
+      "name": "Gullet's Thursday Eat-Off",
+      "host": "Gullet Provisions",
+      "status": "suggestion",
+      "activity": "Competitive eating of Thursday-flavoured ration bricks. Timing and stamina mini-game.",
+      "lore": "The prize is more Thursday. Nobody has ever found out what's in it, but the record holder has a theory."
+    },
+    {
+      "n": 12,
+      "name": "Gavel & Rope Appraisal Parlour",
+      "host": "Gavel & Rope / The Assessor's Office",
+      "status": "suggestion",
+      "activity": "Guess what a piece of junk is worth; closest without going over beats the Assessor. Pure skill, no stakes.",
+      "lore": "The Assessor is always right. Beating the Assessor is therefore impossible, and the record board is mostly people who did it anyway."
+    },
+    {
+      "n": 13,
+      "name": "Cinder Breath-Hold Pool",
+      "host": "Cinder Collective",
+      "status": "suggestion",
+      "activity": "Hold your breath for as long as you can. Ties into the oxygen ration.",
+      "lore": "The Collective's most popular attraction: the only place on the Spine where not breathing is free."
+    }
   ]
 }

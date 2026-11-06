@@ -224,6 +224,11 @@
           "id": "p2-death",
           "text": "Death = account deletion: counted and announced by skiff number only; credits forfeited, lots to market, number to a 69h auction",
           "status": "later"
+        },
+        {
+          "id": "p2-recreation",
+          "text": "13 recreation zones (see wiki): driving range, Church of 13, Church of the Dog, Regeneration Center, Black Site 13 (Snake), AstroTurf Center, Militia, Imaging Research + 5 TBD. Record boards local first, global with the server",
+          "status": "later"
         }
       ]
     },
@@ -396,6 +401,40 @@
       "items": [
         "Flight, Spine lots, buy-outs + credits, ledger, drops, levelling",
         "Freight, heat, Spine Run; the Sprawl; generated sprite art; rename to SpaceSquat"
+      ]
+    }
+  ],
+  "tracks": [
+    {
+      "id": "militia",
+      "name": "Track: Non-Volunteer Volunteer Militia",
+      "note": "Separate progression for the truly devoted. Allegiance is to one corporation. 13 ranks, obviously.",
+      "items": [
+        {
+          "id": "m-oath",
+          "text": "Swear allegiance to one corporation's militia company (changing sides: TBD, probably a 13-day cooldown + a fine)",
+          "status": "later"
+        },
+        {
+          "id": "m-weekly",
+          "text": "Weekly shooting qualification; skipping is fined in scrap (never below zero; only for players active that week)",
+          "status": "later"
+        },
+        {
+          "id": "m-ranks",
+          "text": "13 ranks from Conscript-Volunteer to whatever the 13th is; rank cosmetics come through levelling",
+          "status": "later"
+        },
+        {
+          "id": "m-range",
+          "text": "Shooting range mini-game (targets, record board)",
+          "status": "later"
+        },
+        {
+          "id": "m-duties",
+          "text": "Rank duties: escort freight, patrol the Spine, assist Null Sector chases (TBD)",
+          "status": "later"
+        }
       ]
     }
   ]

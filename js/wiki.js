@@ -8,7 +8,7 @@ export function openWiki(lore, { openModal, closeModal, esc }, tab = 'orgs', foc
     );
     return;
   }
-  const TABS = [['orgs', `the ${lore.organizations.length}`], ['places', 'places'], ['glossary', 'glossary']];
+  const TABS = [['orgs', `the ${lore.organizations.length}`], ['rec', 'recreation'], ['places', 'places'], ['glossary', 'glossary']];
   let body = '';
   if (tab === 'orgs') {
     const list = lore.organizations
@@ -27,6 +27,12 @@ export function openWiki(lore, { openModal, closeModal, esc }, tab = 'orgs', foc
           <b>Rumour:</b> ${esc(o.rumour)}${o.renameNote ? `<br/><span class="sub">${esc(o.renameNote)}</span>` : ''}</div>`
       : '<div class="sub">Pick an organization.</div>';
     body = `${detail}<table>${list}</table>`;
+  } else if (tab === 'rec') {
+    const z = (lore.recreation || []).map(
+      (r) => `<h3>${r.n}. ${esc(r.name.toUpperCase())} <span style="color:${r.status === 'suggestion' ? 'var(--dim)' : 'var(--green)'}">${esc(r.status)}</span></h3>
+        <div class="sub" style="margin:0 0 4px">${esc(r.host)}</div><div><b>Do:</b> ${esc(r.activity)}</div><div class="sub" style="margin-top:4px">${esc(r.lore)}</div>`
+    );
+    body = `<div class="sub">${esc(lore.recreation_note || '')}</div>${z.join('')}`;
   } else if (tab === 'places') {
     body = lore.places.map((p) => `<h3>${esc(p.name.toUpperCase())}</h3><div>${esc(p.text)}</div>`).join('');
   } else {

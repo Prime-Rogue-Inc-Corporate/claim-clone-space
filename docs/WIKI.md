@@ -166,6 +166,130 @@ The Bureau writes the Corp Bulletin, schedules the weather, and measures public 
 - **Residency stamp:** Bulletin Tower: Swear the Compliance Oath.
 - **Rumour:** This wiki is published by the Bureau.
 
+## The 13 recreation zones
+
+> 13 designated recreation zones. Zones 1–8 are Kevin's; 9–13 are suggestions until confirmed. Every zone gets a record board (local bests now, global leaderboards with the server).
+
+| # | Zone | Host | Status |
+|---|---|---|---|
+| 1 | The Redundant Terrestrial Gravitational Driving Range | Last Mile Freight | idea |
+| 2 | The Official Church of 13 | Bureau of Public Cheer | idea |
+| 3 | The Underground Church of the Dog | Nobody (counter-culture) | idea |
+| 4 | The Collective Fauna & Flora Regeneration Center | Cinder Collective (catering by Gullet Provisions) | idea |
+| 5 | Black Site Number 13 | Null Sector Trust (officially does not exist) | idea |
+| 6 | The AstroTurf Center for Community Formation | Ministry of the Gentry | tbd |
+| 7 | The Non-Volunteer Volunteer Militia | Chartered by the corps (you swear allegiance to one) | idea |
+| 8 | The Innocuous Center for Imaging Research | Vantablack Holdings × Mercy Unlimited (medical) / Null Sector Trust (military) | idea |
+| 9 | Kessler Demolition Pit | Kessler Mining Co. | suggestion |
+| 10 | Ash & Iron Hall of Hymns | Ash & Iron | suggestion |
+| 11 | Gullet's Thursday Eat-Off | Gullet Provisions | suggestion |
+| 12 | Gavel & Rope Appraisal Parlour | Gavel & Rope / The Assessor's Office | suggestion |
+| 13 | Cinder Breath-Hold Pool | Cinder Collective | suggestion |
+
+### 1. The Redundant Terrestrial Gravitational Driving Range
+
+_Last Mile Freight · idea_
+
+**Do:** Drive actual cars, on wheels, under simulated planetary gravity. Lap times on a record board.
+
+Last Mile built it to test delivery vans for planets nobody delivers to anymore. The gravity is fake, the asphalt is fake, and the nostalgia is extremely real.
+
+### 2. The Official Church of 13
+
+_Bureau of Public Cheer · idea_
+
+**Do:** Worship the number 13.
+
+The state faith. Services last 13 minutes, there are 13 commandments, and the collection plate takes exactly 13 scrap. Nobody knows why it's 13. Doubting it is not recommended.
+
+### 3. The Underground Church of the Dog
+
+_Nobody (counter-culture) · idea_
+
+**Do:** Worship the dog. Literally, a dog.
+
+The minority religion, and the badass one. Meets in a hollowed-out Kessler ore hauler under the Spine. The dog is a good boy. The dog has always been a good boy. Null Sector pretends not to know where it is.
+
+### 4. The Collective Fauna & Flora Regeneration Center
+
+_Cinder Collective (catering by Gullet Provisions) · idea_
+
+**Do:** Run the obstacle course for the record board. Eat some genuinely disgusting food.
+
+The last living things on the Spine, kept in a dome and used as an obstacle course. The café serves 'regenerated' cuisine. Do not ask what was regenerated.
+
+### 5. Black Site Number 13
+
+_Null Sector Trust (officially does not exist) · idea_
+
+**Do:** You can't go in. Fly close and you hear screams. Walk up to the fence and there's a machine: a scrap-themed game of Snake.
+
+There is no Black Site Number 13. The screaming is ambient audio. The Snake machine is a recreational amenity. Your high score has been noted.
+
+### 6. The AstroTurf Center for Community Formation
+
+_Ministry of the Gentry · tbd_
+
+**Do:** TBD. Suggestion: organise a 'spontaneous grassroots' rally in under 13 minutes (recruit NPCs, hand out pre-printed signs, hit the cheer quota).
+
+Where communities are formed, professionally. All spontaneity is scheduled in advance.
+
+### 7. The Non-Volunteer Volunteer Militia
+
+_Chartered by the corps (you swear allegiance to one) · idea_
+
+**Do:** Weekly shooting qualification. Skip it and you're fined scrap. Go as often as you like. Has its own rank progression (separate roadmap track).
+
+Membership is voluntary and mandatory. Every resident is a volunteer; every volunteer qualifies weekly; every absence is invoiced. The truly devoted rise through the ranks of their corporation's company.
+
+### 8. The Innocuous Center for Imaging Research
+
+_Vantablack Holdings × Mercy Unlimited (medical) / Null Sector Trust (military) · idea_
+
+**Do:** Hidden-object mini-game. Medical track: find it in a body (X-ray scans). Military track: find it on a map.
+
+Nothing about this building is suspicious. The scans are anonymised. The maps are of nowhere in particular. The objects are whatever you find.
+
+### 9. Kessler Demolition Pit
+
+_Kessler Mining Co. · suggestion_
+
+**Do:** Bumper-skiff derby in a ring of wrecks. Last skiff still flying wins.
+
+Kessler calls it 'pre-salvage'. Everything that loses gets smelted by morning.
+
+### 10. Ash & Iron Hall of Hymns
+
+_Ash & Iron · suggestion_
+
+**Do:** Rhythm game to the factory hymn. Every verse is a worker who died on shift; the song gets longer.
+
+Shifts begin with the hymn. The hall is where you practise, because getting it wrong on the floor is a disciplinary matter.
+
+### 11. Gullet's Thursday Eat-Off
+
+_Gullet Provisions · suggestion_
+
+**Do:** Competitive eating of Thursday-flavoured ration bricks. Timing and stamina mini-game.
+
+The prize is more Thursday. Nobody has ever found out what's in it, but the record holder has a theory.
+
+### 12. Gavel & Rope Appraisal Parlour
+
+_Gavel & Rope / The Assessor's Office · suggestion_
+
+**Do:** Guess what a piece of junk is worth; closest without going over beats the Assessor. Pure skill, no stakes.
+
+The Assessor is always right. Beating the Assessor is therefore impossible, and the record board is mostly people who did it anyway.
+
+### 13. Cinder Breath-Hold Pool
+
+_Cinder Collective · suggestion_
+
+**Do:** Hold your breath for as long as you can. Ties into the oxygen ration.
+
+The Collective's most popular attraction: the only place on the Spine where not breathing is free.
+
 ## Places
 
 - **The Spine (Avenue Zero):** The main drag. 52 lots, all on the north side for now. Any lot can be bought at 1.25× its value; towers grow every time one changes hands. (Currently 48 lots on both sides; moving to 52 on the north side.)
