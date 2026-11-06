@@ -4,6 +4,7 @@ import { solids, collide, plotPad, sectorName, dropsForWindow, decorations, DROP
 import { createLoops } from './loops.js';
 import { loadSprites } from './sprites.js';
 import { devEnabled, createDevTools } from './devtools.js';
+import { openWiki } from './wiki.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -30,17 +31,18 @@ async function boot() {
     return;
   }
   const DEV = devEnabled();
-  const [bulletin, sprites, roadmap, costs, build] = await Promise.all([
+  const [bulletin, sprites, lore, roadmap, costs, build] = await Promise.all([
     loadJSON('data/bulletin.json', DEFAULT_BULLETIN),
     loadSprites(),
+    loadJSON('data/lore.json', null),
     DEV ? loadJSON('data/roadmap.json', null) : null,
     DEV ? loadJSON('data/costs.json', null) : null,
     DEV ? loadJSON('data/build.json', { sha: 'local', built: '' }) : null,
   ]);
-  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null);
+  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null, lore);
 }
 
-function start(world, bulletin, sprites, devData) {
+function start(world, bulletin, sprites, devData, lore) {
   const econ = createEconomy(world);
   const S = econ.state;
   const rng = mulberry32((Date.now() & 0xffffffff) >>> 0);
@@ -152,7 +154,7 @@ function start(world, bulletin, sprites, devData) {
         setWaypoint: (w) => (waypoint = w),
       })
     : null;
-  if (dev) $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>';
+  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
   let windowIndex = -1;
@@ -202,6 +204,7 @@ function start(world, bulletin, sprites, devData) {
   function onPress(k) {
     if (dev && dev.onKey(k)) return;
     if (k === 'h') return openHelp();
+    if (k === 'l') return openWiki(lore, { openModal, closeModal, esc });
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now());
@@ -777,6 +780,7 @@ function start(world, bulletin, sprites, devData) {
          <span class="k"><kbd>E</kbd></span><span>At a lot's pad: open the terminal. At the Refit Bay: upgrade your skiff. At a drop: press to grab it (slow down first).</span>
          <span class="k"><kbd>X</kbd></span><span>Decline / abandon a freight job</span>
          <span class="k"><kbd>TAB</kbd></span><span>The ledger: every lot and price</span>
+         <span class="k"><kbd>L</kbd></span><span>The wiki: who runs this place, and why everything is 13</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
        <h3>THE GAME</h3>

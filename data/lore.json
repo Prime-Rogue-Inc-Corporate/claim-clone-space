@@ -1,0 +1,208 @@
+{
+  "title": "The SpaceSquat Wiki",
+  "subtitle": "Bureau-approved. Inaccuracies are your fault.",
+  "note": "Draft lore. Names and details are placeholders until the gameplay loop for each organization is built. Edit this file; the in-game wiki (L), docs/WIKI.md and the project wiki all come from it.",
+  "organizations": [
+    {
+      "id": "vanta",
+      "name": "Vantablack Holdings",
+      "type": "corp",
+      "color": "#5c6b73",
+      "motto": "We hold. You hold on.",
+      "does": "Landlord-finance conglomerate. Holds the Spine's founding charter and most of the debt in orbit. Runs the Science Centre.",
+      "lore": "Vantablack never builds anything. It owns the paper that says who may. When the Spine was poured, Vantablack held the charter, and it has been charging rent on the void ever since. Its Science Centre has been 'testing' whether EVA is survivable for eleven years; the results are always 'promising'.",
+      "site": "Science Centre",
+      "stamp": "Volunteer for a 2.9-second EVA test.",
+      "rumour": "Nobody has ever seen a Vantablack executive. Nobody has ever seen the eleven years of test results either.",
+      "renameNote": "Placeholder name: 'Vantablack' is a real trademark. Rename before launch."
+    },
+    {
+      "id": "kessler",
+      "name": "Kessler Mining Co.",
+      "type": "corp",
+      "color": "#9c8b5e",
+      "motto": "Everything is ore eventually.",
+      "does": "Asteroid mining and salvage. Strips derelicts, buys and sells scrap, runs the Refit Bays where skiffs are fitted out.",
+      "lore": "Kessler started by mining asteroids and finished by mining everything else. Every wreck, every abandoned skiff, every ship that wasn't nailed down eventually passes through a Kessler furnace. Its Refit Bays will bolt anything to anything, as long as you pay in scrap.",
+      "site": "Kessler Refit Bay",
+      "stamp": "Fit any upgrade to your skiff.",
+      "rumour": "The debris field around the Spine is Kessler's. They seeded it. Business was slow."
+    },
+    {
+      "id": "ashiron",
+      "name": "Ash & Iron",
+      "type": "corp",
+      "color": "#7a3b2e",
+      "motto": "Production is prayer.",
+      "does": "Heavy industry: foundries, refineries, smelters. The smog, the slag vents and most of the jobs nobody wants.",
+      "lore": "Ash & Iron is half factory, half church. Shifts begin with a hymn and end when the quota is met, which is never. Its foundries smelt Kessler's scrap into the girders the Spine keeps growing. The smog over the city is technically an Ash & Iron product, and it is trademarked.",
+      "site": "Ash & Iron Foundry",
+      "stamp": "Work one shift: smelt scrap.",
+      "rumour": "The hymn has a verse for every worker who died on shift. It is very long."
+    },
+    {
+      "id": "null",
+      "name": "Null Sector Trust",
+      "type": "corp",
+      "color": "#4d5a3a",
+      "motto": "Compliance is safety.",
+      "does": "Security and insurance. Owns the patrol drones, the impound yards and, soon, detention. Insures the corps against the people.",
+      "lore": "Null Sector sells two products: protection, and protection from Null Sector. Its drones are the only police on the Spine, and they are paid per capture. Stolen ships go to Null Sector impound; so, eventually, does everything else.",
+      "site": "Null Sector Impound Yard",
+      "stamp": "Get processed: survive a 1-star pursuit or pay a token fine.",
+      "rumour": "The drones are cheaper than the fines they collect. Null Sector has never once lost money."
+    },
+    {
+      "id": "cinder",
+      "name": "Cinder Collective",
+      "type": "corp",
+      "color": "#8a5a3a",
+      "motto": "Breathe responsibly. Air is metered.",
+      "does": "Utilities cartel: air, water, oxygen, power. Everything you breathe is metered, and the Collective owns the meter.",
+      "lore": "The Cinder Collective calls itself a co-operative, and technically every resident is a member, because every resident breathes. Membership dues are deducted per breath. The Meter Office registers new pilots for their ration of air and water, which is enough to work and not quite enough to argue.",
+      "site": "Cinder Meter Office",
+      "stamp": "Register for your air, water and oxygen ration.",
+      "rumour": "The air in Tenure Heights isn't metered. The Collective calls this 'a pilot programme'."
+    },
+    {
+      "id": "gullet",
+      "name": "Gullet Provisions",
+      "type": "corp",
+      "color": "#8c6d2f",
+      "motto": "Calories are a privilege.",
+      "does": "Food. Runs the Ration Depots, the protein vats and the only restaurant on the Spine (members only).",
+      "lore": "Gullet feeds everyone, in the sense that everyone eats what Gullet makes. Ration bricks come in three flavours: Original, Original Plus, and Thursday. The Ration Depot hands out a pilot's first ration free, as a 'gesture'; the gesture is recorded as a debt.",
+      "site": "Gullet Ration Depot",
+      "stamp": "Collect your first ration.",
+      "rumour": "Nobody knows what's in Thursday."
+    },
+    {
+      "id": "lastmile",
+      "name": "Last Mile Freight",
+      "type": "corp",
+      "color": "#4f5d6e",
+      "motto": "Every package arrives eventually.",
+      "does": "Freight and logistics. Posts the courier jobs, owns the Freight Depot, and subcontracts all risk to you.",
+      "lore": "Last Mile owns no ships and employs no pilots. It owns the jobs. Every crate on the Spine moves through its board, and every pilot who hauls one is an independent contractor, which means the cargo is insured and the pilot is not.",
+      "site": "Last Mile Freight Depot",
+      "stamp": "Complete one delivery.",
+      "rumour": "The 'sealed casket' jobs pay double. Do not open the sealed casket."
+    },
+    {
+      "id": "gavel",
+      "name": "Gavel & Rope",
+      "type": "corp",
+      "color": "#6e3b4e",
+      "motto": "Going, going, gone.",
+      "does": "Auctioneers. Runs the Auction House where dormant skiff numbers and seized property are sold. Every auction lasts 69 hours.",
+      "lore": "Gavel & Rope sells what other people lose. Dormant skiff numbers, evicted homes, impounded ships: if it has been taken from someone, it goes under the gavel. Every auction runs exactly 69 hours. Nobody at Gavel & Rope will say why.",
+      "site": "Gavel & Rope Auction House",
+      "stamp": "Place a bid (any amount of in-game currency).",
+      "rumour": "The rope is decorative. Probably."
+    },
+    {
+      "id": "mercy",
+      "name": "Mercy Unlimited",
+      "type": "corp",
+      "color": "#7d8f8a",
+      "motto": "Your death is our business.",
+      "does": "Medical, funerary and sponsorship. Sponsors the Spine Run, processes deaths and keeps the death count.",
+      "lore": "Mercy Unlimited heals you, buries you, and sponsors the race that makes both more likely. Its name is on the Spine Run gate, every clinic and every death notice. When a pilot dies (deletes their account), Mercy files the paperwork and the Registry announces the number.",
+      "site": "Spine Run Gate (Mercy Unlimited)",
+      "stamp": "Finish one lap of the Spine Run.",
+      "rumour": "Mercy pays a bonus to the Spine Run's sponsor-of-record for every crash. Mercy is the sponsor-of-record."
+    },
+    {
+      "id": "ministry",
+      "name": "Ministry of the Gentry",
+      "type": "government",
+      "color": "#a39b8b",
+      "motto": "Equality, conveniently.",
+      "does": "Allocates Tenure Heights housing, registers the gentry, collects rent from scrappers living there, and runs affirmative action.",
+      "lore": "The Ministry exists to guarantee equality: everyone has equal access to everything, and the gentry have it conveniently. Its only office is, for reasons of 'community engagement', deep inside the slum's heat zone. Gentry must drive in to register; scrappers who make it there during an unannounced allocation may be offered one of thirteen permanent homes.",
+      "site": "Ministry of the Gentry (heat zone)",
+      "stamp": "Get your residency stamp. Mind the hazards.",
+      "rumour": "Somebody once held a Sprawl hut and a Tenure unit at the same time. The Ministry calls it a clerical error."
+    },
+    {
+      "id": "assessor",
+      "name": "The Assessor's Office",
+      "type": "quasi-government",
+      "color": "#3e4a52",
+      "motto": "Everything has a fair price.",
+      "does": "Keeps the Land Registry and the public ledger. Enforces the 1.25× rule: any lot, any time, owner can't refuse.",
+      "lore": "The Assessor decides what everything is worth, and the answer is always 1.25 times what you paid. Its ledger is the only honest document on the Spine, because it is the only one nobody can afford to bribe. Anyone may read it. Almost nobody does.",
+      "site": "Land Registry",
+      "stamp": "Read the ledger. No purchase necessary.",
+      "rumour": "The Assessor has never assessed itself."
+    },
+    {
+      "id": "registry",
+      "name": "Registry of Skiffs & Souls",
+      "type": "quasi-government",
+      "color": "#5a5550",
+      "motto": "You are a number. Congratulations.",
+      "does": "Issues skiff numbers from #001, keeps the Sprawl Housing Registry, records deaths, and releases dormant numbers to auction after 13 days.",
+      "lore": "The Registry gives every pilot a skiff and a number, and the number is the important part. It never sells numbers; it only releases them, after thirteen days of silence, to Gavel & Rope. It also runs the Sprawl Housing Registry, because a soul needs a hovel to be counted.",
+      "site": "Sprawl Housing Registry",
+      "stamp": "Claim a home.",
+      "rumour": "Skiff #000 exists. It is not on the Registry."
+    },
+    {
+      "id": "bureau",
+      "name": "Bureau of Public Cheer",
+      "type": "government",
+      "color": "#9a4a3a",
+      "motto": "Smile. It's mandatory.",
+      "does": "Morale, propaganda and the daily Corp Bulletin. Administers the Compliance Oath.",
+      "lore": "The Bureau writes the Corp Bulletin, schedules the weather, and measures public cheer to two decimal places. New residents swear the Compliance Oath at the Bulletin Tower. The oath is thirteen lines long. Nobody remembers line nine, and the Bureau prefers it that way.",
+      "site": "Bulletin Tower",
+      "stamp": "Swear the Compliance Oath.",
+      "rumour": "This wiki is published by the Bureau."
+    }
+  ],
+  "places": [
+    {
+      "name": "The Spine (Avenue Zero)",
+      "text": "The main drag. 52 lots, all on the north side for now. Any lot can be bought at 1.25× its value; towers grow every time one changes hands. (Currently 48 lots on both sides; moving to 52 on the north side.)"
+    },
+    {
+      "name": "Lower Upper Squalor & Upper Lower Squalor",
+      "text": "The two Sprawls, one east and one west of the city, about a minute's flight out. Near-identical. Scrap-built huts, never branded. Each has a Housing Registry at its entrance. (Coming: today there is one Sprawl, to the east.)"
+    },
+    {
+      "name": "Tenure Heights",
+      "text": "The gentry's gated, domed deck north of the Spine. Equal access to everything, conveniently. Scrappers may enter. Null Sector will notice. (Coming.)"
+    },
+    {
+      "name": "The void",
+      "text": "Everything between. Buoys mark the way to the Sprawls. Debris courtesy of Kessler."
+    }
+  ],
+  "glossary": [
+    {
+      "term": "Scrap",
+      "text": "In-game currency, earned only by playing. Pays for upgrades, huts, rent and bids. Never bought, never cashed out."
+    },
+    {
+      "term": "Credits",
+      "text": "What you receive when someone buys your lot. Spend them on other lots. They never expire and never become cash."
+    },
+    {
+      "term": "Skiff",
+      "text": "Your ship, issued at signup with a number from #001. Handles like a shopping cart full of scrap until you fix it."
+    },
+    {
+      "term": "Gentry",
+      "text": "Anyone holding a lot or credits. Lose your lots and hold only credits for 13 days and you rejoin the people."
+    },
+    {
+      "term": "Death",
+      "text": "Deleting your account. Deaths are counted and announced by skiff number only."
+    },
+    {
+      "term": "13",
+      "text": "Everything is 13, except the maximum building height. Nobody knows why."
+    }
+  ]
+}

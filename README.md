@@ -27,6 +27,7 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | E | At a lot's pad, the Refit Bay or a Sprawl hut site: open it. At a drop: press to grab it (slow down first) |
 | X | Decline / abandon a freight job |
 | Tab | The ledger: every lot, owner, value, buy-out price |
+| L | The wiki: the 13 organizations, places, glossary (from `data/lore.json`; also `docs/WIKI.md`, regenerate with `npm run wiki`) |
 | H | Help |
 
 ## What's in it

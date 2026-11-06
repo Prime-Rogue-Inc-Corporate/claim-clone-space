@@ -88,9 +88,29 @@
           "status": "done"
         },
         {
+          "id": "p1-wiki",
+          "text": "Wiki: lore for the 13 organizations, places, glossary. In-game on L, docs/WIKI.md, project wiki (all from data/lore.json)",
+          "status": "done"
+        },
+        {
           "id": "p1-corplogos",
-          "text": "Corp logos for the five corps (Kevin generating)",
+          "text": "Logos for the 13 organizations (Kevin generating; names are drafts)",
           "status": "now"
+        },
+        {
+          "id": "p1-thirteen",
+          "text": "Rule of 13 conversion: 52 lots (north side), two Sprawls (east + west, 39 sites each), 13 tiers everywhere, 13 orgs in-world, $13 test cash, 13 drops per window. Everything except max building height",
+          "status": "next"
+        },
+        {
+          "id": "p1-residency",
+          "text": "Residency card: 13 sites run by the 13 orgs, levels 0.01→0.13 → Level 1 ('Fully Processed')",
+          "status": "next"
+        },
+        {
+          "id": "p1-achievements",
+          "text": "Achievements: 13 categories × 13 known (169) + 169 hidden; shame ones hidden until first earned, pay a cosmetic once; others pay scrap/resources",
+          "status": "next"
         },
         {
           "id": "p1-register",
@@ -188,6 +208,21 @@
         {
           "id": "p2-vehicles",
           "text": "Buyable vehicles (scrap) after the upgrade routes; Road Chassis unlock",
+          "status": "later"
+        },
+        {
+          "id": "p2-tenure",
+          "text": "Tenure Heights + Ministry of the Gentry: gentry = lots or credits; 13-day demotion; scrapper raids → security chase + small fine; 13 affirmative-action houses (month 1, stochastic); scrapper rent 5,000 scrap / 13 days at the Ministry; missed rent = achievement + 24h eviction",
+          "status": "next"
+        },
+        {
+          "id": "p2-rations",
+          "text": "Food, water, oxygen (+1 TBD) gate jobs and XP (not drops); equal daily cap for everyone; gentry get theirs conveniently, scrappers through risk",
+          "status": "later"
+        },
+        {
+          "id": "p2-death",
+          "text": "Death = account deletion: counted and announced by skiff number only; credits forfeited, lots to market, number to a 69h auction",
           "status": "later"
         }
       ]
@@ -322,7 +357,8 @@
     "Hut interiors / visiting other players' huts",
     "Lot history replay: watch a building change hands over time",
     "Science Centre landmark: EVA certification mission line",
-    "Upgrade fitting at your hut, not just the Refit Bay"
+    "Upgrade fitting at your hut, not just the Refit Bay",
+    "169 hidden achievements, some of which may never be built (players can't tell which)"
   ],
   "releases": [
     {
