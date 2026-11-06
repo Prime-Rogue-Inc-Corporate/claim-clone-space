@@ -392,10 +392,22 @@
   ],
   "releases": [
     {
+      "version": "0.1.8",
+      "date": "2026-11-06",
+      "name": "Mobile: touch controls, portrait + landscape",
+      "status": "now",
+      "items": [
+        "Touch controls on phones/tablets (auto-detected; ?touch forces them): heading stick (point where you want to go), BRAKE, E (glows when usable), F jump, X dump/abandon",
+        "☰ menu with every keyboard menu (gigs, card, achievements, warmth, lap boards, ledger, wiki, clear waypoint, help, full screen; staging notes/roadmap)",
+        "Responsive layouts for portrait and landscape: compact HUD, minimap top-right, last 3 log lines, gig board as a collapsible overlay, full-width modals",
+        "Camera zooms out on small screens so you see more of the world"
+      ]
+    },
+    {
       "version": "0.1.7",
       "date": "2026-11-06",
       "name": "Humane Shuttle + Civic Warmth™",
-      "status": "now",
+      "status": "done",
       "items": [
         "Humane Shuttle runs: depots in both Sprawls; 3 random hub routes per depot every 13 min (Sprawl stop → maybe the Halfway Halt → city gate → 1–3 crossings → terminal)",
         "The shuttle handles like dog shit: laggy steering, pulls left, wobbles, slides, weak brakes",

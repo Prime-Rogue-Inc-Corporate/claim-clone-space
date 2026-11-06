@@ -10,6 +10,7 @@ import { createCircuits } from './circuits.js';
 import { createGigs } from './gigs.js';
 import { createShuttle } from './shuttle.js';
 import { createWarmth } from './warmth.js';
+import { createTouch } from './touch.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -118,7 +119,18 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   window.addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
   window.addEventListener('blur', () => keys.clear());
 
+  let touch = null; // touch controls (phones/tablets), created once the menus exist
   function inputState() {
+    const t = touch?.input();
+    if (t && !modalOpen) {
+      return {
+        up: t.up || keys.has('w') || keys.has('arrowup'),
+        down: t.down || keys.has('s') || keys.has('arrowdown'),
+        left: t.left || keys.has('a') || keys.has('arrowleft'),
+        right: t.right || keys.has('d') || keys.has('arrowright'),
+        brake: t.brake || keys.has(' '),
+      };
+    }
     return {
       up: keys.has('w') || keys.has('arrowup'),
       down: keys.has('s') || keys.has('arrowdown'),
@@ -202,6 +214,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
         setWaypoint: (w) => (waypoint = w),
       })
     : null;
+  touch = createTouch({ onPress: (k) => (modalOpen ? null : onPress(k)), getBody: () => me(), dev: !!dev, onMenu: () => gigs?.toggle(false) });
   $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; G · gigs &nbsp; K · warmth &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
@@ -870,6 +883,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
          <span class="k"><kbd>B</kbd></span><span>Racetrack leaderboards (The Island Circuit, The Temple Circuit)</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
+       ${touch?.active ? `<h3>TOUCH CONTROLS</h3><div><b>Left stick:</b> point where you want to go; the ship turns toward it and pushes harder the further you drag. <b>BRAKE</b> (hold), <b>E</b> (lights up when there's something to use), <b>F</b> jump, <b>X</b> dump/abandon. <b>☰</b> has every menu: gigs, card, achievements, warmth, lap boards, ledger, wiki. Works in portrait and landscape; Full screen is in the menu.</div>` : ''}
        <h3>THE GAME</h3>
        <div>Fly the Spine. Hunt drops: when something craps out a load of scrap, the first pilot to reach it, slow down and press <kbd>E</kbd> gets it.
        Scrap gives XP; levels widen your sight radius. Spend scrap at the Kessler Refit Bay so your skiff stops handling like a shopping cart. Buy lots for $1, brand them, get bought out, buy them back.<br/>
@@ -895,7 +909,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   gigs = createGigs({
     world, econ, loops, circuits, progress, registries: REGISTRIES, sectorName, sectorCentre,
     getDrops: () => drops, mission: (b) => objective(b), onboarding, esc, log, $,
-    extraRows: (at) => shuttle.gigRows(at), citizen: () => warmth.citizen(),
+    extraRows: (at) => shuttle.gigRows(at), citizen: () => warmth.citizen(), startClosed: !!touch?.active,
   });
   // what the flag + arrow point at: the tracked gig (the mission during onboarding), unless hidden
   function currentTarget(body) {
@@ -1080,7 +1094,9 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
 
     // camera: GTA2 zoom-out with speed
     const sp = speedOf(body);
-    const targetZoom = player.mode === 'jump' ? 1.35 : Math.max(0.5, Math.min(1.05, 1.05 - sp * 0.055));
+    // small screens (phones, portrait) see more of the world
+    const screenK = Math.max(0.55, Math.min(1, Math.min(W, H) / 760));
+    const targetZoom = (player.mode === 'jump' ? 1.35 : Math.max(0.5, Math.min(1.05, 1.05 - sp * 0.055))) * screenK;
     cam.zoom += (targetZoom - cam.zoom) * Math.min(1, dt * 2);
     cam.x += (body.x + body.vx * 18 - cam.x) * Math.min(1, dt * 4);
     cam.y += (body.y + body.vy * 18 - cam.y) * Math.min(1, dt * 4);
@@ -1115,6 +1131,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     const pe = $('prompt');
     pe.style.display = prompt && !modalOpen ? 'block' : 'none';
     pe.textContent = prompt;
+    touch?.setPrompt(modalOpen ? '' : prompt);
 
     renderMarkers(body);
     gigs.render(body, now);

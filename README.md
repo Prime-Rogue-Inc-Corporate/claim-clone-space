@@ -36,6 +36,8 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | Q | Clear the waypoint, then untrack / hide the objective flag |
 | H | Help |
 
+**On a phone or tablet** (portrait or landscape) the game shows touch controls automatically: a heading stick on the left (point where you want to go), BRAKE / E / F / X on the right, and ☰ for every menu. Add `?touch` to the URL to force them on a desktop.
+
 ## What's in it
 
 - **Flight**: inertia and drag, GTA2-style camera that zooms out with speed. Buildings are footprints whose roofs push away from the camera by their height, so towers lean as you pass.

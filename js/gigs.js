@@ -22,10 +22,11 @@ const TYPES = {
 };
 const TOGGLES = ['freight', 'drop', 'race', 'stamp'];
 
-export function createGigs({ world, econ, loops, circuits, progress, registries, sectorName, sectorCentre, getDrops, mission, onboarding, esc, log, $, extraRows = () => [], citizen = null }) {
+export function createGigs({ world, econ, loops, circuits, progress, registries, sectorName, sectorCentre, getDrops, mission, onboarding, esc, log, $, extraRows = () => [], citizen = null, startClosed = false }) {
+  const compact = startClosed; // touch screens: shorter tab label
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
-  const prefs = { open: true, sort: 'dist', map: { freight: false, drop: true, race: true, stamp: true }, ...saved };
+  const prefs = { open: !startClosed, sort: 'dist', map: { freight: false, drop: true, race: true, stamp: true }, ...saved };
   prefs.map = { freight: false, drop: true, race: true, stamp: true, ...(saved.map || {}) };
   let tracked = null; // row id; null = auto (mission during onboarding)
   let lastJobOffer = null;
@@ -149,7 +150,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     }).join('');
     const html = prefs.open
       ? `${head}${star}${toggles}<div class="gl">${body_ || '<div class="sub" style="padding:8px">Nothing open right now. Fly into the city.</div>'}</div>${rows.length > list.length ? `<div class="gmore">+${rows.length - list.length} more further away (nearest of each type shown)</div>` : ''}`
-      : `<button class="gtab" data-g="open">G · GIGS (${rows.length})${newCount ? ` <b>+${newCount} new</b>` : ''}</button>`;
+      : `<button class="gtab" data-g="open">${compact ? 'GIGS' : 'G · GIGS'} ${rows.length}${newCount ? ` <b>+${newCount}</b>` : ''}</button>`;
     if (html !== lastHtml) {
       lastHtml = html;
       el.innerHTML = html;
@@ -169,7 +170,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     lastRender = 0;
     e.preventDefault();
   }
-  $('gigs').addEventListener('mousedown', onClick);
+  $('gigs').addEventListener('pointerdown', onClick);
 
   function toggle(open = !prefs.open) {
     prefs.open = open;
