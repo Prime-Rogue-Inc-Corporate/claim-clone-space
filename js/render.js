@@ -444,7 +444,7 @@ function drawDrop(ctx, d, time, progress) {
   ctx.restore();
 }
 
-const SHIP_LEN = { skiff: 42, hauler: 60, interceptor: 38, eva: 22 };
+const SHIP_LEN = { skiff: 42, hauler: 60, interceptor: 38, eva: 22, shuttle: 68 };
 
 function drawShip(ctx, s, scene, time) {
   const spec = KINDS[s.kind];
@@ -531,6 +531,12 @@ function drawShip(ctx, s, scene, time) {
 }
 
 function drawShipMarks(ctx, s, scene, spec) {
+  if (s.kind === 'shuttle') {
+    ctx.fillStyle = '#d6f08a';
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`HUMANE SHUTTLE${s.passengers ? ` · ${s.passengers} ABOARD` : ''}`, s.x, s.y + spec.radius + 22);
+  }
   if (s === scene.me && s.kind !== 'eva') {
     ctx.strokeStyle = 'rgba(232,197,71,0.6)';
     ctx.lineWidth = 1.5;

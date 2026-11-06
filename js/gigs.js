@@ -18,10 +18,11 @@ const TYPES = {
   drop: { label: 'Drops', icon: 'ach_scrounge', color: '#d6f08a' },
   race: { label: 'Races', icon: 'ach_racing', color: '#e8c547' },
   stamp: { label: 'Stamps', icon: 'ach_residency', color: '#e6dcc4' },
+  shuttle: { label: 'Shuttle', icon: 'logo_ministry', color: '#d6f08a' },
 };
 const TOGGLES = ['freight', 'drop', 'race', 'stamp'];
 
-export function createGigs({ world, econ, loops, circuits, progress, registries, sectorName, sectorCentre, getDrops, mission, onboarding, esc, log, $ }) {
+export function createGigs({ world, econ, loops, circuits, progress, registries, sectorName, sectorCentre, getDrops, mission, onboarding, esc, log, $, extraRows = () => [], citizen = null }) {
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
   const prefs = { open: true, sort: 'dist', map: { freight: false, drop: true, race: true, stamp: true }, ...saved };
@@ -49,6 +50,8 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     for (const o of job ? [] : loops.freightOffers()) {
       rows.push({ id: `offer:${o.id}`, offerId: o.id, type: 'freight', title: `Lot ${o.from} → Lot ${o.to}`, sub: `${o.cargo} · for ${econ.ownerName(o.owner)} · ${o.seconds}s to deliver`, pay: `${o.reward}`, ttl: o.expires - now, target: { ...o.pickup, label: `Freight pickup · Lot ${o.from}` } });
     }
+    // 2b. other gig types (Humane Shuttle, …)
+    rows.push(...extraRows(at));
     // 3. drops: by sector, never the exact spot
     const bySector = new Map();
     for (const d of getDrops()) {
@@ -95,6 +98,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     let r = tracked && rows.find((x) => x.id === tracked);
     if (tracked && !r && body) { refresh(body); r = rows.find((x) => x.id === tracked); }
     if (tracked && !r) tracked = null; // expired or done
+    if (!r && rows.find((x) => x.id === 'shuttle:run') && (!tracked || tracked.startsWith('shuttle:'))) r = rows.find((x) => x.id === 'shuttle:run');
     if (!r && onboarding()) r = rows.find((x) => x.id === 'mission');
     return r || null;
   }
@@ -127,11 +131,13 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     for (const r of rows) seen.add(r.id);
     const el = $('gigs');
     // keep a mix: no single type can take over the 13 rows
-    const CAP = { mission: 1, freight: 5, drop: 4, race: 3, stamp: 3 };
+    const CAP = { mission: 1, freight: 5, drop: 4, race: 3, stamp: 3, shuttle: 2 };
     const used = {};
     const list = rows.filter((r) => (used[r.type] = (used[r.type] || 0) + 1) <= CAP[r.type]).slice(0, T13);
     const head = `<div class="gh"><b>GIGS</b> <span class="sub">${rows.length} open</span><span class="sp"></span>
       <button data-g="sort" title="Sort">${prefs.sort === 'dist' ? 'nearest' : 'best pay'}</button><button data-g="close" title="Hide (G)">G ✕</button></div>`;
+    const c = citizen?.();
+    const star = c ? `<div class="gc" title="Civic Warmth™ (K)">★ <b>Most Humane Citizen today:</b> ${esc(c.name)} (skiff ${esc(c.skiff)}), who ${esc(c.deed)}</div>` : '';
     const toggles = `<div class="gt"><span class="sub">on map:</span>${TOGGLES.map((t) => `<button data-g="map:${t}" class="${prefs.map[t] ? 'on' : ''}">${TYPES[t].label}</button>`).join('')}</div>`;
     const body_ = list.map((r) => {
       const ty = TYPES[r.type];
@@ -142,7 +148,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
         <div class="gx"><div>${r.pay ? `${esc(r.pay)} <span class="sub">${r.pay === 'stamp' ? '' : 'scrap'}</span>` : ''}</div><div class="sub" data-dist="${esc(r.id)}">${fmtDist(r.dist)}</div>${r.ttl != null ? `<div class="sub ttl">${fmtTtl(r.ttl)}</div>` : ''}</div></div>`;
     }).join('');
     const html = prefs.open
-      ? `${head}${toggles}<div class="gl">${body_ || '<div class="sub" style="padding:8px">Nothing open right now. Fly into the city.</div>'}</div>${rows.length > list.length ? `<div class="gmore">+${rows.length - list.length} more further away (nearest of each type shown)</div>` : ''}`
+      ? `${head}${star}${toggles}<div class="gl">${body_ || '<div class="sub" style="padding:8px">Nothing open right now. Fly into the city.</div>'}</div>${rows.length > list.length ? `<div class="gmore">+${rows.length - list.length} more further away (nearest of each type shown)</div>` : ''}`
       : `<button class="gtab" data-g="open">G · GIGS (${rows.length})${newCount ? ` <b>+${newCount} new</b>` : ''}</button>`;
     if (html !== lastHtml) {
       lastHtml = html;

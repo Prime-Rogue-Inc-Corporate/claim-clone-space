@@ -4,6 +4,9 @@ export const KINDS = {
   skiff: { label: 'Skiff', thrust: 0.2, max: 8, turn: 0.06, radius: 14, color: '#8d8a80' },
   hauler: { label: 'Hauler', thrust: 0.11, max: 5, turn: 0.032, radius: 22, color: '#6f6450' },
   interceptor: { label: 'Interceptor', thrust: 0.3, max: 11.5, turn: 0.075, radius: 12, color: '#5a6470' },
+  // The Humane Shuttle: handles like dog shit on purpose. Laggy steering, pulls left, wobbles,
+  // slides like a fridge on ice, and the brakes are a suggestion. Career ranks make it slightly less bad.
+  shuttle: { label: 'Humane Shuttle', thrust: 0.075, max: 4.6, turn: 0.022, drag: 0.996, grip: 0.012, yawLag: 0.06, pull: 0.0025, wobble: 0.004, brake: 0.975, radius: 24, color: '#9c8b5e' },
   eva: { label: 'EVA suit', thrust: 0.07, max: 2.3, turn: 0.11, radius: 6, color: '#d0c8b0' },
 };
 
@@ -22,8 +25,17 @@ export function fly(body, input, dt, boost = false) {
   // body.stats (your upgraded skiff) overrides the stock spec for its kind
   const spec = body.stats || KINDS[body.kind];
   const k = dt * 60;
-  if (input.left) body.angle -= spec.turn * k;
-  if (input.right) body.angle += spec.turn * k;
+  if (spec.yawLag) {
+    // laggy steering: the wheel turns, the vehicle thinks about it
+    const want = (input.left ? -1 : 0) + (input.right ? 1 : 0);
+    body.av = (body.av || 0) + (want * spec.turn - (body.av || 0)) * Math.min(1, spec.yawLag * k);
+    body.angle += body.av * k;
+    if (input.up && spec.pull) body.angle -= spec.pull * k; // pulls left under power
+    if (spec.wobble) body.angle += Math.sin(performance.now() / 270 + body.id) * spec.wobble * k * Math.min(1, speedOf(body) / 2);
+  } else {
+    if (input.left) body.angle -= spec.turn * k;
+    if (input.right) body.angle += spec.turn * k;
+  }
   body.thrusting = !!input.up;
   const thrust = spec.thrust * (boost ? 1.8 : 1);
   if (input.up) {
@@ -34,7 +46,7 @@ export function fly(body, input, dt, boost = false) {
     body.vx -= Math.cos(body.angle) * thrust * 0.5 * k;
     body.vy -= Math.sin(body.angle) * thrust * 0.5 * k;
   }
-  const drag = input.brake ? 0.9 : spec.drag ?? 0.988;
+  const drag = input.brake ? spec.brake ?? 0.9 : spec.drag ?? 0.988;
   body.vx *= Math.pow(drag, k);
   body.vy *= Math.pow(drag, k);
   // grip: bleed off sideways velocity so the ship goes where it points (stock ships have some; the starter skiff has none)

@@ -67,6 +67,7 @@ function nearestVariant(hex) {
 export function shipSpriteName(ship) {
   if (ship.kind === 'eva') return 'eva';
   if (ship.kind === 'interceptor') return 'interceptor';
+  if (ship.kind === 'shuttle') return 'hauler_tan'; // placeholder until the shuttle sprite exists
   const v = (ship.corp && CORP_VARIANT[ship.corp]) || nearestVariant(ship.color);
   return `${ship.kind}_${v}`;
 }

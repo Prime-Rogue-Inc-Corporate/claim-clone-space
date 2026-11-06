@@ -229,6 +229,21 @@
           "id": "p2-recreation",
           "text": "13 recreation zones (see wiki): driving range, Church of 13, Church of the Dog, Regeneration Center, Black Site 13 (Snake), AstroTurf Center, Militia, Imaging Research + 5 TBD. Record boards local first, global with the server",
           "status": "later"
+        },
+        {
+          "id": "p2-warmth-consequences",
+          "text": "Civic Warmth™ consequences (design first). Ideas: low warmth → Null Sector drones faster/earlier, shuttle routes and Tenure Heights locked, higher Ministry fees, public 'Cold List'; high warmth → priority freight/shuttle offers, Ministry fast-track, heat-free visits to Tenure Heights, a seat on the Bulletin. Never real-money effects; no edge on lot buying",
+          "status": "later"
+        },
+        {
+          "id": "p2-citizen-of-day",
+          "text": "Most Humane Citizen of the Day picked server-side from real pilots (biggest warmth gain); shown by skiff number unless the pilot opts in to a display name; ties broken by earliest",
+          "status": "later"
+        },
+        {
+          "id": "p2-certificate-email",
+          "text": "Opt-in e-mailed certificate for the Citizen of the Day (express consent, unsubscribe, sender ID per CASL; transactional wording only, no marketing in it)",
+          "status": "later"
         }
       ]
     },
@@ -271,6 +286,11 @@
         {
           "id": "p3-model",
           "text": "Model the $1 economy before launch (staging price; real revenue implications)",
+          "status": "later"
+        },
+        {
+          "id": "p3-certificate-print",
+          "text": "Paper certificate for purchase (print-on-demand partner, shipping + sales tax, refund policy; Competition Act price display incl. fees)",
           "status": "later"
         }
       ]
@@ -372,10 +392,25 @@
   ],
   "releases": [
     {
+      "version": "0.1.7",
+      "date": "2026-11-06",
+      "name": "Humane Shuttle + Civic Warmth™",
+      "status": "now",
+      "items": [
+        "Humane Shuttle runs: depots in both Sprawls; 3 random hub routes per depot every 13 min (Sprawl stop → maybe the Halfway Halt → city gate → 1–3 crossings → terminal)",
+        "The shuttle handles like dog shit: laggy steering, pulls left, wobbles, slides, weak brakes",
+        "Base pay + bonus for comfort ≥ 70% AND under par; comfort drops on wall hits, hard cornering, brake slams; 0% = passengers walk (run failed)",
+        "Career with the Humane Transit Directorate (Ministry of the Gentry): 13 ranks, +4% pay per rank, each rank a slightly less awful shuttle",
+        "Civic Warmth™ (K) by the Bureau of Public Cheer: 0–1300, 13 tiers (Frozen Out → Incandescent), start 650; contributing warms, degeneracy cools; HUD row + daily ledger",
+        "Most Humane Citizen of the Day on the gig board and in the feed (seeded until accounts); printable certificate if you out-warm the pick",
+        "8 achievements (4 shuttle, 2 warmth; shame: Passenger Incident, Frozen Out)"
+      ]
+    },
+    {
       "version": "0.1.6",
       "date": "2026-11-06",
       "name": "Gig board",
-      "status": "now",
+      "status": "done",
       "items": [
         "Gig board (G): one list for every open gig, up to 13 rows with a mix of types; sort by nearest or best pay",
         "Track one gig at a time: it gets the flag + arrow; onboarding mission tracked by default; Q / chip buttons to untrack",

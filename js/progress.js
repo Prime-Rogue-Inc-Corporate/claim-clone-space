@@ -39,7 +39,7 @@ export function residencyLevel(n) {
   return n >= T13 ? '1' : `0.${String(n).padStart(2, '0')}`;
 }
 
-export function createProgress({ world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, setWaypoint, addHeat, raceStart, refit, registries }) {
+export function createProgress({ world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, warmth = null, setWaypoint, addHeat, raceStart, refit, registries }) {
   const S = econ.state;
   S.stamps ||= {};
   S.ach ||= {};
@@ -89,6 +89,7 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
   function matches(def, data) {
     for (const [k, v] of Object.entries(def.eq || {})) if (data?.[k] !== v) return false;
     for (const [k, v] of Object.entries(def.min || {})) if (!(data?.[k] >= v)) return false;
+    for (const [k, v] of Object.entries(def.max || {})) if (!(data?.[k] <= v)) return false;
     return true;
   }
   function earn(def) {
@@ -105,6 +106,7 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
 
   // Every game event goes through here: stamps first, then achievement progress.
   function emit(type, data = {}) {
+    const dw = warmth ? warmth.apply(type, data) : 0;
     for (const [id, st] of Object.entries(STAMPS)) if (st.event === type) stamp(id);
     let dirty = false;
     for (const def of defs) {
@@ -123,6 +125,7 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
       }
     }
     if (dirty) econ.save();
+    if (dw) emit('warmth', { value: S.warmth });
   }
   const progressOf = (def) => {
     const p = S.achProg[def.id];

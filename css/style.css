@@ -143,3 +143,8 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #gigs .gtab b { color: #d6f08a; }
 #gigs .sub { color: var(--dim); }
 #gigs .gmore { background: rgba(8,9,10,0.85); border: 1px solid var(--line); border-top: none; padding: 4px 8px; color: var(--dim); }
+#gigs .gc { background: rgba(214,240,138,0.08); border: 1px solid var(--line); border-bottom: none; padding: 5px 8px; color: #e6dcc4; }
+#gigs .gc b { color: #d6f08a; }
+#panel .warmbar { height: 8px; background: #1a1c1f; border: 1px solid var(--line); margin: 6px 0 10px; }
+#panel .warmbar i { display: block; height: 100%; background: linear-gradient(90deg, #3b6bff, #d6f08a, #ffb347, #ff5a3a); }
+#h-warmrow { cursor: pointer; }

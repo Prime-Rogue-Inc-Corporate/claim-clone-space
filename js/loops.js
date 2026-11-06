@@ -74,7 +74,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       newOffer(body);
       freight.nextOffer = now + (freight.offers.length < 3 ? 2500 : 12000);
     }
-    if (!freight.job && player.mode === 'ship' && speedOf(body) < PAD_SPEED) {
+    if (!freight.job && player.mode === 'ship' && !player.ship?.shuttle && speedOf(body) < PAD_SPEED) {
       const o = freight.offers.find((o) => { const pad = plotPad(world, econ.plotById(o.from)); return Math.hypot(pad.x - body.x, pad.y - body.y) < PAD_RADIUS; });
       if (o) {
         freight.job = { ...o, offerId: o.id, deadline: now + o.seconds * 1000, damage: 0, hitCooldown: 0 };

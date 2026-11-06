@@ -136,6 +136,47 @@
       "reward": 39
     },
     {
+      "id": "humane-transit",
+      "cat": "freight",
+      "name": "Humane Transit",
+      "desc": "Finish a Humane Shuttle run.",
+      "on": "shuttle",
+      "reward": 13
+    },
+    {
+      "id": "smooth-operator",
+      "cat": "freight",
+      "name": "Smooth Operator",
+      "desc": "Finish a shuttle run with 90%+ passenger comfort.",
+      "on": "shuttle",
+      "min": {
+        "rating": 90
+      },
+      "reward": 26
+    },
+    {
+      "id": "on-the-clock",
+      "cat": "freight",
+      "name": "On the Clock",
+      "desc": "Finish a shuttle run under par.",
+      "on": "shuttle",
+      "eq": {
+        "onTime": true
+      },
+      "reward": 26
+    },
+    {
+      "id": "career-bureaucrat",
+      "cat": "freight",
+      "name": "Career Bureaucrat",
+      "desc": "Reach Route Steward rank in the Humane Transit Directorate.",
+      "on": "shuttle",
+      "min": {
+        "rank": 3
+      },
+      "reward": 39
+    },
+    {
       "id": "shook-it",
       "cat": "heat",
       "name": "Shook It",
@@ -458,6 +499,28 @@
       "reward": 13
     },
     {
+      "id": "toasty",
+      "cat": "civic",
+      "name": "Toasty",
+      "desc": "Reach Civic Warmth 900.",
+      "on": "warmth",
+      "min": {
+        "value": 900
+      },
+      "reward": 26
+    },
+    {
+      "id": "radiant",
+      "cat": "civic",
+      "name": "Radiant",
+      "desc": "Reach Civic Warmth 1100.",
+      "on": "warmth",
+      "min": {
+        "value": 1100
+      },
+      "reward": 39
+    },
+    {
       "id": "impounded",
       "cat": "shame",
       "name": "Impounded",
@@ -511,6 +574,27 @@
       "on": "wrong-way",
       "shame": true,
       "cosmetic": "Backwards-cap decal"
+    },
+    {
+      "id": "passenger-incident",
+      "cat": "shame",
+      "name": "Passenger Incident",
+      "desc": "Make every passenger walk off your shuttle.",
+      "on": "passenger-incident",
+      "shame": true,
+      "cosmetic": "Sick-bag air freshener"
+    },
+    {
+      "id": "frozen-out",
+      "cat": "shame",
+      "name": "Frozen Out",
+      "desc": "Let your Civic Warmth drop below 300.",
+      "on": "warmth",
+      "max": {
+        "value": 299
+      },
+      "shame": true,
+      "cosmetic": "Icicle hood ornament"
     }
   ]
 }

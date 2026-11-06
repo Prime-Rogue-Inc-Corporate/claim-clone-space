@@ -32,6 +32,7 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | J | Achievements (`data/achievements.json`): 13 categories × 13, shame ones hidden until earned |
 | B | Racetrack leaderboards |
 | G | Gig board: every open gig in one list; click to track one (it gets the flag + arrow), toggle which types show on the map |
+| K | Civic Warmth™: the Bureau's friendly score, today's ledger, Most Humane Citizen of the Day, certificate |
 | Q | Clear the waypoint, then untrack / hide the objective flag |
 | H | Help |
 
@@ -57,6 +58,8 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 - **Racetracks**: two space circuits south of the main drag, traced from real F1 tracks: **The Island Circuit** (after Circuit Gilles-Villeneuve, Montréal; southwest) and **The Temple Circuit** (after Monza; southeast). Fly through the start gate in the race direction to start a lap, hit all 13 gates in order; wrong-way crossings are flagged. Laps go to a leaderboard per track (**B**, or E at the timing board): for now it's this browser's laps vs. 12 seeded rival pilots from the orgs, shared once accounts and a server exist. 13 scrap a lap, +26 for a PB, +39 for the first lap of the day per track.
 - **Art**: org emblems (desks, residency card, wiki, ledger, lot terminals), achievement-category icons, Tenure Heights / owner-home / deck art sliced from `assets/src/` by `scripts/slice-assets.py`. Lot owners who live in a Sprawl get the owner-home art.
 - **Gig board (G)**: freight offers, the job you're on, reported drops (by sector only: sight radius stays the earned edge), races and residency stamps, up to 13 rows with a mix of types. Track one gig at a time; the onboarding mission is tracked by default. Per-type "on map" toggles (freight offers are list-only by default). Offers no longer spam the log.
+- **Humane Shuttle runs**: sign up at the depot next to either Sprawl's Housing Registry; 3 random routes through the hubs every 13 minutes. The shuttle handles like dog shit on purpose. Stop at every stop; keep passenger comfort ≥ 70% and beat par for a bonus on top of base pay. Career with the Humane Transit Directorate (Ministry of the Gentry): 13 ranks, better pay and a marginally less awful shuttle each time. X abandons.
+- **Civic Warmth™ (K)**: a friendly score from the Bureau of Public Cheer (0–1300, 13 tiers, start 650). Deliveries, shuttle runs, stamps and homes warm it; jacking, evading or getting busted, dumping cargo, late jobs, wall-scraping and wrong-way laps cool it. Consequences are on the roadmap. Most Humane Citizen of the Day is on the gig board and in the feed (seeded until accounts); out-warm the pick and you can print a certificate. E-mailed certificates (opt-in) and paper copies (for purchase) come later.
 - **Branding**: owners only, with an opt-in public-content consent step first. Editable or clearable any time; https links only.
 
 ## The "server" (GitHub Actions)

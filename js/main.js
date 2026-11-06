@@ -8,6 +8,8 @@ import { openWiki } from './wiki.js';
 import { createProgress, residencyLevel } from './progress.js';
 import { createCircuits } from './circuits.js';
 import { createGigs } from './gigs.js';
+import { createShuttle } from './shuttle.js';
+import { createWarmth } from './warmth.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -153,15 +155,41 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites, hullLevel: () => (player.ship === player.home ? S.upgrades.hull || 0 : 0), emit: (t, d) => progress.emit(t, d), view: () => (gigs ? gigs.mapView() : { freight: true, races: true, trackedOffer: null }) });
 
   // ---- residency card (C) + achievements (J) ----
+  // Civic Warmth™: the Bureau's friendly score (K)
+  const warmth = createWarmth({ econ, log, esc, openModal, closeModal, skiff: myShip.reg });
   const progress = createProgress({
-    world, econ, lore, achievements, log, esc, openModal, closeModal, sprites,
+    world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, warmth,
     setWaypoint: (w) => (waypoint = w),
     addHeat: (n, why) => loops.addHeat(n, why),
     raceStart: loops.raceStart, refit: REFIT, registries: REGISTRIES,
   });
   const emit = progress.emit;
+  $('h-warmrow').addEventListener('click', () => warmth.openPanel());
   // ---- racetracks south of the main drag ----
   const circuits = createCircuits({ econ, log, esc, player, emit, openModal, closeModal, sprites });
+  // ---- Humane Shuttle runs (Humane Transit Directorate, Ministry of the Gentry) ----
+  const shuttle = createShuttle({
+    world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit: REFIT,
+    spawnShuttle: (x, y, a, stats) => {
+      const v = makeShip('shuttle', x + 90 * Math.cos(a), y + 90 * Math.sin(a), a, { stats, shuttle: true });
+      ships.push(v);
+      player.mode = 'ship';
+      player.ship = v;
+      player.eva = null;
+      player.stolenUntil = 0;
+      return v;
+    },
+    endShuttle: (v, at) => {
+      const i = ships.indexOf(v);
+      if (i >= 0) ships.splice(i, 1);
+      if (player.ship === v) {
+        const p = at || v;
+        returnToSkiff();
+        Object.assign(player.home, { x: p.x + 80, y: p.y + 80, vx: 0, vy: 0 });
+        log('The Directorate tows your skiff alongside. A courtesy.');
+      }
+    },
+  });
 
   // ---- staging tools: roadmap (R) + pinned notes (N); hidden on the production domain ----
   const dev = devData
@@ -174,7 +202,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
         setWaypoint: (w) => (waypoint = w),
       })
     : null;
-  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; G · gigs &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
+  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; G · gigs &nbsp; K · warmth &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
   let windowIndex = -1;
@@ -217,6 +245,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   let nearRegistry = null; // the Registry kiosk you're parked at, if any
   let nearDesk = null; // an organization's residency desk
   let nearCircuit = null; // a racetrack's timing board
+  let nearDepot = null; // a Humane Shuttle depot
   let registryAutoShown = false;
   let lastSprawl = null;
   let lastYSide = 0;
@@ -226,6 +255,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (player.mode === 'jump') return 'JUMPING';
     const s = player.ship;
     if (s === player.home) return `SKIFF ${s.reg}`;
+    if (s.shuttle) return 'HUMANE SHUTTLE';
     return `STOLEN ${KINDS[s.kind].label.toUpperCase()} · ${Math.max(0, Math.ceil((player.stolenUntil - performance.now()) / 1000))}s`;
   }
 
@@ -240,7 +270,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (k === 'g') return gigs.toggle();
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
-    if (k === 'x') return loops.onKey('x', performance.now());
+    if (k === 'x') return loops.onKey('x', performance.now()) || shuttle.abandon();
+    if (k === 'k') return warmth.openPanel();
     if (k === 'e' && nearDrop) return grabDrop(nearDrop);
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
@@ -248,6 +279,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (k === 'e' && !nearDrop && nearRegistry) return openRegistry(null, nearRegistry.sprawl);
     if (k === 'e' && !nearDrop && nearDesk) return progress.openDesk(nearDesk);
     if (k === 'e' && !nearDrop && nearCircuit) return circuits.openBoard(nearCircuit.id);
+    if (k === 'e' && !nearDrop && nearDepot) return shuttle.openDepot(nearDepot);
   }
 
   // Back into your own skiff, wherever you left it. Stolen ships are always temporary.
@@ -833,6 +865,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
          <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”</span>
          <span class="k"><kbd>J</kbd></span><span>Achievements: 13 categories × 13. Shame ones are hidden until you earn them</span>
          <span class="k"><kbd>G</kbd></span><span>Gig board: every open gig (freight offers, reported drops, races, stamps). Click one to track it: the tracked gig gets the flag and arrow. Toggle which gig types show on the map</span>
+         <span class="k"><kbd>K</kbd></span><span>Civic Warmth™: the Bureau of Public Cheer's friendly score. Contributing warms it, degeneracy cools it. Most Humane Citizen of the Day, certificates</span>
          <span class="k"><kbd>Q</kbd></span><span>Clear your waypoint (press again to hide the objective flag). The chips above the minimap have clear buttons too</span>
          <span class="k"><kbd>B</kbd></span><span>Racetrack leaderboards (The Island Circuit, The Temple Circuit)</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
@@ -847,6 +880,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
        <b>Spine Run:</b> fly through the gold ring south of the Spine's west end, then slalom through all 12 crossings (13 gates) and back. Best time is saved.</div>
        <h3>THE CITY</h3>
        <div>The Spine runs 13 blocks of 13 lots (169), all on the north side. The gaps between blocks are crossings: fly through them north-south. Real roads and intersections come later.</div>
+       <h3>HUMANE SHUTTLE RUNS</h3>
+       <div>Sign up at a Humane Shuttle Depot (next to each Sprawl's Housing Registry) and drive a route through the hubs into the city. Stop at every stop. The shuttle handles like dog shit on purpose. Keep passenger comfort at 70%+ and beat par for a bonus; runs build your career with the Humane Transit Directorate (13 ranks, each a slightly less awful shuttle). X abandons the route.</div>
        <h3>THE RACETRACKS</h3>
        <div>South of the main drag, two space circuits traced from real F1 tracks: <b>The Island Circuit</b> (after Circuit Gilles-Villeneuve, Montréal) to the southwest and <b>The Temple Circuit</b> (after Monza) to the southeast. Fly through the start gate in the race direction to start a lap, then hit all 13 gates in order. Laps go on the leaderboard (B, or E at the timing board).</div>
        <h3>THE SPRAWLS</h3>
@@ -860,6 +895,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   gigs = createGigs({
     world, econ, loops, circuits, progress, registries: REGISTRIES, sectorName, sectorCentre,
     getDrops: () => drops, mission: (b) => objective(b), onboarding, esc, log, $,
+    extraRows: (at) => shuttle.gigRows(at), citizen: () => warmth.citizen(),
   });
   // what the flag + arrow point at: the tracked gig (the mission during onboarding), unless hidden
   function currentTarget(body) {
@@ -954,6 +990,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     }
     if (!modalOpen) loops.update(dt, now, body, hit);
     if (!modalOpen) circuits.update(now, body);
+    if (!modalOpen) shuttle.update(dt, now, body, hit, inputState());
     missionTick();
 
     for (const s of ships) {
@@ -1000,6 +1037,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     }
     if (ySide) lastYSide = ySide;
     nearCircuit = circuits.nearBoard(body.x, body.y);
+    nearDepot = player.mode === 'ship' && !shuttle.running() ? shuttle.nearDepot(body.x, body.y) : null;
     const REG = nearestRegistry(body.x);
     nearRegistry = Math.hypot(REG.x - body.x, REG.y - body.y) < 60 ? REG : null;
     // mission 2: arriving at a Registry with enough scrap opens the grid once
@@ -1054,8 +1092,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
-      extraWorld: (c) => { drawRefit(c, now); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
+      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
     drawScene(ctx, W, H, cam, scene);
@@ -1064,6 +1102,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     // prompt
     let prompt = '';
     if (nearDrop) prompt = sp >= GRAB_SPEED ? `Slow down to grab ${nearDrop.amount} scrap (SPACE)` : `E · grab ${nearDrop.amount} scrap`;
+    else if (shuttle.prompt(body)) prompt = shuttle.prompt(body);
     else if (loops.prompt(body)) prompt = loops.prompt(body) + (nearPlot ? ` · E: Lot ${nearPlot.id} terminal` : '');
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
@@ -1080,7 +1119,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     renderMarkers(body);
     gigs.render(body, now);
     const mt = missionText();
-    const ls = [mt && `<span style="color:#d6f08a">${esc(mt)}</span>`, loops.status(now), circuits.status(now)].filter(Boolean).join('<br/>');
+    const ls = [mt && `<span style="color:#d6f08a">${esc(mt)}</span>`, loops.status(now), circuits.status(now), shuttle.status(now)].filter(Boolean).join('<br/>');
     if (ls !== lastLoops) {
       lastLoops = ls;
       $('h-loops').innerHTML = ls;
@@ -1088,7 +1127,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     }
 
     // HUD (only touch the DOM when something changed)
-    const hudKey = [S.cash, S.credits, S.scrap, S.xp, progress.stampCount(), modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
+    const hudKey = [S.cash, S.credits, S.scrap, S.xp, progress.stampCount(), S.warmth, modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
     if (hudKey !== lastHud) {
       lastHud = hudKey;
       $('h-cash').textContent = money(S.cash);
@@ -1098,6 +1137,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       // Until all 13 residency stamps are in, your level is your residency: 0.00 → 0.13 → 1.
       const n = progress.stampCount();
       $('h-level').textContent = progress.processed() ? lv : residencyLevel(n);
+      $('h-warmth').textContent = S.warmth;
+      $('h-warmtier').textContent = `K · ${warmth.tier().toLowerCase()}`;
       $('h-sight').textContent = progress.processed() ? `sight ${sightRadius(lv)}m` : `residency ${n}/13 · sight ${sightRadius(lv)}m`;
       const lo = xpForLevel(lv), hi = xpForLevel(lv + 1);
       $('h-xp').style.width = `${Math.max(0, Math.min(100, Math.round(((S.xp - lo) / (hi - lo)) * 100)))}%`;
@@ -1117,13 +1158,14 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   }
 
   log('Welcome to <b>SpaceSquat</b>. You\'re on the Spine. Press <b>H</b> for controls. All money is fake.');
+  { const c = warmth.citizen(); log(`★ Most Humane Citizen of the Day: <b>${esc(c.name)}</b> (skiff ${esc(c.skiff)}), who ${esc(c.deed)}. Civic Warmth ${c.warmth}. (K)`, 'good'); }
   if (S.mission === 1 && !S.introSeen) {
     S.introSeen = true;
     econ.save();
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth };
 }
 
 boot();

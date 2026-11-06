@@ -311,6 +311,10 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Freight | Independent Contractor | Complete a freight job. | 13 scrap |
 | Freight | Not a Scratch | Deliver with 0% damage. | 26 scrap |
 | Freight | Gig Economy | Complete 13 freight jobs. | 39 scrap |
+| Freight | Humane Transit | Finish a Humane Shuttle run. | 13 scrap |
+| Freight | Smooth Operator | Finish a shuttle run with 90%+ passenger comfort. | 26 scrap |
+| Freight | On the Clock | Finish a shuttle run under par. | 26 scrap |
+| Freight | Career Bureaucrat | Reach Route Steward rank in the Humane Transit Directorate. | 39 scrap |
 | Heat | Shook It | Escape a Corp pursuit. | 13 scrap |
 | Heat | Three-Star Getaway | Escape a 3-star pursuit. | 26 scrap |
 | Heat | Most Wanted | Escape a 5-star pursuit. | 39 scrap |
@@ -346,12 +350,16 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Civic Duty | No Purchase Necessary | Read the Assessor's ledger (TAB). | 13 scrap |
 | Civic Duty | Know Your Landlords | Read the wiki (L). | 13 scrap |
 | Civic Duty | Papers, Please | Check your residency card (C). | 13 scrap |
+| Civic Duty | Toasty | Reach Civic Warmth 900. | 26 scrap |
+| Civic Duty | Radiant | Reach Civic Warmth 1100. | 39 scrap |
 | Shame | _(hidden until earned)_ Impounded | Get busted by Null Sector drones. | cosmetic: Parking-boot decal |
 | Shame | _(hidden until earned)_ Wall Enthusiast | Hit 13 walls with cargo aboard. | cosmetic: Dented hull trim |
 | Shame | _(hidden until earned)_ Has Noted Your Name | Miss a freight deadline. | cosmetic: Snail sticker |
 | Shame | _(hidden until earned)_ Remote-Killed | Let a stolen ship time out on you. | cosmetic: Tow-hook trophy |
 | Shame | _(hidden until earned)_ Cargo Overboard | Bail out with cargo still aboard. | cosmetic: Empty-crate bobblehead |
 | Shame | _(hidden until earned)_ Wrong Way | Drive a circuit backwards. | cosmetic: Backwards-cap decal |
+| Shame | _(hidden until earned)_ Passenger Incident | Make every passenger walk off your shuttle. | cosmetic: Sick-bag air freshener |
+| Shame | _(hidden until earned)_ Frozen Out | Let your Civic Warmth drop below 300. | cosmetic: Icicle hood ornament |
 
 ## Glossary
 
