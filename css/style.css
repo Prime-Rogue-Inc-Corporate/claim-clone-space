@@ -111,3 +111,12 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #panel .ach { font-size: 12px; padding: 2px 0; color: #b8b09a; }
 #panel .ach.got { color: #d6f08a; }
 #panel .ach.hidden { color: #5b5648; font-style: italic; }
+
+/* active map markers, each with a clear button (above the controls hint) */
+#markers { position: fixed; right: 12px; bottom: 186px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 11px; }
+#markers .mk { background: rgba(8,9,10,0.85); border: 1px solid var(--line); padding: 3px 6px; color: #e6dcc4; display: flex; gap: 8px; align-items: center; }
+#markers .mk b { font-weight: bold; }
+#markers .mk.wp b { color: #ff3b1f; }
+#markers .mk.obj b { color: #d6f08a; }
+#markers button { background: none; border: 1px solid var(--line); color: var(--dim); font: inherit; padding: 0 5px; cursor: pointer; }
+#markers button:hover { color: #e8c547; border-color: #e8c547; }

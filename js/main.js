@@ -97,6 +97,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   const stars = makeStars();
   const particles = [];
   let waypoint = null;
+  let objectiveHiddenFor = null; // the objective flag can be dismissed until the mission step changes
 
   // ---- input ----
   const keys = new Set();
@@ -233,6 +234,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (k === 'c') return progress.openCard();
     if (k === 'j') return progress.openAchievements();
     if (k === 'b') return circuits.openBoard();
+    if (k === 'q') return clearMarkers();
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now());
@@ -703,6 +705,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   }
   // Objective flag: where the current mission wants you. For "scrounge" steps it points at the
   // sector a drop was reported in (not the drop itself), so sight radius still matters.
+  const missionKey = () => `${S.mission}:${S.mission === 1 ? S.scrap >= MISSION_SCRAP : S.mission === 3 ? S.scrap >= HOME_SCRAP : ''}`;
   function objective(body) {
     const scrounge = (S.mission === 1 && S.scrap < MISSION_SCRAP) || (S.mission === 3 && S.scrap < HOME_SCRAP);
     if (scrounge) {
@@ -826,6 +829,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
          <span class="k"><kbd>L</kbd></span><span>The wiki: who runs this place, and why everything is 13</span>
          <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”</span>
          <span class="k"><kbd>J</kbd></span><span>Achievements: 13 categories × 13. Shame ones are hidden until you earn them</span>
+         <span class="k"><kbd>Q</kbd></span><span>Clear your waypoint (press again to hide the objective flag). The chips above the minimap have clear buttons too</span>
          <span class="k"><kbd>B</kbd></span><span>Racetrack leaderboards (The Island Circuit, The Temple Circuit)</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
@@ -847,6 +851,40 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       (el) => el.querySelector('#x').addEventListener('click', closeModal)
     );
   }
+
+  // ---- marker chips: every active marker gets a clear button (Q clears them all) ----
+  function clearMarkers() {
+    if (waypoint) { waypoint = null; return log('Waypoint cleared.'); }
+    if (objective(me()) && objectiveHiddenFor !== missionKey()) { objectiveHiddenFor = missionKey(); return log('Objective flag hidden until your next mission step.'); }
+  }
+  let lastMarkers = '';
+  function renderMarkers(body) {
+    const obj = objective(body);
+    const showObj = obj && objectiveHiddenFor !== missionKey();
+    const d = (p) => { const m = Math.hypot(p.x - body.x, p.y - body.y) / 6; return m > 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`; };
+    // rebuild the chips only when their set changes (so the buttons stay clickable); distances update in place
+    const html = [
+      waypoint && `<div class="mk wp"><b>✕ WAYPOINT</b> <span data-d="wp"></span> <button data-clear="wp" title="Clear waypoint (Q)">clear</button></div>`,
+      showObj && `<div class="mk obj"><b>⚑</b> ${esc(obj.label)} · <span data-d="obj"></span> <button data-clear="obj" title="Hide until your next mission step">hide</button></div>`,
+      !showObj && obj && `<div class="mk obj"><button data-clear="showobj">show objective</button></div>`,
+    ].filter(Boolean).join('');
+    if (html !== lastMarkers) {
+      lastMarkers = html;
+      $('markers').innerHTML = html;
+    }
+    const wd = $('markers').querySelector('[data-d="wp"]');
+    if (wd && waypoint) wd.textContent = d(waypoint);
+    const od = $('markers').querySelector('[data-d="obj"]');
+    if (od && showObj) od.textContent = d(obj);
+  }
+  $('markers').addEventListener('click', (e) => {
+    const k = e.target?.dataset?.clear;
+    if (k === 'wp') waypoint = null;
+    if (k === 'obj') objectiveHiddenFor = missionKey();
+    if (k === 'showobj') objectiveHiddenFor = null;
+    lastMarkers = '';
+    e.target.blur();
+  });
 
   // ---- main loop ----
   let last = performance.now();
@@ -988,7 +1026,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       sight, nearPlot, boardable, featured: bulletin.featuredPlot,
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
-      sprawl, hutOf, nearHut, sprites, objective: objective(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
+      sprawl, hutOf, nearHut, sprites, objective: objectiveHiddenFor === missionKey() ? null : objective(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
       extraWorld: (c) => { drawRefit(c, now); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
       extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
@@ -1007,11 +1045,12 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     else if (nearCircuit) prompt = `E · ${nearCircuit.name} leaderboard`;
     else if (nearDesk) prompt = `E · ${lore?.organizations?.find((o) => o.id === nearDesk.org)?.site || nearDesk.org} (residency stamp)`;
     else if (boardable) prompt = boardable === player.home ? `F · jump back into your skiff ${player.home.reg}` : `F · jump ${boardable.npc ? 'and jack the ' : 'into the '}${KINDS[boardable.kind].label.toLowerCase()}`;
-    else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y))}m`;
+    else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y) / 6)} m · Q to clear`;
     const pe = $('prompt');
     pe.style.display = prompt && !modalOpen ? 'block' : 'none';
     pe.textContent = prompt;
 
+    renderMarkers(body);
     const mt = missionText();
     const ls = [mt && `<span style="color:#d6f08a">${esc(mt)}</span>`, loops.status(now), circuits.status(now)].filter(Boolean).join('<br/>');
     if (ls !== lastLoops) {
