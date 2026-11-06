@@ -137,6 +137,7 @@ for i, names in enumerate(EMBLEMS, 1):
 # This sheet came back on a light background with grid lines: flood-fill the background out first.
 a = sheet('sheet-housing.png').astype(int)
 H, W = a.shape[:2]
+transparent = (a[..., 3] < 20).mean() > 0.3  # re-generated sheet has a real transparent background
 rgb = a[..., :3]
 bgish = (rgb.min(-1) > 120) & ((rgb.max(-1) - rgb.min(-1)) < 16)  # background + soft drop shadow
 blab, _ = ndimage.label(bgish)
@@ -145,7 +146,8 @@ for k in range(1, 4):
     edge |= set(np.unique(blab[int(H * k / 4) - 2:int(H * k / 4) + 3].ravel()))
     edge |= set(np.unique(blab[:, int(W * k / 4) - 2:int(W * k / 4) + 3].ravel()))
 edge.discard(0)
-a[..., 3] = np.where(np.isin(blab, list(edge)), 0, 255)
+if not transparent:
+    a[..., 3] = np.where(np.isin(blab, list(edge)), 0, 255)
 a = a.astype(np.uint8)
 boxes, lab, _ = components(a, 4, minarea=1500)
 boxes.sort(key=lambda b: (int((b[0] + b[1]) / 2 // (H / 4)), b[2]))
