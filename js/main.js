@@ -12,6 +12,7 @@ import { createShuttle } from './shuttle.js';
 import { createWarmth } from './warmth.js';
 import { createTouch } from './touch.js';
 import { ensurePilots, createPilots } from './pilots.js';
+import { createScooters } from './scooters.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -204,7 +205,10 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
         log('The Directorate tows your skiff alongside. A courtesy.');
       }
     },
+    onScootersEjected: (x, y, n) => scooters.ejected(x, y, n),
   });
+  // ---- Last Mile Scoot: rental scooters + the juicing gig ----
+  const scooters = createScooters({ world, econ, log, esc, player, ships, makeShip, emit, sprites, returnToSkiff: (msg) => returnToSkiff(msg) });
 
   // ---- staging tools: roadmap (R) + pinned notes (N); hidden on the production domain ----
   const dev = devData
@@ -273,6 +277,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     const s = player.ship;
     if (s === player.home) return `SKIFF ${s.reg}`;
     if (s.shuttle) return 'HUMANE SHUTTLE';
+    if (s.rental) return `SCOOTER ${s.tag} · ${Math.round(s.battery)}%`;
     return `STOLEN ${KINDS[s.kind].label.toUpperCase()} · ${Math.max(0, Math.ceil((player.stolenUntil - performance.now()) / 1000))}s`;
   }
 
@@ -287,10 +292,11 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (k === 'g') return gigs.toggle();
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
-    if (k === 'x') return loops.onKey('x', performance.now()) || shuttle.abandon();
+    if (k === 'x') return scooters.onKey('x') || loops.onKey('x', performance.now()) || shuttle.abandon();
     if (k === 'k') return warmth.openPanel();
     if (k === 'p') return pilots.open();
     if (k === 'e' && nearDrop) return grabDrop(nearDrop);
+    if (k === 'e' && scooters.onE(me())) return;
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
     if (k === 'e' && !nearDrop && nearRefit) return openRefit();
@@ -340,11 +346,17 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   }
 
   function landJump() {
-    const { to, dur } = player.jump;
+    const { to, dur, from } = player.jump;
+    if (from?.rental) scooters.parked(from);
     player.eva = null;
     player.jump = null;
     player.mode = 'ship';
     player.ship = to;
+    if (to.rental) {
+      if (!scooters.startRide(to)) { player.ship = from; return; }
+      player.stolenUntil = 0;
+      return;
+    }
     emit('jump', { dur });
     if (to === player.home) {
       player.stolenUntil = 0;
@@ -902,6 +914,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
        <div>The Spine runs 13 blocks of 13 lots (169), all on the north side. The gaps between blocks are crossings: fly through them north-south. Real roads and intersections come later.</div>
        <h3>HUMANE SHUTTLE RUNS</h3>
        <div>Sign up at a Humane Shuttle Depot (next to each Sprawl's Housing Registry) and drive a route through the hubs into the city. Stop at every stop. The shuttle handles like dog shit on purpose. Keep passenger comfort at 70%+ and beat par for a bonus; runs build your career with the Humane Transit Directorate (13 ranks, each a slightly less awful shuttle). X opens the doors: everyone aboard gets off right there, and the route carries on empty (new passengers board at the next stops). X on an empty shuttle abandons the route. Shuttles seat 13; crowds depend on how many pilots are around; a VIP may board (pay ×1.5, very fussy).</div>
+       <h3>SCOOTERS (LAST MILE SCOOT)</h3>
+       <div>Dockless rental scooters all over: pull alongside in your skiff and jump on (F). 1 scrap to unlock, 1 every 13 s. Quick, twitchy, and if you hit a wall fast you eat it. F back into any ship to park it wherever; X ends the ride from anywhere (tug fee). <b>Juicing gig:</b> low or wrecked scooters show on the gig board; load them in your skiff (E, hold 3) and drop them at a Scoot Dock (E) for scrap. Shuttle passengers bring scooters too: they take up room, fall over on hard corners, and fly out if you open the doors in the void.</div>
        <h3>THE RACETRACKS</h3>
        <div>South of the main drag, two space circuits traced from real F1 tracks: <b>The Island Circuit</b> (after Circuit Gilles-Villeneuve, Montréal) to the southwest and <b>The Temple Circuit</b> (after Monza) to the southeast. Fly through the start gate in the race direction to start a lap, then hit all 13 gates in order. Laps go on the leaderboard (B, or E at the timing board).</div>
        <h3>THE SPRAWLS</h3>
@@ -915,7 +929,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   gigs = createGigs({
     world, econ, loops, circuits, progress, registries: REGISTRIES, sectorName, sectorCentre,
     getDrops: () => drops, mission: (b) => objective(b), onboarding, esc, log, $,
-    extraRows: (at) => shuttle.gigRows(at), citizen: () => warmth.citizen(), startClosed: !!touch?.active,
+    extraRows: (at) => [...shuttle.gigRows(at), ...scooters.gigRows(at)], citizen: () => warmth.citizen(), startClosed: !!touch?.active,
   });
   // what the flag + arrow point at: the tracked gig (the mission during onboarding), unless hidden
   function currentTarget(body) {
@@ -1011,6 +1025,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (!modalOpen) loops.update(dt, now, body, hit);
     if (!modalOpen) circuits.update(now, body);
     if (!modalOpen) shuttle.update(dt, now, body, hit, inputState());
+    if (!modalOpen) scooters.update(dt, now, body, hit);
     missionTick();
 
     for (const s of ships) {
@@ -1090,6 +1105,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       let best = Infinity;
       for (const s of ships) {
         if (s === body) continue;
+        if (s.rental && !scooters.canRide(s)) continue; // wrecked or in someone's hold
         const lim = s.npc ? 4.5 : 2.5;
         const d = Math.hypot(s.x - body.x, s.y - body.y);
         if (d < KINDS[s.kind].radius + KINDS[body.kind].radius + 60 && speedOf(s) < lim && d < best) {
@@ -1134,8 +1150,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
-      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
+      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
     drawScene(ctx, W, H, cam, scene);
@@ -1145,6 +1161,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     let prompt = '';
     if (nearDrop) prompt = sp >= GRAB_SPEED ? `Slow down to grab ${nearDrop.amount} scrap (SPACE)` : `E · grab ${nearDrop.amount} scrap`;
     else if (shuttle.prompt(body)) prompt = shuttle.prompt(body);
+    else if (scooters.prompt(body)) prompt = scooters.prompt(body);
     else if (loops.prompt(body)) prompt = loops.prompt(body) + (nearPlot ? ` · E: Lot ${nearPlot.id} terminal` : '');
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
@@ -1170,7 +1187,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     }
 
     // HUD (only touch the DOM when something changed)
-    const hudKey = [S.cash, S.credits, S.scrap, S.xp, progress.stampCount(), S.warmth, modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
+    const hudKey = [S.cash, S.credits, S.scrap, S.xp, progress.stampCount(), S.warmth, S.souls?.count, modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
     if (hudKey !== lastHud) {
       lastHud = hudKey;
       $('h-cash').textContent = money(S.cash);
@@ -1181,6 +1198,9 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       const n = progress.stampCount();
       $('h-level').textContent = progress.processed() ? lv : residencyLevel(n);
       $('h-warmth').textContent = S.warmth;
+      const souls = S.souls?.count || 0;
+      $('h-soulsrow').hidden = !souls;
+      $('h-souls').textContent = souls;
       $('h-warmtier').textContent = `K · ${warmth.tier().toLowerCase()}`;
       $('h-sight').textContent = progress.processed() ? `sight ${sightRadius(lv)}m` : `residency ${n}/13 · sight ${sightRadius(lv)}m`;
       const lo = xpForLevel(lv), hi = xpForLevel(lv + 1);
@@ -1208,7 +1228,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters };
 }
 
 boot();

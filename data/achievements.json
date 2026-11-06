@@ -108,6 +108,17 @@
       "reward": 39
     },
     {
+      "id": "juicer",
+      "cat": "scrounge",
+      "name": "Juicer",
+      "desc": "Recharge 13 scooters at Scoot Docks.",
+      "on": "juiced",
+      "min": {
+        "total": 13
+      },
+      "reward": 39
+    },
+    {
       "id": "first-delivery",
       "cat": "freight",
       "name": "Independent Contractor",
@@ -197,6 +208,17 @@
         "delivered": 26
       },
       "reward": 26
+    },
+    {
+      "id": "sardine-can",
+      "cat": "freight",
+      "name": "Sardine Can",
+      "desc": "Finish a shuttle run that peaked at 13 standing (26 aboard).",
+      "on": "shuttle",
+      "min": {
+        "peakStanding": 13
+      },
+      "reward": 39
     },
     {
       "id": "shook-it",
@@ -380,6 +402,14 @@
       "on": "jack",
       "n": 13,
       "reward": 39
+    },
+    {
+      "id": "scoot",
+      "cat": "jumping",
+      "name": "Micromobility",
+      "desc": "Jump onto a Last Mile Scoot rental.",
+      "on": "jump-scooter",
+      "reward": 13
     },
     {
       "id": "first-fit",
@@ -647,6 +677,39 @@
       "on": "void-dump",
       "shame": true,
       "cosmetic": "Void-ejection lever (chrome)"
+    },
+    {
+      "id": "faceplant",
+      "cat": "shame",
+      "name": "Faceplant",
+      "desc": "Eat it on a rental scooter.",
+      "on": "wipeout",
+      "shame": true,
+      "cosmetic": "Road-rash decal"
+    },
+    {
+      "id": "body-count",
+      "cat": "shame",
+      "name": "Body Count",
+      "desc": "13 souls lost on your watch.",
+      "on": "souls",
+      "min": {
+        "count": 13
+      },
+      "shame": true,
+      "cosmetic": "Tally-mark hull scratches"
+    },
+    {
+      "id": "grim-statistic",
+      "cat": "shame",
+      "name": "Grim Statistic",
+      "desc": "169 souls lost on your watch.",
+      "on": "souls",
+      "min": {
+        "count": 169
+      },
+      "shame": true,
+      "cosmetic": "Registry black armband"
     }
   ]
 }

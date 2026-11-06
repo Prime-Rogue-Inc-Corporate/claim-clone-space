@@ -14,6 +14,8 @@ const LABELS = {
   'vip-delivered': 'delivered a VIP in comfort',
   'passengers-dumped': 'put passengers off between stops',
   'void-dump': 'dumped a busload of passengers into space',
+  wipeout: 'crashed a rental scooter',
+  juiced: 'recharged scooters for the common good',
 };
 
 export function createWarmth({ econ, log, esc, openModal, closeModal, skiff = '#001' }) {
@@ -54,6 +56,7 @@ export function createWarmth({ econ, log, esc, openModal, closeModal, skiff = '#
     openModal(
       `<h2>CIVIC WARMTH™ · ${S.warmth} · ${warmthTier(S.warmth).toUpperCase()}</h2>
        <div class="sub">Administered by the Bureau of Public Cheer. Contributing to society warms it. Degeneracy cools it.</div>
+       ${S.souls?.count ? `<div class="sub">☠ Souls lost on your watch: <b>${S.souls.count}</b>${S.souls.vips ? ` (${S.souls.vips} VIP)` : ''}. The Registry never forgets. Neither does the Bureau.</div>` : ''}
        <div class="warmbar"><i style="width:${pct}%"></i></div>
        <div class="explain"><b>★ Most Humane Citizen of the Day</b> (${esc(c.day)}): <b>${esc(c.name)}</b>, skiff ${esc(c.skiff)}, Civic Warmth ${c.warmth}, who ${esc(c.deed)} (+${c.gained} today).<br/><br/>
        You today: <b>+${d.gained}</b> / −${d.lost}. ${wouldWin() ? '<b style="color:#d6f08a">You out-warmed today’s pick.</b> Once accounts exist, that makes you Most Humane Citizen of the Day.' : `Gain more than +${c.gained} today to out-warm the pick.`}</div>

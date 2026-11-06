@@ -1,5 +1,5 @@
 {
-  "note": "Humane Shuttle passenger chatter. Each faction has lines by mood: praise (smooth driving), heckle (rough driving: walls, hard corners, brake slams), joke (random, any time), board (getting on), late (over par). 'riders' is who gets on in the Sprawls vs. the city. Add lines freely; the game picks at random and avoids repeats.",
+  "note": "Humane Shuttle passenger chatter. Each faction has lines by mood: praise (smooth driving), heckle (rough driving: walls, hard corners, brake slams), joke (random, any time), board (getting on), late (over par), crowd (overcrowded, 14+ aboard). 'riders' is who gets on in the Sprawls vs. the city. Add lines freely; the game picks at random and avoids repeats.",
   "factions": {
     "sprawl": {
       "label": "SQUALOR RESIDENT",
@@ -62,6 +62,19 @@
         "At this rate my hut'll be rezoned before we arrive.",
         "We're late. Again. Brilliant. Classic.",
         "Could've crawled there. Could've crawled there TWICE."
+      ],
+      "crowd": [
+        "Someone's elbow is in my ear and I think it's mine.",
+        "Is this a shuttle or a sardine tin with ambitions?",
+        "Sir, that is not your hand. That is not anyone's hand.",
+        "I can't feel my legs. Not the bumps, the CROWD.",
+        "Breathe in, everybody. On three. Cinder's watching.",
+        "I've been closer to strangers on this ride than to my own family.",
+        "Humane my arse. I'm wearing three people.",
+        "If we crash, at least we're packed in tight.",
+        "Who brought the goat? WHO BROUGHT THE GOAT?",
+        "Standing room only, they said. Standing room. ONLY.",
+        "Fuck's sake, mate, that's my face you're leaning on."
       ]
     },
     "vanta": {
@@ -183,6 +196,10 @@
       "late": [
         "Late is suspicious behaviour, citizen.",
         "I'll be logging this delay."
+      ],
+      "crowd": [
+        "This is a fire-code violation. I'll let it slide. This once.",
+        "Nobody move. I mean it. Nobody can move anyway."
       ]
     },
     "cinder": {
@@ -324,6 +341,9 @@
       ],
       "late": [
         "Patients waiting. Some of them breathing."
+      ],
+      "crowd": [
+        "If anyone faints, I'm not doing CPR in here. There's no room."
       ]
     },
     "ministry": {
@@ -352,6 +372,9 @@
       ],
       "late": [
         "This delay will need a form. Form 13-L."
+      ],
+      "crowd": [
+        "Twenty-six aboard. Technically humane. I checked the form."
       ]
     },
     "assessor": {
@@ -468,6 +491,11 @@
         "My time is billed in units you can't count.",
         "Late. How very… public transport of you.",
         "I could have bought a faster vehicle in the time this is taking."
+      ],
+      "crowd": [
+        "Why are there POOR PEOPLE touching me?",
+        "I am surrounded. I want it noted that I am surrounded.",
+        "Someone remove these people. Humanely, if you must."
       ]
     }
   },

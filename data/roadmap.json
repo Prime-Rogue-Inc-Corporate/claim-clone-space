@@ -402,10 +402,25 @@
   ],
   "releases": [
     {
+      "version": "0.1.10",
+      "date": "2026-11-06",
+      "name": "Overcrowding, the manifest, souls count, scooters",
+      "status": "now",
+      "items": [
+        "Shuttles can be overcrowded: 13 seats, up to 26 aboard; standing passengers make it heavier, slower to stop, touchier (comfort losses up to 2×, slower recovery) and pay more fares; crowd chatter",
+        "Passengers are people: name, faction, age (18+), job, home, one detail; speech bubbles name the speaker",
+        "Void dumps show the Manifest of the Departed; 'souls lost on your watch' counted permanently (HUD row, residency card, Civic Warmth)",
+        "Last Mile Scoot rentals: 39 dockless scooters; F to ride (1 scrap + 1 per 13 s); twitchy, battery drains, wall at speed = wipeout; F into a ship parks it, X ends the ride (tug fee)",
+        "Juicing gig: load low/wrecked scooters in your skiff (hold 3), drop at 5 Scoot Docks for scrap; void wrecks pay most",
+        "Passengers bring scooters aboard (take a place, fall over on hard corners, fly out in the void as wrecks)",
+        "Achievements: Sardine Can, Micromobility, Juicer; shame: Faceplant, Body Count (13), Grim Statistic (169)"
+      ]
+    },
+    {
       "version": "0.1.9",
       "date": "2026-11-06",
       "name": "Pilots (sign-in on this device), passenger chatter, easier docking",
-      "status": "now",
+      "status": "done",
       "items": [
         "Pilots (P / ☰): sign in as a pilot on this device; new pilot = fresh start; switch; wipe with automatic backup (last 5, restorable); export/import a pilot code (share, copy or download) to protect it or move devices",
         "Shuttle passenger chatter: 14 factions, 219 lines (praise, heckles, jokes, boarding, late), speech bubbles + feed; reacts to walls, hard corners, smooth streaks and running over par; data/passengers.json",

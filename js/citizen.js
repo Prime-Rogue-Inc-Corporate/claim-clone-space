@@ -30,6 +30,8 @@ export const WARMTH_RULES = {
   'vip-killed': () => -130,
   'vip-delivered': (d) => (d.happy ? 13 : 0),
   'passengers-dumped': (d) => -Math.min(39, 3 * (d.passengers || 1)),
+  wipeout: () => -3,
+  juiced: (d) => 2 * (d.n || 1),
   'void-dump': (d) => -Math.min(130, 13 * (d.passengers || 1)),
 };
 

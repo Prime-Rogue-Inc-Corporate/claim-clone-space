@@ -68,6 +68,7 @@ export function shipSpriteName(ship) {
   if (ship.kind === 'eva') return 'eva';
   if (ship.kind === 'interceptor') return 'interceptor';
   if (ship.kind === 'shuttle') return 'hauler_tan'; // placeholder until the shuttle sprite exists
+  if (ship.kind === 'scooter') return 'scooter'; // drawn in code until there's a sprite
   const v = (ship.corp && CORP_VARIANT[ship.corp]) || nearestVariant(ship.color);
   return `${ship.kind}_${v}`;
 }

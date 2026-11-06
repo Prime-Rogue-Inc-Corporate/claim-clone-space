@@ -502,6 +502,18 @@ function drawShip(ctx, s, scene, time) {
     ctx.fillRect(12, -8, 12, 16);
     ctx.fillStyle = '#9fd3e6';
     ctx.fillRect(18, -5, 4, 10);
+  } else if (s.kind === 'scooter') {
+    ctx.globalAlpha = s.wrecked ? 0.55 : 1;
+    ctx.fillStyle = s.wrecked ? '#5a4b3a' : '#2b3a44';
+    ctx.fillRect(-11, -4, 20, 8); // deck
+    ctx.fillStyle = s.wrecked ? '#7a3b2e' : '#4fc3f7';
+    ctx.fillRect(-11, -4, 20, 2);
+    ctx.fillStyle = '#111';
+    ctx.beginPath(); ctx.arc(-10, 0, 3.5, 0, Math.PI * 2); ctx.arc(10, 0, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#cfd8dc';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(9, 0); ctx.lineTo(13, 0); ctx.moveTo(13, -7); ctx.lineTo(13, 7); ctx.stroke(); // stem + bars
+    ctx.globalAlpha = 1;
   } else if (s.kind === 'interceptor') {
     ctx.fillStyle = shade(col, 1.1);
     ctx.beginPath();
@@ -560,11 +572,20 @@ function drawBubble(ctx, s, b, spec) {
 }
 
 function drawShipMarks(ctx, s, scene, spec) {
+  if (s.kind === 'scooter' && s !== scene.me) {
+    const b = Math.round(s.battery ?? 100);
+    ctx.font = 'bold 9px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = s.wrecked ? '#ff5a3a' : b < 30 ? '#ffb347' : '#4fc3f7';
+    ctx.fillText(s.wrecked ? (s.voidWreck ? 'VOID WRECK' : 'WRECKED') : `${b}%`, s.x, s.y - 14);
+  }
   if (s.kind === 'shuttle') {
     ctx.fillStyle = '#d6f08a';
     ctx.font = 'bold 10px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`HUMANE SHUTTLE · ${s.passengers || 0}/13${s.vipAboard ? ' + ⭐ VIP' : ''}`, s.x, s.y + spec.radius + 22);
+    const load = s.load ?? s.passengers ?? 0;
+    if (load > 13) ctx.fillStyle = '#ffb347';
+    ctx.fillText(`HUMANE SHUTTLE · ${s.passengers || 0} aboard${s.scooters ? ` + ${s.scooters} 🛴` : ''} · ${load}/13${load > 13 ? ` (${load - 13} STANDING)` : ''}${s.vipAboard ? ' + ⭐ VIP' : ''}`, s.x, s.y + spec.radius + 22);
     if (s.bubble && scene.time < s.bubble.until) drawBubble(ctx, s, s.bubble, spec);
   }
   if (s === scene.me && s.kind !== 'eva') {

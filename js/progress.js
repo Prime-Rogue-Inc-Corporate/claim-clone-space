@@ -214,6 +214,7 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
     }).join('');
     openModal(
       `<h2>RESIDENCY CARD · LEVEL ${residencyLevel(n)}</h2>
+       ${S.souls?.count ? `<div class="sub" style="color:#ff5a3a">☠ Souls lost on your watch: ${S.souls.count}${S.souls.vips ? ` (${S.souls.vips} VIP)` : ''}. Recorded by the Registry of Skiffs &amp; Souls.</div>` : ''}
        <div class="sub">Skiff #001 · ${n}/${T13} stamps · ${processed() ? '<b style="color:#d6f08a">FULLY PROCESSED</b>' : `the 13th stamp makes you Level 1 (“Fully Processed”) and pays ${PROCESSED_REWARD} scrap`}</div>
        <table>${rows}</table>
        <div class="buttons"><button id="ach">Achievements (J)</button><button class="primary" id="x">Close</button></div>`,

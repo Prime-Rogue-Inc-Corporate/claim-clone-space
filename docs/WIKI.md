@@ -308,6 +308,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Scrounging | Bear Necessities | Grab scrap out of a bear turd. | 13 scrap |
 | Scrounging | Mother Lode | Grab a drop worth 39 scrap. | 13 scrap |
 | Scrounging | Thirteen Turds | Grab 13 drops. | 39 scrap |
+| Scrounging | Juicer | Recharge 13 scooters at Scoot Docks. | 39 scrap |
 | Freight | Independent Contractor | Complete a freight job. | 13 scrap |
 | Freight | Not a Scratch | Deliver with 0% damage. | 26 scrap |
 | Freight | Gig Economy | Complete 13 freight jobs. | 39 scrap |
@@ -317,6 +318,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Freight | Career Bureaucrat | Reach Route Steward rank in the Humane Transit Directorate. | 39 scrap |
 | Freight | VIP Treatment | Deliver a VIP with 80%+ comfort. | 39 scrap |
 | Freight | Standing Room Only | Deliver 26 passengers in one shuttle run. | 26 scrap |
+| Freight | Sardine Can | Finish a shuttle run that peaked at 13 standing (26 aboard). | 39 scrap |
 | Heat | Shook It | Escape a Corp pursuit. | 13 scrap |
 | Heat | Three-Star Getaway | Escape a 3-star pursuit. | 26 scrap |
 | Heat | Most Wanted | Escape a 5-star pursuit. | 39 scrap |
@@ -336,6 +338,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Jumping | 2.9 Seconds | Jump ship-to-ship. | 13 scrap |
 | Jumping | Grand Theft Spacecraft | Jack an NPC ship. | 13 scrap |
 | Jumping | Serial Jacker | Jack 13 ships. | 39 scrap |
+| Jumping | Micromobility | Jump onto a Last Mile Scoot rental. | 13 scrap |
 | Refit | Duct Tape | Fit any upgrade. | 13 scrap |
 | Refit | Ship of Theseus | Fit 13 upgrades. | 39 scrap |
 | Refit | Tier XIII | Max out any upgrade route. | 39 scrap |
@@ -365,6 +368,9 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Shame | _(hidden until earned)_ Passenger Incident | Make every passenger walk off your shuttle. | cosmetic: Sick-bag air freshener |
 | Shame | _(hidden until earned)_ Frozen Out | Let your Civic Warmth drop below 300. | cosmetic: Icicle hood ornament |
 | Shame | _(hidden until earned)_ Dark Lord of Transit | Open the doors of a full Humane Shuttle in the void between the city and the Sprawls. | cosmetic: Void-ejection lever (chrome) |
+| Shame | _(hidden until earned)_ Faceplant | Eat it on a rental scooter. | cosmetic: Road-rash decal |
+| Shame | _(hidden until earned)_ Body Count | 13 souls lost on your watch. | cosmetic: Tally-mark hull scratches |
+| Shame | _(hidden until earned)_ Grim Statistic | 169 souls lost on your watch. | cosmetic: Registry black armband |
 
 ## Glossary
 

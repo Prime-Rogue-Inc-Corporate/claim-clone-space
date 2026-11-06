@@ -7,6 +7,8 @@ export const KINDS = {
   // The Humane Shuttle: handles like dog shit on purpose. Laggy steering, pulls left, wobbles,
   // slides like a fridge on ice, and the brakes are a suggestion. Career ranks make it slightly less bad.
   shuttle: { label: 'Humane Shuttle', thrust: 0.075, max: 4.6, turn: 0.022, drag: 0.996, grip: 0.012, yawLag: 0.06, pull: 0.0025, wobble: 0.004, brake: 0.975, radius: 24, color: '#9c8b5e' },
+  // Last Mile Scoot rentals: quick, twitchy, fragile. Hit a wall fast and you're eating it.
+  scooter: { label: 'Scooter', thrust: 0.17, max: 8.5, turn: 0.085, drag: 0.986, grip: 0.12, radius: 9, color: '#4fc3f7' },
   eva: { label: 'EVA suit', thrust: 0.07, max: 2.3, turn: 0.11, radius: 6, color: '#d0c8b0' },
 };
 

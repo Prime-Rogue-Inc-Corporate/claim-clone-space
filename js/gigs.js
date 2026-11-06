@@ -19,15 +19,16 @@ const TYPES = {
   race: { label: 'Races', icon: 'ach_racing', color: '#e8c547' },
   stamp: { label: 'Stamps', icon: 'ach_residency', color: '#e6dcc4' },
   shuttle: { label: 'Shuttle', icon: 'logo_ministry', color: '#d6f08a' },
+  scooter: { label: 'Scooters', icon: 'logo_lastmile', color: '#4fc3f7' },
 };
-const TOGGLES = ['freight', 'drop', 'race', 'stamp'];
+const TOGGLES = ['freight', 'drop', 'race', 'stamp', 'scooter'];
 
 export function createGigs({ world, econ, loops, circuits, progress, registries, sectorName, sectorCentre, getDrops, mission, onboarding, esc, log, $, extraRows = () => [], citizen = null, startClosed = false }) {
   const compact = startClosed; // touch screens: shorter tab label
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
-  const prefs = { open: !startClosed, sort: 'dist', map: { freight: false, drop: true, race: true, stamp: true }, ...saved };
-  prefs.map = { freight: false, drop: true, race: true, stamp: true, ...(saved.map || {}) };
+  const prefs = { open: !startClosed, sort: 'dist', map: { freight: false, drop: true, race: true, stamp: true, scooter: true }, ...saved };
+  prefs.map = { freight: false, drop: true, race: true, stamp: true, scooter: true, ...(saved.map || {}) };
   let tracked = null; // row id; null = auto (mission during onboarding)
   let lastJobOffer = null;
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify({ open: prefs.open, sort: prefs.sort, map: prefs.map })); } catch {} };
@@ -109,7 +110,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     const r = trackedRow(body);
     return r ? { ...r.target, label: r.target.label || r.title, gig: r.id } : null;
   }
-  const mapView = () => ({ freight: prefs.map.freight, races: prefs.map.race, drops: prefs.map.drop, stamps: prefs.map.stamp, trackedOffer: (trackedRow()?.offerId) || null });
+  const mapView = () => ({ freight: prefs.map.freight, races: prefs.map.race, drops: prefs.map.drop, stamps: prefs.map.stamp, scooters: prefs.map.scooter, trackedOffer: (trackedRow()?.offerId) || null });
 
   function track(id) {
     tracked = tracked === id ? (id === 'mission' ? '__none' : null) : id;
@@ -132,7 +133,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     for (const r of rows) seen.add(r.id);
     const el = $('gigs');
     // keep a mix: no single type can take over the 13 rows
-    const CAP = { mission: 1, freight: 5, drop: 4, race: 3, stamp: 3, shuttle: 2 };
+    const CAP = { mission: 1, freight: 5, drop: 4, race: 3, stamp: 3, shuttle: 2, scooter: 3 };
     const used = {};
     const list = rows.filter((r) => (used[r.type] = (used[r.type] || 0) + 1) <= CAP[r.type]).slice(0, T13);
     const head = `<div class="gh"><b>GIGS</b> <span class="sub">${rows.length} open</span><span class="sp"></span>
