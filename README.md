@@ -23,8 +23,8 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | W A S D / arrows | Thrust and turn |
 | Shift | Boost |
 | Space | Brake |
-| F | Bail out to EVA / board any parked or slow ship (NPC ships too) |
-| E | At a lot's pad or a Sprawl hut site: open it. At a drop: **hold** to claim |
+| F | Jump ship-to-ship (<3s): pull alongside a slow ship, NPC ones too. Stolen ships are hot: remote-killed after 2 min, and you land back in your skiff |
+| E | At a lot's pad, the Refit Bay or a Sprawl hut site: open it. At a drop: **hold** to claim |
 | X | Decline / abandon a freight job |
 | Tab | The ledger: every lot, owner, value, buy-out price |
 | H | Help |
@@ -32,7 +32,9 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 ## What's in it
 
 - **Flight**: inertia and drag, GTA2-style camera that zooms out with speed. Buildings are footprints whose roofs push away from the camera by their height, so towers lean as you pass.
-- **The Spine**: 48 lots (24 per side). Unclaimed lots cost **$5 per floor** (1–100).
+- **The Spine**: 48 lots (24 per side). Empty lots cost **$1**. Prices are in cents. Towers grow ~6 floors per buy-out, so contested lots become the skyline. NPC corps claim empty lots too, leaving a few for players.
+- **Your skiff (#001)**: handles like garbage on purpose. Spend scrap at the **Kessler Refit Bay** (west of the start) on Gyros, Dampeners, Thrusters and Hull plating; Road chassis is coming. Upgrades are scrap only. **Mission 1**: scrounge 40 scrap, fit an upgrade.
+- **No free EVA** (the Vantablack Science Centre hasn't cleared it). You can jump ship-to-ship in under 3 seconds. If you're busted in a stolen ship it's impounded; if you're busted in your skiff you're towed to the start.
 - **Buy-outs**: any lot can be bought for **1.25× its current value**. The owner can't refuse and gets the **full price back as credits** (not cash). Credits pay first, cash tops up.
 - **Idiot-proof transparency**: every terminal shows what you pay, from what, and what happens when someone buys you out. Every lot has its full ownership ledger. Tab shows the whole market.
 - **Getting bought out**: an NPC corp market buys lots off each other, and off you. You get a popup with the buy-back maths ("your credits cover $X, top up $Y") and a waypoint button.

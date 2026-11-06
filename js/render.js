@@ -492,7 +492,12 @@ function drawShipMarks(ctx, s, scene, spec) {
     ctx.fillStyle = '#e8c547';
     ctx.font = 'bold 12px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('F · BOARD', s.x, s.y - spec.radius - 10);
+    ctx.fillText('F · JUMP', s.x, s.y - spec.radius - 10);
+  } else if (s.home) {
+    ctx.fillStyle = 'rgba(232,197,71,0.85)';
+    ctx.font = 'bold 11px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`YOUR SKIFF ${s.reg}`, s.x, s.y - spec.radius - 10);
   }
 }
 

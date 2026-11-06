@@ -2,6 +2,7 @@
 // Run once (npm run world) and commit the output. A real backend replaces this file later.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { mulberry32, hashStr, pick, randInt } from '../js/rng.js';
+import { CLAIM_PRICE, TAKEOVER_MULT, cents, floorsFor } from '../js/economy.js';
 
 const SEED = process.env.WORLD_SEED || 'spine-zero';
 const rng = mulberry32(hashStr(SEED));
@@ -22,12 +23,28 @@ const TAGS = [
   'Do not look at the sun. There is no sun.',
 ];
 
+// The five corps that own the Spine. "does" is shown in-game (ledger) and is the brief for their logos.
 export const CORPS = [
-  { id: 'vanta', name: 'Vantablack Holdings', color: '#5c6b73' },
-  { id: 'kessler', name: 'Kessler Mining Co.', color: '#9c8b5e' },
-  { id: 'ashiron', name: 'Ash & Iron', color: '#7a3b2e' },
-  { id: 'null', name: 'Null Sector Trust', color: '#4d5a3a' },
-  { id: 'cinder', name: 'Cinder Collective', color: '#8a5a3a' },
+  {
+    id: 'vanta', name: 'Vantablack Holdings', color: '#5c6b73', motto: 'We hold. You hold on.',
+    does: 'Landlord-finance conglomerate. Holds the Spine charter and most of the debt in orbit. Runs the Science Centre, still "testing" whether EVA is survivable.',
+  },
+  {
+    id: 'kessler', name: 'Kessler Mining Co.', color: '#9c8b5e', motto: 'Everything is ore eventually.',
+    does: 'Asteroid mining and salvage. Strips derelicts, sells scrap, and runs the Refit Bays where skiffs get fitted out.',
+  },
+  {
+    id: 'ashiron', name: 'Ash & Iron', color: '#7a3b2e', motto: 'Production is prayer.',
+    does: 'Heavy industry: foundries, refineries, smelters. Source of the smog, the slag vents and most of the jobs nobody wants.',
+  },
+  {
+    id: 'null', name: 'Null Sector Trust', color: '#4d5a3a', motto: 'Compliance is safety.',
+    does: 'Security and insurance. Owns the patrol drones, the impound yards and (soon) detention. Insures the corps against the people.',
+  },
+  {
+    id: 'cinder', name: 'Cinder Collective', color: '#8a5a3a', motto: 'Breathe responsibly. Air is metered.',
+    does: 'Utilities cartel: air, water, power. Everything you breathe is metered, and the Collective owns the meter.',
+  },
 ];
 
 const plots = [];
@@ -36,17 +53,16 @@ for (let side = 0; side < 2; side++) {
     const id = side * PER_SIDE + i + 1;
     const x = -((PER_SIDE * SLOT) / 2) + i * SLOT + SLOT / 2;
     const claimed = rng() > 0.3;
-    const floors = claimed ? randInt(rng, 5, 100) : 0;
     const corp = pick(rng, CORPS);
     const history = [];
     let value = 0;
     if (claimed) {
-      value = floors * 5;
+      value = CLAIM_PRICE;
       let owner = corp.id;
       history.push({ t: 0, kind: 'build', to: owner, price: value });
-      const flips = randInt(rng, 0, 5);
+      const flips = randInt(rng, 0, 8);
       for (let f = 0; f < flips; f++) {
-        const price = Math.round(value * 1.25);
+        const price = cents(value * TAKEOVER_MULT);
         const next = pick(rng, CORPS.filter((c) => c.id !== owner)).id;
         history.push({ t: f + 1, kind: 'takeover', from: owner, to: next, price });
         owner = next;
@@ -59,7 +75,7 @@ for (let side = 0; side < 2; side++) {
       id,
       side: side === 0 ? 'north' : 'south',
       x,
-      floors,
+      floors: floorsFor(value),
       owner,
       value,
       history,

@@ -1,22 +1,55 @@
 // Economy rules + local persistence. Everything here is SIMULATED (test money,
 // localStorage). The rules are the real design:
-//   - Build a new lot: $5 per floor.
+//   - Claim an empty lot: $1. Height comes from value: contested lots become the skyline.
 //   - Any branded lot can be bought at 1.25x its current value. Owner can't refuse.
 //   - The displaced owner gets the full price as non-cash CREDITS (closed loop).
 //   - Credits are spent first on any purchase; cash tops up the rest.
 //   - Scrap (from drops) and XP are game-only. They never convert to credits/cash.
 
 export const PLAYER = 'you';
-export const FLOOR_PRICE = 5;
+export const CLAIM_PRICE = 1;
 export const TAKEOVER_MULT = 1.25;
-const KEY = 'claim-clone-space:v1';
+export const START_CASH = 10; // prototype test money
+const KEY = 'claim-clone-space:v2'; // v2: $1 pricing reset (old v1 saves are ignored)
+
+// Everything is in cents. Never round to whole dollars: $1 × 1.25 would round back to $1.
+export const cents = (n) => Math.round(n * 100) / 100;
 
 export function takeoverPrice(plot) {
-  return Math.round(plot.value * TAKEOVER_MULT);
+  return cents(plot.value * TAKEOVER_MULT);
 }
 
-export function buildPrice(floors) {
-  return floors * FLOOR_PRICE;
+export function buildPrice() {
+  return CLAIM_PRICE;
+}
+
+// Skyline: every buy-out (×1.25) adds ~6 floors. $1 = 10F, ~15 flips (≈$28) = 100F.
+export function floorsFor(value) {
+  if (!value || value <= 0) return 0;
+  const flips = Math.log(Math.max(1, value) / CLAIM_PRICE) / Math.log(TAKEOVER_MULT);
+  return Math.max(10, Math.min(100, Math.round(10 + 6 * flips)));
+}
+
+// ---- Skiff upgrades: earned scrap only, never cash or credits (no paid edge). ----
+export const UPGRADES = {
+  gyros: { name: 'Gyros', what: 'Turn rate', tiers: [40, 90, 160] },
+  dampers: { name: 'Dampeners', what: 'Kills sideways drift so the skiff goes where it points', tiers: [50, 110, 200] },
+  thrusters: { name: 'Thrusters', what: 'Acceleration + top speed', tiers: [60, 130, 240] },
+  hull: { name: 'Hull plating', what: 'Less cargo damage; survives a drone tap', tiers: [80, 180] },
+  chassis: { name: 'Road chassis', what: 'Spine-rated. Spine access opens when Security goes live.', tiers: [400], locked: true },
+};
+
+// The starter skiff handles like a shopping cart of scrap. Upgrades fix that.
+export function skiffStats(u = {}) {
+  const g = u.gyros || 0, d = u.dampers || 0, t = u.thrusters || 0;
+  return {
+    thrust: 0.14 + 0.035 * t,
+    max: 6.5 + 1.0 * t,
+    turn: 0.035 + 0.012 * g,
+    drag: 0.993 - 0.0015 * d,
+    grip: [0, 0.025, 0.055, 0.09][d],
+    radius: 14,
+  };
 }
 
 export function levelFor(xp) {
@@ -35,7 +68,7 @@ export function sightRadius(level) {
 export function createEconomy(world) {
   const saved = load();
   const state = {
-    cash: 2500, // test money only
+    cash: START_CASH, // test money only
     credits: 0,
     scrap: 0,
     xp: 0,
@@ -44,6 +77,8 @@ export function createEconomy(world) {
     claimedDrops: {},
     overrides: {},
     hut: null,
+    upgrades: {},
+    mission: 1, // onboarding step: 1 = scrounge scrap, 2 = fit first upgrade, 0 = done
     ...saved,
   };
 
@@ -84,26 +119,26 @@ export function createEconomy(world) {
 
   // Credits first, then cash. Returns false if the wallet can't cover it.
   function pay(amount) {
-    if (state.credits + state.cash < amount) return false;
-    const fromCredits = Math.min(state.credits, amount);
-    state.credits -= fromCredits;
-    state.cash -= amount - fromCredits;
-    return { fromCredits, fromCash: amount - fromCredits };
+    if (cents(state.credits + state.cash) < amount) return false;
+    const fromCredits = cents(Math.min(state.credits, amount));
+    state.credits = cents(state.credits - fromCredits);
+    state.cash = cents(state.cash - (amount - fromCredits));
+    return { fromCredits, fromCash: cents(amount - fromCredits) };
   }
 
   function quote(amount) {
-    const fromCredits = Math.min(state.credits, amount);
-    return { total: amount, fromCredits, fromCash: amount - fromCredits, affordable: state.credits + state.cash >= amount };
+    const fromCredits = cents(Math.min(state.credits, amount));
+    return { total: amount, fromCredits, fromCash: cents(amount - fromCredits), affordable: cents(state.credits + state.cash) >= amount };
   }
 
-  function build(plot, floors) {
+  function build(plot) {
     if (plot.owner) return { ok: false, reason: 'Lot already claimed.' };
-    const price = buildPrice(floors);
+    const price = buildPrice();
     const paid = pay(price);
     if (!paid) return { ok: false, reason: 'Not enough credits + cash.' };
     plot.owner = PLAYER;
-    plot.floors = floors;
     plot.value = price;
+    plot.floors = floorsFor(price);
     plot.history.push({ t: Date.now(), kind: 'build', to: PLAYER, price });
     plot.brand = { name: `Lot ${plot.id}`, tagline: '', color: '#c9a227', link: '' };
     persistPlot(plot);
@@ -121,9 +156,10 @@ export function createEconomy(world) {
       paid = pay(price);
       if (!paid) return { ok: false, reason: 'Not enough credits + cash.' };
     }
-    if (prev === PLAYER) state.credits += price; // displaced owner made whole in credits
+    if (prev === PLAYER) state.credits = cents(state.credits + price); // displaced owner made whole in credits
     plot.owner = buyer;
     plot.value = price;
+    plot.floors = floorsFor(price);
     plot.history.push({ t: Date.now(), kind: 'takeover', from: prev, to: buyer, price });
     if (buyer !== PLAYER) {
       const corp = corpsById[buyer];
@@ -200,6 +236,21 @@ export function createEconomy(world) {
     return { ok: true };
   }
 
+  function buyUpgrade(id) {
+    const u = UPGRADES[id];
+    if (!u) return { ok: false, reason: 'Unknown upgrade.' };
+    if (u.locked) return { ok: false, reason: 'Not available yet. Spine Security isn\'t live.' };
+    const tier = state.upgrades[id] || 0;
+    const cost = u.tiers[tier];
+    if (cost == null) return { ok: false, reason: 'Maxed out.' };
+    if (state.scrap < cost) return { ok: false, reason: `Need ${cost} scrap. You have ${state.scrap}.` };
+    state.scrap -= cost; // scrap only; XP is kept
+    state.upgrades[id] = tier + 1;
+    if (state.mission === 1 || state.mission === 2) state.mission = 0;
+    save();
+    return { ok: true, tier: tier + 1, mission: state.mission };
+  }
+
   function claimDrop(drop, multiplier = 1) {
     if (state.claimedDrops[drop.key]) return null;
     const before = levelFor(state.xp);
@@ -216,7 +267,32 @@ export function createEconomy(world) {
   }
 
   // NPC market: corps buy lots off each other, and sometimes off you.
+  // Corps also claim empty $1 lots on their own, but always leave a few for players.
+  const NPC_PREFIX = ['Hollow', 'Ash', 'Iron', 'Grey', 'Null', 'Rust', 'Sable', 'Tithe', 'Gallows', 'Slag', 'Pallid', 'Cinder'];
+  const NPC_SUFFIX = ['Foundry', 'Arcology', 'Refinery', 'Spire', 'Hab-Block', 'Depot', 'Relay', 'Silo', 'Exchange', 'Kiln', 'Yard', 'Works'];
+  function npcClaim(rng) {
+    const empty = world.plots.filter((p) => !p.owner);
+    if (empty.length <= 6) return false;
+    const plot = empty[Math.floor(rng() * empty.length)];
+    const corp = world.corps[Math.floor(rng() * world.corps.length)];
+    plot.owner = corp.id;
+    plot.value = CLAIM_PRICE;
+    plot.floors = floorsFor(CLAIM_PRICE);
+    plot.history.push({ t: Date.now(), kind: 'build', to: corp.id, price: CLAIM_PRICE });
+    plot.brand = {
+      name: `${NPC_PREFIX[Math.floor(rng() * NPC_PREFIX.length)]} ${NPC_SUFFIX[Math.floor(rng() * NPC_SUFFIX.length)]}`,
+      tagline: corp.motto || '',
+      color: corp.color,
+      link: '',
+    };
+    persistPlot(plot);
+    save();
+    emit('market', { plot, buyer: corp.id, claimed: true });
+    return true;
+  }
+
   function npcTick(rng) {
+    if (rng() < 0.3 && npcClaim(rng)) return;
     const claimed = world.plots.filter((p) => p.owner);
     if (!claimed.length) return;
     const mine = claimed.filter((p) => p.owner === PLAYER);
@@ -247,6 +323,7 @@ export function createEconomy(world) {
     claimDrop,
     reward,
     fine,
+    buyUpgrade,
     HUT_TIERS,
     buildHut,
     upgradeHut,

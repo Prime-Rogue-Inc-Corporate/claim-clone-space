@@ -1,5 +1,5 @@
 import { mulberry32 } from './rng.js';
-import { createEconomy, takeoverPrice, buildPrice, levelFor, xpForLevel, sightRadius, PLAYER } from './economy.js';
+import { createEconomy, takeoverPrice, buildPrice, levelFor, xpForLevel, sightRadius, PLAYER, UPGRADES, skiffStats, TAKEOVER_MULT, cents } from './economy.js';
 import { solids, collide, plotPad, sectorName, dropsForWindow, decorations, DROP_WINDOW_MS, flyBounds, sprawlSites, hutRect, hutPad, region } from './world.js';
 import { createLoops } from './loops.js';
 import { loadSprites } from './sprites.js';
@@ -9,7 +9,7 @@ import { drawScene, drawMinimap, makeStars } from './render.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-const money = (n) => `$${Math.round(n).toLocaleString()}`;
+const money = (n) => `$${(Number(n) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 const DEFAULT_BULLETIN = { day: 'offline', event: { id: 'calm', label: 'No bulletin', dropMultiplier: 1, headline: 'Bulletin relay offline.' }, featuredPlot: null };
 
@@ -73,10 +73,15 @@ function start(world, bulletin, sprites, devData) {
   // ---- entities ----
   const homeSite = S.hut && sprawl.sites.find((s) => s.id === S.hut.site);
   const spawn = homeSite ? { x: hutPad(homeSite).x, y: hutPad(homeSite).y + 60, a: -Math.PI } : { x: 0, y: 640, a: -Math.PI / 2 };
-  const myShip = makeShip('skiff', spawn.x, spawn.y, spawn.a);
+  // Your skiff: issued at signup, numbered (the server will assign real numbers from #001), never sold.
+  const START = { x: 0, y: 640 }; // static return point for now (detention etc. later)
+  const myShip = makeShip('skiff', spawn.x, spawn.y, spawn.a, { home: true, reg: '#001', stats: skiffStats(S.upgrades) });
   const ships = [myShip, ...world.parked.map((p) => makeShip(p.kind, p.x, p.y, p.angle)), ...makeTraffic(rng, world.corps, 12)];
-  const player = { mode: 'ship', ship: myShip, eva: null };
+  // mode: 'ship' (flying something) or 'jump' (the brief ship-to-ship leap). Free EVA is locked by the Science Centre.
+  const player = { mode: 'ship', ship: myShip, home: myShip, eva: null, jump: null, stolenUntil: 0 };
   const me = () => (player.mode === 'ship' ? player.ship : player.eva);
+  const STOLEN_MS = 120000;
+  const REFIT = { x: -320, y: 760 }; // Kessler Refit Bay, near the start
 
   const cam = { x: myShip.x, y: myShip.y, zoom: 1 };
   const deco = decorations(world);
@@ -123,7 +128,7 @@ function start(world, bulletin, sprites, devData) {
 
   $('bulletin').innerHTML = `<b>CORP BULLETIN ${esc(bulletin.day)}</b> · ${esc(bulletin.event.headline)}${bulletin.event.dropMultiplier !== 1 ? ` · drops ×${bulletin.event.dropMultiplier}` : ''}`;
 
-  const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites });
+  const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites, hullLevel: () => (player.ship === player.home ? S.upgrades.hull || 0 : 0) });
 
   // ---- staging tools: roadmap (R) + pinned notes (N); hidden on the production domain ----
   const dev = devData
@@ -131,7 +136,7 @@ function start(world, bulletin, sprites, devData) {
         ...devData, esc, log, openModal, closeModal,
         getContext: () => {
           const b = me();
-          return { x: b.x, y: b.y, sector: sectorName(world, b.x, b.y), mode: player.mode === 'ship' ? KINDS[b.kind].label : 'EVA', level: levelFor(S.xp) };
+          return { x: b.x, y: b.y, sector: sectorName(world, b.x, b.y), mode: modeLabel(), level: levelFor(S.xp) };
         },
         setWaypoint: (w) => (waypoint = w),
       })
@@ -162,54 +167,87 @@ function start(world, bulletin, sprites, devData) {
   let nearPlot = null;
   let nearHut = null;
   let nearDrop = null;
+  let nearRefit = false;
   let boardable = null;
+
+  function modeLabel() {
+    if (player.mode === 'jump') return 'JUMPING';
+    const s = player.ship;
+    if (s === player.home) return `SKIFF ${s.reg}`;
+    return `STOLEN ${KINDS[s.kind].label.toUpperCase()} · ${Math.max(0, Math.ceil((player.stolenUntil - performance.now()) / 1000))}s`;
+  }
 
   function onPress(k) {
     if (dev && dev.onKey(k)) return;
     if (k === 'h') return openHelp();
     if (k === 'tab') return openLedger();
-    if (k === 'f') return toggleBoard();
+    if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now());
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
+    if (k === 'e' && !nearDrop && nearRefit) return openRefit();
   }
 
-  // Busted by Corp drones: ship impounded, you're on EVA.
+  // Back into your own skiff, wherever you left it. Stolen ships are always temporary.
+  function returnToSkiff(msg) {
+    player.mode = 'ship';
+    player.ship = player.home;
+    player.eva = null;
+    player.jump = null;
+    player.stolenUntil = 0;
+    if (msg) log(msg);
+  }
+
+  // Busted by Null Sector drones.
   function bust() {
-    const body = me();
-    if (player.mode === 'ship') {
+    if (player.mode === 'ship' && player.ship !== player.home) {
       const i = ships.indexOf(player.ship);
-      if (i >= 0) ships.splice(i, 1);
-      player.eva = makeShip('eva', body.x, body.y + 30, body.angle);
-      player.ship = null;
-      player.mode = 'eva';
+      if (i >= 0) ships.splice(i, 1); // the stolen ship is impounded
+      returnToSkiff(`The ${KINDS[player.ship.kind].label.toLowerCase()} is impounded. Null Sector drops you back in your skiff.`);
+      return;
     }
+    // in your own skiff (or mid-jump): towed back to the start. Later: detention, etc.
+    returnToSkiff();
+    Object.assign(player.home, { x: START.x, y: START.y, vx: 0, vy: 0, angle: -Math.PI / 2 });
+    log('A Null Sector tug tows your skiff back to the start.');
   }
 
-  function toggleBoard() {
-    if (player.mode === 'ship') {
-      const s = player.ship;
-      if (speedOf(s) > 2.5) return log('Too fast to bail. Brake first (SPACE).');
-      const off = KINDS[s.kind].radius + 12;
-      player.eva = makeShip('eva', s.x + Math.cos(s.angle + Math.PI / 2) * off, s.y + Math.sin(s.angle + Math.PI / 2) * off, s.angle);
-      player.mode = 'eva';
-      player.ship = null;
-      log('EVA. Suit integrity nominal. Probably.');
-    } else if (boardable) {
-      const s = boardable;
-      if (s.npc) {
-        const corp = econ.corpsById[s.corp];
-        log(`You jacked a ${esc(corp?.name || 'corp')} ${KINDS[s.kind].label.toLowerCase()}. The pilot has been… relocated.`);
-        loops.onJack(performance.now());
-        s.npc = false;
-        s.ai = null;
-      } else {
-        log(`Boarded ${KINDS[s.kind].label.toLowerCase()}.`);
-      }
-      player.ship = s;
-      player.eva = null;
-      player.mode = 'ship';
+  // F: ship-to-ship jump. Under 3s of exposure is "acceptable" per the Science Centre.
+  function tryJump() {
+    if (player.mode !== 'ship') return;
+    const from = player.ship;
+    if (!boardable) {
+      return log('EVA not cleared. The Vantablack Science Centre is still testing whether it\'s survivable. Pull alongside a slow ship to jump.');
     }
+    if (speedOf(from) > 4) return log('Too fast to jump. Brake first (SPACE).');
+    const to = boardable;
+    const dist = Math.hypot(to.x - from.x, to.y - from.y);
+    player.eva = makeShip('eva', from.x, from.y, Math.atan2(to.y - from.y, to.x - from.x));
+    player.jump = { from, to, t: 0, dur: Math.min(2.5, Math.max(0.5, dist / 90)), sx: from.x, sy: from.y };
+    player.mode = 'jump';
+  }
+
+  function landJump() {
+    const { to, dur } = player.jump;
+    player.eva = null;
+    player.jump = null;
+    player.mode = 'ship';
+    player.ship = to;
+    if (to === player.home) {
+      player.stolenUntil = 0;
+      return log(`Back in your skiff ${player.home.reg}. ${dur.toFixed(1)}s of exposure, logged.`);
+    }
+    if (to.npc) {
+      const corp = econ.corpsById[to.corp];
+      log(`You jacked a ${esc(corp?.name || 'corp')} ${KINDS[to.kind].label.toLowerCase()}. ${dur.toFixed(1)}s of exposure. The pilot has been… relocated.`);
+      loops.onJack(performance.now());
+      to.npc = false;
+      to.ai = null;
+    } else {
+      log(`Jumped into a derelict ${KINDS[to.kind].label.toLowerCase()}.`);
+    }
+    player.stolenUntil = performance.now() + STOLEN_MS;
+    log(`It's hot: Corp will remote-kill it in ${STOLEN_MS / 1000}s. Your skiff stays where you left it.`);
   }
 
   // ---- economy events ----
@@ -217,7 +255,8 @@ function start(world, bulletin, sprites, devData) {
     if (type === 'lost') showLost(p);
     if (type === 'bought') log(`You now hold <b>${esc(p.plot.brand?.name)}</b> (Lot ${p.plot.id}) for ${money(p.price)}.`, 'money');
     if (type === 'market' && p.plot.owner !== PLAYER) {
-      if (rng() < 0.35) log(`MARKET: ${esc(econ.ownerName(p.buyer))} took Lot ${p.plot.id} for ${money(p.plot.value)}.`);
+      if (p.claimed) log(`MARKET: ${esc(econ.ownerName(p.buyer))} claimed empty Lot ${p.plot.id} for ${money(p.plot.value)}.`);
+      else if (rng() < 0.35) log(`MARKET: ${esc(econ.ownerName(p.buyer))} took Lot ${p.plot.id} for ${money(p.plot.value)}.`);
     }
     solidCache = rects();
   });
@@ -265,11 +304,12 @@ function start(world, bulletin, sprites, devData) {
     let action = '';
     if (!p.owner) {
       action = `
-        <h3>BUILD</h3>
-        <div class="field"><span>Floors: <b id="fl-n">25</b> × $5 = <b id="fl-p">${money(buildPrice(25))}</b></span><input type="range" id="floors" min="1" max="100" value="25" /></div>
-        <div class="explain" id="explain"></div>
+        <h3>CLAIM</h3>
+        <div class="explain">Empty lots cost <b>${money(buildPrice())}</b>. ${payLine(econ.quote(buildPrice()))}<br/>
+        Your tower starts at ${10} floors and grows every time the lot changes hands.<br/>
+        Once claimed, anyone can buy it from you for <b>${money(cents(buildPrice() * TAKEOVER_MULT))}</b>, and you'd get that much back in credits.</div>
         ${riskBox()}
-        <div class="buttons"><button class="primary" id="go">Build</button><button id="x">Close</button></div>
+        <div class="buttons"><button class="primary" id="go">Claim for ${money(buildPrice())}</button><button id="x">Close</button></div>
         <div class="err" id="err"></div>`;
     } else if (mine) {
       action = `
@@ -284,7 +324,7 @@ function start(world, bulletin, sprites, devData) {
           <b>Buy it now: ${money(price)}</b> (1.25 × current value ${money(p.value)}).<br/>
           ${payLine(q)}<br/>
           ${esc(owner)} gets ${money(price)} in credits. Nobody can refuse.<br/>
-          After you buy, anyone can take it from you for <b>${money(Math.round(price * 1.25))}</b>, and you'd get that much back in credits.
+          After you buy, anyone can take it from you for <b>${money(cents(price * TAKEOVER_MULT))}</b>, and you'd get that much back in credits.
         </div>
         ${riskBox()}
         <div class="buttons"><button class="primary" id="go" ${q.affordable ? '' : 'disabled'}>Buy out ${esc(owner)}</button><button id="x">Close</button></div>
@@ -310,33 +350,20 @@ function start(world, bulletin, sprites, devData) {
         el.querySelector('#brand')?.addEventListener('click', () => openBrand(p));
         const risk = el.querySelector('#risk');
         const go = el.querySelector('#go');
-        const slider = el.querySelector('#floors');
-        const updateBuild = () => {
-          const n = Number(slider.value);
-          const q = econ.quote(buildPrice(n));
-          el.querySelector('#fl-n').textContent = n;
-          el.querySelector('#fl-p').textContent = money(q.total);
-          el.querySelector('#explain').innerHTML = `${payLine(q)}<br/>Once built, anyone can buy it from you for <b>${money(Math.round(q.total * 1.25))}</b>, and you'd get that much back in credits.`;
-          go.dataset.afford = q.affordable ? '1' : '';
-          sync();
-        };
         const sync = () => {
           if (!go) return;
           const okRisk = S.acceptedRisk || (risk && risk.checked);
-          const afford = slider ? go.dataset.afford === '1' : econ.quote(takeoverPrice(p)).affordable;
+          const afford = econ.quote(p.owner ? takeoverPrice(p) : buildPrice()).affordable;
           go.disabled = !(okRisk && afford);
         };
         risk?.addEventListener('change', sync);
-        if (slider) {
-          slider.addEventListener('input', updateBuild);
-          updateBuild();
-        } else sync();
+        sync();
         go?.addEventListener('click', () => {
           if (risk?.checked) {
             S.acceptedRisk = true;
             econ.save();
           }
-          const res = p.owner ? econ.takeover(p) : econ.build(p, Number(slider.value));
+          const res = p.owner ? econ.takeover(p) : econ.build(p);
           if (!res.ok) {
             el.querySelector('#err').textContent = res.reason;
             return;
@@ -449,6 +476,100 @@ function start(world, bulletin, sprites, devData) {
     });
   }
 
+  // ---- Kessler Refit Bay: skiff upgrades, scrap only ----
+  function openRefit() {
+    const U = S.upgrades;
+    const rows = Object.entries(UPGRADES)
+      .map(([id, u]) => {
+        const tier = U[id] || 0;
+        const cost = u.tiers[tier];
+        const pips = u.tiers.map((_, i) => (i < tier ? '■' : '□')).join('');
+        const btn = u.locked
+          ? '<span class="sub">coming soon</span>'
+          : cost == null
+          ? '<span class="sub">maxed</span>'
+          : `<button data-up="${id}" ${S.scrap >= cost ? '' : 'disabled'}>${cost} scrap</button>`;
+        return `<tr><td><b>${esc(u.name)}</b> <span style="color:#e8c547">${pips}</span><div class="sub" style="margin:2px 0 0">${esc(u.what)}</div></td><td style="width:110px;text-align:right">${btn}</td></tr>`;
+      })
+      .join('');
+    const st = skiffStats(U);
+    openModal(
+      `<h2>KESSLER REFIT BAY</h2>
+       <div class="sub">Skiff ${esc(player.home.reg)} · you have <b>${S.scrap} scrap</b> · scrap only, no cash or credits accepted</div>
+       <table>${rows}</table>
+       <div class="sub">Turn ${(st.turn * 1000).toFixed(0)} · grip ${(st.grip * 100).toFixed(1)} · thrust ${(st.thrust * 100).toFixed(0)} · top ${(st.max * 10).toFixed(0)} m/s</div>
+       <div class="err" id="err"></div>
+       <div class="buttons"><button id="x">Close</button></div>`,
+      (el) => {
+        el.querySelector('#x').addEventListener('click', closeModal);
+        el.querySelectorAll('[data-up]').forEach((b) =>
+          b.addEventListener('click', () => {
+            const res = econ.buyUpgrade(b.dataset.up);
+            if (!res.ok) return (el.querySelector('#err').textContent = res.reason);
+            player.home.stats = skiffStats(S.upgrades);
+            log(`Fitted ${esc(UPGRADES[b.dataset.up].name)} ${'I'.repeat(res.tier)}. Kessler thanks you for your scrap.`, 'money');
+            if (res.mission === 0 && missionShown !== 0) {
+              missionShown = 0;
+              econ.reward(15);
+              log('MISSION 1 COMPLETE: your skiff steers slightly less like garbage. +15 scrap.', 'good');
+            }
+            openRefit();
+          })
+        );
+      }
+    );
+  }
+
+  // ---- onboarding mission #1 ----
+  const MISSION_SCRAP = 40;
+  let missionShown = S.mission;
+  function missionText() {
+    if (S.mission === 1) return `MISSION 1 · Scrounge ${MISSION_SCRAP} scrap (${Math.min(S.scrap, MISSION_SCRAP)}/${MISSION_SCRAP}). Hunt drops, run freight.`;
+    if (S.mission === 2) return 'MISSION 1 · Fly to the Kessler Refit Bay and fit any upgrade.';
+    return '';
+  }
+  function missionTick() {
+    if (S.mission === 1 && S.scrap >= MISSION_SCRAP) {
+      S.mission = 2;
+      econ.save();
+      waypoint = { x: REFIT.x, y: REFIT.y };
+      log('Enough scrap. Waypoint set to the Kessler Refit Bay.', 'good');
+    }
+  }
+  function openIntro() {
+    openModal(
+      `<h2>WELCOME TO SPACESQUAT</h2>
+       <div class="sub">Skiff ${esc(player.home.reg)} issued. Do not lose it. You cannot leave it.</div>
+       <div class="explain">Your skiff handles like a shopping cart full of scrap. That's not a bug, it's your starting position.<br/><br/>
+       <b>Mission 1:</b> scrounge ${MISSION_SCRAP} scrap (drops, freight jobs), then fit your first upgrade at the <b>Kessler Refit Bay</b> just west of here.<br/><br/>
+       The Vantablack Science Centre has not cleared EVA. You may jump ship-to-ship (<kbd>F</kbd>) for under 3 seconds. Anything you steal is temporary.</div>
+       <div class="buttons"><button class="primary" id="x">Fly</button><button id="help">Controls (H)</button></div>`,
+      (el) => {
+        el.querySelector('#x').addEventListener('click', closeModal);
+        el.querySelector('#help').addEventListener('click', openHelp);
+      }
+    );
+  }
+
+  function drawRefit(c, time) {
+    const img = sprites?.get('pad');
+    c.save();
+    if (img) c.drawImage(img, REFIT.x - 34, REFIT.y - 30, 68, 68 * (img.height / img.width));
+    c.strokeStyle = nearRefit ? '#e8c547' : 'rgba(232,197,71,0.35)';
+    c.lineWidth = 3;
+    c.beginPath();
+    c.arc(REFIT.x, REFIT.y, 40 + (S.mission === 2 ? Math.sin(time / 200) * 5 : 0), 0, Math.PI * 2);
+    c.stroke();
+    c.fillStyle = '#e8c547';
+    c.font = 'bold 13px monospace';
+    c.textAlign = 'center';
+    c.fillText('KESSLER REFIT BAY', REFIT.x, REFIT.y - 52);
+    c.font = '10px monospace';
+    c.fillStyle = 'rgba(232,197,71,0.7)';
+    c.fillText('scrap only · E to fit', REFIT.x, REFIT.y + 56);
+    c.restore();
+  }
+
   function openLedger() {
     const claimed = world.plots.filter((p) => p.owner).sort((a, b) => b.value - a.value);
     const total = claimed.reduce((s, p) => s + p.value, 0);
@@ -459,9 +580,13 @@ function start(world, bulletin, sprites, devData) {
     openModal(
       `<h2>THE LEDGER</h2>
        <div class="sub">Every lot, every price, every buy-out. Market value ${money(total)} · ${changes} ownership changes · ${world.plots.length - claimed.length} lots unclaimed. Click a row to set a waypoint.</div>
-       <div class="explain"><b>The rules, all of them:</b> new lots cost $5 per floor. Any lot can be bought for 1.25× its current value; the owner can't refuse and gets the full price back as credits.
-       Credits pay first, cash tops up. Credits never expire and never turn into cash. Scrap and levels are game-only.</div>
+       <div class="explain"><b>The rules, all of them:</b> empty lots cost $1. Any lot can be bought for 1.25× its current value; the owner can't refuse and gets the full price back as credits. Towers grow every time a lot changes hands.
+       Credits pay first, cash tops up. Credits never expire and never turn into cash. Scrap, levels and skiff upgrades are game-only.</div>
        <table><tr><th>Lot</th><th>Name</th><th>Owner</th><th>Value</th><th>Buy-out</th><th>Flips</th></tr>${rows}</table>
+       <h3>WHO OWNS THE SPINE</h3>
+       <table>${world.corps
+         .map((c) => `<tr><td style="width:12px;background:${esc(c.color)}"></td><td><b>${esc(c.name)}</b>${c.motto ? ` · <i>“${esc(c.motto)}”</i>` : ''}<div class="sub" style="margin:2px 0 0">${esc(c.does || '')}</div></td><td style="width:60px;text-align:right">${claimed.filter((p) => p.owner === c.id).length} lots</td></tr>`)
+         .join('')}</table>
        <div class="buttons"><button id="x">Close</button><button id="reset">Wipe my save</button></div>`,
       (el) => {
         el.querySelector('#x').addEventListener('click', closeModal);
@@ -483,15 +608,16 @@ function start(world, bulletin, sprites, devData) {
          <span class="k"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / arrows</span><span>Thrust and turn</span>
          <span class="k"><kbd>SHIFT</kbd></span><span>Boost</span>
          <span class="k"><kbd>SPACE</kbd></span><span>Brake</span>
-         <span class="k"><kbd>F</kbd></span><span>Bail out / board any parked or slow ship (yes, NPC ones too)</span>
-         <span class="k"><kbd>E</kbd></span><span>At a lot's pad: open the terminal. At a drop: hold to claim.</span>
+         <span class="k"><kbd>F</kbd></span><span>Jump ship-to-ship: pull alongside a slow ship (yes, NPC ones). Stolen ships are hot and get remote-killed after 2 minutes; you land back in your skiff.</span>
+         <span class="k"><kbd>E</kbd></span><span>At a lot's pad: open the terminal. At the Refit Bay: upgrade your skiff. At a drop: hold to claim.</span>
          <span class="k"><kbd>X</kbd></span><span>Decline / abandon a freight job</span>
          <span class="k"><kbd>TAB</kbd></span><span>The ledger: every lot and price</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
        <h3>THE GAME</h3>
        <div>Fly the Spine. Hunt drops: when something craps out a load of scrap, the first pilot to reach it and hold <kbd>E</kbd> gets it.
-       Scrap gives XP; levels widen your sight radius, the only edge anyone gets. Buy lots, brand them, get bought out, buy them back.</div>
+       Scrap gives XP; levels widen your sight radius. Spend scrap at the Kessler Refit Bay so your skiff stops handling like a shopping cart. Buy lots for $1, brand them, get bought out, buy them back.<br/>
+       <i>Why can't I get out? The Vantablack Science Centre hasn't cleared EVA yet. A jump under 3 seconds is the most they'll sign off on.</i></div>
        <h3>SIDE HUSTLES (scrap + XP only)</h3>
        <div><b>Freight jobs:</b> fly to the blue pickup beacon, slow down to load, deliver to the yellow beacon before the clock runs out. Every wall you hit damages the cargo.<br/>
        <b>Heat:</b> jacking ships or speeding in the Spine zone brings Corp drones after you. Lose them for 10s to drop a star; shake them all for a payout. Get caught and your ship is impounded.<br/>
@@ -513,12 +639,36 @@ function start(world, bulletin, sprites, devData) {
     const wall = Date.now();
     refreshDrops(wall);
 
-    const body = me();
-    const input = modalOpen ? {} : inputState();
-    fly(body, input, dt, !modalOpen && keys.has('shift'));
-    const hit = collide(body, KINDS[body.kind].radius, solidCache);
-    clampToBounds(body);
+    // stolen ships are hot: the Corp remote-kills them, and you're back in your skiff
+    if (player.mode === 'ship' && player.stolenUntil && now > player.stolenUntil) {
+      const dead = player.ship;
+      dead.vx *= 0.2;
+      dead.vy *= 0.2;
+      returnToSkiff(`Corp remote-killed the ${KINDS[dead.kind].label.toLowerCase()}. A Kessler tug drags you back to skiff ${player.home.reg}.`);
+    }
+
+    let body = me();
+    let hit = false;
+    if (player.mode === 'jump') {
+      const j = player.jump;
+      j.t += dt;
+      const f = Math.min(1, j.t / j.dur);
+      body.x = j.sx + (j.to.x - j.sx) * f;
+      body.y = j.sy + (j.to.y - j.sy) * f;
+      body.angle = Math.atan2(j.to.y - j.sy, j.to.x - j.sx);
+      body.thrusting = true;
+      if (f >= 1) {
+        landJump();
+        body = me();
+      }
+    } else {
+      const input = modalOpen ? {} : inputState();
+      fly(body, input, dt, !modalOpen && keys.has('shift'));
+      hit = collide(body, KINDS[body.kind].radius, solidCache);
+      clampToBounds(body);
+    }
     if (!modalOpen) loops.update(dt, now, body, hit);
+    missionTick();
 
     for (const s of ships) {
       if (s === body) continue;
@@ -550,11 +700,18 @@ function start(world, bulletin, sprites, devData) {
         if (Math.hypot(pad.x - body.x, pad.y - body.y) < 36) nearHut = site;
       }
     }
+    nearRefit = Math.hypot(REFIT.x - body.x, REFIT.y - body.y) < 45;
     boardable = null;
-    if (player.mode === 'eva') {
+    if (player.mode === 'ship') {
+      let best = Infinity;
       for (const s of ships) {
+        if (s === body) continue;
         const lim = s.npc ? 4.5 : 2.5;
-        if (Math.hypot(s.x - body.x, s.y - body.y) < KINDS[s.kind].radius + 22 && speedOf(s) < lim) boardable = s;
+        const d = Math.hypot(s.x - body.x, s.y - body.y);
+        if (d < KINDS[s.kind].radius + KINDS[body.kind].radius + 60 && speedOf(s) < lim && d < best) {
+          best = d;
+          boardable = s;
+        }
       }
     }
 
@@ -592,7 +749,7 @@ function start(world, bulletin, sprites, devData) {
 
     // camera: GTA2 zoom-out with speed
     const sp = speedOf(body);
-    const targetZoom = player.mode === 'eva' ? 1.35 : Math.max(0.5, Math.min(1.05, 1.05 - sp * 0.055));
+    const targetZoom = player.mode === 'jump' ? 1.35 : Math.max(0.5, Math.min(1.05, 1.05 - sp * 0.055));
     cam.zoom += (targetZoom - cam.zoom) * Math.min(1, dt * 2);
     cam.x += (body.x + body.vx * 18 - cam.x) * Math.min(1, dt * 4);
     cam.y += (body.y + body.vy * 18 - cam.y) * Math.min(1, dt * 4);
@@ -604,8 +761,8 @@ function start(world, bulletin, sprites, devData) {
       holdDrop: hold.drop, holdProgress: hold.progress,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites,
-      extraWorld: (c) => { loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { loops.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
+      extraWorld: (c) => { drawRefit(c, now); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
     };
     drawScene(ctx, W, H, cam, scene);
     drawMinimap(mctx, 200, 150, scene);
@@ -615,14 +772,16 @@ function start(world, bulletin, sprites, devData) {
     if (nearDrop) prompt = `Hold E to claim ${nearDrop.amount} scrap${sp >= 3.5 ? ' (slow down)' : ''}`;
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
+    else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
     else if (loops.prompt(body)) prompt = loops.prompt(body);
-    else if (boardable) prompt = `F · board ${boardable.npc ? 'and jack ' : ''}${KINDS[boardable.kind].label.toLowerCase()}`;
+    else if (boardable) prompt = boardable === player.home ? `F · jump back into your skiff ${player.home.reg}` : `F · jump ${boardable.npc ? 'and jack the ' : 'into the '}${KINDS[boardable.kind].label.toLowerCase()}`;
     else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y))}m`;
     const pe = $('prompt');
     pe.style.display = prompt && !modalOpen ? 'block' : 'none';
     pe.textContent = prompt;
 
-    const ls = loops.status(now);
+    const mt = missionText();
+    const ls = [mt && `<span style="color:#d6f08a">${esc(mt)}</span>`, loops.status(now)].filter(Boolean).join('<br/>');
     if (ls !== lastLoops) {
       lastLoops = ls;
       $('h-loops').innerHTML = ls;
@@ -630,7 +789,7 @@ function start(world, bulletin, sprites, devData) {
     }
 
     // HUD (only touch the DOM when something changed)
-    const hudKey = [S.cash, S.credits, S.scrap, S.xp, player.mode, sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
+    const hudKey = [S.cash, S.credits, S.scrap, S.xp, modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
     if (hudKey !== lastHud) {
       lastHud = hudKey;
       $('h-cash').textContent = money(S.cash);
@@ -641,7 +800,7 @@ function start(world, bulletin, sprites, devData) {
       $('h-sight').textContent = `sight ${sightRadius(lv)}m`;
       const lo = xpForLevel(lv), hi = xpForLevel(lv + 1);
       $('h-xp').style.width = `${Math.max(0, Math.min(100, Math.round(((S.xp - lo) / (hi - lo)) * 100)))}%`;
-      $('h-mode').textContent = player.mode === 'ship' ? KINDS[body.kind].label.toUpperCase() : 'EVA';
+      $('h-mode').textContent = modeLabel();
       $('h-sector').textContent = `SECTOR ${sectorName(world, body.x, body.y)}`;
       $('h-speed').textContent = `${(sp * 10).toFixed(0)} m/s`;
     }
@@ -657,6 +816,11 @@ function start(world, bulletin, sprites, devData) {
   }
 
   log('Welcome to <b>SpaceSquat</b>. You\'re on the Spine. Press <b>H</b> for controls. All money is fake.');
+  if (S.mission === 1 && !S.introSeen) {
+    S.introSeen = true;
+    econ.save();
+    openIntro();
+  }
   requestAnimationFrame(frame);
   window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl };
 }

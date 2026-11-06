@@ -19,7 +19,8 @@ export function speedOf(b) {
 
 // Shared flight model: rotate + thrust with inertia and drag (GTA2-ish handling, space-ish drift).
 export function fly(body, input, dt, boost = false) {
-  const spec = KINDS[body.kind];
+  // body.stats (your upgraded skiff) overrides the stock spec for its kind
+  const spec = body.stats || KINDS[body.kind];
   const k = dt * 60;
   if (input.left) body.angle -= spec.turn * k;
   if (input.right) body.angle += spec.turn * k;
@@ -33,9 +34,18 @@ export function fly(body, input, dt, boost = false) {
     body.vx -= Math.cos(body.angle) * thrust * 0.5 * k;
     body.vy -= Math.sin(body.angle) * thrust * 0.5 * k;
   }
-  const drag = input.brake ? 0.9 : 0.988;
+  const drag = input.brake ? 0.9 : spec.drag ?? 0.988;
   body.vx *= Math.pow(drag, k);
   body.vy *= Math.pow(drag, k);
+  // grip: bleed off sideways velocity so the ship goes where it points (stock ships have some; the starter skiff has none)
+  const grip = spec.grip ?? 0.04;
+  if (grip) {
+    const rx = -Math.sin(body.angle), ry = Math.cos(body.angle);
+    const lat = body.vx * rx + body.vy * ry;
+    const f = Math.min(1, grip * k);
+    body.vx -= rx * lat * f;
+    body.vy -= ry * lat * f;
+  }
   const max = spec.max * (boost ? 1.35 : 1);
   const s = speedOf(body);
   if (s > max) {

@@ -14,7 +14,7 @@ const RACE = [
 ];
 const RING = 70;
 
-export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites }) {
+export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites, hullLevel = () => 0 }) {
   const saved = load();
   const persist = { bestLap: null, raceDay: '', jobsDone: 0, escapes: 0, ...saved };
   const save = () => {
@@ -69,7 +69,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       return endJob(now);
     }
     if (hit && now > job.hitCooldown) {
-      job.damage = Math.min(0.9, job.damage + 0.15);
+      job.damage = Math.min(0.9, job.damage + Math.max(0.05, 0.15 - 0.05 * hullLevel()));
       job.hitCooldown = now + 600;
       log(`Cargo damaged (${Math.round(job.damage * 100)}%).`);
     }
@@ -98,7 +98,10 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
 
   function addHeat(n, why, now) {
     const before = heat.level;
-    if (before === 0) heat.nextSpawn = now + 2500; // a head start: the first drone launches after 2.5s
+    if (before === 0) {
+      heat.nextSpawn = now + 2500; // a head start: the first drone launches after 2.5s
+      heat.tapped = false; // hull plating gets one save per pursuit
+    }
     heat.level = Math.min(5, heat.level + n);
     heat.peak = Math.max(heat.peak, heat.level);
     heat.calmSince = now;
@@ -143,7 +146,19 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       collide(d, 10, getSolids());
       const dist = Math.hypot(d.x - body.x, d.y - body.y);
       if (dist < 700) anyClose = true;
-      if (dist < 24) return busted(now);
+      if (dist < 24) {
+        // Hull plating II shrugs off one drone tap per pursuit
+        if (hullLevel() >= 2 && !heat.tapped) {
+          heat.tapped = true;
+          d.vx = -d.vx * 2;
+          d.vy = -d.vy * 2;
+          d.x += (d.x - body.x) * 2;
+          d.y += (d.y - body.y) * 2;
+          log('Drone tap! Hull plating held. Go, go, go.');
+          continue;
+        }
+        return busted(now);
+      }
     }
     if (anyClose) heat.calmSince = now;
     else if (now - heat.calmSince > 10000) {
@@ -167,6 +182,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     heat.level = 0;
     heat.peak = 0;
     heat.drones = [];
+    heat.tapped = false;
     if (freight.job) endJob(now);
     if (race.active) race.active = false;
     bust();
