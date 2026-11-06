@@ -31,12 +31,14 @@ export function floorsFor(value) {
 }
 
 // ---- Skiff upgrades: earned scrap only, never cash or credits (no paid edge). ----
+// Tuned so the first upgrade takes a new pilot ~2–3 minutes of scrounging (drops avg ~35 scrap,
+// roughly one found per minute in a bad skiff, plus freight). Adjust with in-game notes.
 export const UPGRADES = {
-  gyros: { name: 'Gyros', what: 'Turn rate', tiers: [40, 90, 160] },
-  dampers: { name: 'Dampeners', what: 'Kills sideways drift so the skiff goes where it points', tiers: [50, 110, 200] },
-  thrusters: { name: 'Thrusters', what: 'Acceleration + top speed', tiers: [60, 130, 240] },
-  hull: { name: 'Hull plating', what: 'Less cargo damage; survives a drone tap', tiers: [80, 180] },
-  chassis: { name: 'Road chassis', what: 'Spine-rated. Spine access opens when Security goes live.', tiers: [400], locked: true },
+  gyros: { name: 'Gyros', what: 'Turn rate', tiers: [120, 260, 450] },
+  dampers: { name: 'Dampeners', what: 'Kills sideways drift so the skiff goes where it points', tiers: [150, 320, 550] },
+  thrusters: { name: 'Thrusters', what: 'Acceleration + top speed', tiers: [180, 380, 650] },
+  hull: { name: 'Hull plating', what: 'Less cargo damage; survives a drone tap', tiers: [240, 500] },
+  chassis: { name: 'Road chassis', what: 'Spine-rated. Spine access opens when Security goes live.', tiers: [1200], locked: true },
 };
 
 // The starter skiff handles like a shopping cart of scrap. Upgrades fix that.

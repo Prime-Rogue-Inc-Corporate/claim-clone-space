@@ -510,8 +510,8 @@ function start(world, bulletin, sprites, devData) {
             log(`Fitted ${esc(UPGRADES[b.dataset.up].name)} ${'I'.repeat(res.tier)}. Kessler thanks you for your scrap.`, 'money');
             if (res.mission === 0 && missionShown !== 0) {
               missionShown = 0;
-              econ.reward(15);
-              log('MISSION 1 COMPLETE: your skiff steers slightly less like garbage. +15 scrap.', 'good');
+              econ.reward(40);
+              log('MISSION 1 COMPLETE: your skiff steers slightly less like garbage. +40 scrap.', 'good');
             }
             openRefit();
           })
@@ -521,7 +521,7 @@ function start(world, bulletin, sprites, devData) {
   }
 
   // ---- onboarding mission #1 ----
-  const MISSION_SCRAP = 40;
+  const MISSION_SCRAP = 120; // ~2–3 min of scrounging; matches Gyros I
   let missionShown = S.mission;
   function missionText() {
     if (S.mission === 1) return `MISSION 1 · Scrounge ${MISSION_SCRAP} scrap (${Math.min(S.scrap, MISSION_SCRAP)}/${MISSION_SCRAP}). Hunt drops, run freight.`;
