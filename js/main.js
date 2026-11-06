@@ -556,17 +556,38 @@ function start(world, bulletin, sprites, devData) {
     if (S.mission === 1 && S.scrap >= MISSION_SCRAP) {
       S.mission = 2;
       econ.save();
-      waypoint = { x: REFIT.x, y: REFIT.y };
-      log('Enough scrap. Waypoint set to the Kessler Refit Bay.', 'good');
+      log('Enough scrap. Follow the flag to the Kessler Refit Bay.', 'good');
     }
     if (S.mission === 3 && S.scrap >= HOME_SCRAP && !homeWaypointSet) {
       homeWaypointSet = true;
       // nearest vacant site on the city side of the Sprawl
-      const vacant = sprawl.sites.filter((s) => !hutOf(s)).sort((a, b) => a.x - b.x)[0];
-      if (vacant) waypoint = hutPad(vacant);
-      log('Enough scrap for a shack. Waypoint set to a vacant site in the Sprawl. Follow the buoys east.', 'good');
+      log('Enough scrap for a shack. Follow the flag (and the buoys) east to the Sprawl.', 'good');
     }
   }
+  // Objective flag: where the current mission wants you. For "scrounge" steps it points at the
+  // sector a drop was reported in (not the drop itself), so sight radius still matters.
+  function sectorCentre(x, y) {
+    const b = world.bounds, cw = (b.maxX - b.minX) / 8, ch = (b.maxY - b.minY) / 6;
+    const c = Math.max(0, Math.min(7, Math.floor((x - b.minX) / cw)));
+    const r = Math.max(0, Math.min(5, Math.floor((y - b.minY) / ch)));
+    return { x: b.minX + (c + 0.5) * cw, y: b.minY + (r + 0.5) * ch };
+  }
+  function objective(body) {
+    const scrounge = (S.mission === 1 && S.scrap < MISSION_SCRAP) || (S.mission === 3 && S.scrap < HOME_SCRAP);
+    if (scrounge) {
+      const open = drops.filter((d) => !S.claimedDrops[d.key]);
+      if (!open.length) return null;
+      const d = open.reduce((a, c) => (Math.hypot(c.x - body.x, c.y - body.y) < Math.hypot(a.x - body.x, a.y - body.y) ? c : a));
+      return { ...sectorCentre(d.x, d.y), label: `Scrap reported in ${sectorName(world, d.x, d.y)}`, area: true };
+    }
+    if (S.mission === 2) return { x: REFIT.x, y: REFIT.y, label: 'Fit an upgrade' };
+    if (S.mission === 3) {
+      const v = sprawl.sites.filter((s) => !hutOf(s)).sort((a, b) => a.x - b.x)[0];
+      if (v) return { ...hutPad(v), label: `Build your hut · ${v.id}` };
+    }
+    return null;
+  }
+
   function openMission2() {
     openModal(
       `<h2>MISSION 1 COMPLETE</h2>
@@ -816,7 +837,7 @@ function start(world, bulletin, sprites, devData) {
       sight, nearPlot, boardable, featured: bulletin.featuredPlot,
       holdDrop: hold.drop, holdProgress: hold.progress,
       corpsById: econ.corpsById, waypoint,
-      sprawl, hutOf, nearHut, sprites,
+      sprawl, hutOf, nearHut, sprites, objective: objective(body),
       extraWorld: (c) => { drawRefit(c, now); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
       extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
     };

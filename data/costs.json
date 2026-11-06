@@ -4,6 +4,20 @@
   "note": "Excludes server/hosting time. Update at each version checkpoint: add a new entries[] block per version, and flip basis from \"estimate\" to \"actual\" once you have the real figure. Amounts are this project's share, not the whole subscription.",
   "versions": [
     {
+      "version": "0.1.2",
+      "date": "2026-11-05",
+      "label": "Onboarding flow — part 1 (incl. 0.1.1)",
+      "entries": [
+        {
+          "item": "Claude Ultra: same working day as v0.1",
+          "category": "compute",
+          "amount": 0,
+          "basis": "estimate",
+          "note": "Already counted in v0.1's 1-day share. If this session runs past midnight, add another day's share ($6.67)."
+        }
+      ]
+    },
+    {
       "version": "0.1",
       "date": "2026-11-05",
       "label": "Clone 1 sandbox → SpaceSquat staging build",

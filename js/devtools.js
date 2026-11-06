@@ -79,8 +79,17 @@ export function createDevTools({ roadmap, costs, build, esc, log, openModal, clo
 
   function openRoadmap(tab = 'roadmap') {
     const countFor = (id) => notes.filter((n) => n.item === id).length;
+    const releasesHtml = roadmap?.releases?.length
+      ? `<h3>RELEASES</h3><table>${roadmap.releases
+          .map(
+            (rel) => `<tr><td style="width:62px;color:${STATUS_COLOR[rel.status] || '#8f8670'}">v${esc(rel.version)}</td>
+              <td><b>${esc(rel.name)}</b> <span class="sub">${esc(rel.date)} · ${esc(rel.status)}</span>
+              <ul style="margin:4px 0 2px 16px;padding:0">${rel.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></td></tr>`
+          )
+          .join('')}</table>`
+      : '';
     const roadmapHtml = roadmap
-      ? roadmap.phases
+      ? releasesHtml + roadmap.phases
           .map(
             (ph) => `<h3 style="color:${STATUS_COLOR[ph.status]}">${esc(ph.name)} · ${ph.status.toUpperCase()}</h3>
             <div class="sub">${esc(ph.goal)}</div>

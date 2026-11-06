@@ -1,6 +1,6 @@
 {
   "title": "SpaceSquat — tentative roadmap",
-  "updated": "2026-11-06",
+  "updated": "2026-11-05",
   "note": "Tentative. Edit this file to change what the in-game roadmap (R) shows. Status: done | now | next | later.",
   "phases": [
     {
@@ -74,8 +74,13 @@
         },
         {
           "id": "p1-mission1",
-          "text": "Onboarding: M1 scrounge 120 scrap → fit first upgrade; M2 \"you need a home\": 150 scrap → hut in the Sprawl. Immune to bulletin drop modifiers",
+          "text": "Onboarding flow part 1 (v0.1.2): M1 fix the skiff, M2 get a home, bulletin-immune, objective flag",
           "status": "done"
+        },
+        {
+          "id": "p1-onboard2",
+          "text": "Onboarding flow part 2: TBD (first freight run? first $1 lot? EVA certification at the Science Centre?)",
+          "status": "next"
         },
         {
           "id": "p1-jump",
@@ -318,5 +323,42 @@
     "Lot history replay: watch a building change hands over time",
     "Science Centre landmark: EVA certification mission line",
     "Upgrade fitting at your hut, not just the Refit Bay"
+  ],
+  "releases": [
+    {
+      "version": "0.1.2",
+      "date": "2026-11-05",
+      "name": "Onboarding flow — part 1",
+      "status": "now",
+      "items": [
+        "Mission 1: scrounge 120 scrap (~2–3 min) → fit first upgrade at the Kessler Refit Bay",
+        "Mission 2: \"for now, you need a home\": 150 scrap → build a hut in the Sprawl (~1 min flight)",
+        "Onboarding immune to Corp Bulletin drop modifiers (rookies get base rate; world stays shared)",
+        "Objective flag: world flag + screen-edge arrow with distance + minimap flag; scrounge steps point at the reported sector, not the drop",
+        "Upgrade costs scaled ~3× (Gyros I = 120)"
+      ]
+    },
+    {
+      "version": "0.1.1",
+      "date": "2026-11-05",
+      "name": "Starter skiff, $1 lots, jumps",
+      "status": "done",
+      "items": [
+        "$1 lots, ×1.25 buy-outs in cents, skyline heights, NPC $1 claims, $10 test cash",
+        "Skiff #001 bad-on-purpose handling + scrap-only upgrades (Gyros, Dampeners, Thrusters, Hull; Road chassis locked)",
+        "Ship-to-ship jump (<3s), temporary stolen ships, impound/tow on bust",
+        "Corp lore in the ledger; staging tools (N notes, R roadmap/costs)"
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-11-05",
+      "name": "Clone 1 sandbox → SpaceSquat",
+      "status": "done",
+      "items": [
+        "Flight, Spine lots, buy-outs + credits, ledger, drops, levelling",
+        "Freight, heat, Spine Run; the Sprawl; generated sprite art; rename to SpaceSquat"
+      ]
+    }
   ]
 }

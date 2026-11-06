@@ -143,6 +143,8 @@ export function drawScene(ctx, W, H, cam, scene) {
   ctx.stroke();
   ctx.setLineDash([]);
 
+  if (scene.objective) drawObjectiveFlag(ctx, scene.objective, time, cam);
+
   if (scene.waypoint) {
     const w = scene.waypoint;
     ctx.strokeStyle = 'rgba(255,59,31,0.5)';
@@ -161,6 +163,8 @@ export function drawScene(ctx, W, H, cam, scene) {
   }
 
   ctx.restore();
+
+  if (scene.objective) drawObjectiveArrow(ctx, scene.objective, scene.me, cam, W, H, time);
 
   // vignette
   const v = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
@@ -501,6 +505,88 @@ function drawShipMarks(ctx, s, scene, spec) {
   }
 }
 
+// ---- objective flag (world) + edge arrow (screen) ----
+const OBJ = '#d6f08a';
+function drawObjectiveFlag(ctx, o, time, cam) {
+  const s = 1 / Math.max(0.6, cam.zoom); // stay readable when zoomed out
+  if (o.area) {
+    // a reported area, not an exact spot
+    ctx.strokeStyle = 'rgba(214,240,138,0.25)';
+    ctx.setLineDash([18, 14]);
+    ctx.lineWidth = 3 * s;
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, 380, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  const wave = Math.sin(time / 180) * 6 * s;
+  ctx.save();
+  ctx.translate(o.x, o.y);
+  ctx.strokeStyle = '#e6dcc4';
+  ctx.lineWidth = 3 * s;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, -60 * s);
+  ctx.stroke();
+  ctx.fillStyle = OBJ;
+  ctx.beginPath();
+  ctx.moveTo(0, -60 * s);
+  ctx.quadraticCurveTo(22 * s, -60 * s + wave, 42 * s, -50 * s);
+  ctx.quadraticCurveTo(22 * s, -40 * s - wave, 0, -40 * s);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 10 * s, 4 * s, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = OBJ;
+  ctx.font = `bold ${Math.round(13 * s)}px monospace`;
+  ctx.textAlign = 'center';
+  ctx.fillText(o.label.toUpperCase(), 0, -70 * s);
+  ctx.restore();
+}
+
+function drawObjectiveArrow(ctx, o, me, cam, W, H, time) {
+  const sx = (o.x - cam.x) * cam.zoom + W / 2;
+  const sy = (o.y - cam.y) * cam.zoom + H / 2;
+  // keep clear of the HUD (top-left), banner (top) and log/minimap (bottom)
+  const top = 220, bottom = 200, side = 60;
+  if (sx > side && sx < W - side && sy > 60 && sy < H - 60) return; // on screen: the flag is enough
+  const cx = W / 2, cy = (top + (H - bottom)) / 2;
+  const a = Math.atan2(sy - cy, sx - cx);
+  // clamp to an inset rectangle along the direction of the objective
+  const hw = W / 2 - side, hh = (H - bottom - top) / 2;
+  const t = Math.min(hw / Math.abs(Math.cos(a) || 1e-6), Math.max(40, hh) / Math.abs(Math.sin(a) || 1e-6));
+  const ax = cx + Math.cos(a) * t, ay = cy + Math.sin(a) * t;
+  const pulse = 1 + Math.sin(time / 200) * 0.12;
+  ctx.save();
+  ctx.translate(ax, ay);
+  ctx.rotate(a);
+  ctx.fillStyle = OBJ;
+  ctx.strokeStyle = '#0b0b0c';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(18 * pulse, 0);
+  ctx.lineTo(-10, -12 * pulse);
+  ctx.lineTo(-4, 0);
+  ctx.lineTo(-10, 12 * pulse);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+  const dist = Math.hypot(o.x - me.x, o.y - me.y) / 6; // 6 px per metre (matches the speed readout)
+  const txt = `${o.label} · ${dist >= 1000 ? (dist / 1000).toFixed(1) + ' km' : Math.round(dist) + ' m'}`;
+  ctx.font = 'bold 12px monospace';
+  const tw = ctx.measureText(txt).width;
+  const lx = Math.max(10 + tw / 2, Math.min(W - 10 - tw / 2, ax - Math.cos(a) * 34));
+  const ly = Math.max(20, Math.min(H - 12, ay - Math.sin(a) * 34 + 4));
+  ctx.fillStyle = 'rgba(8,9,10,0.75)';
+  ctx.fillRect(lx - tw / 2 - 6, ly - 13, tw + 12, 18);
+  ctx.fillStyle = OBJ;
+  ctx.textAlign = 'center';
+  ctx.fillText(txt, lx, ly);
+}
+
 // Buoys across the void so you always know which way home is.
 function drawCorridor(ctx, world, time) {
   const start = world.bounds.maxX + 900;
@@ -701,6 +787,23 @@ export function drawMinimap(mctx, MW, MH, scene) {
   return drawMinimapCity(mctx, MW, MH, scene);
 }
 
+function miniFlag(mctx, x, y, MW, MH) {
+  // clamp to the minimap edge if the objective is outside this view
+  const cx = Math.max(4, Math.min(MW - 8, x)), cy = Math.max(10, Math.min(MH - 2, y));
+  mctx.strokeStyle = '#e6dcc4';
+  mctx.beginPath();
+  mctx.moveTo(cx, cy);
+  mctx.lineTo(cx, cy - 9);
+  mctx.stroke();
+  mctx.fillStyle = OBJ;
+  mctx.beginPath();
+  mctx.moveTo(cx, cy - 9);
+  mctx.lineTo(cx + 7, cy - 6);
+  mctx.lineTo(cx, cy - 3);
+  mctx.closePath();
+  mctx.fill();
+}
+
 function drawMinimapLong(mctx, MW, MH, scene) {
   const { world, me } = scene;
   const fb = flyBounds(world);
@@ -720,6 +823,7 @@ function drawMinimapLong(mctx, MW, MH, scene) {
   mctx.fillText('SPRAWL', MW - 4, 14);
   mctx.textAlign = 'center';
   mctx.fillText(`${((SPRAWL.x - me.x) / 6000).toFixed(1)} km to Sprawl`, MW / 2, MH - 8);
+  if (scene.objective) miniFlag(mctx, tx(scene.objective.x), ty(scene.objective.y), MW, MH);
   mctx.fillStyle = '#fff';
   mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
 }
@@ -750,6 +854,7 @@ function drawMinimapSprawl(mctx, MW, MH, scene) {
   mctx.font = '10px monospace';
   mctx.textAlign = 'left';
   mctx.fillText('← SPINE', 4, 14);
+  if (scene.objective) miniFlag(mctx, tx(scene.objective.x), ty(scene.objective.y), MW, MH);
   mctx.fillStyle = '#fff';
   mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
 }
@@ -806,6 +911,7 @@ function drawMinimapCity(mctx, MW, MH, scene) {
     mctx.lineTo(tx(scene.waypoint.x) - 3, ty(scene.waypoint.y) + 3);
     mctx.stroke();
   }
+  if (scene.objective) miniFlag(mctx, tx(scene.objective.x), ty(scene.objective.y), MW, MH);
   mctx.fillStyle = '#ffffff';
   mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
 }
