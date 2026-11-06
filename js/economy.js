@@ -80,7 +80,7 @@ export function createEconomy(world) {
     overrides: {},
     hut: null,
     upgrades: {},
-    mission: 1, // onboarding step: 1 = scrounge scrap, 2 = fit first upgrade, 0 = done
+    mission: 1, // onboarding: 1 = scrounge scrap, 2 = fit first upgrade, 3 = build a home (hut), 0 = done
     ...saved,
   };
 
@@ -223,8 +223,10 @@ export function createEconomy(world) {
     if (state.scrap < cost) return { ok: false, reason: `Need ${cost} scrap. You have ${state.scrap}.` };
     state.scrap -= cost; // spends scrap only; XP is kept
     state.hut = { site: siteId, tier: 0, built: Date.now() };
+    const missionDone = state.mission === 3;
+    if (missionDone) state.mission = 0;
     save();
-    return { ok: true };
+    return { ok: true, missionDone };
   }
 
   function upgradeHut() {
@@ -248,7 +250,7 @@ export function createEconomy(world) {
     if (state.scrap < cost) return { ok: false, reason: `Need ${cost} scrap. You have ${state.scrap}.` };
     state.scrap -= cost; // scrap only; XP is kept
     state.upgrades[id] = tier + 1;
-    if (state.mission === 1 || state.mission === 2) state.mission = 0;
+    if (state.mission === 1 || state.mission === 2) state.mission = state.hut ? 0 : 3;
     save();
     return { ok: true, tier: tier + 1, mission: state.mission };
   }

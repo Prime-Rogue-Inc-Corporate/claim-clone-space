@@ -126,7 +126,17 @@ function start(world, bulletin, sprites, devData) {
     setTimeout(() => el.remove(), 10000);
   }
 
-  $('bulletin').innerHTML = `<b>CORP BULLETIN ${esc(bulletin.day)}</b> · ${esc(bulletin.event.headline)}${bulletin.event.dropMultiplier !== 1 ? ` · drops ×${bulletin.event.dropMultiplier}` : ''}`;
+  // Onboarding is immune to the bulletin: rookies always get the base drop rate. The world stays shared:
+  // drops are seeded in order, so a rookie sees the first 3 of the same set veterans see.
+  const onboarding = () => S.mission !== 0;
+  const dropMult = () => (onboarding() ? 1 : bulletin.event.dropMultiplier);
+  function renderBulletin() {
+    const m = bulletin.event.dropMultiplier;
+    $('bulletin').innerHTML = `<b>CORP BULLETIN ${esc(bulletin.day)}</b> · ${esc(bulletin.event.headline)}${
+      m !== 1 ? (onboarding() ? ` · drops ×${m} <i>(not for rookies yet)</i>` : ` · drops ×${m}`) : ''
+    }`;
+  }
+  renderBulletin();
 
   const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites, hullLevel: () => (player.ship === player.home ? S.upgrades.hull || 0 : 0) });
 
@@ -150,7 +160,7 @@ function start(world, bulletin, sprites, devData) {
     const w = Math.floor(now / DROP_WINDOW_MS);
     if (w === windowIndex) return;
     windowIndex = w;
-    drops = dropsForWindow(world, w, bulletin.event.dropMultiplier);
+    drops = dropsForWindow(world, w, dropMult());
     const fresh = drops.filter((d) => !S.claimedDrops[d.key]);
     if (fresh.length === 1) {
       const d = fresh[0];
@@ -469,6 +479,11 @@ function start(world, bulletin, sprites, devData) {
         if (!res.ok) return (el.querySelector('#err').textContent = res.reason);
         solidCache = rects();
         log(`Home sweet hovel: ${esc(econ.HUT_TIERS[S.hut.tier].name)} at ${esc(site.id)}.`, 'money');
+        if (res.missionDone) {
+          econ.reward(50);
+          log('MISSION 2 COMPLETE. +50 scrap. Onboarding done.', 'good');
+          return finishOnboarding(true);
+        }
         openHut(site);
       };
       el.querySelector('#build')?.addEventListener('click', () => after(econ.buildHut(site.id)));
@@ -508,10 +523,12 @@ function start(world, bulletin, sprites, devData) {
             if (!res.ok) return (el.querySelector('#err').textContent = res.reason);
             player.home.stats = skiffStats(S.upgrades);
             log(`Fitted ${esc(UPGRADES[b.dataset.up].name)} ${'I'.repeat(res.tier)}. Kessler thanks you for your scrap.`, 'money');
-            if (res.mission === 0 && missionShown !== 0) {
-              missionShown = 0;
+            if (res.mission !== 1 && res.mission !== 2 && missionShown !== res.mission) {
+              missionShown = res.mission;
               econ.reward(40);
-              log('MISSION 1 COMPLETE: your skiff steers slightly less like garbage. +40 scrap.', 'good');
+              log('MISSION 1 COMPLETE. +40 scrap.', 'good');
+              if (res.mission === 3) return openMission2();
+              if (res.mission === 0) finishOnboarding(false);
             }
             openRefit();
           })
@@ -520,12 +537,19 @@ function start(world, bulletin, sprites, devData) {
     );
   }
 
-  // ---- onboarding mission #1 ----
+  // ---- onboarding: mission 1 (fix the skiff a bit), mission 2 (get a home) ----
   const MISSION_SCRAP = 120; // ~2–3 min of scrounging; matches Gyros I
+  const HOME_SCRAP = econ.HUT_TIERS[0].cost;
+  if (S.mission === 3 && S.hut) S.mission = 0; // older saves that already have a hut
   let missionShown = S.mission;
+  let homeWaypointSet = false;
   function missionText() {
     if (S.mission === 1) return `MISSION 1 · Scrounge ${MISSION_SCRAP} scrap (${Math.min(S.scrap, MISSION_SCRAP)}/${MISSION_SCRAP}). Hunt drops, run freight.`;
     if (S.mission === 2) return 'MISSION 1 · Fly to the Kessler Refit Bay and fit any upgrade.';
+    if (S.mission === 3)
+      return S.scrap < HOME_SCRAP
+        ? `MISSION 2 · You need a home. Scrounge ${HOME_SCRAP} scrap (${S.scrap}/${HOME_SCRAP}).`
+        : 'MISSION 2 · Fly east to the Sprawl (~1 min) and build a hut on a vacant site.';
     return '';
   }
   function missionTick() {
@@ -535,6 +559,38 @@ function start(world, bulletin, sprites, devData) {
       waypoint = { x: REFIT.x, y: REFIT.y };
       log('Enough scrap. Waypoint set to the Kessler Refit Bay.', 'good');
     }
+    if (S.mission === 3 && S.scrap >= HOME_SCRAP && !homeWaypointSet) {
+      homeWaypointSet = true;
+      // nearest vacant site on the city side of the Sprawl
+      const vacant = sprawl.sites.filter((s) => !hutOf(s)).sort((a, b) => a.x - b.x)[0];
+      if (vacant) waypoint = hutPad(vacant);
+      log('Enough scrap for a shack. Waypoint set to a vacant site in the Sprawl. Follow the buoys east.', 'good');
+    }
+  }
+  function openMission2() {
+    openModal(
+      `<h2>MISSION 1 COMPLETE</h2>
+       <div class="sub">+40 scrap · skiff ${esc(player.home.reg)}</div>
+       <div class="explain">Now it handles like a shopping cart with duct tape. Upgrade later.<br/><br/>
+       <b>Mission 2: for now, you need a home.</b> Scrounge ${HOME_SCRAP} scrap, then fly east past the city limit to <b>the Sprawl</b> (about a minute; follow the buoys) and build a hut on a vacant site.<br/><br/>
+       Huts are scrap-only, never branded, can't be bought out, and you respawn at yours.</div>
+       <div class="buttons"><button class="primary" id="x">Fly</button></div>`,
+      (el) => el.querySelector('#x').addEventListener('click', closeModal)
+    );
+  }
+  function finishOnboarding(showCard = true) {
+    missionShown = 0;
+    windowIndex = -1; // re-roll this window's drops at the bulletin rate
+    renderBulletin();
+    if (!showCard) return;
+    openModal(
+      `<h2>ONBOARDING COMPLETE</h2>
+       <div class="sub">+50 scrap · welcome to the Sprawl</div>
+       <div class="explain">You have a skiff that almost steers and a hovel to call home. You respawn here from now on.<br/><br/>
+       Drops now follow the Corp Bulletin (storm days, lockdowns). The rest is up to you: freight, races, heat, lots on the Spine, more upgrades at the Refit Bay.</div>
+       <div class="buttons"><button class="primary" id="x">Fly</button></div>`,
+      (el) => el.querySelector('#x').addEventListener('click', closeModal)
+    );
   }
   function openIntro() {
     openModal(
