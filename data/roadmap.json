@@ -335,7 +335,9 @@
         "Mission 2: \"for now, you need a home\": 150 scrap → build a hut in the Sprawl (~1 min flight)",
         "Onboarding immune to Corp Bulletin drop modifiers (rookies get base rate; world stays shared)",
         "Objective flag: world flag + screen-edge arrow with distance + minimap flag; scrounge steps point at the reported sector, not the drop",
-        "Upgrade costs scaled ~3× (Gyros I = 120)"
+        "Upgrade costs scaled ~3× (Gyros I = 120)",
+        "Sprawl Housing Registry at the west entrance: grid of all 80 sites, pick any vacant one (auto-opens on arrival during mission 2)",
+        "Fixes: drops are a single E press (75px, speed <5); freight pads + clocks tuned for the starter skiff"
       ]
     },
     {

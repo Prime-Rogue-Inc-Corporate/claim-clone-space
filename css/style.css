@@ -91,3 +91,16 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #panel .err { color: #ff7a5c; margin-top: 8px; }
 #panel kbd { border: 1px solid var(--line); padding: 0 5px; color: var(--amber); }
 #panel a { color: var(--green); }
+
+/* Sprawl Housing Registry grid */
+#panel .hutgrid { display: grid; gap: 4px; margin: 10px 0; }
+#panel .hcell { position: relative; height: 54px; border: 1px solid #2a2620; background: #14110d; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 2px; font: inherit; overflow: hidden; }
+#panel .hcell img { position: absolute; top: 2px; left: 50%; transform: translateX(-50%); height: 32px; opacity: 0.8; image-rendering: auto; }
+#panel .hcell span { font-size: 9px; color: var(--dim); position: relative; }
+#panel .hcell b { font-size: 9px; font-weight: normal; color: var(--dim); position: relative; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+#panel .hcell.taken { opacity: 0.6; }
+#panel .hcell.mine { border-color: var(--amber); }
+#panel .hcell.mine b { color: var(--amber); }
+#panel button.hcell.vacant { border: 1px dashed #6b5a26; cursor: pointer; color: var(--green); }
+#panel button.hcell.vacant b { color: var(--green); }
+#panel button.hcell.vacant:hover, #panel button.hcell.picked { background: #22200f; border-color: var(--green); border-style: solid; }

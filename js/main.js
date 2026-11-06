@@ -1,6 +1,6 @@
 import { mulberry32 } from './rng.js';
 import { createEconomy, takeoverPrice, buildPrice, levelFor, xpForLevel, sightRadius, PLAYER, UPGRADES, skiffStats, TAKEOVER_MULT, cents } from './economy.js';
-import { solids, collide, plotPad, sectorName, dropsForWindow, decorations, DROP_WINDOW_MS, flyBounds, sprawlSites, hutRect, hutPad, region } from './world.js';
+import { solids, collide, plotPad, sectorName, dropsForWindow, decorations, DROP_WINDOW_MS, flyBounds, sprawlSites, hutRect, hutPad, region, SPRAWL } from './world.js';
 import { createLoops } from './loops.js';
 import { loadSprites } from './sprites.js';
 import { devEnabled, createDevTools } from './devtools.js';
@@ -82,6 +82,7 @@ function start(world, bulletin, sprites, devData) {
   const me = () => (player.mode === 'ship' ? player.ship : player.eva);
   const STOLEN_MS = 120000;
   const REFIT = { x: -320, y: 760 }; // Kessler Refit Bay, near the start
+  const REGISTRY = { x: SPRAWL.x - SPRAWL.radius + 150, y: 0 }; // Sprawl Housing Registry, at the west entrance
 
   const cam = { x: myShip.x, y: myShip.y, zoom: 1 };
   const deco = decorations(world);
@@ -187,6 +188,8 @@ function start(world, bulletin, sprites, devData) {
   let nearHut = null;
   let nearDrop = null;
   let nearRefit = false;
+  let nearRegistry = false;
+  let registryAutoShown = false;
   let boardable = null;
 
   function modeLabel() {
@@ -206,6 +209,7 @@ function start(world, bulletin, sprites, devData) {
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
     if (k === 'e' && !nearDrop && nearRefit) return openRefit();
+    if (k === 'e' && !nearDrop && nearRegistry) return openRegistry();
   }
 
   // Back into your own skiff, wherever you left it. Stolen ships are always temporary.
@@ -463,6 +467,90 @@ function start(world, bulletin, sprites, devData) {
     );
   }
 
+  // Shared: after a hut is built or upgraded (from a site pad or the Registry grid)
+  function afterHutBuilt(site, res, upgraded = false) {
+    solidCache = rects();
+    log(`Home sweet hovel: ${esc(econ.HUT_TIERS[S.hut.tier].name)} at ${esc(site.id)}.`, 'money');
+    if (!upgraded) waypoint = hutPad(site);
+    if (res.missionDone) {
+      econ.reward(50);
+      log('MISSION 2 COMPLETE. +50 scrap. Onboarding done.', 'good');
+      finishOnboarding(true);
+      return true;
+    }
+    return false;
+  }
+
+  // ---- Sprawl Housing Registry: pick any vacant site from the grid ----
+  function openRegistry(pick = null) {
+    const T = econ.HUT_TIERS;
+    const cost = T[0].cost;
+    const rows = [...new Set(sprawl.sites.map((s) => s.id.slice(2, -1)))];
+    const cols = [...new Set(sprawl.sites.map((s) => s.id.slice(-1)))];
+    const byId = Object.fromEntries(sprawl.sites.map((s) => [s.id, s]));
+    const vacantCount = sprawl.sites.filter((s) => !hutOf(s)).length;
+    const cell = (site) => {
+      const occ = hutOf(site);
+      if (occ) {
+        const img = `assets/sprites/hut${occ.tier}_a.png`;
+        return `<div class="hcell ${occ.mine ? 'mine' : 'taken'}" title="${esc(site.id)} · ${occ.mine ? 'you' : esc(site.squatter)}">
+          <img src="${img}" alt="" onerror="this.remove()"/><span>${esc(site.id)}</span><b>${occ.mine ? 'YOU' : esc(occ.who)}</b></div>`;
+      }
+      return `<button class="hcell vacant ${pick === site.id ? 'picked' : ''}" data-site="${esc(site.id)}"><span>${esc(site.id)}</span><b>vacant</b></button>`;
+    };
+    const grid = rows
+      .map((r) => cols.map((c) => byId[`H-${r}${c}`]).filter(Boolean).map(cell).join(''))
+      .join('');
+    let footer;
+    if (S.hut) {
+      footer = `<div class="explain">You already have a hut at <b>${esc(S.hut.site)}</b> (${esc(T[S.hut.tier].name)}). One per pilot. Upgrade it at its pad.</div>
+                <div class="buttons"><button id="x">Close</button></div>`;
+    } else if (pick) {
+      footer = `<div class="explain">Build a <b>${esc(T[0].name.toLowerCase())}</b> at <b>${esc(pick)}</b> for <b>${cost} scrap</b>? You have ${S.scrap}.<br/>
+                Scrap only. Never branded, can't be bought out, and you respawn here.</div>
+                <div class="buttons"><button class="primary" id="build" ${S.scrap >= cost ? '' : 'disabled'}>Build at ${esc(pick)}</button><button id="back">Pick another</button><button id="x">Close</button></div>
+                <div class="err" id="err">${S.scrap >= cost ? '' : `Need ${cost} scrap.`}</div>`;
+    } else {
+      footer = `<div class="sub">Pick any vacant site. A ${esc(T[0].name.toLowerCase())} costs ${cost} scrap; you have ${S.scrap}.</div>
+                <div class="buttons"><button id="x">Close</button></div>`;
+    }
+    openModal(
+      `<h2>SPRAWL HOUSING REGISTRY</h2>
+       <div class="sub">${sprawl.sites.length} sites · ${vacantCount} vacant · north is up, the Registry is on the west edge</div>
+       <div class="hutgrid" style="grid-template-columns: repeat(${cols.length}, 1fr)">${grid}</div>
+       ${footer}`,
+      (el) => {
+        el.querySelector('#x')?.addEventListener('click', closeModal);
+        el.querySelector('#back')?.addEventListener('click', () => openRegistry());
+        el.querySelectorAll('[data-site]').forEach((b) => b.addEventListener('click', () => !S.hut && openRegistry(b.dataset.site)));
+        el.querySelector('#build')?.addEventListener('click', () => {
+          const site = byId[pick];
+          const res = econ.buildHut(site.id);
+          if (!res.ok) return (el.querySelector('#err').textContent = res.reason);
+          if (!afterHutBuilt(site, res)) closeModal();
+        });
+      }
+    );
+  }
+
+  function drawRegistry(c, time) {
+    if (Math.abs(cam.x - REGISTRY.x) > 3000) return;
+    const img = sprites?.get('pad');
+    if (img) c.drawImage(img, REGISTRY.x - 34, REGISTRY.y - 30, 68, 68 * (img.height / img.width));
+    c.strokeStyle = nearRegistry ? '#d6f08a' : 'rgba(214,240,138,0.4)';
+    c.lineWidth = 3;
+    c.beginPath();
+    c.arc(REGISTRY.x, REGISTRY.y, 40 + (S.mission === 3 ? Math.sin(time / 200) * 5 : 0), 0, Math.PI * 2);
+    c.stroke();
+    c.fillStyle = '#d6f08a';
+    c.font = 'bold 13px monospace';
+    c.textAlign = 'center';
+    c.fillText('SPRAWL HOUSING REGISTRY', REGISTRY.x, REGISTRY.y - 52);
+    c.font = '10px monospace';
+    c.fillStyle = 'rgba(214,240,138,0.7)';
+    c.fillText('pick any vacant site · E', REGISTRY.x, REGISTRY.y + 56);
+  }
+
   function openHut(site) {
     const occ = hutOf(site);
     const T = econ.HUT_TIERS;
@@ -485,19 +573,12 @@ function start(world, bulletin, sprites, devData) {
     }
     openModal(`<h2>SITE ${esc(site.id)}</h2><div class="sub">The Sprawl · residential</div>${body}`, (el) => {
       el.querySelector('#x')?.addEventListener('click', closeModal);
-      const after = (res) => {
+      const after = (res, upgraded) => {
         if (!res.ok) return (el.querySelector('#err').textContent = res.reason);
-        solidCache = rects();
-        log(`Home sweet hovel: ${esc(econ.HUT_TIERS[S.hut.tier].name)} at ${esc(site.id)}.`, 'money');
-        if (res.missionDone) {
-          econ.reward(50);
-          log('MISSION 2 COMPLETE. +50 scrap. Onboarding done.', 'good');
-          return finishOnboarding(true);
-        }
-        openHut(site);
+        if (!afterHutBuilt(site, res, upgraded)) openHut(site);
       };
-      el.querySelector('#build')?.addEventListener('click', () => after(econ.buildHut(site.id)));
-      el.querySelector('#up')?.addEventListener('click', () => after(econ.upgradeHut()));
+      el.querySelector('#build')?.addEventListener('click', () => after(econ.buildHut(site.id), false));
+      el.querySelector('#up')?.addEventListener('click', () => after(econ.upgradeHut(), true));
     });
   }
 
@@ -559,7 +640,7 @@ function start(world, bulletin, sprites, devData) {
     if (S.mission === 3)
       return S.scrap < HOME_SCRAP
         ? `MISSION 2 · You need a home. Scrounge ${HOME_SCRAP} scrap (${S.scrap}/${HOME_SCRAP}).`
-        : 'MISSION 2 · Fly east to the Sprawl (~1 min) and build a hut on a vacant site.';
+        : 'MISSION 2 · Fly east to the Sprawl (~1 min). Pick a site at the Housing Registry.';
     return '';
   }
   function missionTick() {
@@ -571,7 +652,7 @@ function start(world, bulletin, sprites, devData) {
     if (S.mission === 3 && S.scrap >= HOME_SCRAP && !homeWaypointSet) {
       homeWaypointSet = true;
       // nearest vacant site on the city side of the Sprawl
-      log('Enough scrap for a shack. Follow the flag (and the buoys) east to the Sprawl.', 'good');
+      log('Enough scrap for a shack. Follow the flag (and the buoys) east to the Sprawl Housing Registry.', 'good');
     }
   }
   // Objective flag: where the current mission wants you. For "scrounge" steps it points at the
@@ -591,10 +672,7 @@ function start(world, bulletin, sprites, devData) {
       return { ...sectorCentre(d.x, d.y), label: `Scrap reported in ${sectorName(world, d.x, d.y)}`, area: true };
     }
     if (S.mission === 2) return { x: REFIT.x, y: REFIT.y, label: 'Fit an upgrade' };
-    if (S.mission === 3) {
-      const v = sprawl.sites.filter((s) => !hutOf(s)).sort((a, b) => a.x - b.x)[0];
-      if (v) return { ...hutPad(v), label: `Build your hut · ${v.id}` };
-    }
+    if (S.mission === 3) return { x: REGISTRY.x, y: REGISTRY.y, label: 'Sprawl Housing Registry' };
     return null;
   }
 
@@ -788,6 +866,12 @@ function start(world, bulletin, sprites, devData) {
       }
     }
     nearRefit = Math.hypot(REFIT.x - body.x, REFIT.y - body.y) < 45;
+    nearRegistry = Math.hypot(REGISTRY.x - body.x, REGISTRY.y - body.y) < 60;
+    // mission 2: arriving at the Registry with enough scrap opens the grid once
+    if (!modalOpen && !registryAutoShown && S.mission === 3 && S.scrap >= HOME_SCRAP && !S.hut && Math.hypot(REGISTRY.x - body.x, REGISTRY.y - body.y) < 140) {
+      registryAutoShown = true;
+      openRegistry();
+    }
     boardable = null;
     if (player.mode === 'ship') {
       let best = Infinity;
@@ -835,7 +919,7 @@ function start(world, bulletin, sprites, devData) {
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: objective(body),
-      extraWorld: (c) => { drawRefit(c, now); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraWorld: (c) => { drawRefit(c, now); drawRegistry(c, now); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
       extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
     };
     drawScene(ctx, W, H, cam, scene);
@@ -848,6 +932,7 @@ function start(world, bulletin, sprites, devData) {
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
+    else if (nearRegistry) prompt = 'E · Sprawl Housing Registry (pick a site)';
     else if (boardable) prompt = boardable === player.home ? `F · jump back into your skiff ${player.home.reg}` : `F · jump ${boardable.npc ? 'and jack the ' : 'into the '}${KINDS[boardable.kind].label.toLowerCase()}`;
     else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y))}m`;
     const pe = $('prompt');
