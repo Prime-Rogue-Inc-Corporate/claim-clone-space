@@ -372,10 +372,24 @@
   ],
   "releases": [
     {
+      "version": "0.1.6",
+      "date": "2026-11-06",
+      "name": "Gig board",
+      "status": "now",
+      "items": [
+        "Gig board (G): one list for every open gig, up to 13 rows with a mix of types; sort by nearest or best pay",
+        "Track one gig at a time: it gets the flag + arrow; onboarding mission tracked by default; Q / chip buttons to untrack",
+        "Per-type 'on map' toggles (Freight, Drops, Races, Stamps); freight offers list-only by default",
+        "Freight: up to 5 offers at once, expiring after ~1.5–2 min; fly to any pickup pad to load (no more single pushed offer / X to decline)",
+        "Drops listed by sector only; log trimmed to events",
+        "Marker chips above the minimap with clear / hide / untrack buttons; waypoint distances in metres"
+      ]
+    },
+    {
       "version": "0.1.5",
       "date": "2026-11-06",
       "name": "Racetracks + art backfill",
-      "status": "now",
+      "status": "done",
       "items": [
         "Two racetracks south of the main drag: The Island Circuit (after Circuit Gilles-Villeneuve) and The Temple Circuit (after Monza)",
         "Start gate in the race direction starts a lap; 13 gates in order; wrong-way detection; laps void if you leave the circuit or your ship",

@@ -22,7 +22,7 @@ const RING = 70;
 const PAD_RADIUS = 75;
 const PAD_SPEED = 5;
 
-export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites, hullLevel = () => 0, emit = () => {} }) {
+export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites, hullLevel = () => 0, emit = () => {}, view = () => ({ freight: true, races: true, trackedOffer: null }) }) {
   const RACE = raceGates(world);
   const saved = load();
   const persist = { bestLap: null, raceDay: '', jobsDone: 0, escapes: 0, ...saved };
@@ -39,7 +39,10 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
   }
 
   // ---------------- 1. Freight jobs ----------------
-  const freight = { offer: null, job: null, nextOffer: 0 };
+  // A small market of offers near you (listed on the gig board, G). Fly to any pickup pad and stop
+  // to load it. Offers expire, so you can't sit and wait for the perfect one.
+  const OFFER_MAX = 5, OFFER_TTL = 90000;
+  const freight = { offers: [], job: null, nextOffer: 0, seq: 0 };
 
   function newOffer(body) {
     const lots = claimed();
@@ -52,25 +55,30 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     const to = pool[Math.floor(rng() * pool.length)];
     const a = plotPad(world, from), b = plotPad(world, to);
     const dist = Math.hypot(a.x - b.x, a.y - b.y) + 400;
-    freight.offer = {
+    if (freight.offers.some((o) => o.from === from.id)) return;
+    freight.offers.push({
+      id: ++freight.seq,
+      expires: performance.now() + OFFER_TTL + rng() * 30000,
+      owner: to.owner,
       from: from.id, to: to.id,
       cargo: CARGO[Math.floor(rng() * CARGO.length)],
       reward: Math.round(15 + dist / 70),
       seconds: Math.round(dist / 150 + 20), // generous: tuned for the starter skiff, not an upgraded one
-    };
-    log(`JOB: ${esc(econ.ownerName(to.owner))} needs ${esc(freight.offer.cargo)} moved, Lot ${from.id} → Lot ${to.id}. ${freight.offer.reward} scrap. Blue beacon = pickup.`);
+    });
   }
 
   function updateFreight(now, body, hit) {
     // jobs are offered in the city only (not out in the void or the Sprawls)
-    if (!freight.job && !freight.offer && now > freight.nextOffer && Math.abs(body.x) <= world.bounds.maxX) newOffer(body);
-    if (freight.offer && !freight.job) {
-      const pad = plotPad(world, econ.plotById(freight.offer.from));
-      if (Math.hypot(pad.x - body.x, pad.y - body.y) < PAD_RADIUS) {
-        if (player.mode !== 'ship') return;
-        if (speedOf(body) >= PAD_SPEED) return;
-        freight.job = { ...freight.offer, deadline: now + freight.offer.seconds * 1000, damage: 0, hitCooldown: 0 };
-        freight.offer = null;
+    freight.offers = freight.offers.filter((o) => o.expires > now);
+    if (freight.offers.length < OFFER_MAX && now > freight.nextOffer && Math.abs(body.x) <= world.bounds.maxX) {
+      newOffer(body);
+      freight.nextOffer = now + (freight.offers.length < 3 ? 2500 : 12000);
+    }
+    if (!freight.job && player.mode === 'ship' && speedOf(body) < PAD_SPEED) {
+      const o = freight.offers.find((o) => { const pad = plotPad(world, econ.plotById(o.from)); return Math.hypot(pad.x - body.x, pad.y - body.y) < PAD_RADIUS; });
+      if (o) {
+        freight.job = { ...o, offerId: o.id, deadline: now + o.seconds * 1000, damage: 0, hitCooldown: 0 };
+        freight.offers = freight.offers.filter((x) => x !== o);
         log(`Loaded ${esc(freight.job.cargo)}. ${freight.job.seconds}s to Lot ${freight.job.to}. Don't scrape the paint.`);
       }
     }
@@ -105,8 +113,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
 
   function endJob(now) {
     freight.job = null;
-    freight.offer = null;
-    freight.nextOffer = now + 8000;
+    freight.nextOffer = now + 4000;
   }
 
   // ---------------- 2. Heat ----------------
@@ -262,9 +269,13 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       addHeat(n, why, performance.now());
     },
     raceStart: RACE[0],
+    // for the gig board
+    freightOffers: () => freight.offers.map((o) => ({ ...o, pickup: plotPad(world, econ.plotById(o.from)), dropoff: plotPad(world, econ.plotById(o.to)) })),
+    freightJob: () => (freight.job ? { ...freight.job, dropoff: plotPad(world, econ.plotById(freight.job.to)) } : null),
+    spineRun: () => ({ active: race.active, best: persist.bestLap, start: RACE[0], next: race.active ? RACE[race.next % RACE.length] : null }),
     onKey(k, now) {
-      if (k === 'x' && (freight.job || freight.offer)) {
-        log(freight.job ? 'You dumped the cargo. Job abandoned.' : 'Job declined.');
+      if (k === 'x' && freight.job) {
+        log('You dumped the cargo. Job abandoned.');
         endJob(now);
         return true;
       }
@@ -276,7 +287,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         return Math.hypot(pad.x - body.x, pad.y - body.y) < 140;
       };
       const fast = speedOf(body) >= PAD_SPEED;
-      if (freight.offer && !freight.job && near(freight.offer.from)) {
+      if (!freight.job && freight.offers.some((o) => near(o.from))) {
         if (player.mode !== 'ship') return 'Need a ship to haul cargo';
         return fast ? 'Too fast to load: brake (SPACE) on the blue pad' : 'Ease onto the blue pad to load cargo';
       }
@@ -286,8 +297,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     status(now) {
       const parts = [];
       if (heat.level) parts.push(`<span style="color:#ff5a3a">HEAT ${'★'.repeat(heat.level)}${'☆'.repeat(5 - heat.level)}</span>`);
-      if (freight.job) parts.push(`JOB → Lot ${freight.job.to} · ${Math.max(0, Math.ceil((freight.job.deadline - now) / 1000))}s${freight.job.damage ? ` · ${Math.round(freight.job.damage * 100)}% dmg` : ''}`);
-      else if (freight.offer) parts.push(`OFFER: pickup Lot ${freight.offer.from} · X to decline`);
+      if (freight.job) parts.push(`JOB → Lot ${freight.job.to} · ${Math.max(0, Math.ceil((freight.job.deadline - now) / 1000))}s${freight.job.damage ? ` · ${Math.round(freight.job.damage * 100)}% dmg` : ''} · X to dump`);
       if (race.active) parts.push(`RUN ${fmt(now - race.start)} · gate ${race.next % RACE.length || RACE.length}/${RACE.length}`);
       else if (persist.bestLap) parts.push(`best lap ${fmt(persist.bestLap)}`);
       return parts.join('<br/>');
@@ -308,8 +318,16 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         return pad;
       };
       let target = null;
+      const v = view();
       if (freight.job) target = beacon(econ.plotById(freight.job.to), '#ffd166', `DELIVER · ${freight.job.cargo.toUpperCase()}`);
-      else if (freight.offer) target = beacon(econ.plotById(freight.offer.from), '#4fc3f7', `PICKUP · ${freight.offer.reward} SCRAP`);
+      else {
+        // offers: all on the map if Freight is toggled on, otherwise just the one you're tracking
+        for (const o of freight.offers) {
+          if (!v.freight && o.id !== v.trackedOffer) continue;
+          const pad = beacon(econ.plotById(o.from), '#4fc3f7', `PICKUP · ${o.reward} SCRAP`);
+          if (o.id === v.trackedOffer) target = pad;
+        }
+      }
       if (target) {
         ctx.strokeStyle = freight.job ? 'rgba(255,209,102,0.35)' : 'rgba(79,195,247,0.3)';
         ctx.setLineDash([4, 14]);
@@ -369,10 +387,11 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     },
     drawMinimap(mctx, tx, ty) {
       const dot = (x, y, c, s = 4) => { mctx.fillStyle = c; mctx.fillRect(tx(x) - s / 2, ty(y) - s / 2, s, s); };
+      const v = view();
       if (freight.job) { const p = plotPad(world, econ.plotById(freight.job.to)); dot(p.x, p.y, '#ffd166', 5); }
-      else if (freight.offer) { const p = plotPad(world, econ.plotById(freight.offer.from)); dot(p.x, p.y, '#4fc3f7', 5); }
+      else for (const o of freight.offers) if (v.freight || o.id === v.trackedOffer) { const p = plotPad(world, econ.plotById(o.from)); dot(p.x, p.y, '#4fc3f7', o.id === v.trackedOffer ? 6 : 4); }
       if (race.active) { const [x, y] = RACE[race.next % RACE.length]; dot(x, y, '#d6f08a', 5); }
-      else dot(RACE[0][0], RACE[0][1], '#e8c547', 4);
+      else if (v.races) dot(RACE[0][0], RACE[0][1], '#e8c547', 4);
       for (const d of heat.drones) dot(d.x, d.y, '#ff3b1f', 3);
     },
   };

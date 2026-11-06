@@ -7,6 +7,7 @@ import { devEnabled, createDevTools } from './devtools.js';
 import { openWiki } from './wiki.js';
 import { createProgress, residencyLevel } from './progress.js';
 import { createCircuits } from './circuits.js';
+import { createGigs } from './gigs.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -148,7 +149,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   }
   renderBulletin();
 
-  const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites, hullLevel: () => (player.ship === player.home ? S.upgrades.hull || 0 : 0), emit: (t, d) => progress.emit(t, d) });
+  let gigs = null; // the gig board (G); created below
+  const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites, hullLevel: () => (player.ship === player.home ? S.upgrades.hull || 0 : 0), emit: (t, d) => progress.emit(t, d), view: () => (gigs ? gigs.mapView() : { freight: true, races: true, trackedOffer: null }) });
 
   // ---- residency card (C) + achievements (J) ----
   const progress = createProgress({
@@ -172,7 +174,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
         setWaypoint: (w) => (waypoint = w),
       })
     : null;
-  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
+  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; G · gigs &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
   let windowIndex = -1;
@@ -192,7 +194,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       const b0 = me();
       const nearest = [...fresh].sort((a, c) => Math.hypot(a.x - b0.x, a.y - b0.y) - Math.hypot(c.x - b0.x, c.y - b0.y)).slice(0, 3);
       const where = [...new Set(nearest.map((x) => sectorName(world, x.x, x.y)))].join(', ');
-      log(`💩 ${esc(d.creature)} ${esc(d.verb)}, and it's catching. ${fresh.length} drops across the city, one or more per sector column. Nearest: <b>${where}</b>.`, 'good');
+      log(`💩 ${esc(d.creature)} ${esc(d.verb)}, and it's catching. ${fresh.length} drops reported; nearest in <b>${where}</b>. All of them on the gig board (G).`, 'good');
     }
   }
   // Press E near a drop to grab it. Must be close and slowed down (not a fly-through).
@@ -235,6 +237,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (k === 'j') return progress.openAchievements();
     if (k === 'b') return circuits.openBoard();
     if (k === 'q') return clearMarkers();
+    if (k === 'g') return gigs.toggle();
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now());
@@ -824,11 +827,12 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
          <span class="k"><kbd>SPACE</kbd></span><span>Brake</span>
          <span class="k"><kbd>F</kbd></span><span>Jump ship-to-ship: pull alongside a slow ship (yes, NPC ones). Stolen ships are hot and get remote-killed after 2 minutes; you land back in your skiff.</span>
          <span class="k"><kbd>E</kbd></span><span>At a lot's pad: open the terminal. At the Refit Bay: upgrade your skiff. At a drop: press to grab it (slow down first).</span>
-         <span class="k"><kbd>X</kbd></span><span>Decline / abandon a freight job</span>
+         <span class="k"><kbd>X</kbd></span><span>Dump the cargo (abandon your freight job)</span>
          <span class="k"><kbd>TAB</kbd></span><span>The ledger: every lot and price</span>
          <span class="k"><kbd>L</kbd></span><span>The wiki: who runs this place, and why everything is 13</span>
          <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”</span>
          <span class="k"><kbd>J</kbd></span><span>Achievements: 13 categories × 13. Shame ones are hidden until you earn them</span>
+         <span class="k"><kbd>G</kbd></span><span>Gig board: every open gig (freight offers, reported drops, races, stamps). Click one to track it: the tracked gig gets the flag and arrow. Toggle which gig types show on the map</span>
          <span class="k"><kbd>Q</kbd></span><span>Clear your waypoint (press again to hide the objective flag). The chips above the minimap have clear buttons too</span>
          <span class="k"><kbd>B</kbd></span><span>Racetrack leaderboards (The Island Circuit, The Temple Circuit)</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
@@ -838,7 +842,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
        Scrap gives XP; levels widen your sight radius. Spend scrap at the Kessler Refit Bay so your skiff stops handling like a shopping cart. Buy lots for $1, brand them, get bought out, buy them back.<br/>
        <i>Why can't I get out? The Vantablack Science Centre hasn't cleared EVA yet. A jump under 3 seconds is the most they'll sign off on.</i></div>
        <h3>SIDE HUSTLES (scrap + XP only)</h3>
-       <div><b>Freight jobs:</b> fly to the blue pickup beacon, slow down to load, deliver to the yellow beacon before the clock runs out. Every wall you hit damages the cargo.<br/>
+       <div><b>Freight jobs:</b> pick an offer from the gig board (G; offers expire), fly to its blue pickup pad, slow down to load, deliver to the yellow beacon before the clock runs out. Every wall you hit damages the cargo.<br/>
        <b>Heat:</b> jacking ships or speeding in the Spine zone brings Corp drones after you. Lose them for 10s to drop a star; shake them all for a payout. Get caught and your ship is impounded.<br/>
        <b>Spine Run:</b> fly through the gold ring south of the Spine's west end, then slalom through all 12 crossings (13 gates) and back. Best time is saved.</div>
        <h3>THE CITY</h3>
@@ -852,20 +856,42 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     );
   }
 
+  // ---- the gig board (G) ----
+  gigs = createGigs({
+    world, econ, loops, circuits, progress, registries: REGISTRIES, sectorName, sectorCentre,
+    getDrops: () => drops, mission: (b) => objective(b), onboarding, esc, log, $,
+  });
+  // what the flag + arrow point at: the tracked gig (the mission during onboarding), unless hidden
+  function currentTarget(body) {
+    const t = gigs.target(body);
+    if (t && t.gig === 'mission' && objectiveHiddenFor === missionKey()) return null;
+    return t;
+  }
+
+  // minimap extras governed by the gig board's "on map" toggles
+  function drawGigMinimap(m, tx, ty) {
+    const v = gigs.mapView();
+    if (v.drops) for (const r of gigs.rows()) if (r.type === 'drop') { m.strokeStyle = 'rgba(214,240,138,0.45)'; m.strokeRect(tx(r.target.x) - 6, ty(r.target.y) - 6, 12, 12); }
+    if (v.stamps) for (const r of gigs.rows()) if (r.type === 'stamp') { m.fillStyle = '#e6dcc4'; m.fillRect(tx(r.target.x) - 1.5, ty(r.target.y) - 1.5, 3, 3); }
+  }
+
   // ---- marker chips: every active marker gets a clear button (Q clears them all) ----
   function clearMarkers() {
     if (waypoint) { waypoint = null; return log('Waypoint cleared.'); }
-    if (objective(me()) && objectiveHiddenFor !== missionKey()) { objectiveHiddenFor = missionKey(); return log('Objective flag hidden until your next mission step.'); }
+    const t = gigs.target(me());
+    if (t && t.gig !== 'mission') { gigs.untrack(); return log('Stopped tracking.'); }
+    if (t && objectiveHiddenFor !== missionKey()) { objectiveHiddenFor = missionKey(); return log('Objective flag hidden until your next mission step.'); }
   }
   let lastMarkers = '';
   function renderMarkers(body) {
-    const obj = objective(body);
-    const showObj = obj && objectiveHiddenFor !== missionKey();
+    const raw = gigs.target(body);
+    const obj = raw;
+    const showObj = raw && currentTarget(body);
     const d = (p) => { const m = Math.hypot(p.x - body.x, p.y - body.y) / 6; return m > 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`; };
     // rebuild the chips only when their set changes (so the buttons stay clickable); distances update in place
     const html = [
       waypoint && `<div class="mk wp"><b>✕ WAYPOINT</b> <span data-d="wp"></span> <button data-clear="wp" title="Clear waypoint (Q)">clear</button></div>`,
-      showObj && `<div class="mk obj"><b>⚑</b> ${esc(obj.label)} · <span data-d="obj"></span> <button data-clear="obj" title="Hide until your next mission step">hide</button></div>`,
+      showObj && `<div class="mk obj"><b>⚑</b> ${esc(obj.label)} · <span data-d="obj"></span> ${obj.gig === 'mission' ? '<button data-clear="obj" title="Hide until your next mission step">hide</button>' : '<button data-clear="untrack" title="Stop tracking (Q)">untrack</button>'}</div>`,
       !showObj && obj && `<div class="mk obj"><button data-clear="showobj">show objective</button></div>`,
     ].filter(Boolean).join('');
     if (html !== lastMarkers) {
@@ -881,6 +907,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     const k = e.target?.dataset?.clear;
     if (k === 'wp') waypoint = null;
     if (k === 'obj') objectiveHiddenFor = missionKey();
+    if (k === 'untrack') gigs.untrack();
     if (k === 'showobj') objectiveHiddenFor = null;
     lastMarkers = '';
     e.target.blur();
@@ -1026,9 +1053,9 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       sight, nearPlot, boardable, featured: bulletin.featuredPlot,
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
-      sprawl, hutOf, nearHut, sprites, objective: objectiveHiddenFor === missionKey() ? null : objective(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
+      sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
       extraWorld: (c) => { drawRefit(c, now); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
     drawScene(ctx, W, H, cam, scene);
@@ -1051,6 +1078,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     pe.textContent = prompt;
 
     renderMarkers(body);
+    gigs.render(body, now);
     const mt = missionText();
     const ls = [mt && `<span style="color:#d6f08a">${esc(mt)}</span>`, loops.status(now), circuits.status(now)].filter(Boolean).join('<br/>');
     if (ls !== lastLoops) {

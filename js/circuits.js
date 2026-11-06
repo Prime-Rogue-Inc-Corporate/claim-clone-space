@@ -361,8 +361,9 @@ export function createCircuits({ econ, log, esc, player, emit = () => {}, openMo
     ctx.fillText('START / FINISH · LEADERBOARD: E', g.bx, g.by + 84);
   }
 
-  function drawMinimap(mctx, tx, ty) {
+  function drawMinimap(mctx, tx, ty, show = true) {
     for (const c of CIRCUITS) {
+      if (!show && race.track !== c) continue;
       mctx.strokeStyle = race.track === c ? '#d6f08a' : 'rgba(184,56,42,0.8)';
       mctx.lineWidth = 2;
       mctx.beginPath();
@@ -373,5 +374,7 @@ export function createCircuits({ econ, log, esc, player, emit = () => {}, openMo
     mctx.lineWidth = 1;
   }
 
-  return { update, status, drawWorld, drawMinimap, nearBoard, openBoard, active: () => race.track };
+  const bestOf = (id) => { const l = store.laps[id]; return l && l.length ? Math.min(...l.map((x) => x.ms)) : null; };
+  const rivalTop = (id) => rivals[id].reduce((a, b) => (a.ms < b.ms ? a : b));
+  return { update, status, drawWorld, drawMinimap, nearBoard, openBoard, active: () => race.track, bestOf, rivalTop, fmt, next: () => (race.track ? race.track.gates[race.next % GATES] : null) };
 }

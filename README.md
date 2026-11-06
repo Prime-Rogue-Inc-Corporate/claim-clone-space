@@ -31,6 +31,8 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | C | Residency card: 13 stamps from the 13 organizations, Level 0.00 → 0.13 → Level 1 (“Fully Processed”) |
 | J | Achievements (`data/achievements.json`): 13 categories × 13, shame ones hidden until earned |
 | B | Racetrack leaderboards |
+| G | Gig board: every open gig in one list; click to track one (it gets the flag + arrow), toggle which types show on the map |
+| Q | Clear the waypoint, then untrack / hide the objective flag |
 | H | Help |
 
 ## What's in it
@@ -46,7 +48,7 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 - **Drops**: "a space bear shat in the dark", among others. Every client computes the same drops from the clock (seeded), so the world is shared without a server. Fly there, slow down and press E.
 - **Levelling**: scrap gives XP. Levels widen your **sight radius**, the only edge anyone gets, earned by playing. Drops are only visible inside your sight radius.
 - **Three side hustles** (scrap + XP only, `js/loops.js`):
-  - **Freight jobs**: GTA courier missions. Load at the blue beacon, deliver to the yellow one before the clock runs out. Hitting walls damages the cargo and cuts the pay. Needs a ship, so bailing out fails the job.
+  - **Freight jobs**: GTA courier missions. Up to 5 offers at a time on the gig board (they expire). Load at the blue beacon, deliver to the yellow one before the clock runs out. Hitting walls damages the cargo and cuts the pay. Needs a ship, so bailing out fails the job.
   - **Heat**: a GTA wanted level. Jacking a ship (+2 stars) or speeding in the Spine zone (+1) sends Corp drones after you. From Hull VII your plating shrugs off one drone tap per pursuit. Stay 700m clear for 10s to drop a star; shake them all for 15 scrap × peak stars. Get caught: ship impounded, a small scrap fine, and you're on EVA.
   - **Spine Run**: 13 gates. Start at the gold ring south of the Spine's west end, slalom north-south through all 12 crossings, then fly home. Your best time is saved. Bonus for the first lap each day and for beating your best.
 - **The Sprawls**: two residential zones, each about a minute's flight past a city limit (skiff at cruise), with buoys and distance markers across the void: **Lower Upper Squalor** (east) and **Upper Lower Squalor** (west). 39 sites each (13 × 3). Free players build **huts with scrap only**: 13 tiers from Lean-to (150) to The Big Bunker, each ×1.25. One per pilot; huts are **never branded** and can't be bought out. About half the sites are already squatted by NPCs. You respawn at your hut.
@@ -54,6 +56,7 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 - **Achievements (J)**: `data/achievements.json`. 13 categories × 13 known + 169 hidden; 48 are live so far. Shame achievements stay hidden until earned and pay a cosmetic once; the rest pay scrap.
 - **Racetracks**: two space circuits south of the main drag, traced from real F1 tracks: **The Island Circuit** (after Circuit Gilles-Villeneuve, Montréal; southwest) and **The Temple Circuit** (after Monza; southeast). Fly through the start gate in the race direction to start a lap, hit all 13 gates in order; wrong-way crossings are flagged. Laps go to a leaderboard per track (**B**, or E at the timing board): for now it's this browser's laps vs. 12 seeded rival pilots from the orgs, shared once accounts and a server exist. 13 scrap a lap, +26 for a PB, +39 for the first lap of the day per track.
 - **Art**: org emblems (desks, residency card, wiki, ledger, lot terminals), achievement-category icons, Tenure Heights / owner-home / deck art sliced from `assets/src/` by `scripts/slice-assets.py`. Lot owners who live in a Sprawl get the owner-home art.
+- **Gig board (G)**: freight offers, the job you're on, reported drops (by sector only: sight radius stays the earned edge), races and residency stamps, up to 13 rows with a mix of types. Track one gig at a time; the onboarding mission is tracked by default. Per-type "on map" toggles (freight offers are list-only by default). Offers no longer spam the log.
 - **Branding**: owners only, with an opt-in public-content consent step first. Editable or clearable any time; https links only.
 
 ## The "server" (GitHub Actions)

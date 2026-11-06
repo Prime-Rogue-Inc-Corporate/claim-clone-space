@@ -259,5 +259,7 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
     );
   }
 
-  return { emit, stamp, stampCount, processed, nearDesk, openDesk, openCard, openAchievements, drawWorld, desks };
+  // unstamped orgs that have a place to go (for the gig board)
+  const openStamps = () => BLOCK_ORDER.filter((id) => !S.stamps[id] && orgById[id] && placeOf(id)).map((id) => ({ org: id, name: orgById[id].name, site: orgById[id].site, how: STAMPS[id].how, ...placeOf(id), desk: !!desks.find((d) => d.org === id) }));
+  return { openStamps, emit, stamp, stampCount, processed, nearDesk, openDesk, openCard, openAchievements, drawWorld, desks };
 }

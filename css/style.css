@@ -120,3 +120,26 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #markers .mk.obj b { color: #d6f08a; }
 #markers button { background: none; border: 1px solid var(--line); color: var(--dim); font: inherit; padding: 0 5px; cursor: pointer; }
 #markers button:hover { color: #e8c547; border-color: #e8c547; }
+
+/* gig board (G) */
+#gigs { position: fixed; right: 12px; top: 64px; width: 330px; max-height: calc(100vh - 290px); display: flex; flex-direction: column; font-size: 11px; z-index: 5; }
+#gigs .gh, #gigs .gt { display: flex; align-items: center; gap: 6px; background: rgba(8,9,10,0.9); border: 1px solid var(--line); border-bottom: none; padding: 5px 8px; }
+#gigs .gh b { color: #e8c547; letter-spacing: 0.1em; }
+#gigs .sp { flex: 1; }
+#gigs .gl { overflow-y: auto; background: rgba(8,9,10,0.85); border: 1px solid var(--line); }
+#gigs .gr { display: flex; gap: 8px; align-items: center; padding: 5px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
+#gigs .gr:hover { background: rgba(232,197,71,0.08); }
+#gigs .gr.tracked { background: rgba(214,240,138,0.1); box-shadow: inset 3px 0 0 #d6f08a; }
+#gigs .gr img { width: 22px; height: 22px; flex: none; }
+#gigs .gm { flex: 1; min-width: 0; }
+#gigs .gti { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#gigs .gm .sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#gigs .gx { text-align: right; flex: none; color: #e6dcc4; }
+#gigs .ttl { color: #ffb347; }
+#gigs button { background: none; border: 1px solid var(--line); color: var(--dim); font: inherit; padding: 1px 6px; cursor: pointer; }
+#gigs button.on { color: #d6f08a; border-color: #d6f08a; }
+#gigs button:hover { color: #e8c547; border-color: #e8c547; }
+#gigs .gtab { align-self: flex-end; background: rgba(8,9,10,0.9); color: #e8c547; padding: 4px 8px; }
+#gigs .gtab b { color: #d6f08a; }
+#gigs .sub { color: var(--dim); }
+#gigs .gmore { background: rgba(8,9,10,0.85); border: 1px solid var(--line); border-top: none; padding: 4px 8px; color: var(--dim); }
