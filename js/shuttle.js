@@ -13,6 +13,36 @@ import { KINDS, speedOf } from './entities.js';
 import { CIRCUITS } from './circuits.js';
 
 const ROUTE_WINDOW_MS = T13 * 60 * 1000; // new routes every 13 minutes
+export const CAPACITY = T13; // a Humane Shuttle seats 13. Standing is inhumane.
+const FARE = 3; // scrap per passenger delivered (before rank and VIP modifiers)
+const VIP_CHANCE = 0.13; // per run
+
+// How many pilots are around. Until there's a server this is simulated: a daily curve (busy evenings,
+// dead small hours) plus noise per 13-minute window. With a server it becomes the real online count.
+export function population(now = Date.now()) {
+  const h = new Date(now).getHours() + new Date(now).getMinutes() / 60;
+  const curve = 0.55 + 0.45 * Math.sin(((h - 13) / 24) * Math.PI * 2); // peaks ~19:00, lowest ~07:00
+  const rng = mulberry32(hashStr(`pop:${Math.floor(now / ROUTE_WINDOW_MS)}`));
+  return Math.max(3, Math.round(13 + 156 * curve * (0.8 + rng() * 0.4)));
+}
+// population → how busy the shuttle gets (0.3 quiet … 1 packed)
+const crowd = (pop) => Math.max(0.3, Math.min(1, pop / 169));
+
+const VIPS = [
+  { name: 'Lord Tenure III', org: 'ministry', title: 'Peer of the Gentry' },
+  { name: 'Junior Associate Hale', org: 'vanta', title: 'Vantablack Holdings' },
+  { name: 'Deacon-Foreman Ruth', org: 'ashiron', title: 'Ash & Iron' },
+  { name: 'Commander Voss', org: 'null', title: 'Null Sector Trust' },
+  { name: 'Appraiser-General Grey', org: 'assessor', title: 'The Assessor’s Office' },
+  { name: 'Auctioneer Lot', org: 'gavel', title: 'Gavel & Rope' },
+  { name: 'Director of Cheer Bright', org: 'bureau', title: 'Bureau of Public Cheer' },
+  { name: 'Matron Absolute', org: 'mercy', title: 'Mercy Unlimited' },
+  { name: 'Meter Baron Ash', org: 'cinder', title: 'Cinder Collective' },
+  { name: 'Mr. Kessler (no relation)', org: 'kessler', title: 'Kessler Mining Co.' },
+  { name: 'The Registrar', org: 'registry', title: 'Registry of Skiffs & Souls' },
+  { name: 'Chef Supreme Marrow', org: 'gullet', title: 'Gullet Provisions' },
+  { name: 'Dispatcher-in-Chief Pell', org: 'lastmile', title: 'Last Mile Freight' },
+];
 const STOP_RADIUS = 90, DOOR_SPEED = 1.2, DOOR_SECONDS = 2;
 const PX_PER_M = 6;
 export const RANKS = ['Probationary Conductor', 'Conductor', 'Senior Conductor', 'Route Steward', 'Senior Route Steward', 'Depot Warden',
@@ -76,7 +106,7 @@ function makeRoutes(world, refit, depot, windowIndex) {
   return routes;
 }
 
-export function createShuttle({ world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit, spawnShuttle, endShuttle, passengers = null }) {
+export function createShuttle({ world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit, spawnShuttle, endShuttle, passengers = null, addHeat = () => {} }) {
   // ---- passenger chatter (data/passengers.json): praise, heckles, jokes, boarding, lateness ----
   const PF = passengers?.factions || {};
   const recent = [];
@@ -89,9 +119,11 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
   function say(cat, now, toLog = true) {
     if (!run) return;
     const v = run.vehicle;
+    if (!v.passengers && !run.vip) return; // an empty shuttle is a quiet shuttle
     const riders = v.riders?.length ? v.riders : ['sprawl'];
-    const f = riders[Math.floor(Math.random() * riders.length)];
-    const fac = PF[f] || PF.sprawl;
+    // a VIP aboard talks a lot (about a third of the time)
+    const f = run.vip && PF.vip && Math.random() < 0.34 ? 'vip' : riders[Math.floor(Math.random() * riders.length)];
+    const fac = f === 'vip' ? { ...PF.vip, label: `VIP · ${run.vip.name.toUpperCase()}` } : PF[f] || PF.sprawl;
     if (!fac) return;
     const pool = (fac[cat]?.length ? fac[cat] : PF.sprawl?.[cat]) || [];
     const fresh = pool.filter((l) => !recent.includes(l));
@@ -132,11 +164,34 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
   function signUp(route) {
     const d = depots.find((x) => x.sprawl === route.depot);
     const vehicle = spawnShuttle(d.x, d.y, d.dir > 0 ? Math.PI : 0, shuttleStats(rank()));
-    vehicle.passengers = randInt(Math.random, 2, 7);
+    const pop = population(), c = crowd(pop);
+    vehicle.passengers = Math.min(CAPACITY, randInt(Math.random, 1, Math.round(2 + 9 * c)));
     vehicle.riders = Array.from({ length: vehicle.passengers }, fromSprawl);
-    run = { route, vehicle, idx: 1, start: performance.now(), comfort: 100, doors: 0, hitCd: 0, calmFor: 0 };
+    run = { route, vehicle, idx: 1, start: performance.now(), comfort: 100, doors: 0, hitCd: 0, calmFor: 0, pop, crowd: c, delivered: 0, vip: null, vipChecked: false };
+    if (Math.random() < VIP_CHANCE / 2) boardVip('at the depot');
     setTimeout(() => say('board', performance.now()), 1200);
     log(`🚌 HUMANE SHUTTLE · ${route.stops.length - 1} stops to ${esc(route.stops[route.stops.length - 1].name)}. Par ${fmt(route.par)}. Comfort ≥ 70% and under par for the bonus. It handles like garbage. That's the job.`, 'good');
+  }
+
+  // ---- VIPs: rare, fussy, lucrative. Keep them comfortable. Or don't. ----
+  function boardVip(where) {
+    if (run.vip) return;
+    const v = run.vehicle;
+    run.vip = { ...VIPS[Math.floor(Math.random() * VIPS.length)] };
+    if (v.passengers >= CAPACITY) { v.passengers--; v.riders.shift(); } // someone gets bumped. Of course they do.
+    v.vipAboard = true;
+    log(`⭐ <b>VIP ABOARD</b> ${esc(where)}: <b>${esc(run.vip.name)}</b> (${esc(run.vip.title)}). Pay ×1.5 and a delivery bonus if they arrive comfortable (80%+). They feel every bump twice.`, 'money');
+    setTimeout(() => say('board', performance.now()), 900);
+  }
+  // A VIP who doesn't survive the ride. Hidden honour, very public consequences.
+  function vipDies(how) {
+    const vip = run.vip;
+    run.vip = null;
+    run.vehicle.vipAboard = false;
+    log(`☠ <b>${esc(vip.name)}</b> (${esc(vip.title)}) ${how}. The Directorate is "reviewing your file". Null Sector is on the way. In the Squalor, somebody is buying a round.`, 'money');
+    S.shuttle.points = Math.max(0, S.shuttle.points - T13); // demotion pressure
+    addHeat(3, `a VIP died on your shuttle`);
+    emit('vip-killed', { org: vip.org, name: vip.name, how });
   }
 
   function end(reason, at) {
@@ -162,20 +217,22 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     // - smooth driving lets passengers settle: +0.25/s back, up to 100
     // (Simulated: a careful driver finishes ~100% at about par; flooring it everywhere ends ~55–77%.)
     const sp = speedOf(v);
-    if (hit && now > run.hitCd) { run.comfort -= 8; run.hitCd = now + 1000; emit('scrape'); log(`Passengers bounced off the ceiling. Comfort ${Math.max(0, Math.round(run.comfort))}%.`); chatterTick(now, 'hit'); }
+    const fuss = (run.vip ? 1.5 : 1) * (v.passengers || run.vip ? 1 : 0); // nobody aboard, nobody to upset; VIPs feel bumps 1.5×
+    if (hit && now > run.hitCd) { run.comfort -= 8 * fuss; run.hitCd = now + 1000; emit('scrape'); log(`Passengers bounced off the ceiling. Comfort ${Math.max(0, Math.round(run.comfort))}%.`); chatterTick(now, 'hit'); }
     const head = Math.atan2(v.vy, v.vx);
     let swing = 0;
     if (sp > 1 && run.lastHead != null) { swing = Math.abs(Math.atan2(Math.sin(head - run.lastHead), Math.cos(head - run.lastHead))) / Math.max(dt * 60, 0.01); }
     run.lastHead = sp > 1 ? head : null;
     const lateral = sp * swing; // ~0.087 = full lock at top speed in a rank-0 shuttle (it slides)
     let calm = true;
-    if (lateral > 0.03) { run.comfort -= (lateral - 0.03) * 300 * dt; calm = false; }
-    if (input.brake && sp > 3) { run.comfort -= 3 * dt; calm = false; }
+    if (lateral > 0.03) { run.comfort -= (lateral - 0.03) * 300 * dt * fuss; calm = false; }
+    if (input.brake && sp > 3) { run.comfort -= 3 * dt * fuss; calm = false; }
     if (calm && now > run.hitCd) run.comfort = Math.min(100, run.comfort + 0.25 * dt);
     run.calmFor = calm ? run.calmFor + dt : 0;
     run.harshFor = calm ? 0 : (run.harshFor || 0) + dt;
     chatterTick(now, run.harshFor > 0.6 ? 'harsh' : calm ? 'calm' : 'meh');
-    if (run.comfort <= 0) {
+    if (run.comfort <= 0 && (v.passengers || run.vip)) {
+      if (run.vip) vipDies('suffered a fatal comfort deficiency');
       emit('passenger-incident');
       return end('🚨 PASSENGER INCIDENT. Everyone got off and walked. In space. Run failed, no pay. The Directorate will be in touch.', v);
     }
@@ -193,15 +250,19 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     const stop = run.route.stops[run.idx];
     run.doors = 0;
     if (last) return finish(now, stop);
-    const off = Math.min(v.passengers, randInt(Math.random, 0, 3));
-    const on = randInt(Math.random, 0, 5);
-    v.passengers = Math.max(1, v.passengers - off + on);
+    const off = Math.min(v.passengers, randInt(Math.random, 0, Math.round(1 + 3 * run.crowd)));
+    const room = CAPACITY - (v.passengers - off) - (run.vip ? 1 : 0);
+    const on = Math.max(0, Math.min(room, randInt(Math.random, 0, Math.round(1 + 6 * run.crowd))));
+    run.delivered += off;
+    v.passengers = Math.max(0, v.passengers - off + on);
     const cityStop = Math.abs(stop.x) <= world.bounds.maxX + 600;
+    if (!run.vipChecked && cityStop) { run.vipChecked = true; if (Math.random() < VIP_CHANCE) boardVip(`at ${stop.name}`); }
     v.riders = (v.riders || []).slice(off);
     for (let i = 0; i < on; i++) v.riders.push(cityStop ? fromCity() : fromSprawl());
     while (v.riders.length < v.passengers) v.riders.push(fromSprawl());
+    if (!v.passengers) v.riders = [];
     v.riders.length = v.passengers;
-    log(`${esc(stop.name)}: ${off} off, ${on} on. ${v.passengers} aboard.`);
+    log(`${esc(stop.name)}: ${off} off, ${on} on. ${v.passengers}${run.vip ? ' + VIP' : ''} aboard (seats ${CAPACITY}).${on && room <= on ? ' Full. Others left at the stop, humanely.' : ''}`);
     if (on) { const who = v.riders; v.riders = who.slice(-on); say('board', now); v.riders = who; }
     run.idx++;
   }
@@ -211,37 +272,59 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     const rating = Math.round(Math.max(0, run.comfort));
     const onTime = secs <= r.par;
     const before = rank();
-    const base = Math.round(r.base * mult());
-    const bonus = rating >= 70 && onTime ? Math.round(r.base * 0.5 * mult()) : 0;
+    run.delivered += run.vehicle.passengers; // everybody off at the terminal
+    const vipMult = run.vip ? 1.5 : 1;
+    const fares = Math.round(run.delivered * FARE * mult());
+    const dead = run.delivered === 0; // deadheading: nobody delivered, half pay, no bonus
+    const base = Math.round((r.base * mult() * (dead ? 0.5 : 1) + fares) * vipMult);
+    const bonus = !dead && rating >= 70 && onTime ? Math.round(r.base * 0.5 * mult() * vipMult) : 0;
+    const vipBonus = run.vip && rating >= 80 ? T13 * 3 : 0;
     S.shuttle.runs++;
     if (rating >= 90) S.shuttle.smooth++;
     if (onTime) S.shuttle.onTime++;
     S.shuttle.points += 1 + (rating >= 70 ? 1 : 0) + (rating >= 90 ? 1 : 0) + (onTime ? 1 : 0);
-    const res = econ.reward(base + bonus);
-    log(`🚌 ${esc(stop.name)}. Everybody off. ${fmt(secs)} (par ${fmt(r.par)}) · comfort ${rating}% · +${res.amount} scrap${bonus ? ` (incl. +${bonus} smooth-and-on-time bonus)` : rating < 70 ? ' · no bonus: rough ride' : ' · no bonus: over par'}.`, 'good');
+    const res = econ.reward(base + bonus + vipBonus);
+    log(`🚌 ${esc(stop.name)}. Everybody off: ${run.delivered} delivered${run.vip ? ` + VIP ${esc(run.vip.name)}` : ''}. ${fmt(secs)} (par ${fmt(r.par)}) · comfort ${rating}% · +${res.amount} scrap (incl. ${fares} in fares${run.vip ? ', ×1.5 VIP' : ''}${bonus ? `, +${bonus} smooth-and-on-time` : rating < 70 ? '; no bonus: rough ride' : '; no bonus: over par'}${vipBonus ? `, +${vipBonus} VIP delivered happy` : ''}).`, 'good');
+    if (run.vip) emit('vip-delivered', { org: run.vip.org, happy: rating >= 80 });
     const after = rank();
     if (after > before) log(`PROMOTED: <b>${RANKS[after]}</b>, Humane Transit Directorate. Your next shuttle is marginally less terrible.`, 'money');
-    emit('shuttle', { rating, onTime, rank: after });
+    emit('shuttle', { rating, onTime, rank: after, delivered: run.delivered, full: run.delivered >= CAPACITY * 2, vip: !!run.vip });
     end(null, stop);
   }
 
+  // X: open the doors. Everybody aboard gets off right here (in the void, that's… a choice), but the
+  // route carries on: new passengers board at the next stops and you can still finish it.
+  // X with an empty shuttle abandons the route.
   function abandon() {
     if (!run) return false;
     const v = run.vehicle;
-    const inVoid = Math.abs(v.x) > world.bounds.maxX && !sprawlAt(v.x); // out between the city and the Sprawls
-    emit('shuttle-abandon', { void: inVoid, passengers: v.passengers });
-    if (inVoid && v.passengers) {
-      log(`You opened the doors in the void. ${v.passengers} passengers. The Bureau of Public Cheer has no comment.`);
-      emit('void-dump', { passengers: v.passengers });
+    const aboard = v.passengers + (run.vip ? 1 : 0);
+    if (!aboard) {
+      emit('shuttle-abandon', { void: false, passengers: 0 });
+      end('You abandoned the route. The Directorate has noted it.', v);
+      return true;
     }
-    end('You abandoned the route. The passengers disembark into the void with some dignity.', run.vehicle);
+    const inVoid = Math.abs(v.x) > world.bounds.maxX && !sprawlAt(v.x); // out between the city and the Sprawls
+    const atStop = Math.hypot(run.route.stops[run.idx].x - v.x, run.route.stops[run.idx].y - v.y) < STOP_RADIUS * 2;
+    if (inVoid && run.vip) vipDies('was ejected into the void with the rest of them');
+    if (inVoid) {
+      log(`You opened the doors in the void. ${v.passengers} passengers. The Bureau of Public Cheer has no comment. The route goes on. Empty.`);
+      if (v.passengers) emit('void-dump', { passengers: v.passengers });
+    } else {
+      log(`You opened the doors ${atStop ? 'at the stop' : 'between stops'}: ${v.passengers}${run.vip ? ' + the VIP' : ''} got off, unpaid and unimpressed. Pick up more at the next stop. X again on an empty shuttle abandons the route.`);
+      if (run.vip) { log(`⭐ ${esc(run.vip.name)} has left the shuttle. Furious. No VIP bonus.`); run.vip = null; v.vipAboard = false; }
+      emit('passengers-dumped', { passengers: v.passengers });
+    }
+    v.passengers = 0;
+    v.riders = [];
+    v.bubble = null;
     return true;
   }
 
   // ---- depot sign-up ----
   const nearDepot = (x, y, r = 70) => depots.find((d) => Math.hypot(d.x - x, d.y - y) < r) || null;
   function openDepot(depot) {
-    const rk = rank(), next = RANK_AT[rk + 1];
+    const rk = rank(), next = RANK_AT[rk + 1], pop = population();
     const list = routes(depot).map((r, i) => `<tr><td><b>${esc(r.stops[r.stops.length - 1].name)}</b> <span class="sub">· ${r.stops.length - 1} stops · ${km(r.dist)} · par ${fmt(r.par)}</span>
         <div class="sub" style="margin:2px 0 0">${r.stops.slice(1).map((s) => esc(s.name)).join(' → ')}</div></td>
         <td style="width:130px;text-align:right">${Math.round(r.base * mult())} scrap<div class="sub">+${Math.round(r.base * 0.5 * mult())} if smooth &amp; on time</div>${run ? '' : `<button data-r="${i}">Sign up</button>`}</td></tr>`).join('');
@@ -249,6 +332,7 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
       `<h2>HUMANE SHUTTLE DEPOT · ${esc(depot.title.toUpperCase())}</h2>
        <div class="sub">Humane Transit Directorate · Ministry of the Gentry · “Getting the people where the gentry need them.”</div>
        <div class="explain"><b>Your career:</b> ${esc(RANKS[rk])} (rank ${rk + 1} of ${T13}) · ${S.shuttle.runs} runs · ${S.shuttle.points} points${next != null ? ` · next rank at ${next}` : ' · top of the ladder'}.<br/>
+       <b>Pilots around: ~${pop}</b> (simulated until the server; later it's the real online count) → ${pop > 110 ? 'packed shuttles' : pop > 50 ? 'decent crowds' : 'quiet runs'}. Seats ${CAPACITY}; fares ${FARE} scrap a head; ${Math.round(VIP_CHANCE * 100)}% chance of a VIP (pay ×1.5, +39 if they arrive 80%+ comfortable, feel every bump 1.5×).<br/>
        Pay ×${mult().toFixed(2)} at your rank. Stop at every stop (doors open after ${DOOR_SECONDS}s stopped). Comfort drops when you hit walls (−8), take corners hard at speed, or slam the brakes; it recovers slowly while you drive smoothly. At 0% the passengers walk.<br/>
        <b>The shuttle handles like dog shit.</b> It pulls left, the steering lags and the brakes are a suggestion. Each rank makes it slightly less bad.</div>
        <table>${list}</table>
@@ -265,7 +349,7 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
   function status(now) {
     if (!run) return '';
     const secs = (now - run.start) / 1000, r = run.route;
-    return `<span style="color:#d6f08a">SHUTTLE → ${esc(r.stops[run.idx].name)} (${run.idx}/${r.stops.length - 1}) · ${fmt(secs)} / par ${fmt(r.par)} · comfort ${Math.max(0, Math.round(run.comfort))}% · X to abandon</span>`;
+    return `<span style="color:#d6f08a">SHUTTLE → ${esc(r.stops[run.idx].name)} (${run.idx}/${r.stops.length - 1}) · ${fmt(secs)} / par ${fmt(r.par)} · comfort ${Math.max(0, Math.round(run.comfort))}% · ${run.vehicle.passengers || run.vip ? 'X opens the doors' : 'empty · X abandons'}</span>`;
   }
   function prompt(body) {
     if (run) {
@@ -280,11 +364,11 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
   function gigRows(at) {
     if (run) {
       const s = run.route.stops[run.idx];
-      return [{ id: 'shuttle:run', type: 'shuttle', title: `Shuttle → ${s.name}`, sub: `stop ${run.idx}/${run.route.stops.length - 1} · comfort ${Math.max(0, Math.round(run.comfort))}% · ${run.vehicle.passengers} aboard`, pay: `${Math.round(run.route.base * mult())}`, ttl: run.route.par * 1000 - (performance.now() - run.start), target: { x: s.x, y: s.y, label: `Shuttle stop · ${s.name}` }, pinned: 1 }];
+      return [{ id: 'shuttle:run', type: 'shuttle', title: `Shuttle → ${s.name}`, sub: `stop ${run.idx}/${run.route.stops.length - 1} · comfort ${Math.max(0, Math.round(run.comfort))}% · ${run.vehicle.passengers} aboard${run.vip ? ' + ⭐ VIP' : ''}`, pay: `${Math.round(run.route.base * mult())}`, ttl: run.route.par * 1000 - (performance.now() - run.start), target: { x: s.x, y: s.y, label: `Shuttle stop · ${s.name}` }, pinned: 1 }];
     }
     return depots.map((d) => {
       const rs = routes(d), best = Math.max(...rs.map((r) => r.base));
-      return { id: `shuttle:${d.sprawl}`, type: 'shuttle', title: `Humane Shuttle · ${d.title}`, sub: `${rs.length} routes · ${RANKS[rank()]} · handles like garbage`, pay: `≤${Math.round(best * 1.5 * mult())}`, target: { x: d.x, y: d.y, label: `Shuttle Depot · ${d.title}` } };
+      return { id: `shuttle:${d.sprawl}`, type: 'shuttle', title: `Humane Shuttle · ${d.title}`, sub: `${rs.length} routes · ~${population()} pilots around · ${RANKS[rank()]}`, pay: `≤${Math.round(best * 1.5 * mult())}`, target: { x: d.x, y: d.y, label: `Shuttle Depot · ${d.title}` } };
     });
   }
   function drawWorld(c, cam, time) {
@@ -341,5 +425,5 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     if (run) { const s = run.route.stops[run.idx]; m.strokeStyle = '#d6f08a'; m.strokeRect(tx(s.x) - 4, ty(s.y) - 4, 8, 8); }
   }
 
-  return { update, status, prompt, nearDepot, openDepot, abandon, gigRows, drawWorld, drawMinimap, running: () => !!run, depots, rank, career: () => S.shuttle };
+  return { _test: { vip: () => run && boardVip('(test)'), run: () => run }, update, status, prompt, nearDepot, openDepot, abandon, gigRows, drawWorld, drawMinimap, running: () => !!run, depots, rank, career: () => S.shuttle };
 }

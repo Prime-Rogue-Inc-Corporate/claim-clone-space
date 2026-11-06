@@ -2,120 +2,501 @@
   "note": "Humane Shuttle passenger chatter. Each faction has lines by mood: praise (smooth driving), heckle (rough driving: walls, hard corners, brake slams), joke (random, any time), board (getting on), late (over par). 'riders' is who gets on in the Sprawls vs. the city. Add lines freely; the game picks at random and avoids repeats.",
   "factions": {
     "sprawl": {
-      "label": "SQUALOR RESIDENT", "color": "#c9b38a", "weight": 6,
-      "praise": ["Smooth. Smoother than my last landlord, anyway.", "Oi, this one can actually drive!", "Ma, look, no bruises!", "I could sleep on this. I might. Wake me at the Spine.", "Best ride I've had since the war. Which war? Exactly.", "Lovely. Like being carried by a drunk angel.", "Didn't spill a drop of my soup. Respect.", "You drive like you've got somewhere to be and someone to love.", "Gentle as a Null Sector drone. Kidding. Gentler.", "If this is humane, I'll take seconds."],
-      "heckle": ["Jesus wept, who gave YOU a licence?", "My spine! And not the nice one with the shops!", "Driving like the shuttle owes you money.", "Oi! Precious cargo back here! Mostly me!", "I've had smoother rides in a bin. I've lived in a bin.", "Mind the wall, you absolute walnut!", "Christ on a cargo pallet!", "Are you steering or just suggesting?", "That's my kidney on the window now, cheers.", "Brakes are on the floor, genius. The FLOOR.", "I paid nothing for this ride and I want a refund.", "Do you hate us specifically or people in general?", "Fuck me, it's like riding a shopping trolley down a mineshaft.", "Holy hell, I've lost a shoe. I only had the one.", "If I puke, it's going on your dashboard, mate."],
-      "joke": ["Why'd the scrapper cross the void? Rent was due on both sides.", "My hut's so small I have to go outside to change my mind.", "They call it the Sprawl because nobody can afford to stand up.", "I asked the Ministry for a home. They sent a pamphlet. I'm living in it.", "What's the difference between a squatter and a landlord? About 1.25 times.", "Knock knock. Who's there? Eviction. Eviction who? Exactly.", "My neighbour burns tyres for warmth. Cosy. Toxic, but cosy.", "I was going to get a job but this shuttle's warmer.", "Heard the void whale's back. Bring a bucket, it's payday.", "They say money can't buy happiness. Haven't seen either, can't confirm.", "Life hack: if you stand still long enough, the Registry assigns you a number.", "My lean-to has a sea view. The sea is slag. Still counts."],
-      "board": ["Room for one more? Room for one more.", "Is this the one to the Spine? Is anything?", "Mind if I bring my chicken? It's mostly feathers now.", "Morning. Or whatever this is.", "Don't look at me, I've got a ticket. Somewhere.", "Budge up, I'm a big lad."],
-      "late": ["Clock's running, love. Like my nose.", "My shift started an hour ago. I don't have a shift. Still.", "At this rate my hut'll be rezoned before we arrive.", "We're late. Again. Brilliant. Classic.", "Could've crawled there. Could've crawled there TWICE."]
+      "label": "SQUALOR RESIDENT",
+      "color": "#c9b38a",
+      "weight": 6,
+      "praise": [
+        "Smooth. Smoother than my last landlord, anyway.",
+        "Oi, this one can actually drive!",
+        "Ma, look, no bruises!",
+        "I could sleep on this. I might. Wake me at the Spine.",
+        "Best ride I've had since the war. Which war? Exactly.",
+        "Lovely. Like being carried by a drunk angel.",
+        "Didn't spill a drop of my soup. Respect.",
+        "You drive like you've got somewhere to be and someone to love.",
+        "Gentle as a Null Sector drone. Kidding. Gentler.",
+        "If this is humane, I'll take seconds."
+      ],
+      "heckle": [
+        "Jesus wept, who gave YOU a licence?",
+        "My spine! And not the nice one with the shops!",
+        "Driving like the shuttle owes you money.",
+        "Oi! Precious cargo back here! Mostly me!",
+        "I've had smoother rides in a bin. I've lived in a bin.",
+        "Mind the wall, you absolute walnut!",
+        "Christ on a cargo pallet!",
+        "Are you steering or just suggesting?",
+        "That's my kidney on the window now, cheers.",
+        "Brakes are on the floor, genius. The FLOOR.",
+        "I paid nothing for this ride and I want a refund.",
+        "Do you hate us specifically or people in general?",
+        "Fuck me, it's like riding a shopping trolley down a mineshaft.",
+        "Holy hell, I've lost a shoe. I only had the one.",
+        "If I puke, it's going on your dashboard, mate."
+      ],
+      "joke": [
+        "Why'd the scrapper cross the void? Rent was due on both sides.",
+        "My hut's so small I have to go outside to change my mind.",
+        "They call it the Sprawl because nobody can afford to stand up.",
+        "I asked the Ministry for a home. They sent a pamphlet. I'm living in it.",
+        "What's the difference between a squatter and a landlord? About 1.25 times.",
+        "Knock knock. Who's there? Eviction. Eviction who? Exactly.",
+        "My neighbour burns tyres for warmth. Cosy. Toxic, but cosy.",
+        "I was going to get a job but this shuttle's warmer.",
+        "Heard the void whale's back. Bring a bucket, it's payday.",
+        "They say money can't buy happiness. Haven't seen either, can't confirm.",
+        "Life hack: if you stand still long enough, the Registry assigns you a number.",
+        "My lean-to has a sea view. The sea is slag. Still counts."
+      ],
+      "board": [
+        "Room for one more? Room for one more.",
+        "Is this the one to the Spine? Is anything?",
+        "Mind if I bring my chicken? It's mostly feathers now.",
+        "Morning. Or whatever this is.",
+        "Don't look at me, I've got a ticket. Somewhere.",
+        "Budge up, I'm a big lad."
+      ],
+      "late": [
+        "Clock's running, love. Like my nose.",
+        "My shift started an hour ago. I don't have a shift. Still.",
+        "At this rate my hut'll be rezoned before we arrive.",
+        "We're late. Again. Brilliant. Classic.",
+        "Could've crawled there. Could've crawled there TWICE."
+      ]
     },
     "vanta": {
-      "label": "VANTABLACK ASSOCIATE", "color": "#5c6b73", "weight": 1,
-      "praise": ["Adequate. I'll note it in your file. Positively, for once.", "Acceptable ride-to-cost ratio. Well done.", "Smooth. Like a well-structured loan."],
-      "heckle": ["This vehicle is collateral, you know. Drive like it.", "Every bump is going on your account.", "I've seen better handling on a defaulted mortgage.", "Do that again and we're repossessing your teeth.", "Christ, man, I bill by the minute and this is costing ME."],
-      "joke": ["We don't own the void. We just hold the paper on it.", "Science Centre says EVA is 'promising'. Promising what, they won't say.", "Interest compounds. So does resentment. Both are profitable."],
-      "board": ["Associate class, please. Oh. There is no associate class.", "I'm only on this vehicle for research purposes."],
-      "late": ["Late is a breach. I'll draft something.", "Tick tock. Every second is a fee."]
+      "label": "VANTABLACK ASSOCIATE",
+      "color": "#5c6b73",
+      "weight": 1,
+      "praise": [
+        "Adequate. I'll note it in your file. Positively, for once.",
+        "Acceptable ride-to-cost ratio. Well done.",
+        "Smooth. Like a well-structured loan."
+      ],
+      "heckle": [
+        "This vehicle is collateral, you know. Drive like it.",
+        "Every bump is going on your account.",
+        "I've seen better handling on a defaulted mortgage.",
+        "Do that again and we're repossessing your teeth.",
+        "Christ, man, I bill by the minute and this is costing ME."
+      ],
+      "joke": [
+        "We don't own the void. We just hold the paper on it.",
+        "Science Centre says EVA is 'promising'. Promising what, they won't say.",
+        "Interest compounds. So does resentment. Both are profitable."
+      ],
+      "board": [
+        "Associate class, please. Oh. There is no associate class.",
+        "I'm only on this vehicle for research purposes."
+      ],
+      "late": [
+        "Late is a breach. I'll draft something.",
+        "Tick tock. Every second is a fee."
+      ]
     },
     "kessler": {
-      "label": "KESSLER MINER", "color": "#9c8b5e", "weight": 2,
-      "praise": ["Nice and steady. Like a good drill bit.", "You'd do alright in the deep shafts, kid.", "Smooth as fresh ore. Well. Smoother."],
-      "heckle": ["I've been in cave-ins with less shaking!", "You fly like a loose payload, ya muppet!", "Bloody hell, I came up here to get AWAY from rockfalls.", "Ease off, I've got dynamite in me lunchbox. Joking. Mostly.", "Shit the bed, that was a wall!"],
-      "joke": ["Everything's ore eventually. Even you. Especially you.", "Why do miners make good friends? We dig you.", "Refit Bay quoted me 300 scrap for a gyro. I'll gyro their nose.", "That debris field? Ours. Business was slow."],
-      "board": ["Mind the dust, it's load-bearing.", "Shift's over. Thank Christ."],
-      "late": ["We're slower than a dull bit in granite.", "I've mined faster than this. With a spoon."]
+      "label": "KESSLER MINER",
+      "color": "#9c8b5e",
+      "weight": 2,
+      "praise": [
+        "Nice and steady. Like a good drill bit.",
+        "You'd do alright in the deep shafts, kid.",
+        "Smooth as fresh ore. Well. Smoother."
+      ],
+      "heckle": [
+        "I've been in cave-ins with less shaking!",
+        "You fly like a loose payload, ya muppet!",
+        "Bloody hell, I came up here to get AWAY from rockfalls.",
+        "Ease off, I've got dynamite in me lunchbox. Joking. Mostly.",
+        "Shit the bed, that was a wall!"
+      ],
+      "joke": [
+        "Everything's ore eventually. Even you. Especially you.",
+        "Why do miners make good friends? We dig you.",
+        "Refit Bay quoted me 300 scrap for a gyro. I'll gyro their nose.",
+        "That debris field? Ours. Business was slow."
+      ],
+      "board": [
+        "Mind the dust, it's load-bearing.",
+        "Shift's over. Thank Christ."
+      ],
+      "late": [
+        "We're slower than a dull bit in granite.",
+        "I've mined faster than this. With a spoon."
+      ]
     },
     "ashiron": {
-      "label": "ASH & IRON FAITHFUL", "color": "#7a3b2e", "weight": 2,
-      "praise": ["Blessed be the steady hand.", "A smooth ride is a form of prayer.", "The quota of comfort is met. Praise."],
-      "heckle": ["Lord of the furnace, take the wheel from this heathen!", "Your driving is a sin and I will be mentioning it at vespers.", "Damn your soul and your suspension!", "The smog is gentler than you, brother.", "I'll hymn your name at the next smelting. Not kindly."],
-      "joke": ["Production is prayer. Overtime is a pilgrimage.", "Our smog is trademarked. Breathe it and you owe us.", "How many Ash & Iron workers to change a lamp? None. Quota says darkness."],
-      "board": ["Shift ends with the hymn. The hymn never ends.", "Brother. Sister. Driver."],
-      "late": ["The quota does not wait, brother.", "Late! The foreman will sing of this."]
+      "label": "ASH & IRON FAITHFUL",
+      "color": "#7a3b2e",
+      "weight": 2,
+      "praise": [
+        "Blessed be the steady hand.",
+        "A smooth ride is a form of prayer.",
+        "The quota of comfort is met. Praise."
+      ],
+      "heckle": [
+        "Lord of the furnace, take the wheel from this heathen!",
+        "Your driving is a sin and I will be mentioning it at vespers.",
+        "Damn your soul and your suspension!",
+        "The smog is gentler than you, brother.",
+        "I'll hymn your name at the next smelting. Not kindly."
+      ],
+      "joke": [
+        "Production is prayer. Overtime is a pilgrimage.",
+        "Our smog is trademarked. Breathe it and you owe us.",
+        "How many Ash & Iron workers to change a lamp? None. Quota says darkness."
+      ],
+      "board": [
+        "Shift ends with the hymn. The hymn never ends.",
+        "Brother. Sister. Driver."
+      ],
+      "late": [
+        "The quota does not wait, brother.",
+        "Late! The foreman will sing of this."
+      ]
     },
     "null": {
-      "label": "NULL SECTOR OFFICER", "color": "#4d5a3a", "weight": 2,
-      "praise": ["Driving within acceptable parameters. Carry on, citizen.", "Compliant. Nice.", "I'm not writing you up. Today."],
-      "heckle": ["That was a moving violation, citizen. Several, in fact.", "One more wall and I'm impounding the lot of us.", "Do you WANT a pursuit? Because that's how you get a pursuit.", "Driving's shit, driver's shit, day's shit. Carry on.", "I'm off duty, but I'm noting your skiff number."],
-      "joke": ["Null Sector: protection, and protection from Null Sector.", "We're paid per capture. Drive however you like.", "Our drones don't sleep. Neither do I. Hence the mood."],
-      "board": ["Off duty. Mostly. Don't test it.", "Nobody sits next to me. Good."],
-      "late": ["Late is suspicious behaviour, citizen.", "I'll be logging this delay."]
+      "label": "NULL SECTOR OFFICER",
+      "color": "#4d5a3a",
+      "weight": 2,
+      "praise": [
+        "Driving within acceptable parameters. Carry on, citizen.",
+        "Compliant. Nice.",
+        "I'm not writing you up. Today."
+      ],
+      "heckle": [
+        "That was a moving violation, citizen. Several, in fact.",
+        "One more wall and I'm impounding the lot of us.",
+        "Do you WANT a pursuit? Because that's how you get a pursuit.",
+        "Driving's shit, driver's shit, day's shit. Carry on.",
+        "I'm off duty, but I'm noting your skiff number."
+      ],
+      "joke": [
+        "Null Sector: protection, and protection from Null Sector.",
+        "We're paid per capture. Drive however you like.",
+        "Our drones don't sleep. Neither do I. Hence the mood."
+      ],
+      "board": [
+        "Off duty. Mostly. Don't test it.",
+        "Nobody sits next to me. Good."
+      ],
+      "late": [
+        "Late is suspicious behaviour, citizen.",
+        "I'll be logging this delay."
+      ]
     },
     "cinder": {
-      "label": "CINDER METER READER", "color": "#b0623a", "weight": 1,
-      "praise": ["Lovely, you're barely using any air back here.", "Smooth driving saves oxygen. I've done the maths.", "Efficient. I like efficient."],
-      "heckle": ["Every time you hit something we all gasp. That's metered, you know.", "You're costing us litres of air, mate.", "Breathe responsibly! You're not letting us!", "Oh for fuck's sake, I dropped my meter."],
-      "joke": ["Air is metered. Jokes are free. For now.", "Inhale. Exhale. That'll be four scrap.", "Why did the meter reader quit? Couldn't take the pressure."],
-      "board": ["Reading your meter on the way, if you don't mind.", "Morning. Breathe light."],
-      "late": ["Late costs air. Air costs money. Do the maths."]
+      "label": "CINDER METER READER",
+      "color": "#b0623a",
+      "weight": 1,
+      "praise": [
+        "Lovely, you're barely using any air back here.",
+        "Smooth driving saves oxygen. I've done the maths.",
+        "Efficient. I like efficient."
+      ],
+      "heckle": [
+        "Every time you hit something we all gasp. That's metered, you know.",
+        "You're costing us litres of air, mate.",
+        "Breathe responsibly! You're not letting us!",
+        "Oh for fuck's sake, I dropped my meter."
+      ],
+      "joke": [
+        "Air is metered. Jokes are free. For now.",
+        "Inhale. Exhale. That'll be four scrap.",
+        "Why did the meter reader quit? Couldn't take the pressure."
+      ],
+      "board": [
+        "Reading your meter on the way, if you don't mind.",
+        "Morning. Breathe light."
+      ],
+      "late": [
+        "Late costs air. Air costs money. Do the maths."
+      ]
     },
     "gullet": {
-      "label": "GULLET VAT HAND", "color": "#4d5a3a", "weight": 1,
-      "praise": ["Smooth enough to eat soup. I'm eating soup.", "Didn't lose a single ration brick. Chef's kiss.", "You drive like a well-proofed loaf."],
-      "heckle": ["My lunch is in my lap now. Thanks.", "Protein slurry on the ceiling. Again.", "You've curdled my vat culture, you prick!", "Easy! I'm carrying the good bricks!"],
-      "joke": ["Calories are a privilege. So's this seat.", "The restaurant's members-only. The members are the vats.", "What's in the ration bricks? Yes."],
-      "board": ["Anyone want a brick? No? More for me.", "Smells like vats. That's me."],
-      "late": ["The vats are boiling over without me!"]
+      "label": "GULLET VAT HAND",
+      "color": "#4d5a3a",
+      "weight": 1,
+      "praise": [
+        "Smooth enough to eat soup. I'm eating soup.",
+        "Didn't lose a single ration brick. Chef's kiss.",
+        "You drive like a well-proofed loaf."
+      ],
+      "heckle": [
+        "My lunch is in my lap now. Thanks.",
+        "Protein slurry on the ceiling. Again.",
+        "You've curdled my vat culture, you prick!",
+        "Easy! I'm carrying the good bricks!"
+      ],
+      "joke": [
+        "Calories are a privilege. So's this seat.",
+        "The restaurant's members-only. The members are the vats.",
+        "What's in the ration bricks? Yes."
+      ],
+      "board": [
+        "Anyone want a brick? No? More for me.",
+        "Smells like vats. That's me."
+      ],
+      "late": [
+        "The vats are boiling over without me!"
+      ]
     },
     "lastmile": {
-      "label": "LAST MILE CONTRACTOR", "color": "#6f8aa3", "weight": 2,
-      "praise": ["Five stars. Not that it pays you anything.", "Clean delivery of humans. Love to see it.", "Mate, you should drive for us. Actually don't, it's awful."],
-      "heckle": ["I'd dock you a star but I'm not allowed to give any.", "Driving like you're paid per crash.", "Cargo's insured. I'm not. EASE UP.", "Who taught you corners, the void?"],
-      "joke": ["Independent contractor means I'm independently broke.", "We own no ships, employ no pilots, and somehow I'm still tired.", "Last Mile? It's always the last mile. Every mile."],
-      "board": ["Between gigs. Always between gigs.", "Got a parcel? I'll take it. For a fee."],
-      "late": ["Late? Your rating's gonna tank, mate.", "That's a missed SLA right there."]
+      "label": "LAST MILE CONTRACTOR",
+      "color": "#6f8aa3",
+      "weight": 2,
+      "praise": [
+        "Five stars. Not that it pays you anything.",
+        "Clean delivery of humans. Love to see it.",
+        "Mate, you should drive for us. Actually don't, it's awful."
+      ],
+      "heckle": [
+        "I'd dock you a star but I'm not allowed to give any.",
+        "Driving like you're paid per crash.",
+        "Cargo's insured. I'm not. EASE UP.",
+        "Who taught you corners, the void?"
+      ],
+      "joke": [
+        "Independent contractor means I'm independently broke.",
+        "We own no ships, employ no pilots, and somehow I'm still tired.",
+        "Last Mile? It's always the last mile. Every mile."
+      ],
+      "board": [
+        "Between gigs. Always between gigs.",
+        "Got a parcel? I'll take it. For a fee."
+      ],
+      "late": [
+        "Late? Your rating's gonna tank, mate.",
+        "That's a missed SLA right there."
+      ]
     },
     "gavel": {
-      "label": "GAVEL & ROPE BIDDER", "color": "#9c8b5e", "weight": 1,
-      "praise": ["Going once, going twice, SOLD on this smooth ride.", "I'd bid on this driver.", "Lovely work. Lot thirteen, the driver."],
-      "heckle": ["I've seen dormant skiffs handle better!", "Your licence is going up for auction, pal.", "Sixty-nine hours till I forgive that.", "Bloody hell, do we have a reserve price on our lives?"],
-      "joke": ["All auctions last 69 hours. Nice.", "We don't sell numbers. We release them. For money.", "I bought a used skiff number. Previous owner's ghost included."],
-      "board": ["Any bids on that seat? No? Mine.", "Lot one: me, sitting down."],
-      "late": ["Late! The hammer's falling without me!"]
+      "label": "GAVEL & ROPE BIDDER",
+      "color": "#9c8b5e",
+      "weight": 1,
+      "praise": [
+        "Going once, going twice, SOLD on this smooth ride.",
+        "I'd bid on this driver.",
+        "Lovely work. Lot thirteen, the driver."
+      ],
+      "heckle": [
+        "I've seen dormant skiffs handle better!",
+        "Your licence is going up for auction, pal.",
+        "Sixty-nine hours till I forgive that.",
+        "Bloody hell, do we have a reserve price on our lives?"
+      ],
+      "joke": [
+        "All auctions last 69 hours. Nice.",
+        "We don't sell numbers. We release them. For money.",
+        "I bought a used skiff number. Previous owner's ghost included."
+      ],
+      "board": [
+        "Any bids on that seat? No? Mine.",
+        "Lot one: me, sitting down."
+      ],
+      "late": [
+        "Late! The hammer's falling without me!"
+      ]
     },
     "mercy": {
-      "label": "MERCY UNLIMITED NURSE", "color": "#8a3b2e", "weight": 1,
-      "praise": ["Lovely driving. Nobody needs me. A first.", "Smooth ride. Mercy approves.", "No injuries! Bad for business, good for you."],
-      "heckle": ["Keep this up and I'll be billing ALL of you.", "That one's going in a report. A medical one.", "I can hear somebody's ribs. Not mine. Yet.", "Fuck me, I'm off shift. Don't make me work."],
-      "joke": ["We heal you, bury you, and sponsor the race in between.", "The Spine Run sponsor-of-record gets paid per crash. Guess who.", "Mercy Unlimited: unlimited, except for the mercy."],
-      "board": ["Mind the kit, there's sharps in there.", "Night shift. Or day. Who knows."],
-      "late": ["Patients waiting. Some of them breathing."]
+      "label": "MERCY UNLIMITED NURSE",
+      "color": "#8a3b2e",
+      "weight": 1,
+      "praise": [
+        "Lovely driving. Nobody needs me. A first.",
+        "Smooth ride. Mercy approves.",
+        "No injuries! Bad for business, good for you."
+      ],
+      "heckle": [
+        "Keep this up and I'll be billing ALL of you.",
+        "That one's going in a report. A medical one.",
+        "I can hear somebody's ribs. Not mine. Yet.",
+        "Fuck me, I'm off shift. Don't make me work."
+      ],
+      "joke": [
+        "We heal you, bury you, and sponsor the race in between.",
+        "The Spine Run sponsor-of-record gets paid per crash. Guess who.",
+        "Mercy Unlimited: unlimited, except for the mercy."
+      ],
+      "board": [
+        "Mind the kit, there's sharps in there.",
+        "Night shift. Or day. Who knows."
+      ],
+      "late": [
+        "Patients waiting. Some of them breathing."
+      ]
     },
     "ministry": {
-      "label": "MINISTRY CLERK", "color": "#5c6b73", "weight": 1,
-      "praise": ["Exemplary. I'll put in a good word with the Directorate.", "This is what humane transit looks like.", "You'll make Route Steward yet, my lad."],
-      "heckle": ["The Directorate will hear about this. In triplicate.", "Humane, they said. HUMANE.", "I'm filing a complaint. Then I'm processing it. Then I'm upholding it.", "Damned conductors. Damned shuttles. Damned Tuesday."],
-      "joke": ["Getting the people where the gentry need them. It's on the side of the bus.", "The Ministry is in a heat zone. For our safety. Not yours.", "I processed thirteen forms today. Twelve were mine."],
-      "board": ["Ministry business. Don't ask.", "Here's my pass. It's laminated."],
-      "late": ["This delay will need a form. Form 13-L."]
+      "label": "MINISTRY CLERK",
+      "color": "#5c6b73",
+      "weight": 1,
+      "praise": [
+        "Exemplary. I'll put in a good word with the Directorate.",
+        "This is what humane transit looks like.",
+        "You'll make Route Steward yet, my lad."
+      ],
+      "heckle": [
+        "The Directorate will hear about this. In triplicate.",
+        "Humane, they said. HUMANE.",
+        "I'm filing a complaint. Then I'm processing it. Then I'm upholding it.",
+        "Damned conductors. Damned shuttles. Damned Tuesday."
+      ],
+      "joke": [
+        "Getting the people where the gentry need them. It's on the side of the bus.",
+        "The Ministry is in a heat zone. For our safety. Not yours.",
+        "I processed thirteen forms today. Twelve were mine."
+      ],
+      "board": [
+        "Ministry business. Don't ask.",
+        "Here's my pass. It's laminated."
+      ],
+      "late": [
+        "This delay will need a form. Form 13-L."
+      ]
     },
     "assessor": {
-      "label": "ASSESSOR'S APPRAISER", "color": "#6f6450", "weight": 1,
-      "praise": ["I assess this ride at 1.25 times expectations.", "Valuation: excellent. Rare word for me."],
-      "heckle": ["This ride has depreciated considerably.", "I'm marking your driving down. Way down.", "Even I can't put a value on that crash. Negative, probably."],
-      "joke": ["Everything is worth 1.25 times what you paid. Even this joke.", "Nobody reads the ledger. That's how we like it."],
-      "board": ["Just appraising the seats. Carry on."],
-      "late": ["Time is money. You are losing both."]
+      "label": "ASSESSOR'S APPRAISER",
+      "color": "#6f6450",
+      "weight": 1,
+      "praise": [
+        "I assess this ride at 1.25 times expectations.",
+        "Valuation: excellent. Rare word for me."
+      ],
+      "heckle": [
+        "This ride has depreciated considerably.",
+        "I'm marking your driving down. Way down.",
+        "Even I can't put a value on that crash. Negative, probably."
+      ],
+      "joke": [
+        "Everything is worth 1.25 times what you paid. Even this joke.",
+        "Nobody reads the ledger. That's how we like it."
+      ],
+      "board": [
+        "Just appraising the seats. Carry on."
+      ],
+      "late": [
+        "Time is money. You are losing both."
+      ]
     },
     "registry": {
-      "label": "REGISTRY CLERK", "color": "#8f8670", "weight": 1,
-      "praise": ["Good driving. I'll remember your number. I remember all the numbers.", "Smooth. Soul intact."],
-      "heckle": ["Careful, I'd hate to have to announce your number.", "You're one wall away from a death certificate, pal.", "Shit driving, citizen. Logged."],
-      "joke": ["We don't sell numbers. We just release them after thirteen days of silence.", "Skiffs and Souls. Mostly skiffs."],
-      "board": ["Number? I'll find it. I always find it."],
-      "late": ["Thirteen minutes late. I'm counting."]
+      "label": "REGISTRY CLERK",
+      "color": "#8f8670",
+      "weight": 1,
+      "praise": [
+        "Good driving. I'll remember your number. I remember all the numbers.",
+        "Smooth. Soul intact."
+      ],
+      "heckle": [
+        "Careful, I'd hate to have to announce your number.",
+        "You're one wall away from a death certificate, pal.",
+        "Shit driving, citizen. Logged."
+      ],
+      "joke": [
+        "We don't sell numbers. We just release them after thirteen days of silence.",
+        "Skiffs and Souls. Mostly skiffs."
+      ],
+      "board": [
+        "Number? I'll find it. I always find it."
+      ],
+      "late": [
+        "Thirteen minutes late. I'm counting."
+      ]
     },
     "bureau": {
-      "label": "BUREAU CHEER OFFICER", "color": "#e8c547", "weight": 1,
-      "praise": ["What a joyful ride! Civic Warmth for everyone!", "Your cheer is noted and appreciated!", "Smile! You're driving beautifully!"],
-      "heckle": ["That was insufficiently cheerful driving.", "I'm docking you warmth. With love.", "Smile while you crash, please. It's policy.", "Oh, for fuck's — I mean, golly!"],
-      "joke": ["Cheer is mandatory. Joy is encouraged. Sadness is filed.", "We publish this wiki. Trust us.", "The Most Humane Citizen of the Day is chosen fairly. By us."],
-      "board": ["Hello! Hello! Everybody smile!", "Bureau business. Happy business!"],
-      "late": ["Lateness is a mood. Change your mood!"]
+      "label": "BUREAU CHEER OFFICER",
+      "color": "#e8c547",
+      "weight": 1,
+      "praise": [
+        "What a joyful ride! Civic Warmth for everyone!",
+        "Your cheer is noted and appreciated!",
+        "Smile! You're driving beautifully!"
+      ],
+      "heckle": [
+        "That was insufficiently cheerful driving.",
+        "I'm docking you warmth. With love.",
+        "Smile while you crash, please. It's policy.",
+        "Oh, for fuck's — I mean, golly!"
+      ],
+      "joke": [
+        "Cheer is mandatory. Joy is encouraged. Sadness is filed.",
+        "We publish this wiki. Trust us.",
+        "The Most Humane Citizen of the Day is chosen fairly. By us."
+      ],
+      "board": [
+        "Hello! Hello! Everybody smile!",
+        "Bureau business. Happy business!"
+      ],
+      "late": [
+        "Lateness is a mood. Change your mood!"
+      ]
+    },
+    "vip": {
+      "label": "VIP",
+      "color": "#ffd166",
+      "weight": 0,
+      "praise": [
+        "Acceptable. I may mention you to someone who matters.",
+        "You drive almost as well as my chauffeur. Almost.",
+        "Smooth. Like my portfolio.",
+        "I have decided not to have you fired. Today.",
+        "This is how the other half lives? Charming. Quaint, even."
+      ],
+      "heckle": [
+        "Do you know who I AM?",
+        "My lawyer felt that. From three sectors away.",
+        "This is assault. On my comfort.",
+        "I've had people impounded for less.",
+        "Careful! This coat is worth more than your district!",
+        "Good God, I've spilled my champagne on a commoner.",
+        "I am writing a strongly worded letter. To your mother.",
+        "Is this what the poor do all day? Bounce?",
+        "Fuck me, this is a cattle car with ambitions."
+      ],
+      "joke": [
+        "I'm only here because my skiff is being gold-plated.",
+        "Rent is a feeling. Mostly mine. Mostly good.",
+        "I bought this shuttle route once. Got bored. Sold it back at 1.25.",
+        "The Squalor is so authentic. I'm thinking of buying it.",
+        "Humane transit. The Ministry's little joke. I wrote it."
+      ],
+      "board": [
+        "Clear that seat. And that one. And wipe it.",
+        "Driver. Yes, you. Drive smoothly or don't drive at all.",
+        "I'll be sitting at the front. Alone. Don't make it weird."
+      ],
+      "late": [
+        "My time is billed in units you can't count.",
+        "Late. How very… public transport of you.",
+        "I could have bought a faster vehicle in the time this is taking."
+      ]
     }
   },
   "riders": {
-    "sprawl": { "sprawl": 8, "kessler": 2, "ashiron": 2, "lastmile": 2, "gullet": 1, "cinder": 1, "mercy": 1, "null": 1 },
-    "city": { "sprawl": 3, "vanta": 1, "kessler": 1, "ashiron": 1, "null": 2, "cinder": 1, "gullet": 1, "lastmile": 2, "gavel": 1, "mercy": 1, "ministry": 1, "assessor": 1, "registry": 1, "bureau": 1 }
+    "sprawl": {
+      "sprawl": 8,
+      "kessler": 2,
+      "ashiron": 2,
+      "lastmile": 2,
+      "gullet": 1,
+      "cinder": 1,
+      "mercy": 1,
+      "null": 1
+    },
+    "city": {
+      "sprawl": 3,
+      "vanta": 1,
+      "kessler": 1,
+      "ashiron": 1,
+      "null": 2,
+      "cinder": 1,
+      "gullet": 1,
+      "lastmile": 2,
+      "gavel": 1,
+      "mercy": 1,
+      "ministry": 1,
+      "assessor": 1,
+      "registry": 1,
+      "bureau": 1
+    }
   }
 }

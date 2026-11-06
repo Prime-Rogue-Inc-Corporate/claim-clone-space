@@ -10,6 +10,9 @@ const LABELS = {
   escape: 'evaded the authorities', expired: 'stolen ship remote-killed', busted: 'busted by Null Sector',
   'passenger-incident': 'passengers evacuated your shuttle',
   'shuttle-abandon': 'abandoned a shuttle route',
+  'vip-killed': 'a VIP died on your shuttle',
+  'vip-delivered': 'delivered a VIP in comfort',
+  'passengers-dumped': 'put passengers off between stops',
   'void-dump': 'dumped a busload of passengers into space',
 };
 

@@ -184,7 +184,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   const circuits = createCircuits({ econ, log, esc, player, emit, openModal, closeModal, sprites });
   // ---- Humane Shuttle runs (Humane Transit Directorate, Ministry of the Gentry) ----
   const shuttle = createShuttle({
-    world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit: REFIT, passengers,
+    world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit: REFIT, passengers, addHeat: (n, why) => loops.addHeat(n, why),
     spawnShuttle: (x, y, a, stats) => {
       const v = makeShip('shuttle', x + 90 * Math.cos(a), y + 90 * Math.sin(a), a, { stats, shuttle: true });
       ships.push(v);
@@ -901,7 +901,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
        <h3>THE CITY</h3>
        <div>The Spine runs 13 blocks of 13 lots (169), all on the north side. The gaps between blocks are crossings: fly through them north-south. Real roads and intersections come later.</div>
        <h3>HUMANE SHUTTLE RUNS</h3>
-       <div>Sign up at a Humane Shuttle Depot (next to each Sprawl's Housing Registry) and drive a route through the hubs into the city. Stop at every stop. The shuttle handles like dog shit on purpose. Keep passenger comfort at 70%+ and beat par for a bonus; runs build your career with the Humane Transit Directorate (13 ranks, each a slightly less awful shuttle). X abandons the route.</div>
+       <div>Sign up at a Humane Shuttle Depot (next to each Sprawl's Housing Registry) and drive a route through the hubs into the city. Stop at every stop. The shuttle handles like dog shit on purpose. Keep passenger comfort at 70%+ and beat par for a bonus; runs build your career with the Humane Transit Directorate (13 ranks, each a slightly less awful shuttle). X opens the doors: everyone aboard gets off right there, and the route carries on empty (new passengers board at the next stops). X on an empty shuttle abandons the route. Shuttles seat 13; crowds depend on how many pilots are around; a VIP may board (pay ×1.5, very fussy).</div>
        <h3>THE RACETRACKS</h3>
        <div>South of the main drag, two space circuits traced from real F1 tracks: <b>The Island Circuit</b> (after Circuit Gilles-Villeneuve, Montréal) to the southwest and <b>The Temple Circuit</b> (after Monza) to the southeast. Fly through the start gate in the race direction to start a lap, then hit all 13 gates in order. Laps go on the leaderboard (B, or E at the timing board).</div>
        <h3>THE SPRAWLS</h3>

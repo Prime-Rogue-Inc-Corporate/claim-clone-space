@@ -315,9 +315,12 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Freight | Smooth Operator | Finish a shuttle run with 90%+ passenger comfort. | 26 scrap |
 | Freight | On the Clock | Finish a shuttle run under par. | 26 scrap |
 | Freight | Career Bureaucrat | Reach Route Steward rank in the Humane Transit Directorate. | 39 scrap |
+| Freight | VIP Treatment | Deliver a VIP with 80%+ comfort. | 39 scrap |
+| Freight | Standing Room Only | Deliver 26 passengers in one shuttle run. | 26 scrap |
 | Heat | Shook It | Escape a Corp pursuit. | 13 scrap |
 | Heat | Three-Star Getaway | Escape a 3-star pursuit. | 26 scrap |
 | Heat | Most Wanted | Escape a 5-star pursuit. | 39 scrap |
+| Heat | Eat the Rich | A VIP did not survive your shuttle. The Squalor will remember. So will Null Sector. | 130 scrap |
 | Racing | Sponsored by Mercy | Finish a Spine Run lap. | 13 scrap |
 | Racing | Faster Than You | Beat your own best Spine Run time. | 13 scrap |
 | Racing | Thirteen Laps | Finish 13 Spine Run laps. | 39 scrap |

@@ -177,6 +177,28 @@
       "reward": 39
     },
     {
+      "id": "vip-treatment",
+      "cat": "freight",
+      "name": "VIP Treatment",
+      "desc": "Deliver a VIP with 80%+ comfort.",
+      "on": "vip-delivered",
+      "eq": {
+        "happy": true
+      },
+      "reward": 39
+    },
+    {
+      "id": "standing-room-only",
+      "cat": "freight",
+      "name": "Standing Room Only",
+      "desc": "Deliver 26 passengers in one shuttle run.",
+      "on": "shuttle",
+      "min": {
+        "delivered": 26
+      },
+      "reward": 26
+    },
+    {
       "id": "shook-it",
       "cat": "heat",
       "name": "Shook It",
@@ -205,6 +227,16 @@
         "peak": 5
       },
       "reward": 39
+    },
+    {
+      "id": "eat-the-rich",
+      "cat": "heat",
+      "name": "Eat the Rich",
+      "desc": "A VIP did not survive your shuttle. The Squalor will remember. So will Null Sector.",
+      "on": "vip-killed",
+      "hidden": true,
+      "reward": 130,
+      "cosmetic": "Silver-spoon hood ornament"
     },
     {
       "id": "first-lap",

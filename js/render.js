@@ -564,7 +564,7 @@ function drawShipMarks(ctx, s, scene, spec) {
     ctx.fillStyle = '#d6f08a';
     ctx.font = 'bold 10px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`HUMANE SHUTTLE${s.passengers ? ` · ${s.passengers} ABOARD` : ''}`, s.x, s.y + spec.radius + 22);
+    ctx.fillText(`HUMANE SHUTTLE · ${s.passengers || 0}/13${s.vipAboard ? ' + ⭐ VIP' : ''}`, s.x, s.y + spec.radius + 22);
     if (s.bubble && scene.time < s.bubble.until) drawBubble(ctx, s, s.bubble, spec);
   }
   if (s === scene.me && s.kind !== 'eva') {

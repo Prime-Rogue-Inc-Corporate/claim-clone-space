@@ -27,6 +27,9 @@ export const WARMTH_RULES = {
   busted: () => -26,
   'passenger-incident': () => -39,
   'shuttle-abandon': () => -13,
+  'vip-killed': () => -130,
+  'vip-delivered': (d) => (d.happy ? 13 : 0),
+  'passengers-dumped': (d) => -Math.min(39, 3 * (d.passengers || 1)),
   'void-dump': (d) => -Math.min(130, 13 * (d.passengers || 1)),
 };
 

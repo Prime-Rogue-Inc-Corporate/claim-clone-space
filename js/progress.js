@@ -94,12 +94,12 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
   }
   function earn(def) {
     S.ach[def.id] = Date.now();
+    if (def.cosmetic && !S.cosmetics.includes(def.cosmetic)) S.cosmetics.push(def.cosmetic);
     if (def.shame) {
-      if (def.cosmetic && !S.cosmetics.includes(def.cosmetic)) S.cosmetics.push(def.cosmetic);
       log(`🏅 <b>${esc(def.name)}</b> (shame). ${esc(def.desc)} You get a cosmetic: <i>${esc(def.cosmetic)}</i>.`, 'good');
     } else {
       const r = econ.reward(def.reward || T13);
-      log(`🏅 <b>${esc(def.name)}</b>. ${esc(def.desc)} +${r.amount} scrap.`, 'good');
+      log(`🏅 <b>${esc(def.name)}</b>${def.hidden ? ' (secret honour)' : ''}. ${esc(def.desc)} +${r.amount} scrap${def.cosmetic ? ` and a cosmetic: <i>${esc(def.cosmetic)}</i>` : ''}.`, 'good');
     }
     econ.save();
   }
@@ -239,10 +239,10 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
       const mine = defs.filter((d) => d.cat === cat.id);
       const items = mine.map((d) => {
         const got = S.ach[d.id];
-        if (d.shame && !got) return `<div class="ach hidden">??? <span class="sub">hidden until earned</span></div>`;
+        if ((d.shame || d.hidden) && !got) return `<div class="ach hidden">??? <span class="sub">hidden until earned</span></div>`;
         const need = d.n || 1;
         const prog = need > 1 && !got ? ` <span class="sub">${Math.min(progressOf(d), need)}/${need}</span>` : '';
-        const pay = d.shame ? `cosmetic: ${esc(d.cosmetic)}` : `${d.reward || T13} scrap`;
+        const pay = d.shame ? `cosmetic: ${esc(d.cosmetic)}` : `${d.reward || T13} scrap${d.cosmetic ? ` + ${esc(d.cosmetic)}` : ''}`;
         return `<div class="ach ${got ? 'got' : ''}">${got ? '■' : '□'} <b>${esc(d.name)}</b>${prog} <span class="sub">· ${esc(d.desc)} · ${pay}</span></div>`;
       }).join('');
       const unannounced = Math.max(0, T13 - mine.length);
