@@ -27,6 +27,7 @@ export const WARMTH_RULES = {
   busted: () => -26,
   'passenger-incident': () => -39,
   'shuttle-abandon': () => -13,
+  'void-dump': (d) => -Math.min(130, 13 * (d.passengers || 1)),
 };
 
 // The Bureau's pick for today. Until accounts exist it's a seeded resident everyone sees the same;

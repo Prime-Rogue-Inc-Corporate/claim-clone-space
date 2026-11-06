@@ -8,7 +8,7 @@
 // better pay and a slightly less awful shuttle.
 import { mulberry32, hashStr, randInt, pick } from './rng.js';
 import { T13 } from './economy.js';
-import { SPRAWLS, registryOf, CITY_HALF, SPRAWL_OFFSET } from './world.js';
+import { SPRAWLS, registryOf, CITY_HALF, SPRAWL_OFFSET, sprawlAt } from './world.js';
 import { KINDS, speedOf } from './entities.js';
 import { CIRCUITS } from './circuits.js';
 
@@ -76,7 +76,43 @@ function makeRoutes(world, refit, depot, windowIndex) {
   return routes;
 }
 
-export function createShuttle({ world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit, spawnShuttle, endShuttle }) {
+export function createShuttle({ world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit, spawnShuttle, endShuttle, passengers = null }) {
+  // ---- passenger chatter (data/passengers.json): praise, heckles, jokes, boarding, lateness ----
+  const PF = passengers?.factions || {};
+  const recent = [];
+  function riderMix(kind) {
+    const mix = passengers?.riders?.[kind] || { sprawl: 1 };
+    const bag = Object.entries(mix).flatMap(([f, w]) => (PF[f] ? Array(w).fill(f) : []));
+    return () => bag[Math.floor(Math.random() * bag.length)] || 'sprawl';
+  }
+  const fromSprawl = riderMix('sprawl'), fromCity = riderMix('city');
+  function say(cat, now, toLog = true) {
+    if (!run) return;
+    const v = run.vehicle;
+    const riders = v.riders?.length ? v.riders : ['sprawl'];
+    const f = riders[Math.floor(Math.random() * riders.length)];
+    const fac = PF[f] || PF.sprawl;
+    if (!fac) return;
+    const pool = (fac[cat]?.length ? fac[cat] : PF.sprawl?.[cat]) || [];
+    const fresh = pool.filter((l) => !recent.includes(l));
+    const line = (fresh.length ? fresh : pool)[Math.floor(Math.random() * (fresh.length || pool.length))];
+    if (!line) return;
+    recent.push(line);
+    if (recent.length > 40) recent.shift();
+    v.bubble = { who: fac.label, color: fac.color, text: line, until: now + 4800 };
+    run.lastTalk = now;
+    if (toLog) log(`<span style="color:${fac.color}">${esc(fac.label)}:</span> “${esc(line)}”`);
+  }
+  const chatterTick = (now, mood) => {
+    if (!run) return;
+    const since = now - (run.lastTalk || run.start);
+    const cd = (k, ms) => { if (now < (run.cd?.[k] || 0)) return false; run.cd = { ...(run.cd || {}), [k]: now + ms }; return true; };
+    if (mood === 'hit') { if (cd('hit', 2500)) say('heckle', now); return; }
+    if (mood === 'harsh') { if (since > 2500 && cd('harsh', 7000)) say('heckle', now); return; }
+    if (mood === 'calm' && run.calmFor > 12 && run.comfort > 80 && since > 5000 && cd('praise', 14000)) return say('praise', now);
+    if ((now - run.start) / 1000 > run.route.par && since > 6000 && cd('late', 30000)) return say('late', now);
+    if (since > 16000 + Math.random() * 8000) say('joke', now);
+  };
   const S = econ.state;
   S.shuttle ||= { points: 0, runs: 0, smooth: 0, onTime: 0 };
   const depots = depotsFor();
@@ -97,7 +133,9 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     const d = depots.find((x) => x.sprawl === route.depot);
     const vehicle = spawnShuttle(d.x, d.y, d.dir > 0 ? Math.PI : 0, shuttleStats(rank()));
     vehicle.passengers = randInt(Math.random, 2, 7);
-    run = { route, vehicle, idx: 1, start: performance.now(), comfort: 100, doors: 0, hitCd: 0 };
+    vehicle.riders = Array.from({ length: vehicle.passengers }, fromSprawl);
+    run = { route, vehicle, idx: 1, start: performance.now(), comfort: 100, doors: 0, hitCd: 0, calmFor: 0 };
+    setTimeout(() => say('board', performance.now()), 1200);
     log(`🚌 HUMANE SHUTTLE · ${route.stops.length - 1} stops to ${esc(route.stops[route.stops.length - 1].name)}. Par ${fmt(route.par)}. Comfort ≥ 70% and under par for the bonus. It handles like garbage. That's the job.`, 'good');
   }
 
@@ -124,7 +162,7 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     // - smooth driving lets passengers settle: +0.25/s back, up to 100
     // (Simulated: a careful driver finishes ~100% at about par; flooring it everywhere ends ~55–77%.)
     const sp = speedOf(v);
-    if (hit && now > run.hitCd) { run.comfort -= 8; run.hitCd = now + 1000; emit('scrape'); log(`Passengers bounced off the ceiling. Comfort ${Math.max(0, Math.round(run.comfort))}%.`); }
+    if (hit && now > run.hitCd) { run.comfort -= 8; run.hitCd = now + 1000; emit('scrape'); log(`Passengers bounced off the ceiling. Comfort ${Math.max(0, Math.round(run.comfort))}%.`); chatterTick(now, 'hit'); }
     const head = Math.atan2(v.vy, v.vx);
     let swing = 0;
     if (sp > 1 && run.lastHead != null) { swing = Math.abs(Math.atan2(Math.sin(head - run.lastHead), Math.cos(head - run.lastHead))) / Math.max(dt * 60, 0.01); }
@@ -134,6 +172,9 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     if (lateral > 0.03) { run.comfort -= (lateral - 0.03) * 300 * dt; calm = false; }
     if (input.brake && sp > 3) { run.comfort -= 3 * dt; calm = false; }
     if (calm && now > run.hitCd) run.comfort = Math.min(100, run.comfort + 0.25 * dt);
+    run.calmFor = calm ? run.calmFor + dt : 0;
+    run.harshFor = calm ? 0 : (run.harshFor || 0) + dt;
+    chatterTick(now, run.harshFor > 0.6 ? 'harsh' : calm ? 'calm' : 'meh');
     if (run.comfort <= 0) {
       emit('passenger-incident');
       return end('🚨 PASSENGER INCIDENT. Everyone got off and walked. In space. Run failed, no pay. The Directorate will be in touch.', v);
@@ -155,7 +196,13 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
     const off = Math.min(v.passengers, randInt(Math.random, 0, 3));
     const on = randInt(Math.random, 0, 5);
     v.passengers = Math.max(1, v.passengers - off + on);
+    const cityStop = Math.abs(stop.x) <= world.bounds.maxX + 600;
+    v.riders = (v.riders || []).slice(off);
+    for (let i = 0; i < on; i++) v.riders.push(cityStop ? fromCity() : fromSprawl());
+    while (v.riders.length < v.passengers) v.riders.push(fromSprawl());
+    v.riders.length = v.passengers;
     log(`${esc(stop.name)}: ${off} off, ${on} on. ${v.passengers} aboard.`);
+    if (on) { const who = v.riders; v.riders = who.slice(-on); say('board', now); v.riders = who; }
     run.idx++;
   }
 
@@ -180,13 +227,19 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
 
   function abandon() {
     if (!run) return false;
-    emit('shuttle-abandon');
+    const v = run.vehicle;
+    const inVoid = Math.abs(v.x) > world.bounds.maxX && !sprawlAt(v.x); // out between the city and the Sprawls
+    emit('shuttle-abandon', { void: inVoid, passengers: v.passengers });
+    if (inVoid && v.passengers) {
+      log(`You opened the doors in the void. ${v.passengers} passengers. The Bureau of Public Cheer has no comment.`);
+      emit('void-dump', { passengers: v.passengers });
+    }
     end('You abandoned the route. The passengers disembark into the void with some dignity.', run.vehicle);
     return true;
   }
 
   // ---- depot sign-up ----
-  const nearDepot = (x, y) => depots.find((d) => Math.hypot(d.x - x, d.y - y) < 70) || null;
+  const nearDepot = (x, y, r = 70) => depots.find((d) => Math.hypot(d.x - x, d.y - y) < r) || null;
   function openDepot(depot) {
     const rk = rank(), next = RANK_AT[rk + 1];
     const list = routes(depot).map((r, i) => `<tr><td><b>${esc(r.stops[r.stops.length - 1].name)}</b> <span class="sub">· ${r.stops.length - 1} stops · ${km(r.dist)} · par ${fmt(r.par)}</span>

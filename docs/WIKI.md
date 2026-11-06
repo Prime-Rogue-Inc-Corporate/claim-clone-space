@@ -326,6 +326,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Racing | Temple of Speed | Finish a lap of The Temple Circuit. | 13 scrap |
 | Racing | Podium | Set a top-3 time on a circuit leaderboard. | 39 scrap |
 | Racing | P1 | Top a circuit leaderboard. | 39 scrap |
+| Racing | Bus Lane Grand Prix | Finish a valid racetrack lap in a Humane Shuttle, mid-route. | 39 scrap |
 | Flight | Jaywalker | Fly through a Spine crossing. | 13 scrap |
 | Flight | Every Gap in the Fence | Fly through all 12 crossings. | 39 scrap |
 | Flight | Thirteen Crossings | Fly through crossings 13 times. | 13 scrap |
@@ -360,6 +361,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Shame | _(hidden until earned)_ Wrong Way | Drive a circuit backwards. | cosmetic: Backwards-cap decal |
 | Shame | _(hidden until earned)_ Passenger Incident | Make every passenger walk off your shuttle. | cosmetic: Sick-bag air freshener |
 | Shame | _(hidden until earned)_ Frozen Out | Let your Civic Warmth drop below 300. | cosmetic: Icicle hood ornament |
+| Shame | _(hidden until earned)_ Dark Lord of Transit | Open the doors of a full Humane Shuttle in the void between the city and the Sprawls. | cosmetic: Void-ejection lever (chrome) |
 
 ## Glossary
 

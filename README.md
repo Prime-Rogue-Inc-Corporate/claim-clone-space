@@ -31,6 +31,7 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | C | Residency card: 13 stamps from the 13 organizations, Level 0.00 → 0.13 → Level 1 (“Fully Processed”) |
 | J | Achievements (`data/achievements.json`): 13 categories × 13, shame ones hidden until earned |
 | B | Racetrack leaderboards |
+| P | Pilots: sign in on this device, new pilot (fresh start), switch, wipe with backup, export/import a pilot code |
 | G | Gig board: every open gig in one list; click to track one (it gets the flag + arrow), toggle which types show on the map |
 | K | Civic Warmth™: the Bureau's friendly score, today's ledger, Most Humane Citizen of the Day, certificate |
 | Q | Clear the waypoint, then untrack / hide the objective flag |
@@ -62,6 +63,8 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 - **Gig board (G)**: freight offers, the job you're on, reported drops (by sector only: sight radius stays the earned edge), races and residency stamps, up to 13 rows with a mix of types. Track one gig at a time; the onboarding mission is tracked by default. Per-type "on map" toggles (freight offers are list-only by default). Offers no longer spam the log.
 - **Humane Shuttle runs**: sign up at the depot next to either Sprawl's Housing Registry; 3 random routes through the hubs every 13 minutes. The shuttle handles like dog shit on purpose. Stop at every stop; keep passenger comfort ≥ 70% and beat par for a bonus on top of base pay. Career with the Humane Transit Directorate (Ministry of the Gentry): 13 ranks, better pay and a marginally less awful shuttle each time. X abandons.
 - **Civic Warmth™ (K)**: a friendly score from the Bureau of Public Cheer (0–1300, 13 tiers, start 650). Deliveries, shuttle runs, stamps and homes warm it; jacking, evading or getting busted, dumping cargo, late jobs, wall-scraping and wrong-way laps cool it. Consequences are on the roadmap. Most Humane Citizen of the Day is on the gig board and in the feed (seeded until accounts); out-warm the pick and you can print a certificate. E-mailed certificates (opt-in) and paper copies (for purchase) come later.
+- **Pilots (P)**: sign-in on this device until real accounts exist. Every pilot keeps its own save; wipes back up first; pilot codes (SQ1-…) move or protect a pilot and will import into real accounts later.
+- **Passenger chatter**: shuttle passengers from 14 factions praise, heckle and tell jokes as you drive (`data/passengers.json`, 219 lines; add more freely).
 - **Branding**: owners only, with an opt-in public-content consent step first. Editable or clearable any time; https links only.
 
 ## The "server" (GitHub Actions)

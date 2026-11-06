@@ -530,12 +530,42 @@ function drawShip(ctx, s, scene, time) {
   drawShipMarks(ctx, s, scene, spec);
 }
 
+// Passenger speech bubble over the shuttle (who's talking + what they said, wrapped).
+function drawBubble(ctx, s, b, spec) {
+  ctx.font = '12px monospace';
+  const words = b.text.split(' '), lines = [];
+  let cur = '';
+  for (const w of words) { if ((cur + ' ' + w).trim().length > 34) { lines.push(cur.trim()); cur = w; } else cur += ' ' + w; }
+  if (cur.trim()) lines.push(cur.trim());
+  const w = Math.max(ctx.measureText(b.who).width, ...lines.map((l) => ctx.measureText(l).width)) + 16;
+  const h = 18 + lines.length * 15;
+  const x = s.x - w / 2, y = s.y - spec.radius - 22 - h;
+  ctx.fillStyle = 'rgba(14,15,17,0.92)';
+  ctx.strokeStyle = b.color || '#e8c547';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.rect(x, y, w, h);
+  ctx.moveTo(s.x - 6, y + h);
+  ctx.lineTo(s.x, y + h + 9);
+  ctx.lineTo(s.x + 6, y + h);
+  ctx.fill();
+  ctx.stroke();
+  ctx.textAlign = 'left';
+  ctx.fillStyle = b.color || '#e8c547';
+  ctx.font = 'bold 10px monospace';
+  ctx.fillText(b.who, x + 8, y + 13);
+  ctx.fillStyle = '#e6dcc4';
+  ctx.font = '12px monospace';
+  lines.forEach((l, i) => ctx.fillText(l, x + 8, y + 28 + i * 15));
+}
+
 function drawShipMarks(ctx, s, scene, spec) {
   if (s.kind === 'shuttle') {
     ctx.fillStyle = '#d6f08a';
     ctx.font = 'bold 10px monospace';
     ctx.textAlign = 'center';
     ctx.fillText(`HUMANE SHUTTLE${s.passengers ? ` · ${s.passengers} ABOARD` : ''}`, s.x, s.y + spec.radius + 22);
+    if (s.bubble && scene.time < s.bubble.until) drawBubble(ctx, s, s.bubble, spec);
   }
   if (s === scene.me && s.kind !== 'eva') {
     ctx.strokeStyle = 'rgba(232,197,71,0.6)';

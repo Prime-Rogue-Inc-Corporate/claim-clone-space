@@ -10,6 +10,7 @@ const LABELS = {
   escape: 'evaded the authorities', expired: 'stolen ship remote-killed', busted: 'busted by Null Sector',
   'passenger-incident': 'passengers evacuated your shuttle',
   'shuttle-abandon': 'abandoned a shuttle route',
+  'void-dump': 'dumped a busload of passengers into space',
 };
 
 export function createWarmth({ econ, log, esc, openModal, closeModal, skiff = '#001' }) {

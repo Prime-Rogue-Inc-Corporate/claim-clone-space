@@ -287,6 +287,17 @@
       "reward": 39
     },
     {
+      "id": "bus-lane-grand-prix",
+      "cat": "racing",
+      "name": "Bus Lane Grand Prix",
+      "desc": "Finish a valid racetrack lap in a Humane Shuttle, mid-route.",
+      "on": "track-lap",
+      "eq": {
+        "bus": true
+      },
+      "reward": 39
+    },
+    {
       "id": "crossing",
       "cat": "flight",
       "name": "Jaywalker",
@@ -595,6 +606,15 @@
       },
       "shame": true,
       "cosmetic": "Icicle hood ornament"
+    },
+    {
+      "id": "dark-lord-of-transit",
+      "cat": "shame",
+      "name": "Dark Lord of Transit",
+      "desc": "Open the doors of a full Humane Shuttle in the void between the city and the Sprawls.",
+      "on": "void-dump",
+      "shame": true,
+      "cosmetic": "Void-ejection lever (chrome)"
     }
   ]
 }

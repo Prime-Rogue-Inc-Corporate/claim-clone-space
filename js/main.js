@@ -11,6 +11,7 @@ import { createGigs } from './gigs.js';
 import { createShuttle } from './shuttle.js';
 import { createWarmth } from './warmth.js';
 import { createTouch } from './touch.js';
+import { ensurePilots, createPilots } from './pilots.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -32,25 +33,27 @@ async function loadJSON(url, fallback) {
 }
 
 async function boot() {
+  ensurePilots(); // which pilot's save is live (sign-in on this device)
   const world = await loadJSON('data/world.json', null);
   if (!world) {
     document.body.insertAdjacentHTML('beforeend', '<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#e8c547">Could not load data/world.json. Serve this folder over HTTP (npm run serve), not file://</div>');
     return;
   }
   const DEV = devEnabled();
-  const [bulletin, sprites, lore, achievements, roadmap, costs, build] = await Promise.all([
+  const [bulletin, sprites, lore, achievements, passengers, roadmap, costs, build] = await Promise.all([
     loadJSON('data/bulletin.json', DEFAULT_BULLETIN),
     loadSprites(),
     loadJSON('data/lore.json', null),
     loadJSON('data/achievements.json', null),
+    loadJSON('data/passengers.json', null),
     DEV ? loadJSON('data/roadmap.json', null) : null,
     DEV ? loadJSON('data/costs.json', null) : null,
     DEV ? loadJSON('data/build.json', { sha: 'local', built: '' }) : null,
   ]);
-  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null, lore, achievements);
+  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null, lore, achievements, passengers);
 }
 
-function start(world, bulletin, sprites, devData, lore, achievements) {
+function start(world, bulletin, sprites, devData, lore, achievements, passengers) {
   const econ = createEconomy(world);
   const S = econ.state;
   const rng = mulberry32((Date.now() & 0xffffffff) >>> 0);
@@ -181,7 +184,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   const circuits = createCircuits({ econ, log, esc, player, emit, openModal, closeModal, sprites });
   // ---- Humane Shuttle runs (Humane Transit Directorate, Ministry of the Gentry) ----
   const shuttle = createShuttle({
-    world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit: REFIT,
+    world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit: REFIT, passengers,
     spawnShuttle: (x, y, a, stats) => {
       const v = makeShip('shuttle', x + 90 * Math.cos(a), y + 90 * Math.sin(a), a, { stats, shuttle: true });
       ships.push(v);
@@ -214,8 +217,9 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
         setWaypoint: (w) => (waypoint = w),
       })
     : null;
+  const pilots = createPilots({ log, esc, openModal, closeModal });
   touch = createTouch({ onPress: (k) => (modalOpen ? null : onPress(k)), getBody: () => me(), dev: !!dev, onMenu: () => gigs?.toggle(false) });
-  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; G · gigs &nbsp; K · warmth &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
+  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; P · pilot &nbsp; G · gigs &nbsp; K · warmth &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
   let windowIndex = -1;
@@ -285,6 +289,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now()) || shuttle.abandon();
     if (k === 'k') return warmth.openPanel();
+    if (k === 'p') return pilots.open();
     if (k === 'e' && nearDrop) return grabDrop(nearDrop);
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
@@ -878,6 +883,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
          <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”</span>
          <span class="k"><kbd>J</kbd></span><span>Achievements: 13 categories × 13. Shame ones are hidden until you earn them</span>
          <span class="k"><kbd>G</kbd></span><span>Gig board: every open gig (freight offers, reported drops, races, stamps). Click one to track it: the tracked gig gets the flag and arrow. Toggle which gig types show on the map</span>
+         <span class="k"><kbd>P</kbd></span><span>Pilots (sign in on this device): switch pilots, start a fresh one, wipe (with a backup), export/import a pilot code to move or protect it</span>
          <span class="k"><kbd>K</kbd></span><span>Civic Warmth™: the Bureau of Public Cheer's friendly score. Contributing warms it, degeneracy cools it. Most Humane Citizen of the Day, certificates</span>
          <span class="k"><kbd>Q</kbd></span><span>Clear your waypoint (press again to hide the objective flag). The chips above the minimap have clear buttons too</span>
          <span class="k"><kbd>B</kbd></span><span>Racetrack leaderboards (The Island Circuit, The Temple Circuit)</span>
@@ -1025,22 +1031,29 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     const sight = sightRadius(lvl);
     const visible = drops.filter((d) => !S.claimedDrops[d.key] && Math.hypot(d.x - body.x, d.y - body.y) < sight);
     nearDrop = player.mode === 'ship' ? visible.find((d) => Math.hypot(d.x - body.x, d.y - body.y) < GRAB_RADIUS) || null : null;
+    // Pad reach: generous on touch screens (a drifting skiff + a thumb = misery), a bit generous on PC.
+    const REACH = touch?.active ? 1.8 : 1.3;
+    const dist = (p) => Math.hypot(p.x - body.x, p.y - body.y);
     nearPlot = null;
+    let bestPad = Infinity, dockPad = null;
     for (const p of world.plots) {
-      const pad = plotPad(world, p);
-      if (Math.hypot(pad.x - body.x, pad.y - body.y) < 40) nearPlot = p;
+      if (Math.abs(p.x - body.x) > 400) continue;
+      const pad = plotPad(world, p), d = dist(pad);
+      if (d < 45 * REACH && d < bestPad) { bestPad = d; nearPlot = p; dockPad = pad; }
     }
     nearHut = null;
     const inSprawl = region(world, body.x) === 'sprawl' ? sprawlAt(body.x) : null;
     if (inSprawl) {
       for (const site of sprawl.sites) {
         if (site.sprawl !== inSprawl.id) continue;
-        const pad = hutPad(site);
-        if (Math.hypot(pad.x - body.x, pad.y - body.y) < 36) nearHut = site;
+        const pad = hutPad(site), d = dist(pad);
+        if (d < 50 * REACH && d < bestPad) { bestPad = d; nearHut = site; dockPad = pad; nearPlot = null; }
       }
     }
-    nearRefit = Math.hypot(REFIT.x - body.x, REFIT.y - body.y) < 45;
-    nearDesk = player.mode === 'ship' ? progress.nearDesk(body.x, body.y + -40) : null;
+    nearRefit = dist(REFIT) < 45 * REACH;
+    if (nearRefit) dockPad = REFIT;
+    nearDesk = player.mode === 'ship' ? progress.nearDesk(body.x, body.y + -40, 60 * REACH) : null;
+    if (nearDesk) dockPad = { x: nearDesk.x, y: nearDesk.y + 40 };
     // exploration + crossings (achievements)
     if (inSprawl && inSprawl.id !== lastSprawl) emit('sprawl', { id: inSprawl.id });
     lastSprawl = inSprawl ? inSprawl.id : null;
@@ -1051,9 +1064,22 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     }
     if (ySide) lastYSide = ySide;
     nearCircuit = circuits.nearBoard(body.x, body.y);
-    nearDepot = player.mode === 'ship' && !shuttle.running() ? shuttle.nearDepot(body.x, body.y) : null;
+    nearDepot = player.mode === 'ship' && !shuttle.running() ? shuttle.nearDepot(body.x, body.y, 70 * REACH) : null;
+    if (nearDepot) dockPad = nearDepot;
     const REG = nearestRegistry(body.x);
-    nearRegistry = Math.hypot(REG.x - body.x, REG.y - body.y) < 60 ? REG : null;
+    nearRegistry = dist(REG) < 60 * REACH ? REG : null;
+    if (nearRegistry) dockPad = REG;
+    // Docking assist: coasting slowly near a pad, the ship settles onto it instead of drifting off.
+    if (dockPad && player.mode === 'ship' && !modalOpen) {
+      const sp0 = speedOf(body), inp = inputState();
+      if (sp0 < 2.5 && !inp.up) {
+        const k = Math.min(1, dt * 60);
+        body.vx *= 1 - 0.08 * k;
+        body.vy *= 1 - 0.08 * k;
+        body.x += (dockPad.x - body.x) * 0.03 * k;
+        body.y += (dockPad.y - body.y) * 0.03 * k;
+      }
+    }
     // mission 2: arriving at a Registry with enough scrap opens the grid once
     if (!modalOpen && !registryAutoShown && S.mission === 3 && S.scrap >= HOME_SCRAP && !S.hut && Math.hypot(REG.x - body.x, REG.y - body.y) < 140) {
       registryAutoShown = true;
@@ -1159,7 +1185,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       $('h-sight').textContent = progress.processed() ? `sight ${sightRadius(lv)}m` : `residency ${n}/13 · sight ${sightRadius(lv)}m`;
       const lo = xpForLevel(lv), hi = xpForLevel(lv + 1);
       $('h-xp').style.width = `${Math.max(0, Math.min(100, Math.round(((S.xp - lo) / (hi - lo)) * 100)))}%`;
-      $('h-mode').textContent = modeLabel();
+      $('h-mode').textContent = `${pilots.name()} · ${modeLabel()}`;
       $('h-sector').textContent = `SECTOR ${sectorName(world, body.x, body.y)}`;
       $('h-speed').textContent = `${(sp * 10).toFixed(0)} m/s`;
     }

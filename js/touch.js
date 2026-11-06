@@ -13,7 +13,7 @@ export function touchWanted() {
 }
 
 const MENU = [
-  ['g', 'Gigs'], ['c', 'Residency card'], ['j', 'Achievements'], ['k', 'Civic Warmth'], ['b', 'Lap boards'],
+  ['p', 'Pilot / sign in'], ['g', 'Gigs'], ['c', 'Residency card'], ['j', 'Achievements'], ['k', 'Civic Warmth'], ['b', 'Lap boards'],
   ['tab', 'Ledger'], ['l', 'Wiki'], ['q', 'Clear waypoint'], ['h', 'Help'],
 ];
 

@@ -244,6 +244,11 @@
           "id": "p2-certificate-email",
           "text": "Opt-in e-mailed certificate for the Citizen of the Day (express consent, unsubscribe, sender ID per CASL; transactional wording only, no marketing in it)",
           "status": "later"
+        },
+        {
+          "id": "p2-accounts-import",
+          "text": "Real accounts import SQ1- pilot codes from the on-device Pilots screen (no progress lost from staging)",
+          "status": "later"
         }
       ]
     },
@@ -392,10 +397,23 @@
   ],
   "releases": [
     {
+      "version": "0.1.9",
+      "date": "2026-11-06",
+      "name": "Pilots (sign-in on this device), passenger chatter, easier docking",
+      "status": "now",
+      "items": [
+        "Pilots (P / ☰): sign in as a pilot on this device; new pilot = fresh start; switch; wipe with automatic backup (last 5, restorable); export/import a pilot code (share, copy or download) to protect it or move devices",
+        "Shuttle passenger chatter: 14 factions, 219 lines (praise, heckles, jokes, boarding, late), speech bubbles + feed; reacts to walls, hard corners, smooth streaks and running over par; data/passengers.json",
+        "Comfort retuned: scores what passengers feel, not steering corrections",
+        "Docking: bigger pad reach (×1.8 on touch, ×1.3 on PC) and a docking assist that settles a slow, coasting ship onto the pad",
+        "Achievements: Bus Lane Grand Prix (valid racetrack lap in a shuttle mid-route); Dark Lord of Transit (hidden shame: open a full shuttle's doors in the void)"
+      ]
+    },
+    {
       "version": "0.1.8",
       "date": "2026-11-06",
       "name": "Mobile: touch controls, portrait + landscape",
-      "status": "now",
+      "status": "done",
       "items": [
         "Touch controls on phones/tablets (auto-detected; ?touch forces them): heading stick (point where you want to go), BRAKE, E (glows when usable), F jump, X dump/abandon",
         "☰ menu with every keyboard menu (gigs, card, achievements, warmth, lap boards, ledger, wiki, clear waypoint, help, full screen; staging notes/roadmap)",

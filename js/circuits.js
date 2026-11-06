@@ -191,7 +191,7 @@ export function createCircuits({ econ, log, esc, player, emit = () => {}, openMo
     save();
     const r = econ.reward(reward);
     log(`🏁 +${r.amount} scrap · ${esc(why)}`, 'good');
-    emit('track-lap', { track: c.id, ms, best, podium: rank <= 3, win: rank === 1 });
+    emit('track-lap', { track: c.id, ms, best, podium: rank <= 3, win: rank === 1, bus: !!player.ship?.shuttle });
   }
 
   function status(now) {

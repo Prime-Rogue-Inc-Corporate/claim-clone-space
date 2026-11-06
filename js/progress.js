@@ -133,8 +133,8 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
   };
 
   // ---- desks ----
-  function nearDesk(x, y) {
-    return desks.find((d) => Math.hypot(d.x - x, d.y - y) < 60) || null;
+  function nearDesk(x, y, r = 60) {
+    return desks.find((d) => Math.hypot(d.x - x, d.y - y) < r) || null;
   }
 
   function openDesk(desk) {
