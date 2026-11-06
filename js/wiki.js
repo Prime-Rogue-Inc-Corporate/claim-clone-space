@@ -15,12 +15,14 @@ export function openWiki(lore, { openModal, closeModal, esc }, tab = 'orgs', foc
       .map(
         (o, i) => `<tr class="click" data-org="${esc(o.id)}"><td style="width:22px;color:var(--dim)">${i + 1}</td>
           <td style="width:10px;background:${esc(o.color)}"></td>
+          <td style="width:30px"><img src="assets/sprites/logo_${esc(o.id)}.png" width="26" height="26" alt="" onerror="this.remove()"/></td>
           <td><b>${esc(o.name)}</b> <span class="sub">${TYPES[o.type] || esc(o.type)}</span><div class="sub" style="margin:1px 0 0"><i>“${esc(o.motto)}”</i></div></td></tr>`
       )
       .join('');
     const o = lore.organizations.find((x) => x.id === focus);
     const detail = o
       ? `<div class="explain" style="border-left:4px solid ${esc(o.color)}">
+          <img src="assets/sprites/logo_${esc(o.id)}.png" width="64" height="64" alt="" style="float:right;margin:0 0 6px 10px" onerror="this.remove()"/>
           <b style="font-size:15px">${esc(o.name)}</b> · ${TYPES[o.type] || esc(o.type)}<br/><i>“${esc(o.motto)}”</i><br/><br/>
           ${esc(o.does)}<br/><br/>${esc(o.lore)}<br/><br/>
           <b>Residency stamp:</b> ${esc(o.site)}: ${esc(o.stamp)}<br/>

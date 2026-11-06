@@ -1,4 +1,56 @@
 {
+ "ach_civic": {
+  "h": 128,
+  "w": 107
+ },
+ "ach_explore": {
+  "h": 127,
+  "w": 128
+ },
+ "ach_flight": {
+  "h": 128,
+  "w": 124
+ },
+ "ach_freight": {
+  "h": 107,
+  "w": 128
+ },
+ "ach_heat": {
+  "h": 128,
+  "w": 110
+ },
+ "ach_housing": {
+  "h": 128,
+  "w": 123
+ },
+ "ach_jumping": {
+  "h": 128,
+  "w": 114
+ },
+ "ach_property": {
+  "h": 128,
+  "w": 108
+ },
+ "ach_racing": {
+  "h": 128,
+  "w": 121
+ },
+ "ach_refit": {
+  "h": 128,
+  "w": 127
+ },
+ "ach_residency": {
+  "h": 128,
+  "w": 111
+ },
+ "ach_scrounge": {
+  "h": 128,
+  "w": 117
+ },
+ "ach_shame": {
+  "h": 128,
+  "w": 110
+ },
  "barrel_0": {
   "h": 96,
   "w": 76
@@ -18,6 +70,38 @@
  "buoy_on": {
   "h": 96,
   "w": 60
+ },
+ "deck_camera": {
+  "h": 128,
+  "w": 60
+ },
+ "deck_garden": {
+  "h": 99,
+  "w": 128
+ },
+ "deck_gate": {
+  "h": 89,
+  "w": 128
+ },
+ "deck_grate": {
+  "h": 128,
+  "w": 126
+ },
+ "deck_scrubber": {
+  "h": 128,
+  "w": 109
+ },
+ "deck_statue": {
+  "h": 128,
+  "w": 95
+ },
+ "deck_tile": {
+  "h": 128,
+  "w": 127
+ },
+ "deck_wall": {
+  "h": 79,
+  "w": 128
  },
  "dish": {
   "h": 96,
@@ -51,6 +135,26 @@
  "eva": {
   "h": 61,
   "w": 64
+ },
+ "extra_cannon": {
+  "h": 128,
+  "w": 123
+ },
+ "extra_cryo": {
+  "h": 128,
+  "w": 99
+ },
+ "extra_drop": {
+  "h": 128,
+  "w": 120
+ },
+ "extra_flask": {
+  "h": 128,
+  "w": 127
+ },
+ "extra_refinery": {
+  "h": 128,
+  "w": 117
  },
  "fence": {
   "h": 71,
@@ -161,8 +265,76 @@
   "h": 71,
   "w": 96
  },
+ "logo_ashiron": {
+  "h": 128,
+  "w": 96
+ },
+ "logo_assessor": {
+  "h": 128,
+  "w": 108
+ },
+ "logo_bureau": {
+  "h": 128,
+  "w": 126
+ },
+ "logo_cinder": {
+  "h": 128,
+  "w": 115
+ },
+ "logo_gavel": {
+  "h": 128,
+  "w": 122
+ },
+ "logo_gullet": {
+  "h": 128,
+  "w": 120
+ },
+ "logo_kessler": {
+  "h": 127,
+  "w": 128
+ },
+ "logo_lastmile": {
+  "h": 128,
+  "w": 102
+ },
+ "logo_mercy": {
+  "h": 128,
+  "w": 114
+ },
+ "logo_ministry": {
+  "h": 128,
+  "w": 112
+ },
+ "logo_null": {
+  "h": 128,
+  "w": 81
+ },
+ "logo_registry": {
+  "h": 119,
+  "w": 128
+ },
+ "logo_vanta": {
+  "h": 128,
+  "w": 121
+ },
  "lot_empty": {
   "h": 251,
+  "w": 256
+ },
+ "ownerhome1": {
+  "h": 219,
+  "w": 256
+ },
+ "ownerhome2": {
+  "h": 204,
+  "w": 256
+ },
+ "ownerhome3": {
+  "h": 208,
+  "w": 256
+ },
+ "ownerhome4": {
+  "h": 197,
   "w": 256
  },
  "pad": {
@@ -252,6 +424,38 @@
  "spine_plain": {
   "h": 128,
   "w": 126
+ },
+ "tenure_a1": {
+  "h": 244,
+  "w": 256
+ },
+ "tenure_a2": {
+  "h": 209,
+  "w": 256
+ },
+ "tenure_a3": {
+  "h": 195,
+  "w": 256
+ },
+ "tenure_a4": {
+  "h": 199,
+  "w": 256
+ },
+ "tenure_b1": {
+  "h": 246,
+  "w": 256
+ },
+ "tenure_b2": {
+  "h": 206,
+  "w": 256
+ },
+ "tenure_b3": {
+  "h": 197,
+  "w": 256
+ },
+ "tenure_b4": {
+  "h": 198,
+  "w": 256
  },
  "wall_a": {
   "h": 110,

@@ -335,6 +335,8 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
           ctx.font = 'bold 14px monospace';
           ctx.textAlign = 'center';
           ctx.fillText('SPINE RUN · FLY THROUGH', x, y - RING - 10);
+          const ml = sprites?.get('logo_mercy');
+          if (ml) ctx.drawImage(ml, x - 24, y - RING - 78, 48, 48);
         }
         if (isNext) {
           ctx.fillStyle = '#d6f08a';

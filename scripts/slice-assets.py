@@ -115,6 +115,46 @@ for n, b in zip(['rock_1', 'rock_2', 'rock_3', 'rock_4', 'buoy_on', 'buoy_off', 
 for n, b in zip(['icon_cash', 'icon_credits', 'icon_scrap', 'icon_xp', 'icon_heat', 'icon_lock', 'icon_eye', 'icon_crate'], bot):
     save(n, a, b, lab_b, 32)
 
+# ---- organization emblems: 6 one-row sheets (transparent). 13 org logos, 13 achievement-category
+# icons, 5 spares. Order = left to right on each sheet.
+EMBLEMS = [
+    ['shame_cage', 'ach_scrounge', 'logo_lastmile', 'logo_cinder', 'extra_cannon'],
+    ['ach_freight', 'logo_registry', 'ach_explore', 'logo_mercy', 'logo_vanta'],
+    ['ach_flight', 'ach_civic', 'extra_flask', 'logo_bureau', 'logo_gavel'],
+    ['extra_refinery', 'extra_drop', 'ach_jumping', 'ach_housing', 'extra_cryo', 'logo_ministry'],
+    ['logo_gullet', 'ach_racing', 'ach_residency', 'ach_refit', 'ach_property'],
+    ['logo_assessor', 'logo_kessler', 'logo_ashiron', 'logo_null', 'ach_heat'],
+]
+for i, names in enumerate(EMBLEMS, 1):
+    a = sheet(f'sheet-emblems-{i}.png')
+    boxes, lab, _ = components(a, 8, minarea=3000)
+    boxes.sort(key=lambda b: b[2])
+    assert len(boxes) == len(names), (i, len(boxes))
+    for n, b in zip(names, boxes):
+        save('ach_shame' if n == 'shame_cage' else n, a, b, lab, 128)
+
+# ---- housing: Tenure Heights (2 variants x 4 tiers), Sprawl owner homes (4 tiers), 8 deck props.
+# This sheet came back on a light background with grid lines: flood-fill the background out first.
+a = sheet('sheet-housing.png').astype(int)
+H, W = a.shape[:2]
+rgb = a[..., :3]
+bgish = (rgb.min(-1) > 120) & ((rgb.max(-1) - rgb.min(-1)) < 16)  # background + soft drop shadow
+blab, _ = ndimage.label(bgish)
+edge = set(np.unique(np.concatenate([blab[0], blab[-1], blab[:, 0], blab[:, -1]])))
+for k in range(1, 4):
+    edge |= set(np.unique(blab[int(H * k / 4) - 2:int(H * k / 4) + 3].ravel()))
+    edge |= set(np.unique(blab[:, int(W * k / 4) - 2:int(W * k / 4) + 3].ravel()))
+edge.discard(0)
+a[..., 3] = np.where(np.isin(blab, list(edge)), 0, 255)
+a = a.astype(np.uint8)
+boxes, lab, _ = components(a, 4, minarea=1500)
+boxes.sort(key=lambda b: (int((b[0] + b[1]) / 2 // (H / 4)), b[2]))
+names = [f'tenure_a{t}' for t in range(1, 5)] + [f'tenure_b{t}' for t in range(1, 5)] + [f'ownerhome{t}' for t in range(1, 5)] + \
+        ['deck_tile', 'deck_grate', 'deck_garden', 'deck_scrubber', 'deck_wall', 'deck_gate', 'deck_camera', 'deck_statue']
+assert len(boxes) == len(names), len(boxes)
+for n, b in zip(names, boxes):
+    save(n, a, b, lab, 256 if n.startswith(('tenure', 'ownerhome')) else 128)
+
 with open('assets/sprites.json', 'w') as f:
     json.dump(manifest, f, indent=1, sort_keys=True)
 print(f'{len(manifest)} sprites ->', OUT)

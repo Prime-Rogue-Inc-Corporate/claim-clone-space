@@ -94,8 +94,8 @@
         },
         {
           "id": "p1-corplogos",
-          "text": "Logos for the 13 organizations (Kevin generating; names are drafts)",
-          "status": "now"
+          "text": "Logos for the 13 organizations (Kevin generating; names are drafts) — in (v0.1.5); names still drafts",
+          "status": "done"
         },
         {
           "id": "p1-thirteen",
@@ -109,7 +109,7 @@
         },
         {
           "id": "p1-achievements",
-          "text": "Achievements: 13 categories × 13 known (169) + 169 hidden; shame ones hidden until first earned, pay a cosmetic once; others pay scrap/resources — v0.1.4: framework + 42 live; the other 127 known + 169 hidden still to write",
+          "text": "Achievements: 13 categories × 13 known (169) + 169 hidden; shame ones hidden until first earned, pay a cosmetic once; others pay scrap/resources — v0.1.4: framework + 48 live; the other 121 known + 169 hidden still to write",
           "status": "now"
         },
         {
@@ -372,15 +372,29 @@
   ],
   "releases": [
     {
+      "version": "0.1.5",
+      "date": "2026-11-06",
+      "name": "Racetracks + art backfill",
+      "status": "now",
+      "items": [
+        "Two racetracks south of the main drag: The Island Circuit (after Circuit Gilles-Villeneuve) and The Temple Circuit (after Monza)",
+        "Start gate in the race direction starts a lap; 13 gates in order; wrong-way detection; laps void if you leave the circuit or your ship",
+        "Leaderboards (B / E at the timing board): local laps vs. 12 seeded org rival pilots; shared board needs accounts + server",
+        "6 new achievements (Lights Out, Wall of Champions, Temple of Speed, Podium, P1; shame: Wrong Way)",
+        "Art backfill: 13 org emblems, 13 achievement-category icons, Tenure Heights (2×4), owner homes (4), deck props (8); owner-home art for lot owners living in a Sprawl",
+        "World extends south to y=6800 for the Raceway"
+      ]
+    },
+    {
       "version": "0.1.4",
       "date": "2026-11-06",
       "name": "Residency card + achievements",
-      "status": "now",
+      "status": "done",
       "items": [
         "Residency card (C): 13 stamps, one per organization; Level 0.00 → 0.13 → Level 1 “Fully Processed” (+130 scrap)",
         "10 org desks on the Spine, one per block (Ministry north of the Spine, in the heat zone: +1 star); Kessler, Mercy, Registry stamp at their real places",
         "Stand-in desk actions where the system doesn't exist yet (Foundry shift, ration, oath, bid, Meter Office)",
-        "Achievements (J): data/achievements.json, 13 categories × 13 known + 169 hidden; 42 live, the rest 'unannounced'",
+        "Achievements (J): data/achievements.json, 13 categories × 13 known + 169 hidden; 48 live, the rest 'unannounced'",
         "Shame achievements hidden until earned, pay a cosmetic once (cosmetics recorded, rendering later); the rest pay scrap",
         "HUD level shows residency until processed, then your XP level"
       ]

@@ -30,6 +30,7 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | L | The wiki: the 13 organizations, places, glossary (from `data/lore.json`; also `docs/WIKI.md`, regenerate with `npm run wiki`) |
 | C | Residency card: 13 stamps from the 13 organizations, Level 0.00 → 0.13 → Level 1 (“Fully Processed”) |
 | J | Achievements (`data/achievements.json`): 13 categories × 13, shame ones hidden until earned |
+| B | Racetrack leaderboards |
 | H | Help |
 
 ## What's in it
@@ -50,7 +51,9 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
   - **Spine Run**: 13 gates. Start at the gold ring south of the Spine's west end, slalom north-south through all 12 crossings, then fly home. Your best time is saved. Bonus for the first lap each day and for beating your best.
 - **The Sprawls**: two residential zones, each about a minute's flight past a city limit (skiff at cruise), with buoys and distance markers across the void: **Lower Upper Squalor** (east) and **Upper Lower Squalor** (west). 39 sites each (13 × 3). Free players build **huts with scrap only**: 13 tiers from Lean-to (150) to The Big Bunker, each ×1.25. One per pilot; huts are **never branded** and can't be bought out. About half the sites are already squatted by NPCs. You respawn at your hut.
 - **Residency card (C)**: Level 0.00 → 0.13: one stamp from each of the 13 organizations, then Level 1, “Fully Processed”. Ten desks sit on the Spine, one per block (the Ministry's is north of the Spine, in the heat zone); Kessler, Mercy and the Registry stamp you at the Refit Bay, the Spine Run gate and the Housing Registries. Desks use stand-in actions where the real system doesn't exist yet.
-- **Achievements (J)**: `data/achievements.json`. 13 categories × 13 known + 169 hidden; 42 are live so far. Shame achievements stay hidden until earned and pay a cosmetic once; the rest pay scrap.
+- **Achievements (J)**: `data/achievements.json`. 13 categories × 13 known + 169 hidden; 48 are live so far. Shame achievements stay hidden until earned and pay a cosmetic once; the rest pay scrap.
+- **Racetracks**: two space circuits south of the main drag, traced from real F1 tracks: **The Island Circuit** (after Circuit Gilles-Villeneuve, Montréal; southwest) and **The Temple Circuit** (after Monza; southeast). Fly through the start gate in the race direction to start a lap, hit all 13 gates in order; wrong-way crossings are flagged. Laps go to a leaderboard per track (**B**, or E at the timing board): for now it's this browser's laps vs. 12 seeded rival pilots from the orgs, shared once accounts and a server exist. 13 scrap a lap, +26 for a PB, +39 for the first lap of the day per track.
+- **Art**: org emblems (desks, residency card, wiki, ledger, lot terminals), achievement-category icons, Tenure Heights / owner-home / deck art sliced from `assets/src/` by `scripts/slice-assets.py`. Lot owners who live in a Sprawl get the owner-home art.
 - **Branding**: owners only, with an opt-in public-content consent step first. Editable or clearable any time; https links only.
 
 ## The "server" (GitHub Actions)

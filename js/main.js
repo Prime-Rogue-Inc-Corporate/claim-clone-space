@@ -6,11 +6,13 @@ import { loadSprites } from './sprites.js';
 import { devEnabled, createDevTools } from './devtools.js';
 import { openWiki } from './wiki.js';
 import { createProgress, residencyLevel } from './progress.js';
+import { createCircuits } from './circuits.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const logo = (id, px = 22) => (id ? `<img class="logo" src="assets/sprites/logo_${id}.png" width="${px}" height="${px}" alt="" onerror="this.remove()"/>` : '');
 const money = (n) => `$${(Number(n) || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 const DEFAULT_BULLETIN = { day: 'offline', event: { id: 'calm', label: 'No bulletin', dropMultiplier: 1, headline: 'Bulletin relay offline.' }, featuredPlot: null };
@@ -149,12 +151,14 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
 
   // ---- residency card (C) + achievements (J) ----
   const progress = createProgress({
-    world, econ, lore, achievements, log, esc, openModal, closeModal,
+    world, econ, lore, achievements, log, esc, openModal, closeModal, sprites,
     setWaypoint: (w) => (waypoint = w),
     addHeat: (n, why) => loops.addHeat(n, why),
     raceStart: loops.raceStart, refit: REFIT, registries: REGISTRIES,
   });
   const emit = progress.emit;
+  // ---- racetracks south of the main drag ----
+  const circuits = createCircuits({ econ, log, esc, player, emit, openModal, closeModal, sprites });
 
   // ---- staging tools: roadmap (R) + pinned notes (N); hidden on the production domain ----
   const dev = devData
@@ -167,7 +171,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
         setWaypoint: (w) => (waypoint = w),
       })
     : null;
-  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; C · card &nbsp; J · achievements' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
+  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
   let windowIndex = -1;
@@ -209,6 +213,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
   let nearRefit = false;
   let nearRegistry = null; // the Registry kiosk you're parked at, if any
   let nearDesk = null; // an organization's residency desk
+  let nearCircuit = null; // a racetrack's timing board
   let registryAutoShown = false;
   let lastSprawl = null;
   let lastYSide = 0;
@@ -227,6 +232,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (k === 'l') { emit('wiki'); return openWiki(lore, { openModal, closeModal, esc }); }
     if (k === 'c') return progress.openCard();
     if (k === 'j') return progress.openAchievements();
+    if (k === 'b') return circuits.openBoard();
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now());
@@ -236,6 +242,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     if (k === 'e' && !nearDrop && nearRefit) return openRefit();
     if (k === 'e' && !nearDrop && nearRegistry) return openRegistry(null, nearRegistry.sprawl);
     if (k === 'e' && !nearDrop && nearDesk) return progress.openDesk(nearDesk);
+    if (k === 'e' && !nearDrop && nearCircuit) return circuits.openBoard(nearCircuit.id);
   }
 
   // Back into your own skiff, wherever you left it. Stolen ships are always temporary.
@@ -359,7 +366,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       action = `
         <h3>CLAIM</h3>
         <div class="explain">Empty lots cost <b>${money(buildPrice())}</b>. ${payLine(econ.quote(buildPrice()))}<br/>
-        Your tower starts at ${10} floors and grows every time the lot changes hands.<br/>
+        Your tower starts at 13 floors and grows every time the lot changes hands.<br/>
         Once claimed, anyone can buy it from you for <b>${money(cents(buildPrice() * TAKEOVER_MULT))}</b>, and you'd get that much back in credits.</div>
         ${riskBox()}
         <div class="buttons"><button class="primary" id="go">Claim for ${money(buildPrice())}</button><button id="x">Close</button></div>
@@ -388,7 +395,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       `<h2>${esc(b?.name || `Lot ${p.id}`)}</h2>
        <div class="sub">LOT ${p.id} · ${p.side} side · ${sectorName(world, p.x, p.side === 'north' ? -200 : 200)}${b?.tagline ? ` · “${esc(b.tagline)}”` : ''}</div>
        <div class="grid">
-         <span class="k">Owner</span><span>${esc(owner)}</span>
+         <span class="k">Owner</span><span>${p.owner && p.owner !== PLAYER ? logo(p.owner, 18) + ' ' : ''}${esc(owner)}</span>
          <span class="k">Height</span><span>${p.floors || 0} floors</span>
          <span class="k">Current value</span><span>${money(p.value)}</span>
          <span class="k">Buy-out price</span><span>${p.owner ? money(takeoverPrice(p)) : '—'}</span>
@@ -582,6 +589,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     c.font = 'bold 13px monospace';
     c.textAlign = 'center';
     c.fillText(`HOUSING REGISTRY · ${sprawlById(REGISTRY.sprawl).name}`, REGISTRY.x, REGISTRY.y - 52);
+    const rl = sprites?.get('logo_registry');
+    if (rl) c.drawImage(rl, REGISTRY.x - 22, REGISTRY.y - 112, 44, 44);
     c.font = '10px monospace';
     c.fillStyle = 'rgba(214,240,138,0.7)';
     c.fillText('pick any vacant site · E', REGISTRY.x, REGISTRY.y + 56);
@@ -763,6 +772,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     c.font = 'bold 13px monospace';
     c.textAlign = 'center';
     c.fillText('KESSLER REFIT BAY', REFIT.x, REFIT.y - 52);
+    const kl = sprites?.get('logo_kessler');
+    if (kl) c.drawImage(kl, REFIT.x + 62, REFIT.y - 26, 44, 44);
     c.font = '10px monospace';
     c.fillStyle = 'rgba(232,197,71,0.7)';
     c.fillText('scrap only · E to fit', REFIT.x, REFIT.y + 56);
@@ -775,7 +786,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     const total = claimed.reduce((s, p) => s + p.value, 0);
     const changes = world.plots.reduce((s, p) => s + p.history.filter((h) => h.kind === 'takeover').length, 0);
     const rows = claimed
-      .map((p) => `<tr class="click ${p.owner === PLAYER ? 'mine' : ''}" data-id="${p.id}"><td>${p.id}</td><td>${esc(p.brand?.name)}</td><td>${esc(econ.ownerName(p.owner))}</td><td>${money(p.value)}</td><td>${money(takeoverPrice(p))}</td><td>${p.history.filter((h) => h.kind === 'takeover').length}</td></tr>`)
+      .map((p) => `<tr class="click ${p.owner === PLAYER ? 'mine' : ''}" data-id="${p.id}"><td>${p.id}</td><td>${esc(p.brand?.name)}</td><td>${p.owner && p.owner !== PLAYER ? logo(p.owner, 14) + ' ' : ''}${esc(econ.ownerName(p.owner))}</td><td>${money(p.value)}</td><td>${money(takeoverPrice(p))}</td><td>${p.history.filter((h) => h.kind === 'takeover').length}</td></tr>`)
       .join('');
     openModal(
       `<h2>THE LEDGER</h2>
@@ -815,6 +826,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
          <span class="k"><kbd>L</kbd></span><span>The wiki: who runs this place, and why everything is 13</span>
          <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”</span>
          <span class="k"><kbd>J</kbd></span><span>Achievements: 13 categories × 13. Shame ones are hidden until you earn them</span>
+         <span class="k"><kbd>B</kbd></span><span>Racetrack leaderboards (The Island Circuit, The Temple Circuit)</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
        <h3>THE GAME</h3>
@@ -827,6 +839,8 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
        <b>Spine Run:</b> fly through the gold ring south of the Spine's west end, then slalom through all 12 crossings (13 gates) and back. Best time is saved.</div>
        <h3>THE CITY</h3>
        <div>The Spine runs 13 blocks of 13 lots (169), all on the north side. The gaps between blocks are crossings: fly through them north-south. Real roads and intersections come later.</div>
+       <h3>THE RACETRACKS</h3>
+       <div>South of the main drag, two space circuits traced from real F1 tracks: <b>The Island Circuit</b> (after Circuit Gilles-Villeneuve, Montréal) to the southwest and <b>The Temple Circuit</b> (after Monza) to the southeast. Fly through the start gate in the race direction to start a lap, then hit all 13 gates in order. Laps go on the leaderboard (B, or E at the timing board).</div>
        <h3>THE SPRAWLS</h3>
        <div>About a minute's flight past either end of the city: <b>Lower Upper Squalor</b> (east) and <b>Upper Lower Squalor</b> (west), 39 sites each. Free housing for anyone who plays: build a lean-to with scrap (${econ.HUT_TIERS[0].cost}), then upgrade through 13 tiers to The Big Bunker. Huts are never branded and can't be bought out. You respawn at yours.</div>
        <div class="buttons"><button class="primary" id="x">Fly</button></div>`,
@@ -874,6 +888,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       clampToBounds(body);
     }
     if (!modalOpen) loops.update(dt, now, body, hit);
+    if (!modalOpen) circuits.update(now, body);
     missionTick();
 
     for (const s of ships) {
@@ -919,6 +934,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       if (gi >= 0) emit('crossing', { i: gi + 1 });
     }
     if (ySide) lastYSide = ySide;
+    nearCircuit = circuits.nearBoard(body.x, body.y);
     const REG = nearestRegistry(body.x);
     nearRegistry = Math.hypot(REG.x - body.x, REG.y - body.y) < 60 ? REG : null;
     // mission 2: arriving at a Registry with enough scrap opens the grid once
@@ -972,9 +988,10 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
       sight, nearPlot, boardable, featured: bulletin.featuredPlot,
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
-      sprawl, hutOf, nearHut, sprites, objective: objective(body),
+      sprawl, hutOf, nearHut, sprites, objective: objective(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
       extraWorld: (c) => { drawRefit(c, now); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
+      underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
     drawScene(ctx, W, H, cam, scene);
     drawMinimap(mctx, 200, 150, scene);
@@ -987,6 +1004,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
     else if (nearRegistry) prompt = `E · Housing Registry, ${sprawlById(nearRegistry.sprawl).title} (pick a site)`;
+    else if (nearCircuit) prompt = `E · ${nearCircuit.name} leaderboard`;
     else if (nearDesk) prompt = `E · ${lore?.organizations?.find((o) => o.id === nearDesk.org)?.site || nearDesk.org} (residency stamp)`;
     else if (boardable) prompt = boardable === player.home ? `F · jump back into your skiff ${player.home.reg}` : `F · jump ${boardable.npc ? 'and jack the ' : 'into the '}${KINDS[boardable.kind].label.toLowerCase()}`;
     else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y))}m`;
@@ -995,7 +1013,7 @@ function start(world, bulletin, sprites, devData, lore, achievements) {
     pe.textContent = prompt;
 
     const mt = missionText();
-    const ls = [mt && `<span style="color:#d6f08a">${esc(mt)}</span>`, loops.status(now)].filter(Boolean).join('<br/>');
+    const ls = [mt && `<span style="color:#d6f08a">${esc(mt)}</span>`, loops.status(now), circuits.status(now)].filter(Boolean).join('<br/>');
     if (ls !== lastLoops) {
       lastLoops = ls;
       $('h-loops').innerHTML = ls;

@@ -1,11 +1,11 @@
 {
   "seed": "spine-thirteen",
-  "generated": "2026-11-06T09:54:12.829Z",
+  "generated": "2026-11-06T10:58:04.277Z",
   "bounds": {
     "minX": -21000,
     "maxX": 21000,
     "minY": -3000,
-    "maxY": 3000
+    "maxY": 6800
   },
   "spine": {
     "halfLength": 20450,

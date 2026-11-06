@@ -294,6 +294,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 
 - **The Spine (Avenue Zero):** The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.25× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming.
 - **Lower Upper Squalor & Upper Lower Squalor:** The two Sprawls, each about a minute's flight past a city limit: Lower Upper Squalor to the east, Upper Lower Squalor to the west. Near-identical: 39 sites each (13 × 3). Scrap-built huts in 13 tiers, from Lean-to to The Big Bunker, never branded. Each has a Housing Registry on its city-facing edge.
+- **The Mercy Unlimited Raceway:** Two circuits in the void south of the main drag, built to the shapes of tracks from a planet nobody here remembers: The Island Circuit (after Circuit Gilles-Villeneuve, Montréal) and The Temple Circuit (after Monza). 13 gates a lap. Mercy Unlimited sponsors both, and the crashes.
 - **Tenure Heights:** The gentry's gated, domed deck north of the Spine. Equal access to everything, conveniently. Scrappers may enter. Null Sector will notice. (Coming.)
 - **The void:** Everything between. Buoys mark the way to the Sprawls. Debris courtesy of Kessler.
 
@@ -316,6 +317,11 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Racing | Sponsored by Mercy | Finish a Spine Run lap. | 13 scrap |
 | Racing | Faster Than You | Beat your own best Spine Run time. | 13 scrap |
 | Racing | Thirteen Laps | Finish 13 Spine Run laps. | 39 scrap |
+| Racing | Lights Out | Finish a lap at either circuit. | 13 scrap |
+| Racing | Wall of Champions | Finish a lap of The Island Circuit. | 13 scrap |
+| Racing | Temple of Speed | Finish a lap of The Temple Circuit. | 13 scrap |
+| Racing | Podium | Set a top-3 time on a circuit leaderboard. | 39 scrap |
+| Racing | P1 | Top a circuit leaderboard. | 39 scrap |
 | Flight | Jaywalker | Fly through a Spine crossing. | 13 scrap |
 | Flight | Every Gap in the Fence | Fly through all 12 crossings. | 39 scrap |
 | Flight | Thirteen Crossings | Fly through crossings 13 times. | 13 scrap |
@@ -345,6 +351,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Shame | _(hidden until earned)_ Has Noted Your Name | Miss a freight deadline. | cosmetic: Snail sticker |
 | Shame | _(hidden until earned)_ Remote-Killed | Let a stolen ship time out on you. | cosmetic: Tow-hook trophy |
 | Shame | _(hidden until earned)_ Cargo Overboard | Bail out with cargo still aboard. | cosmetic: Empty-crate bobblehead |
+| Shame | _(hidden until earned)_ Wrong Way | Drive a circuit backwards. | cosmetic: Backwards-cap decal |
 
 ## Glossary
 

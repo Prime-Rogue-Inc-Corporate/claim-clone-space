@@ -39,7 +39,7 @@ export function residencyLevel(n) {
   return n >= T13 ? '1' : `0.${String(n).padStart(2, '0')}`;
 }
 
-export function createProgress({ world, econ, lore, achievements, log, esc, openModal, closeModal, setWaypoint, addHeat, raceStart, refit, registries }) {
+export function createProgress({ world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, setWaypoint, addHeat, raceStart, refit, registries }) {
   const S = econ.state;
   S.stamps ||= {};
   S.ach ||= {};
@@ -168,23 +168,28 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
       if (Math.abs(cam.x - d.x) > 2500) continue;
       const org = orgById[d.org];
       const done = S.stamps[d.org];
-      c.fillStyle = org.color || '#888';
-      c.globalAlpha = 0.85;
-      c.fillRect(d.x - 26, d.y - 18, 52, 30);
-      c.globalAlpha = 1;
+      const img = sprites?.get(`logo_${d.org}`);
       c.strokeStyle = near === d ? '#e8c547' : done ? 'rgba(214,240,138,0.6)' : 'rgba(232,197,71,0.45)';
       c.lineWidth = 2;
-      c.strokeRect(d.x - 26, d.y - 18, 52, 30);
+      if (img) {
+        c.drawImage(img, d.x - 30, d.y - 46, 60, 60);
+      } else {
+        c.fillStyle = org.color || '#888';
+        c.globalAlpha = 0.85;
+        c.fillRect(d.x - 26, d.y - 18, 52, 30);
+        c.globalAlpha = 1;
+        c.strokeRect(d.x - 26, d.y - 18, 52, 30);
+      }
       c.beginPath();
       c.arc(d.x, d.y + 40, near === d ? 18 + Math.sin(time / 200) * 2 : 14, 0, Math.PI * 2);
       c.stroke();
       c.fillStyle = done ? '#d6f08a' : '#e8c547';
       c.font = 'bold 12px monospace';
       c.textAlign = 'center';
-      c.fillText(done ? '✓' : 'STAMP', d.x, d.y + 1);
+      c.fillText(done ? '✓ STAMPED' : 'STAMP', d.x, d.y + 26);
       c.fillStyle = 'rgba(232,220,190,0.8)';
       c.font = 'bold 12px monospace';
-      c.fillText((org.site || org.name).toUpperCase(), d.x, d.y - 28);
+      c.fillText((org.site || org.name).toUpperCase(), d.x, d.y - 54);
       c.font = '10px monospace';
       c.fillStyle = 'rgba(232,220,190,0.55)';
       c.fillText(`${org.name} · E at the pad`, d.x, d.y + 70);
@@ -200,6 +205,7 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
       if (!org) return '';
       const done = S.stamps[id];
       return `<tr><td style="width:22px;color:${done ? '#d6f08a' : '#5b5648'}">${done ? '■' : '□'}</td>
+        <td style="width:34px"><img src="assets/sprites/logo_${id}.png" width="30" height="30" alt="" style="${done ? '' : 'opacity:.45;filter:grayscale(1)'}" onerror="this.remove()"/></td>
         <td><b>${esc(org.name)}</b> <span class="sub">· ${esc(org.site || '')} · block ${k + 1}</span><div class="sub" style="margin:2px 0 0">${esc(STAMPS[id].how)}</div></td>
         <td style="width:90px;text-align:right">${done ? '<span class="sub">stamped</span>' : placeOf(id) ? `<button data-wp="${id}">Waypoint</button>` : ''}</td></tr>`;
     }).join('');
@@ -238,7 +244,7 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
       }).join('');
       const unannounced = Math.max(0, T13 - mine.length);
       const gotHere = mine.filter((d) => S.ach[d.id]).length;
-      return `<h3>${esc(cat.name)} <span class="sub">${gotHere}/${T13}</span></h3>${items}${unannounced ? `<div class="ach hidden">+${unannounced} unannounced</div>` : ''}`;
+      return `<h3><img src="assets/sprites/ach_${cat.id}.png" width="22" height="22" alt="" style="vertical-align:middle;margin-right:6px" onerror="this.remove()"/>${esc(cat.name)} <span class="sub">${gotHere}/${T13}</span></h3>${items}${unannounced ? `<div class="ach hidden">+${unannounced} unannounced</div>` : ''}`;
     }).join('');
     openModal(
       `<h2>ACHIEVEMENTS</h2>

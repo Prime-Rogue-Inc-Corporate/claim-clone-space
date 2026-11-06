@@ -91,6 +91,7 @@ export function drawScene(ctx, W, H, cam, scene) {
     ctx.restore();
   }
 
+  scene.underWorld?.(ctx, viewR); // ground-level layers: racetracks
   drawSpine(ctx, world, time, view);
   drawCorridor(ctx, world, time, view);
   for (const sp of SPRAWLS) if (inView(sp.x - sp.rx - 2500, sp.x + sp.rx + 2500)) drawSprawl(ctx, scene, time, sp);
@@ -756,7 +757,7 @@ function drawSprawl(ctx, scene, time, SP) {
       ctx.textAlign = 'center';
       ctx.fillText(`${site.id} · VACANT`, site.x, site.y + 4);
     } else {
-      drawHut(ctx, site, occ.tier, occ.mine, time);
+      drawHut(ctx, site, occ.tier, occ.mine, time, occ.mine && scene.ownsLot);
       ctx.fillStyle = occ.mine ? '#e8c547' : 'rgba(220,200,150,0.55)';
       ctx.font = '10px monospace';
       ctx.textAlign = 'center';
@@ -776,10 +777,11 @@ function drawSprawl(ctx, scene, time, SP) {
 }
 
 // Huts are deliberately generic: tier decides the shape, nobody decides the logo.
-function drawHut(ctx, site, tier, mine, time) {
+// Lot owners who live among the people get an owner-tier home: better, still never branded.
+function drawHut(ctx, site, tier, mine, time, owner = false) {
   const r = hutRect(site, tier);
   const art = hutArt(tier);
-  const img = spr(`hut${art}_${hashNum(site.x, site.y) % 2 ? 'a' : 'b'}`);
+  const img = (owner && spr(`ownerhome${1 + Math.min(3, Math.floor((tier * 4) / 13))}`)) || spr(`hut${art}_${hashNum(site.x, site.y) % 2 ? 'a' : 'b'}`);
   if (img) {
     const w = r.w * 1.3;
     const h = w * (img.height / img.width);

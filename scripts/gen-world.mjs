@@ -77,7 +77,7 @@ const gaps = Array.from({ length: BLOCKS - 1 }, (_, k) => ({ x0: blockX0(k) + BL
 const world = {
   seed: SEED,
   generated: new Date().toISOString(),
-  bounds: { minX: -CITY_HALF, maxX: CITY_HALF, minY: -3000, maxY: 3000 }, // 13 sector columns
+  bounds: { minX: -CITY_HALF, maxX: CITY_HALF, minY: -3000, maxY: 6800 }, // 13 sector columns; the south holds the racetracks
   spine: { halfLength: SPAN / 2 + 60, halfWidth: 60, slot: SLOT, blockGap: BLOCK_GAP, blocks, gaps },
   corps: CORPS,
   plots,
