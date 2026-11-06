@@ -115,12 +115,25 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
       return end('You left the shuttle mid-route. The passengers are walking. The Directorate has noted it.', null);
     }
     const v = run.vehicle;
-    // Comfort: walls, harsh turning, slamming the brakes
-    if (hit && now > run.hitCd) { run.comfort -= 13; run.hitCd = now + 600; emit('scrape'); log(`Passengers bounced off the ceiling. Comfort ${Math.max(0, Math.round(run.comfort))}%.`); }
+    // Comfort (tuned v0.1.8: hard, not impossible):
+    // - walls: -8 a hit (1 s grace between hits)
+    // - cornering: only what the passengers FEEL, i.e. how fast the direction of travel swings at speed.
+    //   Steering corrections (the shuttle pulls left, so you're always correcting) don't count; only
+    //   hard turns at speed do. Full lock at top speed costs ~15%/s; braking before a corner costs nothing.
+    // - brake slams at speed: -3/s
+    // - smooth driving lets passengers settle: +0.25/s back, up to 100
+    // (Simulated: a careful driver finishes ~100% at about par; flooring it everywhere ends ~55–77%.)
     const sp = speedOf(v);
-    const harsh = sp * Math.abs(v.av || 0);
-    if (harsh > 0.06) run.comfort -= (harsh - 0.06) * 300 * dt;
-    if (input.brake && sp > 2) run.comfort -= 4 * dt;
+    if (hit && now > run.hitCd) { run.comfort -= 8; run.hitCd = now + 1000; emit('scrape'); log(`Passengers bounced off the ceiling. Comfort ${Math.max(0, Math.round(run.comfort))}%.`); }
+    const head = Math.atan2(v.vy, v.vx);
+    let swing = 0;
+    if (sp > 1 && run.lastHead != null) { swing = Math.abs(Math.atan2(Math.sin(head - run.lastHead), Math.cos(head - run.lastHead))) / Math.max(dt * 60, 0.01); }
+    run.lastHead = sp > 1 ? head : null;
+    const lateral = sp * swing; // ~0.087 = full lock at top speed in a rank-0 shuttle (it slides)
+    let calm = true;
+    if (lateral > 0.03) { run.comfort -= (lateral - 0.03) * 300 * dt; calm = false; }
+    if (input.brake && sp > 3) { run.comfort -= 3 * dt; calm = false; }
+    if (calm && now > run.hitCd) run.comfort = Math.min(100, run.comfort + 0.25 * dt);
     if (run.comfort <= 0) {
       emit('passenger-incident');
       return end('🚨 PASSENGER INCIDENT. Everyone got off and walked. In space. Run failed, no pay. The Directorate will be in touch.', v);
@@ -183,7 +196,7 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
       `<h2>HUMANE SHUTTLE DEPOT · ${esc(depot.title.toUpperCase())}</h2>
        <div class="sub">Humane Transit Directorate · Ministry of the Gentry · “Getting the people where the gentry need them.”</div>
        <div class="explain"><b>Your career:</b> ${esc(RANKS[rk])} (rank ${rk + 1} of ${T13}) · ${S.shuttle.runs} runs · ${S.shuttle.points} points${next != null ? ` · next rank at ${next}` : ' · top of the ladder'}.<br/>
-       Pay ×${mult().toFixed(2)} at your rank. Stop at every stop (doors open after ${DOOR_SECONDS}s stopped). Comfort drops when you hit walls, corner hard or slam the brakes; at 0% the passengers walk.<br/>
+       Pay ×${mult().toFixed(2)} at your rank. Stop at every stop (doors open after ${DOOR_SECONDS}s stopped). Comfort drops when you hit walls (−8), take corners hard at speed, or slam the brakes; it recovers slowly while you drive smoothly. At 0% the passengers walk.<br/>
        <b>The shuttle handles like dog shit.</b> It pulls left, the steering lags and the brakes are a suggestion. Each rank makes it slightly less bad.</div>
        <table>${list}</table>
        <div class="sub">New routes every 13 minutes. ${run ? 'You are already on a route.' : ''}</div>
