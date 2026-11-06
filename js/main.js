@@ -171,7 +171,16 @@ function start(world, bulletin, sprites, devData) {
       log(`💩 ${esc(d.creature)} ${esc(d.verb)}, and it's catching. ${fresh.length} drops out there: <b>${where}</b>.`, 'good');
     }
   }
-  let hold = { drop: null, progress: 0 };
+  // Press E near a drop to grab it. Must be close and slowed down (not a fly-through).
+  const GRAB_RADIUS = 75;
+  const GRAB_SPEED = 5;
+  function grabDrop(d) {
+    if (speedOf(me()) >= GRAB_SPEED) return log('Too fast to grab it. Brake (SPACE) and press E.');
+    const res = econ.claimDrop(d, 1);
+    if (!res) return;
+    log(`Grabbed <b>${res.amount} scrap</b> from the ${esc(d.noun)}. Lovely.`, 'good');
+    if (res.levelUp) log(`LEVEL ${res.levelUp}. Sight radius now ${sightRadius(res.levelUp)}m.`, 'money');
+  }
 
   // ---- interactions ----
   let nearPlot = null;
@@ -193,6 +202,7 @@ function start(world, bulletin, sprites, devData) {
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now());
+    if (k === 'e' && nearDrop) return grabDrop(nearDrop);
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
     if (k === 'e' && !nearDrop && nearRefit) return openRefit();
@@ -686,13 +696,13 @@ function start(world, bulletin, sprites, devData) {
          <span class="k"><kbd>SHIFT</kbd></span><span>Boost</span>
          <span class="k"><kbd>SPACE</kbd></span><span>Brake</span>
          <span class="k"><kbd>F</kbd></span><span>Jump ship-to-ship: pull alongside a slow ship (yes, NPC ones). Stolen ships are hot and get remote-killed after 2 minutes; you land back in your skiff.</span>
-         <span class="k"><kbd>E</kbd></span><span>At a lot's pad: open the terminal. At the Refit Bay: upgrade your skiff. At a drop: hold to claim.</span>
+         <span class="k"><kbd>E</kbd></span><span>At a lot's pad: open the terminal. At the Refit Bay: upgrade your skiff. At a drop: press to grab it (slow down first).</span>
          <span class="k"><kbd>X</kbd></span><span>Decline / abandon a freight job</span>
          <span class="k"><kbd>TAB</kbd></span><span>The ledger: every lot and price</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
        <h3>THE GAME</h3>
-       <div>Fly the Spine. Hunt drops: when something craps out a load of scrap, the first pilot to reach it and hold <kbd>E</kbd> gets it.
+       <div>Fly the Spine. Hunt drops: when something craps out a load of scrap, the first pilot to reach it, slow down and press <kbd>E</kbd> gets it.
        Scrap gives XP; levels widen your sight radius. Spend scrap at the Kessler Refit Bay so your skiff stops handling like a shopping cart. Buy lots for $1, brand them, get bought out, buy them back.<br/>
        <i>Why can't I get out? The Vantablack Science Centre hasn't cleared EVA yet. A jump under 3 seconds is the most they'll sign off on.</i></div>
        <h3>SIDE HUSTLES (scrap + XP only)</h3>
@@ -764,7 +774,7 @@ function start(world, bulletin, sprites, devData) {
     const lvl = levelFor(S.xp);
     const sight = sightRadius(lvl);
     const visible = drops.filter((d) => !S.claimedDrops[d.key] && Math.hypot(d.x - body.x, d.y - body.y) < sight);
-    nearDrop = visible.find((d) => Math.hypot(d.x - body.x, d.y - body.y) < 55) || null;
+    nearDrop = player.mode === 'ship' ? visible.find((d) => Math.hypot(d.x - body.x, d.y - body.y) < GRAB_RADIUS) || null : null;
     nearPlot = null;
     for (const p of world.plots) {
       const pad = plotPad(world, p);
@@ -792,19 +802,6 @@ function start(world, bulletin, sprites, devData) {
       }
     }
 
-    // hold E to claim a drop: in-world, slow, deliberate
-    if (nearDrop && keys.has('e') && !modalOpen && speedOf(body) < 3.5) {
-      if (hold.drop !== nearDrop) hold = { drop: nearDrop, progress: 0 };
-      hold.progress += dt / 1.2;
-      if (hold.progress >= 1) {
-        const res = econ.claimDrop(nearDrop, 1);
-        hold = { drop: null, progress: 0 };
-        if (res) {
-          log(`Claimed <b>${res.amount} scrap</b> from the ${esc(nearDrop.noun)}. Lovely.`, 'good');
-          if (res.levelUp) log(`LEVEL ${res.levelUp}. Sight radius now ${sightRadius(res.levelUp)}m.`, 'money');
-        }
-      }
-    } else if (hold.drop) hold = { drop: null, progress: 0 };
 
     if (waypoint && Math.hypot(waypoint.x - body.x, waypoint.y - body.y) < 60) waypoint = null;
 
@@ -835,7 +832,7 @@ function start(world, bulletin, sprites, devData) {
       world, time: now, dpr, deco, stars, particles,
       ships, pilot: player.eva, me: body, drops: visible,
       sight, nearPlot, boardable, featured: bulletin.featuredPlot,
-      holdDrop: hold.drop, holdProgress: hold.progress,
+      holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: objective(body),
       extraWorld: (c) => { drawRefit(c, now); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
@@ -846,7 +843,7 @@ function start(world, bulletin, sprites, devData) {
 
     // prompt
     let prompt = '';
-    if (nearDrop) prompt = `Hold E to claim ${nearDrop.amount} scrap${sp >= 3.5 ? ' (slow down)' : ''}`;
+    if (nearDrop) prompt = sp >= GRAB_SPEED ? `Slow down to grab ${nearDrop.amount} scrap (SPACE)` : `E · grab ${nearDrop.amount} scrap`;
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
