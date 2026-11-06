@@ -456,7 +456,7 @@ function start(world, bulletin, sprites) {
 
   function openHelp() {
     openModal(
-      `<h2>CONTROLS</h2>
+      `<h2>SPACESQUAT · CONTROLS</h2>
        <div class="grid">
          <span class="k"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / arrows</span><span>Thrust and turn</span>
          <span class="k"><kbd>SHIFT</kbd></span><span>Boost</span>
@@ -634,7 +634,7 @@ function start(world, bulletin, sprites) {
     if (b.y > B.maxY) { b.y = B.maxY; b.vy = -Math.abs(b.vy) * 0.5; }
   }
 
-  log('Welcome to the Spine. Press <b>H</b> for controls. All money is fake.');
+  log('Welcome to <b>SpaceSquat</b>. You\'re on the Spine. Press <b>H</b> for controls. All money is fake.');
   requestAnimationFrame(frame);
   window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl };
 }

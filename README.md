@@ -1,6 +1,8 @@
-# CLAIM // SPACE — Clone 1 (pre-pre-alpha)
+# SpaceSquat (pre-pre-alpha)
 
-The first throwaway prototype of the Claim Avenue concept: **GTA 1/2 in space meets Total Annihilation dystopia.**
+**Staging:** spacesquat.fun · **Final:** spacesquat.com
+
+Clone 1 of the claim/buy-out concept: **GTA 1/2 in space meets Total Annihilation dystopia.**
 A top-down sandbox where you fly the Spine (a station "avenue"), jack ships, hunt drops, and buy, brand and lose lots.
 
 > All money is fake. No payments, no accounts, no backend. Saves are in your browser's localStorage.
@@ -60,6 +62,11 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 Until the secrets exist, the deploy runs its checks and skips the upload.
 
 `.htaccess` stops LiteSpeed from caching the JSON data files.
+
+### Domains
+
+- **spacesquat.fun** is staging and testing. Point it at the folder `FTP_SERVER_DIR` uploads to. `robots.txt` and the `noindex` meta tag keep it out of search engines.
+- **spacesquat.com** is the final site. At launch, remove the `noindex` meta tag in `index.html` and replace `robots.txt`.
 
 ## Art
 

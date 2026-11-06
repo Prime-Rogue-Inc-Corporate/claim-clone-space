@@ -1,8 +1,8 @@
 {
-  "name": "claim-clone-space",
+  "name": "spacesquat",
   "private": true,
   "version": "0.0.1",
-  "description": "Clone 1: top-down space sandbox (GTA 1/2 in space x Total Annihilation dystopia) for the Claim Avenue concept. Static site, no build step.",
+  "description": "SpaceSquat: top-down dystopian space sandbox (clone 1 of the claim/buy-out concept). Static site, no build step.",
   "type": "module",
   "scripts": {
     "world": "node scripts/gen-world.mjs",
