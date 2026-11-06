@@ -1,166 +1,287 @@
 {
-  "seed": "spine-zero",
-  "generated": "2026-11-06T04:33:50.646Z",
+  "seed": "spine-thirteen",
+  "generated": "2026-11-06T09:54:12.829Z",
   "bounds": {
-    "minX": -4000,
-    "maxX": 4000,
+    "minX": -21000,
+    "maxX": 21000,
     "minY": -3000,
     "maxY": 3000
   },
   "spine": {
-    "halfLength": 2700,
+    "halfLength": 20450,
     "halfWidth": 60,
-    "slot": 220
+    "slot": 220,
+    "blockGap": 300,
+    "blocks": [
+      {
+        "x0": -20450,
+        "x1": -17530
+      },
+      {
+        "x0": -17230,
+        "x1": -14370
+      },
+      {
+        "x0": -14070,
+        "x1": -11210
+      },
+      {
+        "x0": -10910,
+        "x1": -8050
+      },
+      {
+        "x0": -7750,
+        "x1": -4890
+      },
+      {
+        "x0": -4590,
+        "x1": -1730
+      },
+      {
+        "x0": -1430,
+        "x1": 1430
+      },
+      {
+        "x0": 1730,
+        "x1": 4590
+      },
+      {
+        "x0": 4890,
+        "x1": 7750
+      },
+      {
+        "x0": 8050,
+        "x1": 10910
+      },
+      {
+        "x0": 11210,
+        "x1": 14070
+      },
+      {
+        "x0": 14370,
+        "x1": 17230
+      },
+      {
+        "x0": 17530,
+        "x1": 20450
+      }
+    ],
+    "gaps": [
+      {
+        "x0": -17530,
+        "x1": -17230,
+        "x": -17380
+      },
+      {
+        "x0": -14370,
+        "x1": -14070,
+        "x": -14220
+      },
+      {
+        "x0": -11210,
+        "x1": -10910,
+        "x": -11060
+      },
+      {
+        "x0": -8050,
+        "x1": -7750,
+        "x": -7900
+      },
+      {
+        "x0": -4890,
+        "x1": -4590,
+        "x": -4740
+      },
+      {
+        "x0": -1730,
+        "x1": -1430,
+        "x": -1580
+      },
+      {
+        "x0": 1430,
+        "x1": 1730,
+        "x": 1580
+      },
+      {
+        "x0": 4590,
+        "x1": 4890,
+        "x": 4740
+      },
+      {
+        "x0": 7750,
+        "x1": 8050,
+        "x": 7900
+      },
+      {
+        "x0": 10910,
+        "x1": 11210,
+        "x": 11060
+      },
+      {
+        "x0": 14070,
+        "x1": 14370,
+        "x": 14220
+      },
+      {
+        "x0": 17230,
+        "x1": 17530,
+        "x": 17380
+      }
+    ]
   },
   "corps": [
     {
       "id": "vanta",
       "name": "Vantablack Holdings",
+      "type": "corp",
       "color": "#5c6b73",
       "motto": "We hold. You hold on.",
-      "does": "Landlord-finance conglomerate. Holds the Spine charter and most of the debt in orbit. Runs the Science Centre, still \"testing\" whether EVA is survivable."
+      "does": "Landlord-finance conglomerate. Holds the Spine's founding charter and most of the debt in orbit. Runs the Science Centre."
     },
     {
       "id": "kessler",
       "name": "Kessler Mining Co.",
+      "type": "corp",
       "color": "#9c8b5e",
       "motto": "Everything is ore eventually.",
-      "does": "Asteroid mining and salvage. Strips derelicts, sells scrap, and runs the Refit Bays where skiffs get fitted out."
+      "does": "Asteroid mining and salvage. Strips derelicts, buys and sells scrap, runs the Refit Bays where skiffs are fitted out."
     },
     {
       "id": "ashiron",
       "name": "Ash & Iron",
+      "type": "corp",
       "color": "#7a3b2e",
       "motto": "Production is prayer.",
-      "does": "Heavy industry: foundries, refineries, smelters. Source of the smog, the slag vents and most of the jobs nobody wants."
+      "does": "Heavy industry: foundries, refineries, smelters. The smog, the slag vents and most of the jobs nobody wants."
     },
     {
       "id": "null",
       "name": "Null Sector Trust",
+      "type": "corp",
       "color": "#4d5a3a",
       "motto": "Compliance is safety.",
-      "does": "Security and insurance. Owns the patrol drones, the impound yards and (soon) detention. Insures the corps against the people."
+      "does": "Security and insurance. Owns the patrol drones, the impound yards and, soon, detention. Insures the corps against the people."
     },
     {
       "id": "cinder",
       "name": "Cinder Collective",
+      "type": "corp",
       "color": "#8a5a3a",
       "motto": "Breathe responsibly. Air is metered.",
-      "does": "Utilities cartel: air, water, power. Everything you breathe is metered, and the Collective owns the meter."
+      "does": "Utilities cartel: air, water, oxygen, power. Everything you breathe is metered, and the Collective owns the meter."
+    },
+    {
+      "id": "gullet",
+      "name": "Gullet Provisions",
+      "type": "corp",
+      "color": "#8c6d2f",
+      "motto": "Calories are a privilege.",
+      "does": "Food. Runs the Ration Depots, the protein vats and the only restaurant on the Spine (members only)."
+    },
+    {
+      "id": "lastmile",
+      "name": "Last Mile Freight",
+      "type": "corp",
+      "color": "#4f5d6e",
+      "motto": "Every package arrives eventually.",
+      "does": "Freight and logistics. Posts the courier jobs, owns the Freight Depot, and subcontracts all risk to you."
+    },
+    {
+      "id": "gavel",
+      "name": "Gavel & Rope",
+      "type": "corp",
+      "color": "#6e3b4e",
+      "motto": "Going, going, gone.",
+      "does": "Auctioneers. Runs the Auction House where dormant skiff numbers and seized property are sold. Every auction lasts 69 hours."
+    },
+    {
+      "id": "mercy",
+      "name": "Mercy Unlimited",
+      "type": "corp",
+      "color": "#7d8f8a",
+      "motto": "Your death is our business.",
+      "does": "Medical, funerary and sponsorship. Sponsors the Spine Run, processes deaths and keeps the death count."
+    },
+    {
+      "id": "ministry",
+      "name": "Ministry of the Gentry",
+      "type": "government",
+      "color": "#a39b8b",
+      "motto": "Equality, conveniently.",
+      "does": "Allocates Tenure Heights housing, registers the gentry, collects rent from scrappers living there, and runs affirmative action."
+    },
+    {
+      "id": "assessor",
+      "name": "The Assessor's Office",
+      "type": "quasi-government",
+      "color": "#3e4a52",
+      "motto": "Everything has a fair price.",
+      "does": "Keeps the Land Registry and the public ledger. Enforces the 1.25× rule: any lot, any time, owner can't refuse."
+    },
+    {
+      "id": "registry",
+      "name": "Registry of Skiffs & Souls",
+      "type": "quasi-government",
+      "color": "#5a5550",
+      "motto": "You are a number. Congratulations.",
+      "does": "Issues skiff numbers from #001, keeps the Sprawl Housing Registry, records deaths, and releases dormant numbers to auction after 13 days."
+    },
+    {
+      "id": "bureau",
+      "name": "Bureau of Public Cheer",
+      "type": "government",
+      "color": "#9a4a3a",
+      "motto": "Smile. It's mandatory.",
+      "does": "Morale, propaganda and the daily Corp Bulletin. Administers the Compliance Oath."
     }
   ],
   "plots": [
     {
       "id": 1,
       "side": "north",
-      "x": -2530,
-      "floors": 52,
-      "owner": "kessler",
-      "value": 4.76,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "ashiron",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "cinder",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "null",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "cinder",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "ashiron",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 4.76
-        }
-      ],
-      "brand": {
-        "name": "Kessler Foundry",
-        "tagline": "Do not look at the sun. There is no sun.",
-        "color": "#9c8b5e",
-        "link": ""
-      }
+      "block": 1,
+      "x": -20280,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
     },
     {
       "id": 2,
       "side": "north",
-      "x": -2310,
-      "floors": 22,
-      "owner": "ashiron",
-      "value": 1.56,
+      "block": 1,
+      "x": -20060,
+      "floors": 20,
+      "owner": "bureau",
+      "value": 1.25,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "null",
+          "to": "vanta",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "null",
-          "to": "kessler",
+          "from": "vanta",
+          "to": "bureau",
           "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "ashiron",
-          "price": 1.56
         }
       ],
       "brand": {
-        "name": "Obsidian Arcology",
-        "tagline": "Your shift begins when you wake.",
-        "color": "#7a3b2e",
+        "name": "Gallows Silo",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
         "link": ""
       }
     },
     {
       "id": 3,
       "side": "north",
-      "x": -2090,
+      "block": 1,
+      "x": -19840,
       "floors": 0,
       "owner": null,
       "value": 0,
@@ -170,7 +291,8 @@
     {
       "id": 4,
       "side": "north",
-      "x": -1870,
+      "block": 1,
+      "x": -19620,
       "floors": 0,
       "owner": null,
       "value": 0,
@@ -180,39 +302,570 @@
     {
       "id": 5,
       "side": "north",
-      "x": -1650,
-      "floors": 16,
-      "owner": "cinder",
-      "value": 1.25,
+      "block": 1,
+      "x": -19400,
+      "floors": 58,
+      "owner": "bureau",
+      "value": 4.76,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "null",
+          "to": "ministry",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "null",
-          "to": "cinder",
+          "from": "ministry",
+          "to": "bureau",
           "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "assessor",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "kessler",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "ministry",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "cinder",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "vanta",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "bureau",
+          "price": 4.76
         }
       ],
       "brand": {
-        "name": "Grey Silo",
-        "tagline": "Your shift begins when you wake.",
-        "color": "#8a5a3a",
+        "name": "Pallid Works",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
         "link": ""
       }
     },
     {
       "id": 6,
       "side": "north",
-      "x": -1430,
-      "floors": 28,
-      "owner": "ashiron",
-      "value": 1.95,
+      "block": 1,
+      "x": -19180,
+      "floors": 26,
+      "owner": "mercy",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "gullet",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "mercy",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Rust Works",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 7,
+      "side": "north",
+      "block": 1,
+      "x": -18960,
+      "floors": 52,
+      "owner": "assessor",
+      "value": 3.81,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "gullet",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "assessor",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "mercy",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "assessor",
+          "price": 3.81
+        }
+      ],
+      "brand": {
+        "name": "Cinder Bastion",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 8,
+      "side": "north",
+      "block": 1,
+      "x": -18740,
+      "floors": 20,
+      "owner": "cinder",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "vanta",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "cinder",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Dread Exchange",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 9,
+      "side": "north",
+      "block": 1,
+      "x": -18520,
+      "floors": 39,
+      "owner": "ministry",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "assessor",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "gullet",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "gavel",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "vanta",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ministry",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Cinder Hab-Block",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
+        "link": ""
+      }
+    },
+    {
+      "id": 10,
+      "side": "north",
+      "block": 1,
+      "x": -18300,
+      "floors": 45,
+      "owner": "cinder",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "kessler",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "mercy",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "cinder",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Sable Arcology",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 11,
+      "side": "north",
+      "block": 1,
+      "x": -18080,
+      "floors": 65,
+      "owner": "mercy",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "kessler",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "gullet",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "registry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "kessler",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "null",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "null",
+          "to": "mercy",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "assessor",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "mercy",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Iron Hab-Block",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 12,
+      "side": "north",
+      "block": 1,
+      "x": -17860,
+      "floors": 20,
+      "owner": "ministry",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gullet",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "ministry",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Iron Spire",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
+        "link": ""
+      }
+    },
+    {
+      "id": 13,
+      "side": "north",
+      "block": 1,
+      "x": -17640,
+      "floors": 45,
+      "owner": "cinder",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "registry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "gavel",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "ministry",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "cinder",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Ash Depot",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 14,
+      "side": "north",
+      "block": 2,
+      "x": -17120,
+      "floors": 65,
+      "owner": "lastmile",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "lastmile",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "cinder",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "gullet",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "registry",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "kessler",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "lastmile",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "ministry",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "lastmile",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Ash Spire",
+        "tagline": "Every package arrives eventually.",
+        "color": "#4f5d6e",
+        "link": ""
+      }
+    },
+    {
+      "id": 15,
+      "side": "north",
+      "block": 2,
+      "x": -16900,
+      "floors": 65,
+      "owner": "kessler",
+      "value": 5.95,
       "history": [
         {
           "t": 0,
@@ -224,6 +877,1235 @@
           "t": 1,
           "kind": "takeover",
           "from": "cinder",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "mercy",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "registry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "bureau",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "ministry",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "ashiron",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "null",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "null",
+          "to": "kessler",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Tithe Hab-Block",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 16,
+      "side": "north",
+      "block": 2,
+      "x": -16680,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 17,
+      "side": "north",
+      "block": 2,
+      "x": -16460,
+      "floors": 39,
+      "owner": "bureau",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "assessor",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "bureau",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "registry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "bureau",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Dread Bastion",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 18,
+      "side": "north",
+      "block": 2,
+      "x": -16240,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 19,
+      "side": "north",
+      "block": 2,
+      "x": -16020,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 20,
+      "side": "north",
+      "block": 2,
+      "x": -15800,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 21,
+      "side": "north",
+      "block": 2,
+      "x": -15580,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 22,
+      "side": "north",
+      "block": 2,
+      "x": -15360,
+      "floors": 65,
+      "owner": "mercy",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "kessler",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "vanta",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "mercy",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "bureau",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "cinder",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "gavel",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "mercy",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Dread Bastion",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 23,
+      "side": "north",
+      "block": 2,
+      "x": -15140,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 24,
+      "side": "north",
+      "block": 2,
+      "x": -14920,
+      "floors": 26,
+      "owner": "gavel",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "kessler",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "gavel",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Ash Yard",
+        "tagline": "Going, going, gone.",
+        "color": "#6e3b4e",
+        "link": ""
+      }
+    },
+    {
+      "id": 25,
+      "side": "north",
+      "block": 2,
+      "x": -14700,
+      "floors": 20,
+      "owner": "bureau",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "bureau",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Ash Yard",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 26,
+      "side": "north",
+      "block": 2,
+      "x": -14480,
+      "floors": 32,
+      "owner": "cinder",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "cinder",
+          "price": 1.95
+        }
+      ],
+      "brand": {
+        "name": "Cinder Relay",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 27,
+      "side": "north",
+      "block": 3,
+      "x": -13960,
+      "floors": 65,
+      "owner": "assessor",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "ministry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "lastmile",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "bureau",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "null",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "null",
+          "to": "mercy",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "gavel",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "assessor",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Hollow Yard",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 28,
+      "side": "north",
+      "block": 3,
+      "x": -13740,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 29,
+      "side": "north",
+      "block": 3,
+      "x": -13520,
+      "floors": 65,
+      "owner": "gullet",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gullet",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "assessor",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "ministry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "bureau",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "mercy",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "kessler",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "gullet",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "assessor",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "gullet",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Pallid Arcology",
+        "tagline": "Calories are a privilege.",
+        "color": "#8c6d2f",
+        "link": ""
+      }
+    },
+    {
+      "id": 30,
+      "side": "north",
+      "block": 3,
+      "x": -13300,
+      "floors": 65,
+      "owner": "cinder",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "cinder",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "gavel",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "assessor",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "vanta",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "lastmile",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "mercy",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "vanta",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "cinder",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Slag Spire",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 31,
+      "side": "north",
+      "block": 3,
+      "x": -13080,
+      "floors": 13,
+      "owner": "ashiron",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Gallows Spire",
+        "tagline": "Production is prayer.",
+        "color": "#7a3b2e",
+        "link": ""
+      }
+    },
+    {
+      "id": 32,
+      "side": "north",
+      "block": 3,
+      "x": -12860,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 33,
+      "side": "north",
+      "block": 3,
+      "x": -12640,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 34,
+      "side": "north",
+      "block": 3,
+      "x": -12420,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 35,
+      "side": "north",
+      "block": 3,
+      "x": -12200,
+      "floors": 32,
+      "owner": "null",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "kessler",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "gavel",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "bureau",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "null",
+          "price": 1.95
+        }
+      ],
+      "brand": {
+        "name": "Null Yard",
+        "tagline": "Compliance is safety.",
+        "color": "#4d5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 36,
+      "side": "north",
+      "block": 3,
+      "x": -11980,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 37,
+      "side": "north",
+      "block": 3,
+      "x": -11760,
+      "floors": 58,
+      "owner": "gullet",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "vanta",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "gavel",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "bureau",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "null",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "null",
+          "to": "cinder",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "mercy",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "lastmile",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "gullet",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Ash Refinery",
+        "tagline": "Calories are a privilege.",
+        "color": "#8c6d2f",
+        "link": ""
+      }
+    },
+    {
+      "id": 38,
+      "side": "north",
+      "block": 3,
+      "x": -11540,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 39,
+      "side": "north",
+      "block": 3,
+      "x": -11320,
+      "floors": 26,
+      "owner": "ashiron",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "assessor",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ashiron",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Cinder Works",
+        "tagline": "Production is prayer.",
+        "color": "#7a3b2e",
+        "link": ""
+      }
+    },
+    {
+      "id": 40,
+      "side": "north",
+      "block": 4,
+      "x": -10800,
+      "floors": 13,
+      "owner": "lastmile",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "lastmile",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Ash Foundry",
+        "tagline": "Every package arrives eventually.",
+        "color": "#4f5d6e",
+        "link": ""
+      }
+    },
+    {
+      "id": 41,
+      "side": "north",
+      "block": 4,
+      "x": -10580,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 42,
+      "side": "north",
+      "block": 4,
+      "x": -10360,
+      "floors": 20,
+      "owner": "gullet",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "gullet",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Iron Arcology",
+        "tagline": "Calories are a privilege.",
+        "color": "#8c6d2f",
+        "link": ""
+      }
+    },
+    {
+      "id": 43,
+      "side": "north",
+      "block": 4,
+      "x": -10140,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 44,
+      "side": "north",
+      "block": 4,
+      "x": -9920,
+      "floors": 20,
+      "owner": "cinder",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "cinder",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Hollow Spire",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 45,
+      "side": "north",
+      "block": 4,
+      "x": -9700,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 46,
+      "side": "north",
+      "block": 4,
+      "x": -9480,
+      "floors": 45,
+      "owner": "gavel",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "cinder",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "lastmile",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "mercy",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "kessler",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "gavel",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Dread Yard",
+        "tagline": "Going, going, gone.",
+        "color": "#6e3b4e",
+        "link": ""
+      }
+    },
+    {
+      "id": 47,
+      "side": "north",
+      "block": 4,
+      "x": -9260,
+      "floors": 20,
+      "owner": "mercy",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "mercy",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Slag Kiln",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 48,
+      "side": "north",
+      "block": 4,
+      "x": -9040,
+      "floors": 32,
+      "owner": "bureau",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "assessor",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "gullet",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "bureau",
+          "price": 1.95
+        }
+      ],
+      "brand": {
+        "name": "Cinder Kiln",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 49,
+      "side": "north",
+      "block": 4,
+      "x": -8820,
+      "floors": 45,
+      "owner": "kessler",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "ministry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "cinder",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "gavel",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "registry",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "kessler",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Tithe Spire",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 50,
+      "side": "north",
+      "block": 4,
+      "x": -8600,
+      "floors": 45,
+      "owner": "bureau",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "gullet",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "gavel",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "ministry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "registry",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "bureau",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Dread Yard",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 51,
+      "side": "north",
+      "block": 4,
+      "x": -8380,
+      "floors": 58,
+      "owner": "registry",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
           "to": "kessler",
           "price": 1.25
         },
@@ -231,29 +2113,324 @@
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
-          "to": "null",
+          "to": "vanta",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
+          "from": "vanta",
+          "to": "gullet",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "null",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
           "from": "null",
+          "to": "kessler",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "bureau",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "registry",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Iron Spire",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 52,
+      "side": "north",
+      "block": 4,
+      "x": -8160,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 53,
+      "side": "north",
+      "block": 5,
+      "x": -7640,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 54,
+      "side": "north",
+      "block": 5,
+      "x": -7420,
+      "floors": 52,
+      "owner": "bureau",
+      "value": 3.81,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "registry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "kessler",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "lastmile",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "mercy",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "bureau",
+          "price": 3.81
+        }
+      ],
+      "brand": {
+        "name": "Grey Hab-Block",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 55,
+      "side": "north",
+      "block": 5,
+      "x": -7200,
+      "floors": 65,
+      "owner": "registry",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "ministry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "ashiron",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "cinder",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "gullet",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "null",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "null",
+          "to": "mercy",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "bureau",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "registry",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Iron Arcology",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 56,
+      "side": "north",
+      "block": 5,
+      "x": -6980,
+      "floors": 32,
+      "owner": "ashiron",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
           "to": "ashiron",
           "price": 1.95
         }
       ],
       "brand": {
-        "name": "Null Depot",
-        "tagline": "Breathe responsibly. Air is metered.",
+        "name": "Hollow Bastion",
+        "tagline": "Production is prayer.",
         "color": "#7a3b2e",
         "link": ""
       }
     },
     {
-      "id": 7,
+      "id": 57,
       "side": "north",
-      "x": -1210,
-      "floors": 10,
+      "block": 5,
+      "x": -6760,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 58,
+      "side": "north",
+      "block": 5,
+      "x": -6540,
+      "floors": 13,
+      "owner": "ashiron",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Slag Kiln",
+        "tagline": "Production is prayer.",
+        "color": "#7a3b2e",
+        "link": ""
+      }
+    },
+    {
+      "id": 59,
+      "side": "north",
+      "block": 5,
+      "x": -6320,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 60,
+      "side": "north",
+      "block": 5,
+      "x": -6100,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 61,
+      "side": "north",
+      "block": 5,
+      "x": -5880,
+      "floors": 13,
       "owner": "vanta",
       "value": 1,
       "history": [
@@ -265,705 +2442,165 @@
         }
       ],
       "brand": {
-        "name": "Grey Arcology",
-        "tagline": "Do not look at the sun. There is no sun.",
+        "name": "Cinder Depot",
+        "tagline": "We hold. You hold on.",
         "color": "#5c6b73",
         "link": ""
       }
     },
     {
-      "id": 8,
+      "id": 62,
       "side": "north",
-      "x": -990,
-      "floors": 0,
-      "owner": null,
-      "value": 0,
-      "history": [],
-      "brand": null
-    },
-    {
-      "id": 9,
-      "side": "north",
-      "x": -770,
-      "floors": 28,
-      "owner": "kessler",
-      "value": 1.95,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "kessler",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "null",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 1.95
-        }
-      ],
-      "brand": {
-        "name": "Vant Exchange",
-        "tagline": "Your shift begins when you wake.",
-        "color": "#9c8b5e",
-        "link": ""
-      }
-    },
-    {
-      "id": 10,
-      "side": "north",
-      "x": -550,
-      "floors": 52,
-      "owner": "ashiron",
-      "value": 4.76,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "vanta",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "kessler",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "vanta",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "kessler",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "null",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "cinder",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "ashiron",
-          "price": 4.76
-        }
-      ],
-      "brand": {
-        "name": "Rust Refinery",
-        "tagline": "Quota met. Quota raised.",
-        "color": "#7a3b2e",
-        "link": ""
-      }
-    },
-    {
-      "id": 11,
-      "side": "north",
-      "x": -330,
-      "floors": 52,
-      "owner": "cinder",
-      "value": 4.76,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "null",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "null",
-          "to": "cinder",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "ashiron",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "null",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "null",
-          "to": "kessler",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "null",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "null",
-          "to": "cinder",
-          "price": 4.76
-        }
-      ],
-      "brand": {
-        "name": "Vant Depot",
-        "tagline": "Do not look at the sun. There is no sun.",
-        "color": "#8a5a3a",
-        "link": ""
-      }
-    },
-    {
-      "id": 12,
-      "side": "north",
-      "x": -110,
-      "floors": 58,
-      "owner": "ashiron",
-      "value": 5.95,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "ashiron",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "null",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "null",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "null",
-          "to": "kessler",
-          "price": 4.76
-        },
-        {
-          "t": 8,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "ashiron",
-          "price": 5.95
-        }
-      ],
-      "brand": {
-        "name": "Grey Refinery",
-        "tagline": "Now hiring: expendables.",
-        "color": "#7a3b2e",
-        "link": ""
-      }
-    },
-    {
-      "id": 13,
-      "side": "north",
-      "x": 110,
-      "floors": 58,
-      "owner": "null",
-      "value": 5.95,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "null",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "null",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "cinder",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "kessler",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
-          "price": 4.76
-        },
-        {
-          "t": 8,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "null",
-          "price": 5.95
-        }
-      ],
-      "brand": {
-        "name": "Null Depot",
-        "tagline": "Loyalty is a renewable resource.",
-        "color": "#4d5a3a",
-        "link": ""
-      }
-    },
-    {
-      "id": 14,
-      "side": "north",
-      "x": 330,
-      "floors": 34,
-      "owner": "ashiron",
-      "value": 2.44,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "vanta",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "null",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "null",
-          "to": "vanta",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "kessler",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "ashiron",
-          "price": 2.44
-        }
-      ],
-      "brand": {
-        "name": "Kessler Exchange",
-        "tagline": "Your shift begins when you wake.",
-        "color": "#7a3b2e",
-        "link": ""
-      }
-    },
-    {
-      "id": 15,
-      "side": "north",
-      "x": 550,
-      "floors": 22,
-      "owner": "cinder",
+      "block": 5,
+      "x": -5660,
+      "floors": 26,
+      "owner": "lastmile",
       "value": 1.56,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "null",
+          "to": "bureau",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
+          "from": "bureau",
+          "to": "kessler",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "cinder",
+          "from": "kessler",
+          "to": "lastmile",
           "price": 1.56
         }
       ],
       "brand": {
-        "name": "Slag Hab-Block",
-        "tagline": "Now hiring: expendables.",
-        "color": "#8a5a3a",
+        "name": "Rust Kiln",
+        "tagline": "Every package arrives eventually.",
+        "color": "#4f5d6e",
         "link": ""
       }
     },
     {
-      "id": 16,
+      "id": 63,
       "side": "north",
-      "x": 770,
-      "floors": 0,
-      "owner": null,
-      "value": 0,
-      "history": [],
-      "brand": null
-    },
-    {
-      "id": 17,
-      "side": "north",
-      "x": 990,
-      "floors": 58,
-      "owner": "ashiron",
-      "value": 5.95,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "null",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "ashiron",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "null",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "vanta",
-          "price": 4.76
-        },
-        {
-          "t": 8,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
-          "price": 5.95
-        }
-      ],
-      "brand": {
-        "name": "Slag Kiln",
-        "tagline": "We recycle everything. Everything.",
-        "color": "#7a3b2e",
-        "link": ""
-      }
-    },
-    {
-      "id": 18,
-      "side": "north",
-      "x": 1210,
-      "floors": 40,
-      "owner": "kessler",
-      "value": 3.05,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "kessler",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "ashiron",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "null",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "kessler",
-          "price": 3.05
-        }
-      ],
-      "brand": {
-        "name": "Obsidian Relay",
-        "tagline": "Breathe responsibly. Air is metered.",
-        "color": "#9c8b5e",
-        "link": ""
-      }
-    },
-    {
-      "id": 19,
-      "side": "north",
-      "x": 1430,
-      "floors": 40,
-      "owner": "kessler",
-      "value": 3.05,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "vanta",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "null",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "null",
-          "to": "cinder",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "kessler",
-          "price": 3.05
-        }
-      ],
-      "brand": {
-        "name": "Sable Relay",
-        "tagline": "Production is prayer.",
-        "color": "#9c8b5e",
-        "link": ""
-      }
-    },
-    {
-      "id": 20,
-      "side": "north",
-      "x": 1650,
-      "floors": 16,
+      "block": 5,
+      "x": -5440,
+      "floors": 20,
       "owner": "null",
       "value": 1.25,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "vanta",
+          "to": "gavel",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "vanta",
+          "from": "gavel",
           "to": "null",
           "price": 1.25
         }
       ],
       "brand": {
-        "name": "Kessler Bastion",
-        "tagline": "Loyalty is a renewable resource.",
+        "name": "Hollow Refinery",
+        "tagline": "Compliance is safety.",
         "color": "#4d5a3a",
         "link": ""
       }
     },
     {
-      "id": 21,
+      "id": 64,
       "side": "north",
-      "x": 1870,
-      "floors": 28,
-      "owner": "kessler",
+      "block": 5,
+      "x": -5220,
+      "floors": 26,
+      "owner": "registry",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "registry",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Sable Refinery",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 65,
+      "side": "north",
+      "block": 5,
+      "x": -5000,
+      "floors": 13,
+      "owner": "mercy",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Grey Depot",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 66,
+      "side": "north",
+      "block": 6,
+      "x": -4480,
+      "floors": 32,
+      "owner": "bureau",
       "value": 1.95,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "ashiron",
+          "to": "mercy",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
+          "from": "mercy",
+          "to": "registry",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "vanta",
+          "from": "registry",
           "to": "null",
           "price": 1.56
         },
@@ -971,245 +2608,117 @@
           "t": 3,
           "kind": "takeover",
           "from": "null",
-          "to": "kessler",
+          "to": "bureau",
           "price": 1.95
-        }
-      ],
-      "brand": {
-        "name": "Ash Chapel",
-        "tagline": "Your shift begins when you wake.",
-        "color": "#9c8b5e",
-        "link": ""
-      }
-    },
-    {
-      "id": 22,
-      "side": "north",
-      "x": 2090,
-      "floors": 0,
-      "owner": null,
-      "value": 0,
-      "history": [],
-      "brand": null
-    },
-    {
-      "id": 23,
-      "side": "north",
-      "x": 2310,
-      "floors": 52,
-      "owner": "null",
-      "value": 4.76,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "kessler",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "ashiron",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "cinder",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "kessler",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "ashiron",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "cinder",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "null",
-          "price": 4.76
-        }
-      ],
-      "brand": {
-        "name": "Hollow Chapel",
-        "tagline": "Do not look at the sun. There is no sun.",
-        "color": "#4d5a3a",
-        "link": ""
-      }
-    },
-    {
-      "id": 24,
-      "side": "north",
-      "x": 2530,
-      "floors": 22,
-      "owner": "vanta",
-      "value": 1.56,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "ashiron",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "vanta",
-          "price": 1.56
-        }
-      ],
-      "brand": {
-        "name": "Sable Yard",
-        "tagline": "Loyalty is a renewable resource.",
-        "color": "#5c6b73",
-        "link": ""
-      }
-    },
-    {
-      "id": 25,
-      "side": "south",
-      "x": -2530,
-      "floors": 22,
-      "owner": "kessler",
-      "value": 1.56,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "vanta",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "null",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "null",
-          "to": "kessler",
-          "price": 1.56
-        }
-      ],
-      "brand": {
-        "name": "Obsidian Bastion",
-        "tagline": "We recycle everything. Everything.",
-        "color": "#9c8b5e",
-        "link": ""
-      }
-    },
-    {
-      "id": 26,
-      "side": "south",
-      "x": -2310,
-      "floors": 52,
-      "owner": "vanta",
-      "value": 4.76,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "null",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "kessler",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
-          "price": 3.05
-        },
-        {
-          "t": 6,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "ashiron",
-          "price": 3.81
-        },
-        {
-          "t": 7,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
-          "price": 4.76
         }
       ],
       "brand": {
         "name": "Null Arcology",
-        "tagline": "We recycle everything. Everything.",
-        "color": "#5c6b73",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
         "link": ""
       }
     },
     {
-      "id": 27,
-      "side": "south",
-      "x": -2090,
+      "id": 67,
+      "side": "north",
+      "block": 6,
+      "x": -4260,
+      "floors": 13,
+      "owner": "cinder",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "cinder",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Slag Yard",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 68,
+      "side": "north",
+      "block": 6,
+      "x": -4040,
+      "floors": 58,
+      "owner": "ministry",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "kessler",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "lastmile",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "registry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "kessler",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "ministry",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "registry",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "gullet",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "ministry",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Rust Silo",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
+        "link": ""
+      }
+    },
+    {
+      "id": 69,
+      "side": "north",
+      "block": 6,
+      "x": -3820,
       "floors": 0,
       "owner": null,
       "value": 0,
@@ -1217,158 +2726,575 @@
       "brand": null
     },
     {
-      "id": 28,
-      "side": "south",
-      "x": -1870,
-      "floors": 34,
+      "id": 70,
+      "side": "north",
+      "block": 6,
+      "x": -3600,
+      "floors": 65,
+      "owner": "ministry",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gullet",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "kessler",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "bureau",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "gullet",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "gavel",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "null",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "null",
+          "to": "kessler",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "ministry",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Rust Foundry",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
+        "link": ""
+      }
+    },
+    {
+      "id": 71,
+      "side": "north",
+      "block": 6,
+      "x": -3380,
+      "floors": 58,
+      "owner": "ministry",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "vanta",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ashiron",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "assessor",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "lastmile",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "assessor",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "gavel",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "null",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "null",
+          "to": "ministry",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Slag Bastion",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
+        "link": ""
+      }
+    },
+    {
+      "id": 72,
+      "side": "north",
+      "block": 6,
+      "x": -3160,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 73,
+      "side": "north",
+      "block": 6,
+      "x": -2940,
+      "floors": 20,
       "owner": "kessler",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "cinder",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "kessler",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Slag Silo",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 74,
+      "side": "north",
+      "block": 6,
+      "x": -2720,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 75,
+      "side": "north",
+      "block": 6,
+      "x": -2500,
+      "floors": 26,
+      "owner": "gavel",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "mercy",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "gavel",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Slag Yard",
+        "tagline": "Going, going, gone.",
+        "color": "#6e3b4e",
+        "link": ""
+      }
+    },
+    {
+      "id": 76,
+      "side": "north",
+      "block": 6,
+      "x": -2280,
+      "floors": 13,
+      "owner": "cinder",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "cinder",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Slag Depot",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 77,
+      "side": "north",
+      "block": 6,
+      "x": -2060,
+      "floors": 58,
+      "owner": "registry",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "gullet",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "registry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "bureau",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "gavel",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "lastmile",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "registry",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Sable Kiln",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 78,
+      "side": "north",
+      "block": 6,
+      "x": -1840,
+      "floors": 39,
+      "owner": "bureau",
       "value": 2.44,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "vanta",
+          "to": "null",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
+          "from": "null",
+          "to": "gullet",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
+          "from": "gullet",
+          "to": "null",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
+          "from": "null",
+          "to": "vanta",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
-          "from": "cinder",
-          "to": "kessler",
+          "from": "vanta",
+          "to": "bureau",
           "price": 2.44
         }
       ],
       "brand": {
-        "name": "Obsidian Yard",
-        "tagline": "Your shift begins when you wake.",
-        "color": "#9c8b5e",
+        "name": "Dread Arcology",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
         "link": ""
       }
     },
     {
-      "id": 29,
-      "side": "south",
-      "x": -1650,
-      "floors": 46,
-      "owner": "cinder",
+      "id": 79,
+      "side": "north",
+      "block": 7,
+      "x": -1320,
+      "floors": 52,
+      "owner": "gullet",
       "value": 3.81,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "null",
+          "to": "gavel",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "null",
-          "to": "vanta",
+          "from": "gavel",
+          "to": "ashiron",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "null",
+          "from": "ashiron",
+          "to": "assessor",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
-          "from": "null",
-          "to": "vanta",
+          "from": "assessor",
+          "to": "lastmile",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "cinder",
+          "from": "lastmile",
+          "to": "gavel",
           "price": 2.44
         },
         {
           "t": 5,
           "kind": "takeover",
-          "from": "cinder",
-          "to": "vanta",
+          "from": "gavel",
+          "to": "assessor",
           "price": 3.05
         },
         {
           "t": 6,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "cinder",
+          "from": "assessor",
+          "to": "gullet",
           "price": 3.81
         }
       ],
       "brand": {
-        "name": "Cinder Silo",
-        "tagline": "Quota met. Quota raised.",
-        "color": "#8a5a3a",
+        "name": "Tithe Hab-Block",
+        "tagline": "Calories are a privilege.",
+        "color": "#8c6d2f",
         "link": ""
       }
     },
     {
-      "id": 30,
-      "side": "south",
-      "x": -1430,
-      "floors": 40,
-      "owner": "vanta",
-      "value": 3.05,
+      "id": 80,
+      "side": "north",
+      "block": 7,
+      "x": -1100,
+      "floors": 65,
+      "owner": "null",
+      "value": 5.95,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "null",
+          "to": "gullet",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "null",
-          "to": "kessler",
+          "from": "gullet",
+          "to": "vanta",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
+          "from": "vanta",
+          "to": "ministry",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
-          "from": "cinder",
-          "to": "null",
+          "from": "ministry",
+          "to": "gullet",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
+          "from": "gullet",
+          "to": "null",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
           "from": "null",
+          "to": "gavel",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "registry",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "gavel",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "null",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Ash Silo",
+        "tagline": "Compliance is safety.",
+        "color": "#4d5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 81,
+      "side": "north",
+      "block": 7,
+      "x": -880,
+      "floors": 45,
+      "owner": "gullet",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gullet",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "registry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "lastmile",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "vanta",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "vanta",
           "to": "ashiron",
           "price": 2.44
         },
@@ -1376,120 +3302,1358 @@
           "t": 5,
           "kind": "takeover",
           "from": "ashiron",
-          "to": "vanta",
+          "to": "gullet",
           "price": 3.05
         }
       ],
       "brand": {
-        "name": "Cinder Exchange",
-        "tagline": "Loyalty is a renewable resource.",
+        "name": "Dread Works",
+        "tagline": "Calories are a privilege.",
+        "color": "#8c6d2f",
+        "link": ""
+      }
+    },
+    {
+      "id": 82,
+      "side": "north",
+      "block": 7,
+      "x": -660,
+      "floors": 58,
+      "owner": "registry",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "cinder",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ministry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "kessler",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "cinder",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "gullet",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "bureau",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "registry",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Grey Exchange",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 83,
+      "side": "north",
+      "block": 7,
+      "x": -440,
+      "floors": 26,
+      "owner": "vanta",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "assessor",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "vanta",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Null Kiln",
+        "tagline": "We hold. You hold on.",
         "color": "#5c6b73",
         "link": ""
       }
     },
     {
-      "id": 31,
-      "side": "south",
-      "x": -1210,
+      "id": 84,
+      "side": "north",
+      "block": 7,
+      "x": -220,
+      "floors": 20,
+      "owner": "mercy",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "assessor",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "mercy",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Gallows Arcology",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 85,
+      "side": "north",
+      "block": 7,
+      "x": 0,
+      "floors": 45,
+      "owner": "kessler",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "gullet",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "kessler",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "mercy",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "kessler",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Pallid Refinery",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 86,
+      "side": "north",
+      "block": 7,
+      "x": 220,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 87,
+      "side": "north",
+      "block": 7,
+      "x": 440,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 88,
+      "side": "north",
+      "block": 7,
+      "x": 660,
+      "floors": 20,
+      "owner": "assessor",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gullet",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "assessor",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Sable Spire",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 89,
+      "side": "north",
+      "block": 7,
+      "x": 880,
+      "floors": 26,
+      "owner": "ministry",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ministry",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Pallid Depot",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
+        "link": ""
+      }
+    },
+    {
+      "id": 90,
+      "side": "north",
+      "block": 7,
+      "x": 1100,
+      "floors": 39,
+      "owner": "cinder",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "cinder",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ashiron",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "cinder",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Tithe Works",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 91,
+      "side": "north",
+      "block": 7,
+      "x": 1320,
+      "floors": 20,
+      "owner": "registry",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "registry",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Null Silo",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 92,
+      "side": "north",
+      "block": 8,
+      "x": 1840,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 93,
+      "side": "north",
+      "block": 8,
+      "x": 2060,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 94,
+      "side": "north",
+      "block": 8,
+      "x": 2280,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 95,
+      "side": "north",
+      "block": 8,
+      "x": 2500,
+      "floors": 13,
+      "owner": "mercy",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Tithe Refinery",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 96,
+      "side": "north",
+      "block": 8,
+      "x": 2720,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 97,
+      "side": "north",
+      "block": 8,
+      "x": 2940,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 98,
+      "side": "north",
+      "block": 8,
+      "x": 3160,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 99,
+      "side": "north",
+      "block": 8,
+      "x": 3380,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 100,
+      "side": "north",
+      "block": 8,
+      "x": 3600,
+      "floors": 20,
+      "owner": "vanta",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "vanta",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Dread Silo",
+        "tagline": "We hold. You hold on.",
+        "color": "#5c6b73",
+        "link": ""
+      }
+    },
+    {
+      "id": 101,
+      "side": "north",
+      "block": 8,
+      "x": 3820,
       "floors": 58,
+      "owner": "mercy",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "assessor",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "mercy",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "gullet",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "null",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "null",
+          "to": "mercy",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "gavel",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "mercy",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Dread Works",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 102,
+      "side": "north",
+      "block": 8,
+      "x": 4040,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 103,
+      "side": "north",
+      "block": 8,
+      "x": 4260,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 104,
+      "side": "north",
+      "block": 8,
+      "x": 4480,
+      "floors": 52,
+      "owner": "assessor",
+      "value": 3.81,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "mercy",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "ashiron",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "mercy",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "kessler",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "assessor",
+          "price": 3.81
+        }
+      ],
+      "brand": {
+        "name": "Ash Kiln",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 105,
+      "side": "north",
+      "block": 9,
+      "x": 5000,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 106,
+      "side": "north",
+      "block": 9,
+      "x": 5220,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 107,
+      "side": "north",
+      "block": 9,
+      "x": 5440,
+      "floors": 32,
+      "owner": "cinder",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "vanta",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "vanta",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "cinder",
+          "price": 1.95
+        }
+      ],
+      "brand": {
+        "name": "Null Works",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 108,
+      "side": "north",
+      "block": 9,
+      "x": 5660,
+      "floors": 20,
+      "owner": "mercy",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "mercy",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Null Spire",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 109,
+      "side": "north",
+      "block": 9,
+      "x": 5880,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 110,
+      "side": "north",
+      "block": 9,
+      "x": 6100,
+      "floors": 52,
+      "owner": "kessler",
+      "value": 3.81,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "vanta",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "gullet",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "kessler",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "lastmile",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "gullet",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "ashiron",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "kessler",
+          "price": 3.81
+        }
+      ],
+      "brand": {
+        "name": "Ash Arcology",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 111,
+      "side": "north",
+      "block": 9,
+      "x": 6320,
+      "floors": 65,
       "owner": "cinder",
       "value": 5.95,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "kessler",
+          "to": "mercy",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "kessler",
-          "to": "ashiron",
+          "from": "mercy",
+          "to": "registry",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "null",
+          "from": "registry",
+          "to": "bureau",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
-          "from": "null",
-          "to": "vanta",
+          "from": "bureau",
+          "to": "assessor",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
+          "from": "assessor",
+          "to": "ministry",
           "price": 2.44
         },
         {
           "t": 5,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
+          "from": "ministry",
+          "to": "registry",
           "price": 3.05
         },
         {
           "t": 6,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
+          "from": "registry",
+          "to": "lastmile",
           "price": 3.81
         },
         {
           "t": 7,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "null",
+          "from": "lastmile",
+          "to": "mercy",
           "price": 4.76
         },
         {
           "t": 8,
           "kind": "takeover",
-          "from": "null",
+          "from": "mercy",
           "to": "cinder",
           "price": 5.95
         }
       ],
       "brand": {
-        "name": "Dread Silo",
-        "tagline": "Now hiring: expendables.",
+        "name": "Rust Silo",
+        "tagline": "Breathe responsibly. Air is metered.",
         "color": "#8a5a3a",
         "link": ""
       }
     },
     {
-      "id": 32,
-      "side": "south",
-      "x": -990,
-      "floors": 34,
-      "owner": "kessler",
-      "value": 2.44,
+      "id": 112,
+      "side": "north",
+      "block": 9,
+      "x": 6540,
+      "floors": 13,
+      "owner": "bureau",
+      "value": 1,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "vanta",
+          "to": "bureau",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Slag Relay",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 113,
+      "side": "north",
+      "block": 9,
+      "x": 6760,
+      "floors": 45,
+      "owner": "vanta",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "kessler",
+          "from": "registry",
+          "to": "vanta",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
+          "from": "vanta",
+          "to": "gavel",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "assessor",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "mercy",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "vanta",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Sable Exchange",
+        "tagline": "We hold. You hold on.",
+        "color": "#5c6b73",
+        "link": ""
+      }
+    },
+    {
+      "id": 114,
+      "side": "north",
+      "block": 9,
+      "x": 6980,
+      "floors": 13,
+      "owner": "bureau",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Ash Relay",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 115,
+      "side": "north",
+      "block": 9,
+      "x": 7200,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 116,
+      "side": "north",
+      "block": 9,
+      "x": 7420,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 117,
+      "side": "north",
+      "block": 9,
+      "x": 7640,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 118,
+      "side": "north",
+      "block": 10,
+      "x": 8160,
+      "floors": 39,
+      "owner": "gavel",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "null",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "null",
+          "to": "cinder",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "ministry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "lastmile",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "gavel",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Null Exchange",
+        "tagline": "Going, going, gone.",
+        "color": "#6e3b4e",
+        "link": ""
+      }
+    },
+    {
+      "id": 119,
+      "side": "north",
+      "block": 10,
+      "x": 8380,
+      "floors": 45,
+      "owner": "kessler",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "ashiron",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "gullet",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "registry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "vanta",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "kessler",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Slag Depot",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 120,
+      "side": "north",
+      "block": 10,
+      "x": 8600,
+      "floors": 39,
+      "owner": "assessor",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "gullet",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "assessor",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "ministry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "assessor",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Sable Spire",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 121,
+      "side": "north",
+      "block": 10,
+      "x": 8820,
+      "floors": 26,
+      "owner": "assessor",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "registry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "assessor",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Hollow Silo",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 122,
+      "side": "north",
+      "block": 10,
+      "x": 9040,
+      "floors": 20,
+      "owner": "cinder",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "kessler",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
           "from": "kessler",
+          "to": "cinder",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Grey Foundry",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 123,
+      "side": "north",
+      "block": 10,
+      "x": 9260,
+      "floors": 32,
+      "owner": "bureau",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "registry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "null",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "null",
+          "to": "bureau",
+          "price": 1.95
+        }
+      ],
+      "brand": {
+        "name": "Rust Yard",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 124,
+      "side": "north",
+      "block": 10,
+      "x": 9480,
+      "floors": 52,
+      "owner": "mercy",
+      "value": 3.81,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "kessler",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "gullet",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gullet",
           "to": "vanta",
           "price": 1.56
         },
@@ -1497,29 +4661,375 @@
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
-          "to": "ashiron",
+          "to": "kessler",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
+          "from": "kessler",
+          "to": "mercy",
           "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "lastmile",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "mercy",
+          "price": 3.81
         }
       ],
       "brand": {
         "name": "Gallows Exchange",
-        "tagline": "Do not look at the sun. There is no sun.",
-        "color": "#9c8b5e",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
         "link": ""
       }
     },
     {
-      "id": 33,
-      "side": "south",
-      "x": -770,
+      "id": 125,
+      "side": "north",
+      "block": 10,
+      "x": 9700,
+      "floors": 32,
+      "owner": "vanta",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "cinder",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "gavel",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "ministry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "vanta",
+          "price": 1.95
+        }
+      ],
+      "brand": {
+        "name": "Null Bastion",
+        "tagline": "We hold. You hold on.",
+        "color": "#5c6b73",
+        "link": ""
+      }
+    },
+    {
+      "id": 126,
+      "side": "north",
+      "block": 10,
+      "x": 9920,
+      "floors": 45,
+      "owner": "vanta",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "kessler",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "registry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "gavel",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "bureau",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "ministry",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "vanta",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Pallid Works",
+        "tagline": "We hold. You hold on.",
+        "color": "#5c6b73",
+        "link": ""
+      }
+    },
+    {
+      "id": 127,
+      "side": "north",
+      "block": 10,
+      "x": 10140,
+      "floors": 13,
+      "owner": "registry",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Ash Refinery",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 128,
+      "side": "north",
+      "block": 10,
+      "x": 10360,
+      "floors": 65,
+      "owner": "gullet",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "assessor",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "bureau",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "assessor",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "bureau",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "cinder",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "gavel",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "ministry",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "gullet",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Ash Exchange",
+        "tagline": "Calories are a privilege.",
+        "color": "#8c6d2f",
+        "link": ""
+      }
+    },
+    {
+      "id": 129,
+      "side": "north",
+      "block": 10,
+      "x": 10580,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 130,
+      "side": "north",
+      "block": 10,
+      "x": 10800,
       "floors": 58,
+      "owner": "lastmile",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "lastmile",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "ashiron",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "ministry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "vanta",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "assessor",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "bureau",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "lastmile",
+          "price": 4.76
+        }
+      ],
+      "brand": {
+        "name": "Gallows Refinery",
+        "tagline": "Every package arrives eventually.",
+        "color": "#4f5d6e",
+        "link": ""
+      }
+    },
+    {
+      "id": 131,
+      "side": "north",
+      "block": 11,
+      "x": 11320,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 132,
+      "side": "north",
+      "block": 11,
+      "x": 11540,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 133,
+      "side": "north",
+      "block": 11,
+      "x": 11760,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 134,
+      "side": "north",
+      "block": 11,
+      "x": 11980,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 135,
+      "side": "north",
+      "block": 11,
+      "x": 12200,
+      "floors": 65,
       "owner": "null",
       "value": 5.95,
       "history": [
@@ -1533,313 +5043,661 @@
           "t": 1,
           "kind": "takeover",
           "from": "ashiron",
-          "to": "null",
+          "to": "gullet",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
+          "from": "gullet",
+          "to": "mercy",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
+          "from": "mercy",
+          "to": "gavel",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "null",
+          "from": "gavel",
+          "to": "kessler",
           "price": 2.44
         },
         {
           "t": 5,
           "kind": "takeover",
-          "from": "null",
-          "to": "vanta",
+          "from": "kessler",
+          "to": "gullet",
           "price": 3.05
         },
         {
           "t": 6,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
+          "from": "gullet",
+          "to": "kessler",
           "price": 3.81
         },
         {
           "t": 7,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "vanta",
+          "from": "kessler",
+          "to": "registry",
           "price": 4.76
         },
         {
           "t": 8,
           "kind": "takeover",
-          "from": "vanta",
+          "from": "registry",
           "to": "null",
           "price": 5.95
         }
       ],
       "brand": {
-        "name": "Hollow Refinery",
-        "tagline": "Quota met. Quota raised.",
+        "name": "Sable Spire",
+        "tagline": "Compliance is safety.",
         "color": "#4d5a3a",
         "link": ""
       }
     },
     {
-      "id": 34,
-      "side": "south",
-      "x": -550,
-      "floors": 40,
-      "owner": "kessler",
-      "value": 3.05,
+      "id": 136,
+      "side": "north",
+      "block": 11,
+      "x": 12420,
+      "floors": 65,
+      "owner": "gavel",
+      "value": 5.95,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "cinder",
+          "to": "null",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "cinder",
-          "to": "vanta",
+          "from": "null",
+          "to": "ministry",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "ashiron",
+          "from": "ministry",
+          "to": "gavel",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "null",
+          "from": "gavel",
+          "to": "registry",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
-          "from": "null",
-          "to": "cinder",
+          "from": "registry",
+          "to": "lastmile",
           "price": 2.44
         },
         {
           "t": 5,
           "kind": "takeover",
-          "from": "cinder",
-          "to": "kessler",
+          "from": "lastmile",
+          "to": "gavel",
           "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "assessor",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "gullet",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "gavel",
+          "price": 5.95
         }
       ],
       "brand": {
-        "name": "Obsidian Depot",
-        "tagline": "Loyalty is a renewable resource.",
-        "color": "#9c8b5e",
+        "name": "Hollow Hab-Block",
+        "tagline": "Going, going, gone.",
+        "color": "#6e3b4e",
         "link": ""
       }
     },
     {
-      "id": 35,
-      "side": "south",
-      "x": -330,
-      "floors": 16,
-      "owner": "vanta",
-      "value": 1.25,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "cinder",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "vanta",
-          "price": 1.25
-        }
-      ],
-      "brand": {
-        "name": "Obsidian Spire",
-        "tagline": "We recycle everything. Everything.",
-        "color": "#5c6b73",
-        "link": ""
-      }
+      "id": 137,
+      "side": "north",
+      "block": 11,
+      "x": 12640,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
     },
     {
-      "id": 36,
-      "side": "south",
-      "x": -110,
-      "floors": 16,
-      "owner": "kessler",
-      "value": 1.25,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "vanta",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "kessler",
-          "price": 1.25
-        }
-      ],
-      "brand": {
-        "name": "Cinder Exchange",
-        "tagline": "Loyalty is a renewable resource.",
-        "color": "#9c8b5e",
-        "link": ""
-      }
-    },
-    {
-      "id": 37,
-      "side": "south",
-      "x": 110,
-      "floors": 40,
-      "owner": "cinder",
-      "value": 3.05,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "cinder",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "null",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "null",
-          "to": "vanta",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "cinder",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "null",
-          "price": 2.44
-        },
-        {
-          "t": 5,
-          "kind": "takeover",
-          "from": "null",
-          "to": "cinder",
-          "price": 3.05
-        }
-      ],
-      "brand": {
-        "name": "Vant Arcology",
-        "tagline": "Loyalty is a renewable resource.",
-        "color": "#8a5a3a",
-        "link": ""
-      }
-    },
-    {
-      "id": 38,
-      "side": "south",
-      "x": 330,
-      "floors": 34,
-      "owner": "ashiron",
-      "value": 2.44,
-      "history": [
-        {
-          "t": 0,
-          "kind": "build",
-          "to": "kessler",
-          "price": 1
-        },
-        {
-          "t": 1,
-          "kind": "takeover",
-          "from": "kessler",
-          "to": "vanta",
-          "price": 1.25
-        },
-        {
-          "t": 2,
-          "kind": "takeover",
-          "from": "vanta",
-          "to": "cinder",
-          "price": 1.56
-        },
-        {
-          "t": 3,
-          "kind": "takeover",
-          "from": "cinder",
-          "to": "null",
-          "price": 1.95
-        },
-        {
-          "t": 4,
-          "kind": "takeover",
-          "from": "null",
-          "to": "ashiron",
-          "price": 2.44
-        }
-      ],
-      "brand": {
-        "name": "Null Hab-Block",
-        "tagline": "Breathe responsibly. Air is metered.",
-        "color": "#7a3b2e",
-        "link": ""
-      }
-    },
-    {
-      "id": 39,
-      "side": "south",
-      "x": 550,
-      "floors": 58,
+      "id": 138,
+      "side": "north",
+      "block": 11,
+      "x": 12860,
+      "floors": 65,
       "owner": "cinder",
       "value": 5.95,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "kessler",
+          "to": "ministry",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
+          "from": "ministry",
+          "to": "lastmile",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
+          "from": "lastmile",
+          "to": "ashiron",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "registry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "vanta",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ministry",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "lastmile",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "mercy",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "cinder",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Tithe Yard",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 139,
+      "side": "north",
+      "block": 11,
+      "x": 13080,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 140,
+      "side": "north",
+      "block": 11,
+      "x": 13300,
+      "floors": 45,
+      "owner": "null",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "null",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "null",
+          "to": "bureau",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "ministry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "kessler",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "null",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Cinder Bastion",
+        "tagline": "Compliance is safety.",
+        "color": "#4d5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 141,
+      "side": "north",
+      "block": 11,
+      "x": 13520,
+      "floors": 65,
+      "owner": "mercy",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ministry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "gavel",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "cinder",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
           "from": "cinder",
+          "to": "ashiron",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "gullet",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "vanta",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "registry",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "vanta",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "mercy",
+          "price": 5.95
+        }
+      ],
+      "brand": {
+        "name": "Sable Exchange",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
+        "link": ""
+      }
+    },
+    {
+      "id": 142,
+      "side": "north",
+      "block": 11,
+      "x": 13740,
+      "floors": 39,
+      "owner": "kessler",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "assessor",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "vanta",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "kessler",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Iron Hab-Block",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 143,
+      "side": "north",
+      "block": 11,
+      "x": 13960,
+      "floors": 45,
+      "owner": "kessler",
+      "value": 3.05,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gullet",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "bureau",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "assessor",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "gullet",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "gullet",
+          "to": "cinder",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "kessler",
+          "price": 3.05
+        }
+      ],
+      "brand": {
+        "name": "Grey Yard",
+        "tagline": "Everything is ore eventually.",
+        "color": "#9c8b5e",
+        "link": ""
+      }
+    },
+    {
+      "id": 144,
+      "side": "north",
+      "block": 12,
+      "x": 14480,
+      "floors": 13,
+      "owner": "gavel",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Cinder Kiln",
+        "tagline": "Going, going, gone.",
+        "color": "#6e3b4e",
+        "link": ""
+      }
+    },
+    {
+      "id": 145,
+      "side": "north",
+      "block": 12,
+      "x": 14700,
+      "floors": 13,
+      "owner": "lastmile",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "lastmile",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Cinder Refinery",
+        "tagline": "Every package arrives eventually.",
+        "color": "#4f5d6e",
+        "link": ""
+      }
+    },
+    {
+      "id": 146,
+      "side": "north",
+      "block": 12,
+      "x": 14920,
+      "floors": 26,
+      "owner": "lastmile",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "bureau",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "kessler",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "lastmile",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Null Silo",
+        "tagline": "Every package arrives eventually.",
+        "color": "#4f5d6e",
+        "link": ""
+      }
+    },
+    {
+      "id": 147,
+      "side": "north",
+      "block": 12,
+      "x": 15140,
+      "floors": 13,
+      "owner": "lastmile",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "lastmile",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Grey Works",
+        "tagline": "Every package arrives eventually.",
+        "color": "#4f5d6e",
+        "link": ""
+      }
+    },
+    {
+      "id": 148,
+      "side": "north",
+      "block": 12,
+      "x": 15360,
+      "floors": 26,
+      "owner": "null",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "assessor",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "kessler",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "null",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Hollow Silo",
+        "tagline": "Compliance is safety.",
+        "color": "#4d5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 149,
+      "side": "north",
+      "block": 12,
+      "x": 15580,
+      "floors": 39,
+      "owner": "assessor",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "lastmile",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "registry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "registry",
           "to": "null",
           "price": 1.56
         },
@@ -1847,6 +5705,143 @@
           "t": 3,
           "kind": "takeover",
           "from": "null",
+          "to": "registry",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "assessor",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Cinder Kiln",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 150,
+      "side": "north",
+      "block": 12,
+      "x": 15800,
+      "floors": 20,
+      "owner": "null",
+      "value": 1.25,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "null",
+          "price": 1.25
+        }
+      ],
+      "brand": {
+        "name": "Hollow Bastion",
+        "tagline": "Compliance is safety.",
+        "color": "#4d5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 151,
+      "side": "north",
+      "block": 12,
+      "x": 16020,
+      "floors": 13,
+      "owner": "assessor",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "assessor",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Grey Silo",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 152,
+      "side": "north",
+      "block": 12,
+      "x": 16240,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 153,
+      "side": "north",
+      "block": 12,
+      "x": 16460,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 154,
+      "side": "north",
+      "block": 12,
+      "x": 16680,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 155,
+      "side": "north",
+      "block": 12,
+      "x": 16900,
+      "floors": 39,
+      "owner": "assessor",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "ashiron",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "lastmile",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "gullet",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gullet",
           "to": "cinder",
           "price": 1.95
         },
@@ -1854,20 +5849,248 @@
           "t": 4,
           "kind": "takeover",
           "from": "cinder",
+          "to": "assessor",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Grey Exchange",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 156,
+      "side": "north",
+      "block": 12,
+      "x": 17120,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 157,
+      "side": "north",
+      "block": 13,
+      "x": 17640,
+      "floors": 26,
+      "owner": "ministry",
+      "value": 1.56,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "cinder",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "cinder",
+          "to": "vanta",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "vanta",
+          "to": "ministry",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Hollow Relay",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
+        "link": ""
+      }
+    },
+    {
+      "id": 158,
+      "side": "north",
+      "block": 13,
+      "x": 17860,
+      "floors": 13,
+      "owner": "registry",
+      "value": 1,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "registry",
+          "price": 1
+        }
+      ],
+      "brand": {
+        "name": "Tithe Bastion",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
+        "link": ""
+      }
+    },
+    {
+      "id": 159,
+      "side": "north",
+      "block": 13,
+      "x": 18080,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 160,
+      "side": "north",
+      "block": 13,
+      "x": 18300,
+      "floors": 32,
+      "owner": "assessor",
+      "value": 1.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "kessler",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "kessler",
+          "to": "lastmile",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "assessor",
+          "price": 1.95
+        }
+      ],
+      "brand": {
+        "name": "Hollow Relay",
+        "tagline": "Everything has a fair price.",
+        "color": "#3e4a52",
+        "link": ""
+      }
+    },
+    {
+      "id": 161,
+      "side": "north",
+      "block": 13,
+      "x": 18520,
+      "floors": 39,
+      "owner": "cinder",
+      "value": 2.44,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "gavel",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "registry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "gavel",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "ashiron",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "cinder",
+          "price": 2.44
+        }
+      ],
+      "brand": {
+        "name": "Tithe Bastion",
+        "tagline": "Breathe responsibly. Air is metered.",
+        "color": "#8a5a3a",
+        "link": ""
+      }
+    },
+    {
+      "id": 162,
+      "side": "north",
+      "block": 13,
+      "x": 18740,
+      "floors": 58,
+      "owner": "registry",
+      "value": 4.76,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
           "to": "null",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "null",
+          "to": "registry",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "ministry",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "null",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "null",
+          "to": "bureau",
           "price": 2.44
         },
         {
           "t": 5,
           "kind": "takeover",
-          "from": "null",
-          "to": "cinder",
+          "from": "bureau",
+          "to": "kessler",
           "price": 3.05
         },
         {
           "t": 6,
           "kind": "takeover",
-          "from": "cinder",
+          "from": "kessler",
           "to": "null",
           "price": 3.81
         },
@@ -1875,28 +6098,22 @@
           "t": 7,
           "kind": "takeover",
           "from": "null",
-          "to": "ashiron",
+          "to": "registry",
           "price": 4.76
-        },
-        {
-          "t": 8,
-          "kind": "takeover",
-          "from": "ashiron",
-          "to": "cinder",
-          "price": 5.95
         }
       ],
       "brand": {
-        "name": "Null Chapel",
-        "tagline": "Do not look at the sun. There is no sun.",
-        "color": "#8a5a3a",
+        "name": "Gallows Silo",
+        "tagline": "You are a number. Congratulations.",
+        "color": "#5a5550",
         "link": ""
       }
     },
     {
-      "id": 40,
-      "side": "south",
-      "x": 770,
+      "id": 163,
+      "side": "north",
+      "block": 13,
+      "x": 18960,
       "floors": 0,
       "owner": null,
       "value": 0,
@@ -1904,9 +6121,10 @@
       "brand": null
     },
     {
-      "id": 41,
-      "side": "south",
-      "x": 990,
+      "id": 164,
+      "side": "north",
+      "block": 13,
+      "x": 19180,
       "floors": 0,
       "owner": null,
       "value": 0,
@@ -1914,30 +6132,79 @@
       "brand": null
     },
     {
-      "id": 42,
-      "side": "south",
-      "x": 1210,
-      "floors": 34,
-      "owner": "ashiron",
-      "value": 2.44,
+      "id": 165,
+      "side": "north",
+      "block": 13,
+      "x": 19400,
+      "floors": 0,
+      "owner": null,
+      "value": 0,
+      "history": [],
+      "brand": null
+    },
+    {
+      "id": 166,
+      "side": "north",
+      "block": 13,
+      "x": 19620,
+      "floors": 26,
+      "owner": "gavel",
+      "value": 1.56,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "vanta",
+          "to": "assessor",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "vanta",
-          "to": "kessler",
+          "from": "assessor",
+          "to": "bureau",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "kessler",
+          "from": "bureau",
+          "to": "gavel",
+          "price": 1.56
+        }
+      ],
+      "brand": {
+        "name": "Tithe Foundry",
+        "tagline": "Going, going, gone.",
+        "color": "#6e3b4e",
+        "link": ""
+      }
+    },
+    {
+      "id": 167,
+      "side": "north",
+      "block": 13,
+      "x": 19840,
+      "floors": 65,
+      "owner": "bureau",
+      "value": 5.95,
+      "history": [
+        {
+          "t": 0,
+          "kind": "build",
+          "to": "mercy",
+          "price": 1
+        },
+        {
+          "t": 1,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "lastmile",
+          "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "lastmile",
           "to": "vanta",
           "price": 1.56
         },
@@ -1945,185 +6212,254 @@
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
-          "to": "cinder",
+          "to": "mercy",
           "price": 1.95
         },
         {
           "t": 4,
           "kind": "takeover",
-          "from": "cinder",
-          "to": "ashiron",
+          "from": "mercy",
+          "to": "gavel",
           "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "ministry",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "registry",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "registry",
+          "to": "gavel",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "gavel",
+          "to": "bureau",
+          "price": 5.95
         }
       ],
       "brand": {
-        "name": "Kessler Arcology",
-        "tagline": "Loyalty is a renewable resource.",
-        "color": "#7a3b2e",
+        "name": "Dread Foundry",
+        "tagline": "Smile. It's mandatory.",
+        "color": "#9a4a3a",
         "link": ""
       }
     },
     {
-      "id": 43,
-      "side": "south",
-      "x": 1430,
-      "floors": 0,
-      "owner": null,
-      "value": 0,
-      "history": [],
-      "brand": null
-    },
-    {
-      "id": 44,
-      "side": "south",
-      "x": 1650,
-      "floors": 28,
-      "owner": "kessler",
+      "id": 168,
+      "side": "north",
+      "block": 13,
+      "x": 20060,
+      "floors": 32,
+      "owner": "mercy",
       "value": 1.95,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "ashiron",
+          "to": "lastmile",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "ashiron",
-          "to": "kessler",
+          "from": "lastmile",
+          "to": "bureau",
           "price": 1.25
         },
         {
           "t": 2,
           "kind": "takeover",
-          "from": "kessler",
-          "to": "null",
+          "from": "bureau",
+          "to": "assessor",
           "price": 1.56
         },
         {
           "t": 3,
           "kind": "takeover",
-          "from": "null",
-          "to": "kessler",
+          "from": "assessor",
+          "to": "mercy",
           "price": 1.95
         }
       ],
       "brand": {
-        "name": "Kessler Silo",
-        "tagline": "Do not look at the sun. There is no sun.",
-        "color": "#9c8b5e",
+        "name": "Cinder Relay",
+        "tagline": "Your death is our business.",
+        "color": "#7d8f8a",
         "link": ""
       }
     },
     {
-      "id": 45,
-      "side": "south",
-      "x": 1870,
-      "floors": 16,
-      "owner": "cinder",
-      "value": 1.25,
+      "id": 169,
+      "side": "north",
+      "block": 13,
+      "x": 20280,
+      "floors": 65,
+      "owner": "ministry",
+      "value": 5.95,
       "history": [
         {
           "t": 0,
           "kind": "build",
-          "to": "kessler",
+          "to": "vanta",
           "price": 1
         },
         {
           "t": 1,
           "kind": "takeover",
-          "from": "kessler",
-          "to": "cinder",
+          "from": "vanta",
+          "to": "mercy",
           "price": 1.25
+        },
+        {
+          "t": 2,
+          "kind": "takeover",
+          "from": "mercy",
+          "to": "bureau",
+          "price": 1.56
+        },
+        {
+          "t": 3,
+          "kind": "takeover",
+          "from": "bureau",
+          "to": "assessor",
+          "price": 1.95
+        },
+        {
+          "t": 4,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "ashiron",
+          "price": 2.44
+        },
+        {
+          "t": 5,
+          "kind": "takeover",
+          "from": "ashiron",
+          "to": "ministry",
+          "price": 3.05
+        },
+        {
+          "t": 6,
+          "kind": "takeover",
+          "from": "ministry",
+          "to": "assessor",
+          "price": 3.81
+        },
+        {
+          "t": 7,
+          "kind": "takeover",
+          "from": "assessor",
+          "to": "lastmile",
+          "price": 4.76
+        },
+        {
+          "t": 8,
+          "kind": "takeover",
+          "from": "lastmile",
+          "to": "ministry",
+          "price": 5.95
         }
       ],
       "brand": {
-        "name": "Slag Relay",
-        "tagline": "Breathe responsibly. Air is metered.",
-        "color": "#8a5a3a",
+        "name": "Hollow Kiln",
+        "tagline": "Equality, conveniently.",
+        "color": "#a39b8b",
         "link": ""
       }
-    },
-    {
-      "id": 46,
-      "side": "south",
-      "x": 2090,
-      "floors": 0,
-      "owner": null,
-      "value": 0,
-      "history": [],
-      "brand": null
-    },
-    {
-      "id": 47,
-      "side": "south",
-      "x": 2310,
-      "floors": 0,
-      "owner": null,
-      "value": 0,
-      "history": [],
-      "brand": null
-    },
-    {
-      "id": 48,
-      "side": "south",
-      "x": 2530,
-      "floors": 0,
-      "owner": null,
-      "value": 0,
-      "history": [],
-      "brand": null
     }
   ],
   "parked": [
     {
-      "kind": "skiff",
-      "x": 1997,
-      "y": -681,
-      "angle": 2.769195532063486
+      "kind": "interceptor",
+      "x": -13957,
+      "y": 681,
+      "angle": 2.1134017271163583
     },
     {
       "kind": "skiff",
-      "x": -2301,
-      "y": -845,
-      "angle": 6.121401247995564
+      "x": -8194,
+      "y": -842,
+      "angle": 4.259045947799135
+    },
+    {
+      "kind": "interceptor",
+      "x": -12986,
+      "y": 986,
+      "angle": 0.8344893287901056
     },
     {
       "kind": "skiff",
-      "x": 655,
-      "y": 852,
-      "angle": 3.2388776479803023
+      "x": -10199,
+      "y": 706,
+      "angle": 5.311818817797758
+    },
+    {
+      "kind": "skiff",
+      "x": 2108,
+      "y": 1091,
+      "angle": 0.8114439217706869
+    },
+    {
+      "kind": "skiff",
+      "x": -9573,
+      "y": 481,
+      "angle": 1.006013445343756
     },
     {
       "kind": "hauler",
-      "x": 1854,
-      "y": 663,
-      "angle": 2.842160165847642
+      "x": -333,
+      "y": 342,
+      "angle": 1.1685351678029863
     },
     {
       "kind": "skiff",
-      "x": 391,
-      "y": 625,
-      "angle": 0.1530932739550765
+      "x": -9301,
+      "y": 851,
+      "angle": 2.1223290691245578
+    },
+    {
+      "kind": "interceptor",
+      "x": -17798,
+      "y": -865,
+      "angle": 4.27174028630643
     },
     {
       "kind": "skiff",
-      "x": 840,
-      "y": -735,
-      "angle": 4.898008483793494
+      "x": 4059,
+      "y": -955,
+      "angle": 2.709517468449737
+    },
+    {
+      "kind": "interceptor",
+      "x": 2832,
+      "y": -684,
+      "angle": 1.0441089688152205
+    },
+    {
+      "kind": "hauler",
+      "x": 9163,
+      "y": 350,
+      "angle": 4.29699211172346
     },
     {
       "kind": "skiff",
-      "x": 755,
-      "y": -680,
-      "angle": 3.1924702599320294
-    },
-    {
-      "kind": "skiff",
-      "x": 665,
-      "y": -767,
-      "angle": 4.714164698144748
+      "x": -84,
+      "y": 422,
+      "angle": 1.359158379156311
     }
   ]
 }

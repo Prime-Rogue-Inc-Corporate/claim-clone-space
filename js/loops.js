@@ -1,23 +1,29 @@
 // Three gameplay loops. All rewards are scrap/XP: game-only, never credits or cash.
 //  1. Freight jobs  — GTA courier missions. Pick up at one pad, deliver to another, beat the clock.
 //  2. Heat          — GTA wanted level. Jack ships or speed on the Spine and Corp drones hunt you.
-//  3. Spine Run     — checkpoint race lap around the station. Beat your best time.
+//  3. Spine Run     — 13-gate slalom through the Spine crossings. Beat your best time.
 import { plotPad, collide } from './world.js';
+import { HULL_TAP_TIER, T13 } from './economy.js';
 import { speedOf } from './entities.js';
 
 const KEY = 'claim-clone-space:loops:v1';
 const CARGO = ['coolant cells', 'unmarked crates', 'ration bricks', 'reactor slag', 'a sealed casket', 'contraband prayer beads', 'fifty litres of recycled water'];
 
-const RACE = [
-  [-2900, -700], [-1000, -820], [1000, -650], [2900, -720], [3350, 0],
-  [2900, 720], [1000, 820], [-1000, 650], [-2900, 720], [-3350, 0],
-];
+// Spine Run: 13 gates. Gate 1 (start/finish) sits south of the Spine's west end; gates 2–13
+// are the 12 crossings, so the lap weaves north-south-north through the city, then home.
+function raceGates(world) {
+  const gaps = world.spine.gaps || [];
+  if (gaps.length < 2) return [[-2900, 700], [0, -700], [2900, 700]];
+  return [[gaps[0].x - 1300, 700], ...gaps.slice(0, T13 - 1).map((g) => [g.x, 0])];
+}
+const RACE_LIMIT_MS = T13 * 30 * 1000; // 6.5 minutes
 const RING = 70;
 // Pads: same rule as grabbing a drop. Close-ish and slowed down; the starter skiff drifts a lot.
 const PAD_RADIUS = 75;
 const PAD_SPEED = 5;
 
 export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites, hullLevel = () => 0 }) {
+  const RACE = raceGates(world);
   const saved = load();
   const persist = { bestLap: null, raceDay: '', jobsDone: 0, escapes: 0, ...saved };
   const save = () => {
@@ -40,8 +46,10 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     if (lots.length < 2) return;
     const near = lots.filter((p) => Math.hypot(plotPad(world, p).x - body.x, plotPad(world, p).y - body.y) < 2500);
     const from = (near.length ? near : lots)[Math.floor(rng() * (near.length || lots.length))];
-    let to = from;
-    while (to === from) to = lots[Math.floor(rng() * lots.length)];
+    // deliveries stay within ~2 blocks either way; the city is 42 km end to end
+    const dests = lots.filter((p) => p !== from && Math.abs(p.x - from.x) < 6500);
+    const pool = dests.length ? dests : lots.filter((p) => p !== from);
+    const to = pool[Math.floor(rng() * pool.length)];
     const a = plotPad(world, from), b = plotPad(world, to);
     const dist = Math.hypot(a.x - b.x, a.y - b.y) + 400;
     freight.offer = {
@@ -54,7 +62,8 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
   }
 
   function updateFreight(now, body, hit) {
-    if (!freight.job && !freight.offer && now > freight.nextOffer) newOffer(body);
+    // jobs are offered in the city only (not out in the void or the Sprawls)
+    if (!freight.job && !freight.offer && now > freight.nextOffer && Math.abs(body.x) <= world.bounds.maxX) newOffer(body);
     if (freight.offer && !freight.job) {
       const pad = plotPad(world, econ.plotById(freight.offer.from));
       if (Math.hypot(pad.x - body.x, pad.y - body.y) < PAD_RADIUS) {
@@ -72,7 +81,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       return endJob(now);
     }
     if (hit && now > job.hitCooldown) {
-      job.damage = Math.min(0.9, job.damage + Math.max(0.05, 0.15 - 0.05 * hullLevel()));
+      job.damage = Math.min(0.9, job.damage + Math.max(0.03, 0.15 - 0.12 * (hullLevel() / T13)));
       job.hitCooldown = now + 600;
       log(`Cargo damaged (${Math.round(job.damage * 100)}%).`);
     }
@@ -150,8 +159,8 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       const dist = Math.hypot(d.x - body.x, d.y - body.y);
       if (dist < 700) anyClose = true;
       if (dist < 24) {
-        // Hull plating II shrugs off one drone tap per pursuit
-        if (hullLevel() >= 2 && !heat.tapped) {
+        // Hull plating VII+ shrugs off one drone tap per pursuit
+        if (hullLevel() >= HULL_TAP_TIER && !heat.tapped) {
           heat.tapped = true;
           d.vx = -d.vx * 2;
           d.vy = -d.vy * 2;
@@ -201,11 +210,11 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         race.active = true;
         race.next = 1;
         race.start = now;
-        log(`SPINE RUN started. ${RACE.length} gates, then back here.${persist.bestLap ? ` Best: ${fmt(persist.bestLap)}` : ''}`);
+        log(`SPINE RUN started. ${RACE.length - 1} crossings, slalom north-south, then back here.${persist.bestLap ? ` Best: ${fmt(persist.bestLap)}` : ''}`);
       }
       return;
     }
-    if (player.mode !== 'ship' || now - race.start > 240000) {
+    if (player.mode !== 'ship' || now - race.start > RACE_LIMIT_MS) {
       race.active = false;
       race.armedAt = now + 3000;
       return log('Spine Run abandoned.');
@@ -218,13 +227,13 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         race.active = false;
         race.armedAt = now + 3000;
         const today = new Date().toISOString().slice(0, 10);
-        let reward = 5;
+        let reward = T13;
         let why = `Spine Run ${fmt(lap)}`;
         if (!persist.bestLap || lap < persist.bestLap) {
-          if (persist.bestLap) { reward += 20; why += ` · NEW BEST (was ${fmt(persist.bestLap)})`; }
+          if (persist.bestLap) { reward += T13 * 2; why += ` · NEW BEST (was ${fmt(persist.bestLap)})`; }
           persist.bestLap = lap;
         }
-        if (persist.raceDay !== today) { reward += 30; why += ' · first lap today'; persist.raceDay = today; }
+        if (persist.raceDay !== today) { reward += T13 * 3; why += ' · first lap today'; persist.raceDay = today; }
         save();
         pay(reward, why);
       } else race.next++;

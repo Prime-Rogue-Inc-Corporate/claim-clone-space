@@ -1,7 +1,7 @@
 // Canvas renderer. Top-down GTA1/2 trick: buildings are footprints whose roofs are
 // pushed away from the camera by their height, so towers lean as you fly past.
 import { KINDS } from './entities.js';
-import { plotRect, plotPad, spineRect, SPRAWL, flyBounds, region, hutRect, hutPad } from './world.js';
+import { plotRect, plotPad, spineRect, spineRects, SPRAWLS, sprawlAt, flyBounds, region, hutRect, hutPad, hutArt, COLS13, SECTOR_ROWS } from './world.js';
 import { mulberry32 } from './rng.js';
 import { PLAYER } from './economy.js';
 import { roofFor, shipSpriteName } from './sprites.js';
@@ -67,9 +67,11 @@ export function drawScene(ctx, W, H, cam, scene) {
   ctx.scale(cam.zoom, cam.zoom);
   ctx.translate(-cam.x, -cam.y);
 
-  drawGrid(ctx, world, cam, W, H);
-
   const viewR = Math.hypot(W, H) / 2 / cam.zoom + 100;
+  const view = { x0: cam.x - viewR - 400, x1: cam.x + viewR + 400 }; // the city is 42 km wide: cull
+  const inView = (x0, x1 = x0) => x1 >= view.x0 && x0 <= view.x1;
+  drawGrid(ctx, world, cam, W, H, view);
+
   for (const r of scene.deco.rocks) {
     if (Math.abs(r.x - cam.x) > viewR || Math.abs(r.y - cam.y) > viewR) continue;
     ctx.save();
@@ -89,15 +91,16 @@ export function drawScene(ctx, W, H, cam, scene) {
     ctx.restore();
   }
 
-  drawSpine(ctx, world, time);
-  drawCorridor(ctx, world, time);
-  if (cam.x > SPRAWL.x - SPRAWL.radius - 2500) drawSprawl(ctx, scene, time);
+  drawSpine(ctx, world, time, view);
+  drawCorridor(ctx, world, time, view);
+  for (const sp of SPRAWLS) if (inView(sp.x - sp.rx - 2500, sp.x + sp.rx + 2500)) drawSprawl(ctx, scene, time, sp);
 
   // buildings, far-to-near so near walls overlap correctly
-  const plots = [...world.plots].sort((a, b) => Math.abs(b.x - cam.x) - Math.abs(a.x - cam.x));
+  const visible = world.plots.filter((p) => inView(p.x - 400, p.x + 400));
+  const plots = [...visible].sort((a, b) => Math.abs(b.x - cam.x) - Math.abs(a.x - cam.x));
   for (const p of plots) drawPlot(ctx, world, p, cam, time, scene);
 
-  for (const p of world.plots) {
+  for (const p of visible) {
     const pad = plotPad(world, p);
     const near = scene.nearPlot && scene.nearPlot.id === p.id;
     const padImg = spr('pad');
@@ -174,18 +177,22 @@ export function drawScene(ctx, W, H, cam, scene) {
   ctx.fillRect(0, 0, W, H);
 }
 
-function drawGrid(ctx, world, cam, W, H) {
+function drawGrid(ctx, world, cam, W, H, view) {
   const b = world.bounds;
+  const cw = (b.maxX - b.minX) / COLS13.length, rh = (b.maxY - b.minY) / SECTOR_ROWS;
   ctx.strokeStyle = 'rgba(160,120,80,0.07)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  for (let x = b.minX; x <= b.maxX; x += 1000) {
+  for (let c = 0; c <= COLS13.length; c++) {
+    const x = b.minX + c * cw;
+    if (x < view.x0 || x > view.x1) continue;
     ctx.moveTo(x, b.minY);
     ctx.lineTo(x, b.maxY);
   }
-  for (let y = b.minY; y <= b.maxY; y += 1000) {
-    ctx.moveTo(b.minX, y);
-    ctx.lineTo(b.maxX, y);
+  for (let r = 0; r <= SECTOR_ROWS; r++) {
+    const y = b.minY + r * rh;
+    ctx.moveTo(Math.max(b.minX, view.x0), y);
+    ctx.lineTo(Math.min(b.maxX, view.x1), y);
   }
   ctx.stroke();
   const fb = flyBounds(world);
@@ -196,24 +203,64 @@ function drawGrid(ctx, world, cam, W, H) {
   ctx.setLineDash([30, 20]);
   ctx.lineWidth = 4;
   ctx.beginPath();
-  ctx.moveTo(b.maxX, b.minY);
-  ctx.lineTo(b.maxX, b.maxY);
+  for (const x of [b.minX, b.maxX]) {
+    ctx.moveTo(x, b.minY);
+    ctx.lineTo(x, b.maxY);
+  }
   ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = 'rgba(160,120,80,0.18)';
   ctx.font = 'bold 48px monospace';
   ctx.textAlign = 'left';
-  const cols = 'ABCDEFGH';
-  for (let c = 0; c < 8; c++) for (let r = 0; r < 6; r++) ctx.fillText(`${cols[c]}${r + 1}`, b.minX + c * 1000 + 20, b.minY + r * 1000 + 60);
+  for (let c = 0; c < COLS13.length; c++) {
+    const x = b.minX + c * cw;
+    if (x + cw < view.x0 || x > view.x1) continue;
+    for (let r = 0; r < SECTOR_ROWS; r++) ctx.fillText(`${COLS13[c]}${r + 1}`, x + 20, b.minY + r * rh + 60);
+  }
 }
 
-function drawSpine(ctx, world, time) {
-  const r = spineRect(world);
+function drawSpine(ctx, world, time, view) {
+  for (const seg of spineRects(world)) {
+    const x0 = Math.max(seg.x, view.x0), x1 = Math.min(seg.x + seg.w, view.x1);
+    if (x1 > x0) drawSpineSegment(ctx, world, time, seg, x0, x1);
+  }
+  // the crossings: placeholder gaps until real north-south roads and intersections exist
+  for (const [i, g] of (world.spine.gaps || []).entries()) {
+    if (g.x1 < view.x0 || g.x0 > view.x1) continue;
+    ctx.fillStyle = 'rgba(184,150,46,0.08)';
+    ctx.fillRect(g.x0, -world.spine.halfWidth, g.x1 - g.x0, world.spine.halfWidth * 2);
+    ctx.strokeStyle = 'rgba(184,150,46,0.45)';
+    ctx.setLineDash([14, 12]);
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(g.x, -600);
+    ctx.lineTo(g.x, 600);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(220,200,150,0.5)';
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`CROSSING ${i + 1}`, g.x, 640);
+    ctx.font = '11px monospace';
+    ctx.fillText('NORTH-SOUTH ROAD · COMING SOON', g.x, 658);
+  }
+  ctx.fillStyle = 'rgba(220,200,150,0.45)';
+  ctx.font = 'bold 22px monospace';
+  ctx.textAlign = 'center';
+  for (const [k, b] of (world.spine.blocks || []).entries()) {
+    const mid = (b.x0 + b.x1) / 2;
+    if (mid > view.x0 && mid < view.x1) ctx.fillText(`THE SPINE  ·  AVENUE ZERO  ·  BLOCK ${k + 1}`, mid, -12);
+  }
+  if (!world.spine.blocks) ctx.fillText('THE SPINE  ·  AVENUE ZERO', 0, -12);
+}
+
+function drawSpineSegment(ctx, world, time, r, vx0, vx1) {
   const tiles = [spr('spine_plain'), spr('spine_beacon'), spr('spine_cross')];
   if (tiles[0]) {
     // corridor tiles run vertically in the art; the Spine runs east-west, so rotate them
     const t = r.h;
     for (let x = r.x, i = 0; x < r.x + r.w; x += t, i++) {
+      if (x + t < vx0 || x > vx1) continue;
       const img = (i % 7 === 3 && tiles[2]) || (i % 5 === 0 && tiles[1]) || tiles[0];
       ctx.save();
       ctx.translate(x + t / 2, 0);
@@ -231,6 +278,7 @@ function drawSpine(ctx, world, time) {
   }
   // hazard edges
   for (let x = r.x, i = 0; x < r.x + r.w; x += 16, i++) {
+    if (x + 16 < vx0 || x > vx1) continue;
     ctx.fillStyle = i % 2 ? '#1a1a1a' : '#b8962e';
     ctx.fillRect(x, r.y, 16, 5);
     ctx.fillRect(x, r.y + r.h - 5, 16, 5);
@@ -241,10 +289,6 @@ function drawSpine(ctx, world, time) {
     ctx.fillStyle = on ? '#ff3b1f' : '#4a140c';
     ctx.fillRect(x - 3, -3, 6, 6);
   }
-  ctx.fillStyle = 'rgba(220,200,150,0.45)';
-  ctx.font = 'bold 22px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('THE SPINE  ·  AVENUE ZERO', 0, -12);
 }
 
 function drawPlot(ctx, world, p, cam, time, scene) {
@@ -588,11 +632,17 @@ function drawObjectiveArrow(ctx, o, me, cam, W, H, time) {
 }
 
 // Buoys across the void so you always know which way home is.
-function drawCorridor(ctx, world, time) {
-  const start = world.bounds.maxX + 900;
-  const end = SPRAWL.x - SPRAWL.radius - 300;
+function drawCorridor(ctx, world, time, view) {
+  for (const sp of SPRAWLS) drawCorridorTo(ctx, world, time, view, sp);
+}
+
+function drawCorridorTo(ctx, world, time, view, sp) {
+  const edge = sp.dir * world.bounds.maxX;
   const on = Math.floor(time / 500) % 2 === 0;
-  for (let x = start; x < end; x += 1800) {
+  const len = Math.abs(sp.x - edge) - sp.rx - 1200;
+  for (let d = 900; d < len; d += 1800) {
+    const x = edge + sp.dir * d;
+    if (x < view.x0 || x > view.x1) continue;
     for (const y of [-260, 260]) {
       const b = spr(on ? 'buoy_on' : 'buoy_off');
       if (b) {
@@ -609,50 +659,55 @@ function drawCorridor(ctx, world, time) {
     ctx.fillStyle = 'rgba(232,200,140,0.5)';
     ctx.font = 'bold 18px monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`THE SPRAWL ${((SPRAWL.x - x) / 6000).toFixed(1)} KM →`, x, -290);
-    ctx.fillText(`← THE SPINE ${((x - world.bounds.maxX) / 6000 + 0.4).toFixed(1)} KM`, x, 300);
+    const toSprawl = `${(Math.abs(sp.x - x) / 6000).toFixed(1)} KM`;
+    const toSpine = `${(Math.abs(x - edge) / 6000 + 0.4).toFixed(1)} KM`;
+    ctx.fillText(sp.dir > 0 ? `${sp.name} ${toSprawl} →` : `← ${sp.name} ${toSprawl}`, x, -290);
+    ctx.fillText(sp.dir > 0 ? `← THE SPINE ${toSpine}` : `THE SPINE ${toSpine} →`, x, 300);
   }
-  ctx.fillStyle = 'rgba(232,200,140,0.35)';
-  ctx.font = 'bold 28px monospace';
-  ctx.fillText('CITY LIMIT · CORP JURISDICTION ENDS', world.bounds.maxX + 300, -420);
+  if (Math.abs(edge - (view.x0 + view.x1) / 2) < 3000) {
+    ctx.fillStyle = 'rgba(232,200,140,0.35)';
+    ctx.font = 'bold 28px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('CITY LIMIT · CORP JURISDICTION ENDS', edge + sp.dir * 700, -420);
+  }
 }
 
-function drawSprawl(ctx, scene, time) {
-  const { sprawl } = scene;
+function drawSprawl(ctx, scene, time, SP) {
+  const sprawl = { sites: scene.sprawl.sites.filter((s) => s.sprawl === SP.id), fires: scene.sprawl.fires.filter((f) => f.sprawl === SP.id), props: (scene.sprawl.props || []).filter((p) => p.sprawl === SP.id) };
   // ground: a scab of slag and junk floating in the void
   ctx.fillStyle = pattern(ctx, 'ground_slag') || '#17110c';
   ctx.beginPath();
-  ctx.ellipse(SPRAWL.x, SPRAWL.y, SPRAWL.radius, SPRAWL.radius * 0.85, 0, 0, Math.PI * 2);
+  ctx.ellipse(SP.x, SP.y, SP.rx, SP.ry, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = pattern(ctx, 'ground_mud') || '#1e1610';
   ctx.globalAlpha = 0.7;
   ctx.beginPath();
-  ctx.ellipse(SPRAWL.x - 300, SPRAWL.y + 200, SPRAWL.radius * 0.8, SPRAWL.radius * 0.6, 0.4, 0, Math.PI * 2);
+  ctx.ellipse(SP.x - 300 * SP.dir, SP.y + 150, SP.rx * 0.8, SP.ry * 0.6, 0.15 * SP.dir, 0, Math.PI * 2);
   ctx.fill();
   ctx.globalAlpha = 1;
   ctx.fillStyle = 'rgba(10,8,6,0.35)'; // darken the tiles so huts read on top
   ctx.beginPath();
-  ctx.ellipse(SPRAWL.x, SPRAWL.y, SPRAWL.radius, SPRAWL.radius * 0.85, 0, 0, Math.PI * 2);
+  ctx.ellipse(SP.x, SP.y, SP.rx, SP.ry, 0, 0, Math.PI * 2);
   ctx.fill();
-  // dirt tracks between rows/cols
+  // dirt tracks between the 13 columns and 3 rows
   ctx.strokeStyle = 'rgba(90,70,45,0.35)';
   ctx.lineWidth = 26;
   ctx.beginPath();
-  for (let i = -5; i <= 5; i++) {
-    ctx.moveTo(SPRAWL.x + i * 300, SPRAWL.y - 1300);
-    ctx.lineTo(SPRAWL.x + i * 300, SPRAWL.y + 1300);
+  for (let i = -6; i <= 7; i++) {
+    ctx.moveTo(SP.x + i * 300 - 150, SP.y - SP.ry * 0.8);
+    ctx.lineTo(SP.x + i * 300 - 150, SP.y + SP.ry * 0.8);
   }
-  for (let j = -4; j <= 4; j++) {
-    ctx.moveTo(SPRAWL.x - 1600, SPRAWL.y + j * 300);
-    ctx.lineTo(SPRAWL.x + 1600, SPRAWL.y + j * 300);
+  for (let j = -1; j <= 2; j++) {
+    ctx.moveTo(SP.x - SP.rx * 0.85, SP.y + (j - 0.5) * 420);
+    ctx.lineTo(SP.x + SP.rx * 0.85, SP.y + (j - 0.5) * 420);
   }
   ctx.stroke();
   ctx.fillStyle = 'rgba(232,200,140,0.55)';
   ctx.font = 'bold 30px monospace';
   ctx.textAlign = 'center';
-  ctx.fillText('THE SPRAWL', SPRAWL.x, SPRAWL.y - 1450);
+  ctx.fillText(SP.name, SP.x, SP.y - SP.ry - 70);
   ctx.font = 'bold 15px monospace';
-  ctx.fillText('RESIDENTIAL · NO CORPS · NO LOGOS · NO BRANDING · BUILD WITH SCRAP', SPRAWL.x, SPRAWL.y - 1420);
+  ctx.fillText('RESIDENTIAL · NO CORPS · NO LOGOS · NO BRANDING · BUILD WITH SCRAP', SP.x, SP.y - SP.ry - 40);
 
   // burn barrels
   for (const pr of sprawl.props || []) {
@@ -723,7 +778,8 @@ function drawSprawl(ctx, scene, time) {
 // Huts are deliberately generic: tier decides the shape, nobody decides the logo.
 function drawHut(ctx, site, tier, mine, time) {
   const r = hutRect(site, tier);
-  const img = spr(`hut${tier}_${hashNum(site.x, site.y) % 2 ? 'a' : 'b'}`);
+  const art = hutArt(tier);
+  const img = spr(`hut${art}_${hashNum(site.x, site.y) % 2 ? 'a' : 'b'}`);
   if (img) {
     const w = r.w * 1.3;
     const h = w * (img.height / img.width);
@@ -737,14 +793,14 @@ function drawHut(ctx, site, tier, mine, time) {
   }
   ctx.fillStyle = 'rgba(0,0,0,0.4)';
   ctx.fillRect(r.x + 5, r.y + 5, r.w, r.h);
-  if (tier === 0) {
+  if (art === 0) {
     ctx.fillStyle = '#5a3b26';
     ctx.fillRect(r.x, r.y, r.w, r.h);
     ctx.fillStyle = '#6e4a30';
     for (let x = r.x + 2; x < r.x + r.w; x += 6) ctx.fillRect(x, r.y, 3, r.h);
     ctx.fillStyle = '#2f4a5a'; // tarp
     ctx.fillRect(r.x + 4, r.y + 4, r.w * 0.45, r.h * 0.5);
-  } else if (tier === 1) {
+  } else if (art === 1) {
     ctx.fillStyle = '#6b5a45';
     ctx.fillRect(r.x, r.y, r.w, r.h);
     ctx.fillStyle = '#7d6a52';
@@ -814,15 +870,18 @@ function drawMinimapLong(mctx, MW, MH, scene) {
   mctx.fillStyle = '#3a3d42';
   mctx.fillRect(tx(world.bounds.minX), ty(-200), tx(world.bounds.maxX) - tx(world.bounds.minX), ty(200) - ty(-200));
   mctx.fillStyle = '#3a2a1c';
-  mctx.fillRect(tx(SPRAWL.x - SPRAWL.radius), ty(-1800), tx(SPRAWL.x + SPRAWL.radius) - tx(SPRAWL.x - SPRAWL.radius), ty(1800) - ty(-1800));
+  for (const sp of SPRAWLS) mctx.fillRect(tx(sp.x - sp.rx), ty(-sp.ry), tx(sp.x + sp.rx) - tx(sp.x - sp.rx), ty(sp.ry) - ty(-sp.ry));
   mctx.fillStyle = '#8f8670';
   mctx.font = '10px monospace';
   mctx.textAlign = 'left';
-  mctx.fillText('SPINE', 4, 14);
+  mctx.fillText('W SQUALOR', 4, 14);
   mctx.textAlign = 'right';
-  mctx.fillText('SPRAWL', MW - 4, 14);
+  mctx.fillText('E SQUALOR', MW - 4, 14);
   mctx.textAlign = 'center';
-  mctx.fillText(`${((SPRAWL.x - me.x) / 6000).toFixed(1)} km to Sprawl`, MW / 2, MH - 8);
+  mctx.fillText('SPINE', tx(0), 14);
+  const sp = me.x > 0 ? SPRAWLS[0] : SPRAWLS[1];
+  const toSprawl = Math.abs(sp.x - me.x), toCity = Math.abs(Math.abs(me.x) - world.bounds.maxX);
+  mctx.fillText(`${(toSprawl / 6000).toFixed(1)} km to ${sp.title} · ${(toCity / 6000).toFixed(1)} km to city`, MW / 2, MH - 8);
   if (scene.objective) miniFlag(mctx, tx(scene.objective.x), ty(scene.objective.y), MW, MH);
   mctx.fillStyle = '#fff';
   mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
@@ -830,17 +889,19 @@ function drawMinimapLong(mctx, MW, MH, scene) {
 
 function drawMinimapSprawl(mctx, MW, MH, scene) {
   const { me } = scene;
-  const span = SPRAWL.radius * 2.4;
+  const SP = sprawlAt(me.x);
+  const span = SP.rx * 2.3;
   const s = MW / span;
-  const tx = (x) => MW / 2 + (x - SPRAWL.x) * s;
-  const ty = (y) => MH / 2 + (y - SPRAWL.y) * s;
+  const tx = (x) => MW / 2 + (x - SP.x) * s;
+  const ty = (y) => MH / 2 + (y - SP.y) * s;
   mctx.fillStyle = 'rgba(8,9,10,0.92)';
   mctx.fillRect(0, 0, MW, MH);
   mctx.fillStyle = '#2a1f16';
   mctx.beginPath();
-  mctx.ellipse(tx(SPRAWL.x), ty(SPRAWL.y), SPRAWL.radius * s, SPRAWL.radius * 0.85 * s, 0, 0, Math.PI * 2);
+  mctx.ellipse(tx(SP.x), ty(SP.y), SP.rx * s, SP.ry * s, 0, 0, Math.PI * 2);
   mctx.fill();
   for (const site of scene.sprawl.sites) {
+    if (site.sprawl !== SP.id) continue;
     const occ = scene.hutOf(site);
     if (!occ) {
       mctx.strokeStyle = 'rgba(184,150,46,0.5)';
@@ -852,38 +913,55 @@ function drawMinimapSprawl(mctx, MW, MH, scene) {
   }
   mctx.fillStyle = '#8f8670';
   mctx.font = '10px monospace';
-  mctx.textAlign = 'left';
-  mctx.fillText('← SPINE', 4, 14);
+  mctx.textAlign = SP.dir > 0 ? 'left' : 'right';
+  mctx.fillText(SP.dir > 0 ? '← SPINE' : 'SPINE →', SP.dir > 0 ? 4 : MW - 4, 14);
+  mctx.textAlign = 'center';
+  mctx.fillText(SP.name, MW / 2, MH - 8);
   if (scene.objective) miniFlag(mctx, tx(scene.objective.x), ty(scene.objective.y), MW, MH);
   mctx.fillStyle = '#fff';
   mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
 }
 
+// The city is 42 km wide, so the city minimap is a scrolling window ~3 sectors across,
+// with a strip along the bottom showing where you are on the whole Spine.
 function drawMinimapCity(mctx, MW, MH, scene) {
   const { world, me } = scene;
   const b = world.bounds;
-  const sx = MW / (b.maxX - b.minX);
-  const sy = MH / (b.maxY - b.minY);
-  const tx = (x) => (x - b.minX) * sx;
+  const cw = (b.maxX - b.minX) / COLS13.length, rh = (b.maxY - b.minY) / SECTOR_ROWS;
+  const spanX = cw * 3;
+  const cx = Math.max(b.minX + spanX / 2, Math.min(b.maxX - spanX / 2, me.x));
+  const vx0 = cx - spanX / 2;
+  const MHm = MH - 12;
+  const sx = MW / spanX;
+  const sy = MHm / (b.maxY - b.minY);
+  const tx = (x) => (x - vx0) * sx;
   const ty = (y) => (y - b.minY) * sy;
   mctx.fillStyle = 'rgba(8,9,10,0.92)';
   mctx.fillRect(0, 0, MW, MH);
+  mctx.save();
+  mctx.beginPath();
+  mctx.rect(0, 0, MW, MHm);
+  mctx.clip();
   mctx.strokeStyle = 'rgba(160,120,80,0.15)';
-  for (let x = b.minX; x <= b.maxX; x += 1000) {
+  mctx.fillStyle = 'rgba(160,120,80,0.45)';
+  mctx.font = '9px monospace';
+  mctx.textAlign = 'left';
+  for (let c = 0; c <= COLS13.length; c++) {
+    const x = b.minX + c * cw;
     mctx.beginPath();
     mctx.moveTo(tx(x), 0);
-    mctx.lineTo(tx(x), MH);
+    mctx.lineTo(tx(x), MHm);
     mctx.stroke();
+    if (c < COLS13.length) mctx.fillText(COLS13[c], tx(x) + 3, 10);
   }
-  for (let y = b.minY; y <= b.maxY; y += 1000) {
+  for (let r = 0; r <= SECTOR_ROWS; r++) {
     mctx.beginPath();
-    mctx.moveTo(0, ty(y));
-    mctx.lineTo(MW, ty(y));
+    mctx.moveTo(0, ty(b.minY + r * rh));
+    mctx.lineTo(MW, ty(b.minY + r * rh));
     mctx.stroke();
   }
-  const sp = spineRect(world);
   mctx.fillStyle = '#3a3d42';
-  mctx.fillRect(tx(sp.x), ty(sp.y), sp.w * sx, Math.max(2, sp.h * sy));
+  for (const sp of spineRects(world)) mctx.fillRect(tx(sp.x), ty(sp.y), sp.w * sx, Math.max(2, sp.h * sy));
   for (const p of world.plots) {
     const r = plotRect(world, p);
     mctx.fillStyle = p.owner === PLAYER ? '#e8c547' : p.owner ? '#6b6457' : '#26282b';
@@ -911,7 +989,19 @@ function drawMinimapCity(mctx, MW, MH, scene) {
     mctx.lineTo(tx(scene.waypoint.x) - 3, ty(scene.waypoint.y) + 3);
     mctx.stroke();
   }
-  if (scene.objective) miniFlag(mctx, tx(scene.objective.x), ty(scene.objective.y), MW, MH);
   mctx.fillStyle = '#ffffff';
   mctx.fillRect(tx(me.x) - 2, ty(me.y) - 2, 4, 4);
+  mctx.restore();
+  if (scene.objective) miniFlag(mctx, tx(scene.objective.x), ty(scene.objective.y), MW, MHm);
+  // whole-Spine strip: 13 blocks, your position, the objective
+  const fx = (x) => 4 + ((x - b.minX) / (b.maxX - b.minX)) * (MW - 8);
+  mctx.fillStyle = '#1a1c1f';
+  mctx.fillRect(0, MH - 12, MW, 12);
+  mctx.fillStyle = '#3a3d42';
+  for (const sp of spineRects(world)) mctx.fillRect(fx(sp.x), MH - 8, Math.max(1, fx(sp.x + sp.w) - fx(sp.x)), 4);
+  mctx.strokeStyle = 'rgba(232,197,71,0.6)';
+  mctx.strokeRect(fx(vx0), MH - 11, fx(vx0 + spanX) - fx(vx0), 10);
+  if (scene.objective) { mctx.fillStyle = OBJ; mctx.fillRect(fx(Math.max(b.minX, Math.min(b.maxX, scene.objective.x))) - 1.5, MH - 11, 3, 10); }
+  mctx.fillStyle = '#fff';
+  mctx.fillRect(fx(me.x) - 1, MH - 11, 2, 10);
 }

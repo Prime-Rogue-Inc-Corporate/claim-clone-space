@@ -1,6 +1,6 @@
 {
   "title": "SpaceSquat — tentative roadmap",
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "note": "Tentative. Edit this file to change what the in-game roadmap (R) shows. Status: done | now | next | later.",
   "phases": [
     {
@@ -99,8 +99,8 @@
         },
         {
           "id": "p1-thirteen",
-          "text": "Rule of 13 conversion: 52 lots (north side), two Sprawls (east + west, 39 sites each), 13 tiers everywhere, 13 orgs in-world, $13 test cash, 13 drops per window. Everything except max building height",
-          "status": "next"
+          "text": "Rule of 13 conversion (v0.1.3): 169 lots in 13 blocks of 13 (north side) with crossings, two Sprawls (east + west, 39 sites each), 13 tiers everywhere, 13 orgs in-world, $13 test cash, 13 drops per window. Everything except max building height",
+          "status": "done"
         },
         {
           "id": "p1-residency",
@@ -372,10 +372,25 @@
   ],
   "releases": [
     {
+      "version": "0.1.3",
+      "date": "2026-11-06",
+      "name": "Rule of 13",
+      "status": "now",
+      "items": [
+        "The Spine: 13 blocks of 13 lots (169, north side), owned by the 13 organizations",
+        "12 crossings cut through the Spine between blocks (placeholder until north-south roads + intersections)",
+        "Two Sprawls, same ~1 min flight from each city limit: Lower Upper Squalor (east), Upper Lower Squalor (west); 39 sites each (13×3), a Housing Registry each",
+        "13 sector columns (A–M); city minimap scrolls, with a whole-Spine strip",
+        "13 tiers per skiff upgrade; 13 hut tiers (Lean-to → The Big Bunker); Hull VII drone tap",
+        "13 drops per 130 s (one per sector column, 13–39 scrap); $13 test cash; towers start at 13 floors (max 100)",
+        "Spine Run: 13 gates slaloming through the crossings; freight stays within ~2 blocks"
+      ]
+    },
+    {
       "version": "0.1.2",
       "date": "2026-11-05",
       "name": "Onboarding flow — part 1",
-      "status": "now",
+      "status": "done",
       "items": [
         "Mission 1: scrounge 120 scrap (~2–3 min) → fit first upgrade at the Kessler Refit Bay",
         "Mission 2: \"for now, you need a home\": 150 scrap → build a hut in the Sprawl (~1 min flight)",

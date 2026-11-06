@@ -65,7 +65,7 @@ export function makeTraffic(rng, corps, count = 10) {
     const lane = LANES[Math.floor(rng() * LANES.length)];
     const kind = rng() < 0.5 ? 'hauler' : rng() < 0.5 ? 'skiff' : 'interceptor';
     const corp = corps[Math.floor(rng() * corps.length)];
-    const s = makeShip(kind, -3500 + rng() * 7000, lane + (rng() - 0.5) * 200, 0, { npc: true, corp: corp.id });
+    const s = makeShip(kind, -20000 + rng() * 40000, lane + (rng() - 0.5) * 200, 0, { npc: true, corp: corp.id, color: corp.color });
     s.ai = { tx: 0, ty: lane };
     retarget(s, rng);
     out.push(s);
@@ -75,7 +75,8 @@ export function makeTraffic(rng, corps, count = 10) {
 
 function retarget(ship, rng) {
   const lane = LANES[Math.floor(rng() * LANES.length)];
-  ship.ai.tx = -3600 + rng() * 7200;
+  // short hops along the lane, so traffic spreads along the whole 42 km Spine
+  ship.ai.tx = Math.max(-20500, Math.min(20500, ship.x + (rng() - 0.5) * 9000));
   ship.ai.ty = lane + (rng() - 0.5) * 240;
 }
 

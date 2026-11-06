@@ -51,9 +51,22 @@ export function roofFor(hex) {
 }
 
 const CORP_VARIANT = { vanta: 'slate', kessler: 'tan', ashiron: 'red', null: 'olive', cinder: 'red' };
+// 13 organizations, 4 paint jobs: anyone without a hand-picked variant gets the nearest colour.
+const VARIANTS = [['slate', [0x5c, 0x6b, 0x73]], ['tan', [0x9c, 0x8b, 0x5e]], ['red', [0x8a, 0x3b, 0x2e]], ['olive', [0x4d, 0x5a, 0x3a]]];
+function nearestVariant(hex) {
+  if (!hex) return 'slate';
+  const n = parseInt(hex.slice(1), 16);
+  const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  let best = 'slate', bd = Infinity;
+  for (const [name, rgb] of VARIANTS) {
+    const d = (rgb[0] - c[0]) ** 2 + (rgb[1] - c[1]) ** 2 + (rgb[2] - c[2]) ** 2;
+    if (d < bd) { bd = d; best = name; }
+  }
+  return best;
+}
 export function shipSpriteName(ship) {
   if (ship.kind === 'eva') return 'eva';
   if (ship.kind === 'interceptor') return 'interceptor';
-  const v = (ship.corp && CORP_VARIANT[ship.corp]) || 'slate';
+  const v = (ship.corp && CORP_VARIANT[ship.corp]) || nearestVariant(ship.color);
   return `${ship.kind}_${v}`;
 }

@@ -6,11 +6,15 @@
 //   - Credits are spent first on any purchase; cash tops up the rest.
 //   - Scrap (from drops) and XP are game-only. They never convert to credits/cash.
 
+// Everything is 13, except the maximum building height. Nobody knows why.
+export const T13 = 13;
+export const MAX_FLOORS = 100;
+
 export const PLAYER = 'you';
 export const CLAIM_PRICE = 1;
 export const TAKEOVER_MULT = 1.25;
-export const START_CASH = 10; // prototype test money
-const KEY = 'claim-clone-space:v2'; // v2: $1 pricing reset (old v1 saves are ignored)
+export const START_CASH = T13; // prototype test money
+const KEY = 'claim-clone-space:v3'; // v3: rule-of-13 world (older saves are ignored)
 
 // Everything is in cents. Never round to whole dollars: $1 × 1.25 would round back to $1.
 export const cents = (n) => Math.round(n * 100) / 100;
@@ -23,36 +27,42 @@ export function buildPrice() {
   return CLAIM_PRICE;
 }
 
-// Skyline: every buy-out (×1.25) adds ~6 floors. $1 = 10F, ~15 flips (≈$28) = 100F.
+// Skyline: a claimed lot starts at 13 floors and gains 13 floors every 2 buy-outs (×1.25 each).
+// $1 = 13F; ~13 flips (≈$18) caps at 100F, the one number that isn't 13.
 export function floorsFor(value) {
   if (!value || value <= 0) return 0;
   const flips = Math.log(Math.max(1, value) / CLAIM_PRICE) / Math.log(TAKEOVER_MULT);
-  return Math.max(10, Math.min(100, Math.round(10 + 6 * flips)));
+  return Math.max(T13, Math.min(MAX_FLOORS, Math.round(T13 + (T13 / 2) * flips)));
 }
 
 // ---- Skiff upgrades: earned scrap only, never cash or credits (no paid edge). ----
-// Tuned so the first upgrade takes a new pilot ~2–3 minutes of scrounging (drops avg ~35 scrap,
-// roughly one found per minute in a bad skiff, plus freight). Adjust with in-game notes.
+// 13 tiers per route; each tier costs ×1.25 the last (the Assessor's favourite number).
+// Tier I is tuned so a new pilot needs ~2–3 minutes of scrounging. Adjust with in-game notes.
+const tiers13 = (base) => Array.from({ length: T13 }, (_, i) => Math.round(base * Math.pow(TAKEOVER_MULT, i)));
+export const HULL_TAP_TIER = 7; // from Hull VII, plating shrugs off one drone tap per pursuit
 export const UPGRADES = {
-  gyros: { name: 'Gyros', what: 'Turn rate', tiers: [120, 260, 450] },
-  dampers: { name: 'Dampeners', what: 'Kills sideways drift so the skiff goes where it points', tiers: [150, 320, 550] },
-  thrusters: { name: 'Thrusters', what: 'Acceleration + top speed', tiers: [180, 380, 650] },
-  hull: { name: 'Hull plating', what: 'Less cargo damage; survives a drone tap', tiers: [240, 500] },
-  chassis: { name: 'Road chassis', what: 'Spine-rated. Spine access opens when Security goes live.', tiers: [1200], locked: true },
+  gyros: { name: 'Gyros', what: 'Turn rate', tiers: tiers13(120) },
+  dampers: { name: 'Dampeners', what: 'Grip: kills sideways drift so the skiff goes where it points', tiers: tiers13(150) },
+  thrusters: { name: 'Thrusters', what: 'Acceleration + top speed', tiers: tiers13(180) },
+  hull: { name: 'Hull plating', what: `Less cargo damage per scrape; from tier VII, survives a drone tap`, tiers: tiers13(240) },
+  chassis: { name: 'Road chassis', what: 'Spine-rated. Spine access opens when Security goes live.', tiers: tiers13(1300), locked: true },
 };
 
-// The starter skiff handles like a shopping cart of scrap. Upgrades fix that.
+// The starter skiff handles like a shopping cart of scrap. Each of 13 tiers fixes a little of that.
 export function skiffStats(u = {}) {
-  const g = u.gyros || 0, d = u.dampers || 0, t = u.thrusters || 0;
+  const g = (u.gyros || 0) / T13, d = (u.dampers || 0) / T13, t = (u.thrusters || 0) / T13;
   return {
-    thrust: 0.14 + 0.035 * t,
-    max: 6.5 + 1.0 * t,
-    turn: 0.035 + 0.012 * g,
-    drag: 0.993 - 0.0015 * d,
-    grip: [0, 0.025, 0.055, 0.09][d],
+    thrust: 0.14 + 0.11 * t,
+    max: 6.5 + 3.5 * t,
+    turn: 0.035 + 0.04 * g,
+    drag: 0.993 - 0.0045 * d,
+    grip: 0.1 * d,
     radius: 14,
   };
 }
+
+// Roman numerals for tier labels (I–XIII)
+export const roman = (n) => ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII'][n] || String(n);
 
 export function levelFor(xp) {
   return Math.floor(Math.sqrt(xp / 40)) + 1;
@@ -211,11 +221,10 @@ export function createEconomy(world) {
   }
 
   // ---- The Sprawl: huts built with scrap only. Free to anyone who plays. Never branded. ----
-  const HUT_TIERS = [
-    { name: 'Scrap shack', cost: 150 },
-    { name: 'Hab hut', cost: 300 },
-    { name: 'Bunker', cost: 600 },
-  ];
+  // 13 hut tiers. Art is shared across groups: tiers 1–4 shack, 5–8 hut, 9–13 bunker.
+  const HUT_NAMES = ['Lean-to', 'Scrap shack', 'Tarp shack', 'Patched shack', 'Hab hut', 'Insulated hut', 'Two-room hut', 'Chimney hut',
+    'Bunker', 'Sandbagged bunker', 'Antenna bunker', 'Fortified bunker', 'The Big Bunker'];
+  const HUT_TIERS = HUT_NAMES.map((name, i) => ({ name, cost: Math.round(150 * Math.pow(TAKEOVER_MULT, i)) }));
 
   function buildHut(siteId) {
     if (state.hut) return { ok: false, reason: `You already have a hut (${state.hut.site}). One per pilot.` };
@@ -232,7 +241,7 @@ export function createEconomy(world) {
   function upgradeHut() {
     if (!state.hut) return { ok: false, reason: 'No hut.' };
     const next = HUT_TIERS[state.hut.tier + 1];
-    if (!next) return { ok: false, reason: 'Already a bunker. This is as good as it gets out here.' };
+    if (!next) return { ok: false, reason: 'The Big Bunker. This is as good as it gets out here.' };
     if (state.scrap < next.cost) return { ok: false, reason: `Need ${next.cost} scrap. You have ${state.scrap}.` };
     state.scrap -= next.cost;
     state.hut.tier++;

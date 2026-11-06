@@ -164,11 +164,11 @@
   "places": [
     {
       "name": "The Spine (Avenue Zero)",
-      "text": "The main drag. 52 lots, all on the north side for now. Any lot can be bought at 1.25× its value; towers grow every time one changes hands. (Currently 48 lots on both sides; moving to 52 on the north side.)"
+      "text": "The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.25× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming."
     },
     {
       "name": "Lower Upper Squalor & Upper Lower Squalor",
-      "text": "The two Sprawls, one east and one west of the city, about a minute's flight out. Near-identical. Scrap-built huts, never branded. Each has a Housing Registry at its entrance. (Coming: today there is one Sprawl, to the east.)"
+      "text": "The two Sprawls, each about a minute's flight past a city limit: Lower Upper Squalor to the east, Upper Lower Squalor to the west. Near-identical: 39 sites each (13 × 3). Scrap-built huts in 13 tiers, from Lean-to to The Big Bunker, never branded. Each has a Housing Registry on its city-facing edge."
     },
     {
       "name": "Tenure Heights",

@@ -1,8 +1,16 @@
 // World geometry, collision, sectors and the shared drop schedule.
 import { mulberry32, hashStr, pick, randInt } from './rng.js';
 
+export const T = 13;
 export const PLOT_W = 180;
-export const DROP_WINDOW_MS = 150_000; // a new batch of drops every 2.5 minutes
+export const DROP_WINDOW_MS = 130_000; // a new batch of 13 drops every 130 seconds
+// The city: 13 blocks of 13 lots along the Spine. Gaps between blocks cut through the Spine
+// (placeholder crossings until north-south roads and real intersections exist).
+export const SLOT = 220;
+export const BLOCK_GAP = 300;
+export const BLOCK_W = T * SLOT;
+export const CITY_HALF = 21000; // city bounds: x in ±21000 (13 sector columns)
+export const SPRAWL_OFFSET = 26000; // city edge → Sprawl centre: same ~1 minute flight as before
 
 // Footprint of a lot's structure. Taller buildings reach further from the spine.
 export function plotRect(world, plot) {
@@ -19,13 +27,21 @@ export function plotPad(world, plot) {
   return plot.side === 'north' ? { x: plot.x, y: r.y - 46 } : { x: plot.x, y: r.y + r.h + 46 };
 }
 
+// Whole Spine extent (minimap, labels). Collision uses the per-block segments below.
 export function spineRect(world) {
   const { halfLength, halfWidth } = world.spine;
   return { x: -halfLength, y: -halfWidth, w: halfLength * 2, h: halfWidth * 2 };
 }
 
+// The Spine as solid segments, one per block. The gaps between them are flyable crossings.
+export function spineRects(world) {
+  const hw = world.spine.halfWidth;
+  if (!world.spine.blocks) return [spineRect(world)];
+  return world.spine.blocks.map((b) => ({ x: b.x0, y: -hw, w: b.x1 - b.x0, h: hw * 2 }));
+}
+
 export function solids(world) {
-  return [spineRect(world), ...world.plots.map((p) => plotRect(world, p))];
+  return [...spineRects(world), ...world.plots.map((p) => plotRect(world, p))];
 }
 
 // Circle vs rects: push the body out and kill velocity into the wall.
@@ -72,53 +88,76 @@ export function insideAny(x, y, rects, pad = 0) {
   return rects.some((r) => x > r.x - pad && x < r.x + r.w + pad && y > r.y - pad && y < r.y + r.h + pad);
 }
 
-// ---- The Sprawl: residential zone ~1 minute's flight east of the Spine (skiff at cruise). ----
-export const SPRAWL = { x: 30000, y: 0, radius: 2200 };
+// ---- The two Sprawls: residential zones a ~1 minute flight off each end of the city. ----
+// Free players' housing. Ridiculous names are the Assessor's doing.
+export const SPRAWLS = [
+  { id: 'east', prefix: 'E', name: 'LOWER UPPER SQUALOR', title: 'Lower Upper Squalor', x: CITY_HALF + SPRAWL_OFFSET, y: 0, rx: 2400, ry: 1100, dir: 1 },
+  { id: 'west', prefix: 'W', name: 'UPPER LOWER SQUALOR', title: 'Upper Lower Squalor', x: -(CITY_HALF + SPRAWL_OFFSET), y: 0, rx: 2400, ry: 1100, dir: -1 },
+];
+export const SPRAWL = SPRAWLS[0]; // legacy alias
+export const sprawlById = (id) => SPRAWLS.find((s) => s.id === id);
+
+// Which Sprawl a point is in (or near), else null.
+export function sprawlAt(x, margin = 400) {
+  return SPRAWLS.find((s) => Math.abs(x - s.x) <= s.rx + margin) || null;
+}
+// Each Sprawl's Housing Registry kiosk sits on its city-facing edge.
+export function registryOf(sp) {
+  return { x: sp.x - sp.dir * (sp.rx - 200), y: sp.y, sprawl: sp.id };
+}
 
 export function flyBounds(world) {
   const b = world.bounds;
-  return { minX: b.minX, maxX: SPRAWL.x + SPRAWL.radius + 600, minY: b.minY, maxY: b.maxY };
+  const w = SPRAWLS.find((s) => s.dir < 0), e = SPRAWLS.find((s) => s.dir > 0);
+  return { minX: w.x - w.rx - 600, maxX: e.x + e.rx + 600, minY: b.minY, maxY: b.maxY };
 }
 
 export function region(world, x) {
-  if (x <= world.bounds.maxX) return 'city';
-  if (x >= SPRAWL.x - SPRAWL.radius - 400) return 'sprawl';
+  if (Math.abs(x) <= world.bounds.maxX) return 'city';
+  if (sprawlAt(x)) return 'sprawl';
   return 'void';
 }
 
-const SQUATTERS = ['Vel', 'Orrin', 'Mother Kade', 'the twins', 'Pike', 'Old Sorrow', 'Jessop', 'nobody you know', 'Rook', 'Ninefingers'];
+const SQUATTERS = ['Vel', 'Orrin', 'Mother Kade', 'the twins', 'Pike', 'Old Sorrow', 'Jessop', 'nobody you know', 'Rook', 'Ninefingers', 'Aunt Tallow', 'Sixpence', 'the Deacon'];
+export const COLS13 = 'ABCDEFGHIJKLM';
+export const SITE_COLS = T, SITE_ROWS = 3, SITE_GAP = 300;
 
-// Hut sites on a ragged grid. Roughly half are already squatted by NPCs.
+// 13 × 3 = 39 hut sites per Sprawl, on a ragged grid. Roughly half are already squatted by NPCs.
 export function sprawlSites(world) {
-  const rng = mulberry32(hashStr(`sprawl:${world.seed}`));
-  const sites = [];
-  const cols = 10, rows = 8, gap = 300;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const x = SPRAWL.x + (c - (cols - 1) / 2) * gap + (rng() - 0.5) * 80;
-      const y = SPRAWL.y + (r - (rows - 1) / 2) * gap + (rng() - 0.5) * 80;
-      const id = `H-${r + 1}${'ABCDEFGHIJ'[c]}`;
-      const squatted = rng() < 0.5;
-      sites.push({ id, x, y, squatter: squatted ? pick(rng, SQUATTERS) : null, npcTier: squatted ? randInt(rng, 0, 2) : null });
+  const sites = [], fires = [], props = [];
+  const PROP_KINDS = ['junk', 'junk', 'dish', 'laundry', 'planter', 'fence'];
+  for (const sp of SPRAWLS) {
+    const rng = mulberry32(hashStr(`sprawl:${sp.id}:${world.seed}`));
+    for (let r = 0; r < SITE_ROWS; r++) {
+      for (let c = 0; c < SITE_COLS; c++) {
+        const x = sp.x + (c - (SITE_COLS - 1) / 2) * SITE_GAP + (rng() - 0.5) * 60;
+        const y = sp.y + (r - (SITE_ROWS - 1) / 2) * SITE_GAP * 1.4 + (rng() - 0.5) * 60;
+        const squatted = rng() < 0.5;
+        // squatters mostly live rough: low tiers are common, a Big Bunker is rare
+        const npcTier = squatted ? Math.min(T - 1, Math.floor(Math.pow(rng(), 2.2) * T)) : null;
+        sites.push({ id: `${sp.prefix}-${r + 1}${COLS13[c]}`, sprawl: sp.id, x, y, squatter: squatted ? pick(rng, SQUATTERS) : null, npcTier });
+      }
     }
-  }
-  const fires = Array.from({ length: 14 }, () => ({ x: SPRAWL.x + (rng() - 0.5) * 3000, y: SPRAWL.y + (rng() - 0.5) * 2400 }));
-  // street clutter: sits on the tracks between huts, purely decorative
-  const KINDS = ['junk', 'junk', 'dish', 'laundry', 'planter', 'fence'];
-  const props = [];
-  for (let i = -5; i <= 5; i++) {
-    for (let j = -4; j <= 4; j++) {
-      if (rng() > 0.32) continue;
-      props.push({ x: SPRAWL.x + i * 300 + (rng() - 0.5) * 30, y: SPRAWL.y + j * 300 + 150 + (rng() - 0.5) * 60, kind: pick(rng, KINDS), flip: rng() < 0.5 });
+    for (let i = 0; i < T; i++) fires.push({ x: sp.x + (rng() - 0.5) * sp.rx * 1.6, y: sp.y + (rng() - 0.5) * sp.ry * 1.6, sprawl: sp.id });
+    // street clutter on the tracks between huts, purely decorative
+    for (let i = -7; i <= 7; i++) {
+      for (let j = -2; j <= 2; j++) {
+        if (rng() > 0.32) continue;
+        props.push({ x: sp.x + i * SITE_GAP + 150 + (rng() - 0.5) * 30, y: sp.y + j * SITE_GAP * 0.7 + (rng() - 0.5) * 40, kind: pick(rng, PROP_KINDS), flip: rng() < 0.5, sprawl: sp.id });
+      }
     }
   }
   return { sites, fires, props };
 }
 
+// 13 hut tiers share three art sets: I–IV shack, V–VIII hut, IX–XIII bunker.
+export const hutArt = (tier) => (tier < 4 ? 0 : tier < 8 ? 1 : 2);
 export const HUT_SIZE = [ [40, 30], [54, 40], [68, 52] ];
 
 export function hutRect(site, tier) {
-  const [w, h] = HUT_SIZE[tier];
+  const [w0, h0] = HUT_SIZE[hutArt(tier)];
+  const grow = 1 + (tier % 4) * 0.06; // a little bigger within each art set
+  const w = w0 * grow, h = h0 * grow;
   return { x: site.x - w / 2, y: site.y - h / 2, w, h };
 }
 
@@ -127,15 +166,26 @@ export function hutPad(site) {
   return { x: site.x, y: site.y + 58 };
 }
 
-const COLS = 'ABCDEFGH';
+// 13 sector columns (A–M) × 6 rows across the city.
+export const SECTOR_ROWS = 6;
+export function sectorCol(world, x) {
+  const b = world.bounds;
+  return Math.max(0, Math.min(T - 1, Math.floor(((x - b.minX) / (b.maxX - b.minX)) * T)));
+}
 export function sectorName(world, x, y) {
   const reg = region(world, x);
-  if (reg === 'sprawl') return 'THE SPRAWL';
+  if (reg === 'sprawl') return sprawlAt(x).name;
   if (reg === 'void') return 'DEEP VOID';
   const b = world.bounds;
-  const c = Math.max(0, Math.min(7, Math.floor(((x - b.minX) / (b.maxX - b.minX)) * 8)));
-  const r = Math.max(0, Math.min(5, Math.floor(((y - b.minY) / (b.maxY - b.minY)) * 6)));
-  return `${COLS[c]}${r + 1}`;
+  const r = Math.max(0, Math.min(SECTOR_ROWS - 1, Math.floor(((y - b.minY) / (b.maxY - b.minY)) * SECTOR_ROWS)));
+  return `${COLS13[sectorCol(world, x)]}${r + 1}`;
+}
+export function sectorCentre(world, x, y) {
+  const b = world.bounds;
+  const cw = (b.maxX - b.minX) / T, rh = (b.maxY - b.minY) / SECTOR_ROWS;
+  const c = sectorCol(world, x);
+  const r = Math.max(0, Math.min(SECTOR_ROWS - 1, Math.floor((y - b.minY) / rh)));
+  return { x: b.minX + (c + 0.5) * cw, y: b.minY + (r + 0.5) * rh };
 }
 
 const DROP_TYPES = [
@@ -148,16 +198,19 @@ const DROP_TYPES = [
 
 // Every client computes the same drops from the clock: a shared world with no server.
 // (First-claim is local in this prototype; a realtime server will arbitrate it later.)
+// 13 per window, one per sector column, so there's always something within reach.
 export function dropsForWindow(world, windowIndex, multiplier = 1) {
   const rng = mulberry32(hashStr(`drops:${world.seed}:${windowIndex}`));
-  const count = Math.max(1, Math.round(3 * multiplier));
+  const count = Math.max(1, Math.round(T * multiplier));
   const rects = solids(world);
   const b = world.bounds;
+  const cw = (b.maxX - b.minX) / T;
   const drops = [];
   for (let i = 0; i < count; i++) {
     let x, y, tries = 0;
+    const col = i % T;
     do {
-      x = randInt(rng, b.minX + 200, b.maxX - 200);
+      x = randInt(rng, Math.round(b.minX + col * cw + 150), Math.round(b.minX + (col + 1) * cw - 150));
       y = randInt(rng, b.minY + 200, b.maxY - 200);
       tries++;
     } while (insideAny(x, y, rects, 60) && tries < 20);
@@ -166,7 +219,7 @@ export function dropsForWindow(world, windowIndex, multiplier = 1) {
       key: `${windowIndex}:${i}`,
       x,
       y,
-      amount: randInt(rng, 10, 60),
+      amount: randInt(rng, T, T * 3), // 13–39
       ...type,
       expires: (windowIndex + 1) * DROP_WINDOW_MS,
     });
@@ -180,12 +233,13 @@ export function decorations(world) {
   const b = world.bounds;
   const rocks = [];
   const fb = flyBounds(world);
-  for (let i = 0; i < 420; i++) {
-    // ~1/3 in the city, the rest scattered along the long haul to the Sprawl
-    const x = i < 140 ? randInt(rng, b.minX, b.maxX) : randInt(rng, b.maxX, fb.maxX);
+  for (let i = 0; i < 1300; i++) {
+    // ~half in the city, the rest scattered along the long hauls to the two Sprawls
+    const x = i < 650 ? randInt(rng, b.minX, b.maxX) : randInt(rng, fb.minX, fb.maxX);
     const y = randInt(rng, b.minY, b.maxY);
     if (insideAny(x, y, rects, 120)) continue;
-    if (Math.hypot(x - SPRAWL.x, (y - SPRAWL.y) / 0.85) < SPRAWL.radius + 150) continue;
+    if (Math.abs(y) < 140 && Math.abs(x) < b.maxX) continue; // keep the Spine gaps clear
+    if (SPRAWLS.some((sp) => Math.hypot((x - sp.x) / (sp.rx + 150), (y - sp.y) / (sp.ry + 150)) < 1)) continue;
     const r = randInt(rng, 6, 34);
     const pts = [];
     const n = randInt(rng, 6, 9);
