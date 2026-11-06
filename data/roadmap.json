@@ -410,7 +410,7 @@
       "version": "0.1.11",
       "date": "2026-11-06",
       "name": "Your plot: hut-tier unlocks, scrap magnet, house number colour",
-      "status": "now",
+      "status": "done",
       "items": [
         "Every hut tier unlocks one thing on your plot (data/plot-unlocks.json): preset cosmetics (never branding) and allotment fixtures",
         "Tier 1: scrap magnet: passive scrap in 13-minute windows shaped by magnetic weather, hut tier, the bulletin, nearby drops, neighbours' magnets (compete) and detectors (resonate); random surges and oddities; rusts if you don't collect (faster after 13 h); runs while you're away, seeded so reloads can't reroll it",
@@ -571,6 +571,19 @@
       "items": [
         "Flight, Spine lots, buy-outs + credits, ledger, drops, levelling",
         "Freight, heat, Spine Run; the Sprawl; generated sprite art; rename to SpaceSquat"
+      ]
+    },
+    {
+      "version": "0.1.12",
+      "date": "2026-11-06",
+      "name": "Gig board that behaves on phones",
+      "status": "now",
+      "items": [
+        "Swiping the gig list scrolls it; only a clean tap tracks a gig",
+        "Board no longer rebuilds every quarter second: distances and timers update in place, scroll position kept (also lighter on PC)",
+        "Phones: picking a gig closes the board; tapping the world closes it too",
+        "Phones: one-line rows, half-screen max height, no citizen banner or sub-lines in the board",
+        "New-gig badge only counts gigs worth a look (not churning freight, drops, scooters, races)"
       ]
     }
   ],

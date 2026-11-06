@@ -26,6 +26,7 @@ const TOGGLES = ['freight', 'drop', 'race', 'stamp', 'scooter'];
 
 export function createGigs({ world, econ, loops, circuits, progress, registries, sectorName, sectorCentre, getDrops, mission, onboarding, esc, log, $, extraRows = () => [], citizen = null, startClosed = false }) {
   const compact = startClosed; // touch screens: shorter tab label
+  const CHURN = new Set(['freight', 'drop', 'scooter', 'race']);
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
   const prefs = { open: !startClosed, sort: 'dist', map: { freight: false, drop: true, race: true, stamp: true, scooter: true }, ...saved };
@@ -129,7 +130,8 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     lastRender = now;
     refresh(body, now);
     const tr = trackedRow(body);
-    const fresh = rows.filter((r) => !seen.has(r.id) && r.type !== 'race');
+    // only count gigs worth a look; freight/drop/scooter offers churn constantly
+    const fresh = rows.filter((r) => !seen.has(r.id) && !CHURN.has(r.type));
     if (!prefs.open) newCount += fresh.length;
     for (const r of rows) seen.add(r.id);
     const el = $('gigs');
@@ -148,14 +150,25 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
       return `<div class="gr ${on ? 'tracked' : ''}" data-g="track:${esc(r.id)}" title="${on ? 'Click to stop tracking' : 'Click to track'}">
         <img src="assets/sprites/${ty.icon}.png" alt="" onerror="this.remove()"/>
         <div class="gm"><div class="gti" style="color:${ty.color}">${on ? '⚑ ' : ''}${esc(r.title)}</div><div class="sub">${esc(r.sub)}</div></div>
-        <div class="gx"><div>${r.pay ? `${esc(r.pay)} <span class="sub">${r.pay === 'stamp' ? '' : 'scrap'}</span>` : ''}</div><div class="sub" data-dist="${esc(r.id)}">${fmtDist(r.dist)}</div>${r.ttl != null ? `<div class="sub ttl">${fmtTtl(r.ttl)}</div>` : ''}</div></div>`;
+        <div class="gx"><div>${r.pay ? `${esc(r.pay)} <span class="sub">${r.pay === 'stamp' ? '' : 'scrap'}</span>` : ''}</div><div class="sub" data-dist="${esc(r.id)}"></div>${r.ttl != null ? `<div class="sub ttl" data-ttl="${esc(r.id)}"></div>` : ''}</div></div>`;
     }).join('');
     const html = prefs.open
       ? `${head}${star}${toggles}<div class="gl">${body_ || '<div class="sub" style="padding:8px">Nothing open right now. Fly into the city.</div>'}</div>${rows.length > list.length ? `<div class="gmore">+${rows.length - list.length} more further away (nearest of each type shown)</div>` : ''}`
       : `<button class="gtab" data-g="open">${compact ? 'GIGS' : 'G · GIGS'} ${rows.length}${newCount ? ` <b>+${newCount}</b>` : ''}</button>`;
-    if (html !== lastHtml) {
+    // rebuild only when the list itself changes (not every distance tick), never mid-swipe,
+    // and keep the scroll position; distances and timers are patched in place
+    if (html !== lastHtml && !(touching && prefs.open && lastHtml.includes('class="gl"'))) {
+      const gl = el.querySelector('.gl');
+      const top = gl ? gl.scrollTop : 0;
       lastHtml = html;
       el.innerHTML = html;
+      const gl2 = el.querySelector('.gl');
+      if (gl2) gl2.scrollTop = top;
+    }
+    if (prefs.open) {
+      const byId = new Map(rows.map((r) => [r.id, r]));
+      for (const d of el.querySelectorAll('[data-dist]')) { const r = byId.get(d.dataset.dist); if (r) d.textContent = fmtDist(r.dist); }
+      for (const d of el.querySelectorAll('[data-ttl]')) { const r = byId.get(d.dataset.ttl); if (r && r.ttl != null) d.textContent = fmtTtl(r.ttl); }
     }
   }
 
@@ -167,12 +180,27 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     else if (g === 'open') toggle(true);
     else if (g === 'sort') { prefs.sort = prefs.sort === 'dist' ? 'pay' : 'dist'; save(); }
     else if (g.startsWith('map:')) { const k = g.slice(4); prefs.map[k] = !prefs.map[k]; save(); }
-    else if (g.startsWith('track:')) track(g.slice(6));
+    else if (g.startsWith('track:')) {
+      track(g.slice(6));
+      if (compact && tracked) toggle(false); // phones: pick a gig, board gets out of the way
+    }
     lastHtml = '';
     lastRender = 0;
     e.preventDefault();
   }
-  $('gigs').addEventListener('pointerdown', onClick);
+  // a tap, not a swipe: scrolling the list on a phone must not track whatever was under your thumb
+  let touching = false, down = null;
+  const gel = $('gigs');
+  gel.addEventListener('pointerdown', (e) => { touching = true; down = { x: e.clientX, y: e.clientY, t: e.target }; });
+  gel.addEventListener('pointerup', (e) => {
+    touching = false;
+    if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 12) onClick({ target: down.t, preventDefault: () => e.preventDefault() });
+    down = null;
+  });
+  gel.addEventListener('pointercancel', () => { touching = false; down = null; });
+  window.addEventListener('pointerup', () => { touching = false; });
+  // phones: tapping the world closes the board
+  if (compact) document.getElementById('game')?.addEventListener('pointerdown', () => { if (prefs.open) toggle(false); });
 
   function toggle(open = !prefs.open) {
     prefs.open = open;

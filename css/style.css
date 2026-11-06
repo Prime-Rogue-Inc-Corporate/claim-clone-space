@@ -187,6 +187,13 @@ body.touch #gigs .gh, body.touch #gigs .gt, body.touch #gigs .gl, body.touch #gi
 body.touch #gigs .gtab { padding: 8px 10px; }
 body.touch #gigs .gr { padding: 8px; }
 body.touch #gigs button { padding: 4px 8px; }
+body.touch #gigs .gl { touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+body.touch #gigs .gc, body.touch #gigs .gm .sub, body.touch #gigs .gmore { display: none; }
+body.touch #gigs .gt { flex-wrap: wrap; row-gap: 4px; }
+body.touch #gigs .gr { padding: 6px 8px; }
+body.touch #gigs .gr img { width: 18px; height: 18px; }
+body.touch #gigs .gx { display: flex; gap: 6px; align-items: baseline; white-space: nowrap; }
+body.touch #gigs .gx .sub span, body.touch #gigs .gx > div:first-child .sub { display: none; }
 body.touch #panel { width: 96vw; max-height: 92vh; padding: 12px; font-size: 12px; }
 body.touch #panel button { min-height: 38px; }
 body.touch #panel table { display: block; overflow-x: auto; }
@@ -203,7 +210,7 @@ body.touch #panel .grid { grid-template-columns: 110px 1fr; }
   body.touch #minimap { top: calc(72px + env(safe-area-inset-top)); }
   body.touch #markers { top: calc(176px + env(safe-area-inset-top)); }
   body.touch #gigs { top: calc(18px + env(safe-area-inset-top)); }
-  body.touch #gigs:has(.gl) { right: 50%; transform: translateX(50%); top: calc(70px + env(safe-area-inset-top)); max-height: calc(100vh - 300px); }
+  body.touch #gigs:has(.gl) { right: 50%; transform: translateX(50%); top: calc(70px + env(safe-area-inset-top)); max-height: 46vh; }
   body.touch #t-stick { width: 132px; height: 132px; }
   body.touch #t-btns { grid-template-columns: 66px 66px; }
   body.touch #t-btns .big { height: 66px; }
