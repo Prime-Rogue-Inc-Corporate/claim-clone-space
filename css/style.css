@@ -104,3 +104,10 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #panel button.hcell.vacant { border: 1px dashed #6b5a26; cursor: pointer; color: var(--green); }
 #panel button.hcell.vacant b { color: var(--green); }
 #panel button.hcell.vacant:hover, #panel button.hcell.picked { background: #22200f; border-color: var(--green); border-style: solid; }
+
+/* achievements (J) */
+#panel .achlist { max-height: 56vh; overflow-y: auto; padding-right: 6px; }
+#panel .achlist h3 { margin: 12px 0 4px; }
+#panel .ach { font-size: 12px; padding: 2px 0; color: #b8b09a; }
+#panel .ach.got { color: #d6f08a; }
+#panel .ach.hidden { color: #5b5648; font-style: italic; }

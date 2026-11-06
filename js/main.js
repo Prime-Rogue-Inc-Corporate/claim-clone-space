@@ -5,6 +5,7 @@ import { createLoops } from './loops.js';
 import { loadSprites } from './sprites.js';
 import { devEnabled, createDevTools } from './devtools.js';
 import { openWiki } from './wiki.js';
+import { createProgress, residencyLevel } from './progress.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -31,18 +32,19 @@ async function boot() {
     return;
   }
   const DEV = devEnabled();
-  const [bulletin, sprites, lore, roadmap, costs, build] = await Promise.all([
+  const [bulletin, sprites, lore, achievements, roadmap, costs, build] = await Promise.all([
     loadJSON('data/bulletin.json', DEFAULT_BULLETIN),
     loadSprites(),
     loadJSON('data/lore.json', null),
+    loadJSON('data/achievements.json', null),
     DEV ? loadJSON('data/roadmap.json', null) : null,
     DEV ? loadJSON('data/costs.json', null) : null,
     DEV ? loadJSON('data/build.json', { sha: 'local', built: '' }) : null,
   ]);
-  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null, lore);
+  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null, lore, achievements);
 }
 
-function start(world, bulletin, sprites, devData, lore) {
+function start(world, bulletin, sprites, devData, lore, achievements) {
   const econ = createEconomy(world);
   const S = econ.state;
   const rng = mulberry32((Date.now() & 0xffffffff) >>> 0);
@@ -143,7 +145,16 @@ function start(world, bulletin, sprites, devData, lore) {
   }
   renderBulletin();
 
-  const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites, hullLevel: () => (player.ship === player.home ? S.upgrades.hull || 0 : 0) });
+  const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites, hullLevel: () => (player.ship === player.home ? S.upgrades.hull || 0 : 0), emit: (t, d) => progress.emit(t, d) });
+
+  // ---- residency card (C) + achievements (J) ----
+  const progress = createProgress({
+    world, econ, lore, achievements, log, esc, openModal, closeModal,
+    setWaypoint: (w) => (waypoint = w),
+    addHeat: (n, why) => loops.addHeat(n, why),
+    raceStart: loops.raceStart, refit: REFIT, registries: REGISTRIES,
+  });
+  const emit = progress.emit;
 
   // ---- staging tools: roadmap (R) + pinned notes (N); hidden on the production domain ----
   const dev = devData
@@ -156,7 +167,7 @@ function start(world, bulletin, sprites, devData, lore) {
         setWaypoint: (w) => (waypoint = w),
       })
     : null;
-  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
+  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; C · card &nbsp; J · achievements' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
   let windowIndex = -1;
@@ -187,6 +198,7 @@ function start(world, bulletin, sprites, devData, lore) {
     const res = econ.claimDrop(d, 1);
     if (!res) return;
     log(`Grabbed <b>${res.amount} scrap</b> from the ${esc(d.noun)}. Lovely.`, 'good');
+    emit('drop', { amount: res.amount, noun: d.noun });
     if (res.levelUp) log(`LEVEL ${res.levelUp}. Sight radius now ${sightRadius(res.levelUp)}m.`, 'money');
   }
 
@@ -196,7 +208,10 @@ function start(world, bulletin, sprites, devData, lore) {
   let nearDrop = null;
   let nearRefit = false;
   let nearRegistry = null; // the Registry kiosk you're parked at, if any
+  let nearDesk = null; // an organization's residency desk
   let registryAutoShown = false;
+  let lastSprawl = null;
+  let lastYSide = 0;
   let boardable = null;
 
   function modeLabel() {
@@ -209,7 +224,9 @@ function start(world, bulletin, sprites, devData, lore) {
   function onPress(k) {
     if (dev && dev.onKey(k)) return;
     if (k === 'h') return openHelp();
-    if (k === 'l') return openWiki(lore, { openModal, closeModal, esc });
+    if (k === 'l') { emit('wiki'); return openWiki(lore, { openModal, closeModal, esc }); }
+    if (k === 'c') return progress.openCard();
+    if (k === 'j') return progress.openAchievements();
     if (k === 'tab') return openLedger();
     if (k === 'f') return tryJump();
     if (k === 'x') return loops.onKey('x', performance.now());
@@ -218,6 +235,7 @@ function start(world, bulletin, sprites, devData, lore) {
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
     if (k === 'e' && !nearDrop && nearRefit) return openRefit();
     if (k === 'e' && !nearDrop && nearRegistry) return openRegistry(null, nearRegistry.sprawl);
+    if (k === 'e' && !nearDrop && nearDesk) return progress.openDesk(nearDesk);
   }
 
   // Back into your own skiff, wherever you left it. Stolen ships are always temporary.
@@ -265,6 +283,7 @@ function start(world, bulletin, sprites, devData, lore) {
     player.jump = null;
     player.mode = 'ship';
     player.ship = to;
+    emit('jump', { dur });
     if (to === player.home) {
       player.stolenUntil = 0;
       return log(`Back in your skiff ${player.home.reg}. ${dur.toFixed(1)}s of exposure, logged.`);
@@ -273,6 +292,7 @@ function start(world, bulletin, sprites, devData, lore) {
       const corp = econ.corpsById[to.corp];
       log(`You jacked a ${esc(corp?.name || 'corp')} ${KINDS[to.kind].label.toLowerCase()}. ${dur.toFixed(1)}s of exposure. The pilot has been… relocated.`);
       loops.onJack(performance.now());
+      emit('jack');
       to.npc = false;
       to.ai = null;
     } else {
@@ -284,7 +304,8 @@ function start(world, bulletin, sprites, devData, lore) {
 
   // ---- economy events ----
   econ.on((type, p) => {
-    if (type === 'lost') showLost(p);
+    if (type === 'lost') { showLost(p); emit('lost'); }
+    if (type === 'bought') emit('lot');
     if (type === 'bought') log(`You now hold <b>${esc(p.plot.brand?.name)}</b> (Lot ${p.plot.id}) for ${money(p.price)}.`, 'money');
     if (type === 'market' && p.plot.owner !== PLAYER) {
       if (p.claimed) log(`MARKET: ${esc(econ.ownerName(p.buyer))} claimed empty Lot ${p.plot.id} for ${money(p.plot.value)}.`);
@@ -441,6 +462,7 @@ function start(world, bulletin, sprites, devData, lore) {
         const val = (id) => el.querySelector(id).value;
         el.querySelector('#save').addEventListener('click', () => {
           econ.brand(p, { name: val('#b-name'), tagline: val('#b-tag'), color: val('#b-color'), link: val('#b-link') });
+          if (val('#b-name')) emit('brand');
           openPlot(p);
         });
         el.querySelector('#clear').addEventListener('click', () => {
@@ -479,6 +501,7 @@ function start(world, bulletin, sprites, devData, lore) {
   function afterHutBuilt(site, res, upgraded = false) {
     solidCache = rects();
     log(`Home sweet hovel: ${esc(econ.HUT_TIERS[S.hut.tier].name)} at ${esc(site.id)}.`, 'money');
+    emit(upgraded ? 'hut-upgrade' : 'hut', { tier: S.hut.tier, sprawl: site.sprawl });
     if (!upgraded) waypoint = hutPad(site);
     if (res.missionDone) {
       econ.reward(50);
@@ -626,6 +649,7 @@ function start(world, bulletin, sprites, devData, lore) {
             const res = econ.buyUpgrade(b.dataset.up);
             if (!res.ok) return (el.querySelector('#err').textContent = res.reason);
             player.home.stats = skiffStats(S.upgrades);
+            emit('upgrade', { id: b.dataset.up, tier: res.tier });
             log(`Fitted ${esc(UPGRADES[b.dataset.up].name)} ${roman(res.tier)}. Kessler thanks you for your scrap.`, 'money');
             if (res.mission !== 1 && res.mission !== 2 && missionShown !== res.mission) {
               missionShown = res.mission;
@@ -746,6 +770,7 @@ function start(world, bulletin, sprites, devData, lore) {
   }
 
   function openLedger() {
+    emit('ledger');
     const claimed = world.plots.filter((p) => p.owner).sort((a, b) => b.value - a.value);
     const total = claimed.reduce((s, p) => s + p.value, 0);
     const changes = world.plots.reduce((s, p) => s + p.history.filter((h) => h.kind === 'takeover').length, 0);
@@ -788,6 +813,8 @@ function start(world, bulletin, sprites, devData, lore) {
          <span class="k"><kbd>X</kbd></span><span>Decline / abandon a freight job</span>
          <span class="k"><kbd>TAB</kbd></span><span>The ledger: every lot and price</span>
          <span class="k"><kbd>L</kbd></span><span>The wiki: who runs this place, and why everything is 13</span>
+         <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”</span>
+         <span class="k"><kbd>J</kbd></span><span>Achievements: 13 categories × 13. Shame ones are hidden until you earn them</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
        <h3>THE GAME</h3>
@@ -822,6 +849,7 @@ function start(world, bulletin, sprites, devData, lore) {
       const dead = player.ship;
       dead.vx *= 0.2;
       dead.vy *= 0.2;
+      emit('expired');
       returnToSkiff(`Corp remote-killed the ${KINDS[dead.kind].label.toLowerCase()}. A Kessler tug drags you back to skiff ${player.home.reg}.`);
     }
 
@@ -881,6 +909,16 @@ function start(world, bulletin, sprites, devData, lore) {
       }
     }
     nearRefit = Math.hypot(REFIT.x - body.x, REFIT.y - body.y) < 45;
+    nearDesk = player.mode === 'ship' ? progress.nearDesk(body.x, body.y + -40) : null;
+    // exploration + crossings (achievements)
+    if (inSprawl && inSprawl.id !== lastSprawl) emit('sprawl', { id: inSprawl.id });
+    lastSprawl = inSprawl ? inSprawl.id : null;
+    const ySide = body.y < -60 ? -1 : body.y > 60 ? 1 : 0;
+    if (ySide && lastYSide && ySide !== lastYSide && player.mode === 'ship') {
+      const gi = (world.spine.gaps || []).findIndex((g) => body.x > g.x0 - 20 && body.x < g.x1 + 20);
+      if (gi >= 0) emit('crossing', { i: gi + 1 });
+    }
+    if (ySide) lastYSide = ySide;
     const REG = nearestRegistry(body.x);
     nearRegistry = Math.hypot(REG.x - body.x, REG.y - body.y) < 60 ? REG : null;
     // mission 2: arriving at a Registry with enough scrap opens the grid once
@@ -935,7 +973,7 @@ function start(world, bulletin, sprites, devData, lore) {
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: objective(body),
-      extraWorld: (c) => { drawRefit(c, now); drawRegistry(c, now); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraWorld: (c) => { drawRefit(c, now); drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
       extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
     };
     drawScene(ctx, W, H, cam, scene);
@@ -949,6 +987,7 @@ function start(world, bulletin, sprites, devData, lore) {
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
     else if (nearRegistry) prompt = `E · Housing Registry, ${sprawlById(nearRegistry.sprawl).title} (pick a site)`;
+    else if (nearDesk) prompt = `E · ${lore?.organizations?.find((o) => o.id === nearDesk.org)?.site || nearDesk.org} (residency stamp)`;
     else if (boardable) prompt = boardable === player.home ? `F · jump back into your skiff ${player.home.reg}` : `F · jump ${boardable.npc ? 'and jack the ' : 'into the '}${KINDS[boardable.kind].label.toLowerCase()}`;
     else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y))}m`;
     const pe = $('prompt');
@@ -964,15 +1003,17 @@ function start(world, bulletin, sprites, devData, lore) {
     }
 
     // HUD (only touch the DOM when something changed)
-    const hudKey = [S.cash, S.credits, S.scrap, S.xp, modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
+    const hudKey = [S.cash, S.credits, S.scrap, S.xp, progress.stampCount(), modeLabel(), sectorName(world, body.x, body.y), Math.round(sp * 10)].join('|');
     if (hudKey !== lastHud) {
       lastHud = hudKey;
       $('h-cash').textContent = money(S.cash);
       $('h-credits').textContent = money(S.credits);
       $('h-scrap').textContent = S.scrap.toLocaleString();
       const lv = levelFor(S.xp);
-      $('h-level').textContent = lv;
-      $('h-sight').textContent = `sight ${sightRadius(lv)}m`;
+      // Until all 13 residency stamps are in, your level is your residency: 0.00 → 0.13 → 1.
+      const n = progress.stampCount();
+      $('h-level').textContent = progress.processed() ? lv : residencyLevel(n);
+      $('h-sight').textContent = progress.processed() ? `sight ${sightRadius(lv)}m` : `residency ${n}/13 · sight ${sightRadius(lv)}m`;
       const lo = xpForLevel(lv), hi = xpForLevel(lv + 1);
       $('h-xp').style.width = `${Math.max(0, Math.min(100, Math.round(((S.xp - lo) / (hi - lo)) * 100)))}%`;
       $('h-mode').textContent = modeLabel();
@@ -997,7 +1038,7 @@ function start(world, bulletin, sprites, devData, lore) {
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress };
 }
 
 boot();

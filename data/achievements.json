@@ -1,0 +1,74 @@
+{
+  "note": "13 categories × 13 known achievements (169) + 169 hidden. Only some are live in this build; the rest show as 'unannounced'. Shame achievements stay hidden until first earned and pay a cosmetic once; everything else pays scrap. Fields: on = game event, n = times needed, eq/min = filters on the event, distinct = count different values of this field.",
+  "categories": [
+    { "id": "scrounge", "name": "Scrounging", "org": "kessler" },
+    { "id": "freight", "name": "Freight", "org": "lastmile" },
+    { "id": "heat", "name": "Heat", "org": "null" },
+    { "id": "racing", "name": "Racing", "org": "mercy" },
+    { "id": "flight", "name": "Flight", "org": "vanta" },
+    { "id": "jumping", "name": "Jumping", "org": "vanta" },
+    { "id": "refit", "name": "Refit", "org": "kessler" },
+    { "id": "housing", "name": "Housing", "org": "registry" },
+    { "id": "property", "name": "Property", "org": "assessor" },
+    { "id": "residency", "name": "Residency", "org": "ministry" },
+    { "id": "explore", "name": "Exploration", "org": "cinder" },
+    { "id": "civic", "name": "Civic Duty", "org": "bureau" },
+    { "id": "shame", "name": "Shame", "org": "bureau" }
+  ],
+  "achievements": [
+    { "id": "first-turd", "cat": "scrounge", "name": "First Turd", "desc": "Grab your first drop.", "on": "drop", "reward": 13 },
+    { "id": "bear-necessities", "cat": "scrounge", "name": "Bear Necessities", "desc": "Grab scrap out of a bear turd.", "on": "drop", "eq": { "noun": "bear turd" }, "reward": 13 },
+    { "id": "mother-lode", "cat": "scrounge", "name": "Mother Lode", "desc": "Grab a drop worth 39 scrap.", "on": "drop", "min": { "amount": 39 }, "reward": 13 },
+    { "id": "thirteen-turds", "cat": "scrounge", "name": "Thirteen Turds", "desc": "Grab 13 drops.", "on": "drop", "n": 13, "reward": 39 },
+
+    { "id": "first-delivery", "cat": "freight", "name": "Independent Contractor", "desc": "Complete a freight job.", "on": "delivery", "reward": 13 },
+    { "id": "pristine", "cat": "freight", "name": "Not a Scratch", "desc": "Deliver with 0% damage.", "on": "delivery", "eq": { "damage": 0 }, "reward": 26 },
+    { "id": "thirteen-jobs", "cat": "freight", "name": "Gig Economy", "desc": "Complete 13 freight jobs.", "on": "delivery", "n": 13, "reward": 39 },
+
+    { "id": "shook-it", "cat": "heat", "name": "Shook It", "desc": "Escape a Corp pursuit.", "on": "escape", "reward": 13 },
+    { "id": "three-star", "cat": "heat", "name": "Three-Star Getaway", "desc": "Escape a 3-star pursuit.", "on": "escape", "min": { "peak": 3 }, "reward": 26 },
+    { "id": "five-star", "cat": "heat", "name": "Most Wanted", "desc": "Escape a 5-star pursuit.", "on": "escape", "min": { "peak": 5 }, "reward": 39 },
+
+    { "id": "first-lap", "cat": "racing", "name": "Sponsored by Mercy", "desc": "Finish a Spine Run lap.", "on": "lap", "reward": 13 },
+    { "id": "personal-best", "cat": "racing", "name": "Faster Than You", "desc": "Beat your own best Spine Run time.", "on": "lap", "eq": { "best": true }, "reward": 13 },
+    { "id": "thirteen-laps", "cat": "racing", "name": "Thirteen Laps", "desc": "Finish 13 Spine Run laps.", "on": "lap", "n": 13, "reward": 39 },
+
+    { "id": "crossing", "cat": "flight", "name": "Jaywalker", "desc": "Fly through a Spine crossing.", "on": "crossing", "reward": 13 },
+    { "id": "all-crossings", "cat": "flight", "name": "Every Gap in the Fence", "desc": "Fly through all 12 crossings.", "on": "crossing", "distinct": "i", "n": 12, "reward": 39 },
+    { "id": "thirteen-crossings", "cat": "flight", "name": "Thirteen Crossings", "desc": "Fly through crossings 13 times.", "on": "crossing", "n": 13, "reward": 13 },
+
+    { "id": "first-jump", "cat": "jumping", "name": "2.9 Seconds", "desc": "Jump ship-to-ship.", "on": "jump", "reward": 13 },
+    { "id": "jacker", "cat": "jumping", "name": "Grand Theft Spacecraft", "desc": "Jack an NPC ship.", "on": "jack", "reward": 13 },
+    { "id": "thirteen-jacks", "cat": "jumping", "name": "Serial Jacker", "desc": "Jack 13 ships.", "on": "jack", "n": 13, "reward": 39 },
+
+    { "id": "first-fit", "cat": "refit", "name": "Duct Tape", "desc": "Fit any upgrade.", "on": "upgrade", "reward": 13 },
+    { "id": "thirteen-fits", "cat": "refit", "name": "Ship of Theseus", "desc": "Fit 13 upgrades.", "on": "upgrade", "n": 13, "reward": 39 },
+    { "id": "tier-xiii", "cat": "refit", "name": "Tier XIII", "desc": "Max out any upgrade route.", "on": "upgrade", "min": { "tier": 13 }, "reward": 39 },
+
+    { "id": "a-home", "cat": "housing", "name": "Home Sweet Hovel", "desc": "Build a hut.", "on": "hut", "reward": 13 },
+    { "id": "hut-up", "cat": "housing", "name": "Moving On Up (Slightly)", "desc": "Upgrade your hut.", "on": "hut-upgrade", "reward": 13 },
+    { "id": "big-bunker", "cat": "housing", "name": "The Big Bunker", "desc": "Upgrade your hut to tier XIII.", "on": "hut-upgrade", "min": { "tier": 12 }, "reward": 39 },
+
+    { "id": "first-lot", "cat": "property", "name": "One Dollar Landlord", "desc": "Claim or buy out a lot.", "on": "lot", "reward": 13 },
+    { "id": "branded", "cat": "property", "name": "Your Name in Lights", "desc": "Brand a lot.", "on": "brand", "reward": 13 },
+    { "id": "bought-out", "cat": "property", "name": "Market Forces", "desc": "Get bought out. It happens.", "on": "lost", "reward": 13 },
+
+    { "id": "first-stamp", "cat": "residency", "name": "Paperwork", "desc": "Get your first residency stamp.", "on": "stamp", "reward": 13 },
+    { "id": "seven-stamps", "cat": "residency", "name": "Halfway Processed", "desc": "Collect 7 stamps.", "on": "stamp", "n": 7, "reward": 26 },
+    { "id": "processed", "cat": "residency", "name": "Fully Processed", "desc": "Collect all 13 stamps. Level 1.", "on": "processed", "reward": 39 },
+
+    { "id": "east-squalor", "cat": "explore", "name": "Lower Upper Squalor", "desc": "Visit the eastern Sprawl.", "on": "sprawl", "eq": { "id": "east" }, "reward": 13 },
+    { "id": "west-squalor", "cat": "explore", "name": "Upper Lower Squalor", "desc": "Visit the western Sprawl.", "on": "sprawl", "eq": { "id": "west" }, "reward": 13 },
+    { "id": "both-ends", "cat": "explore", "name": "End to End", "desc": "Visit both Sprawls.", "on": "sprawl", "distinct": "id", "n": 2, "reward": 39 },
+
+    { "id": "read-ledger", "cat": "civic", "name": "No Purchase Necessary", "desc": "Read the Assessor's ledger (TAB).", "on": "ledger", "reward": 13 },
+    { "id": "read-wiki", "cat": "civic", "name": "Know Your Landlords", "desc": "Read the wiki (L).", "on": "wiki", "reward": 13 },
+    { "id": "read-card", "cat": "civic", "name": "Papers, Please", "desc": "Check your residency card (C).", "on": "card", "reward": 13 },
+
+    { "id": "impounded", "cat": "shame", "name": "Impounded", "desc": "Get busted by Null Sector drones.", "on": "busted", "shame": true, "cosmetic": "Parking-boot decal" },
+    { "id": "wall-enthusiast", "cat": "shame", "name": "Wall Enthusiast", "desc": "Hit 13 walls with cargo aboard.", "on": "scrape", "n": 13, "shame": true, "cosmetic": "Dented hull trim" },
+    { "id": "too-slow", "cat": "shame", "name": "Has Noted Your Name", "desc": "Miss a freight deadline.", "on": "late", "shame": true, "cosmetic": "Snail sticker" },
+    { "id": "remote-killed", "cat": "shame", "name": "Remote-Killed", "desc": "Let a stolen ship time out on you.", "on": "expired", "shame": true, "cosmetic": "Tow-hook trophy" },
+    { "id": "bailed", "cat": "shame", "name": "Cargo Overboard", "desc": "Bail out with cargo still aboard.", "on": "bailed", "shame": true, "cosmetic": "Empty-crate bobblehead" }
+  ]
+}

@@ -28,6 +28,8 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
 | X | Decline / abandon a freight job |
 | Tab | The ledger: every lot, owner, value, buy-out price |
 | L | The wiki: the 13 organizations, places, glossary (from `data/lore.json`; also `docs/WIKI.md`, regenerate with `npm run wiki`) |
+| C | Residency card: 13 stamps from the 13 organizations, Level 0.00 → 0.13 → Level 1 (“Fully Processed”) |
+| J | Achievements (`data/achievements.json`): 13 categories × 13, shame ones hidden until earned |
 | H | Help |
 
 ## What's in it
@@ -47,6 +49,8 @@ It's a static site with no build step: ES modules, a canvas and JSON files. Don'
   - **Heat**: a GTA wanted level. Jacking a ship (+2 stars) or speeding in the Spine zone (+1) sends Corp drones after you. From Hull VII your plating shrugs off one drone tap per pursuit. Stay 700m clear for 10s to drop a star; shake them all for 15 scrap × peak stars. Get caught: ship impounded, a small scrap fine, and you're on EVA.
   - **Spine Run**: 13 gates. Start at the gold ring south of the Spine's west end, slalom north-south through all 12 crossings, then fly home. Your best time is saved. Bonus for the first lap each day and for beating your best.
 - **The Sprawls**: two residential zones, each about a minute's flight past a city limit (skiff at cruise), with buoys and distance markers across the void: **Lower Upper Squalor** (east) and **Upper Lower Squalor** (west). 39 sites each (13 × 3). Free players build **huts with scrap only**: 13 tiers from Lean-to (150) to The Big Bunker, each ×1.25. One per pilot; huts are **never branded** and can't be bought out. About half the sites are already squatted by NPCs. You respawn at your hut.
+- **Residency card (C)**: Level 0.00 → 0.13: one stamp from each of the 13 organizations, then Level 1, “Fully Processed”. Ten desks sit on the Spine, one per block (the Ministry's is north of the Spine, in the heat zone); Kessler, Mercy and the Registry stamp you at the Refit Bay, the Spine Run gate and the Housing Registries. Desks use stand-in actions where the real system doesn't exist yet.
+- **Achievements (J)**: `data/achievements.json`. 13 categories × 13 known + 169 hidden; 42 are live so far. Shame achievements stay hidden until earned and pay a cosmetic once; the rest pay scrap.
 - **Branding**: owners only, with an opt-in public-content consent step first. Editable or clearable any time; https links only.
 
 ## The "server" (GitHub Actions)

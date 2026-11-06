@@ -297,6 +297,55 @@ The Collective's most popular attraction: the only place on the Spine where not 
 - **Tenure Heights:** The gentry's gated, domed deck north of the Spine. Equal access to everything, conveniently. Scrappers may enter. Null Sector will notice. (Coming.)
 - **The void:** Everything between. Buoys mark the way to the Sprawls. Debris courtesy of Kessler.
 
+## Achievements (live so far)
+
+> 13 categories × 13 known achievements (169) + 169 hidden. Only some are live in this build; the rest show as 'unannounced'. Shame achievements stay hidden until first earned and pay a cosmetic once; everything else pays scrap. Fields: on = game event, n = times needed, eq/min = filters on the event, distinct = count different values of this field.
+
+| Category | Achievement | How | Pays |
+|---|---|---|---|
+| Scrounging | First Turd | Grab your first drop. | 13 scrap |
+| Scrounging | Bear Necessities | Grab scrap out of a bear turd. | 13 scrap |
+| Scrounging | Mother Lode | Grab a drop worth 39 scrap. | 13 scrap |
+| Scrounging | Thirteen Turds | Grab 13 drops. | 39 scrap |
+| Freight | Independent Contractor | Complete a freight job. | 13 scrap |
+| Freight | Not a Scratch | Deliver with 0% damage. | 26 scrap |
+| Freight | Gig Economy | Complete 13 freight jobs. | 39 scrap |
+| Heat | Shook It | Escape a Corp pursuit. | 13 scrap |
+| Heat | Three-Star Getaway | Escape a 3-star pursuit. | 26 scrap |
+| Heat | Most Wanted | Escape a 5-star pursuit. | 39 scrap |
+| Racing | Sponsored by Mercy | Finish a Spine Run lap. | 13 scrap |
+| Racing | Faster Than You | Beat your own best Spine Run time. | 13 scrap |
+| Racing | Thirteen Laps | Finish 13 Spine Run laps. | 39 scrap |
+| Flight | Jaywalker | Fly through a Spine crossing. | 13 scrap |
+| Flight | Every Gap in the Fence | Fly through all 12 crossings. | 39 scrap |
+| Flight | Thirteen Crossings | Fly through crossings 13 times. | 13 scrap |
+| Jumping | 2.9 Seconds | Jump ship-to-ship. | 13 scrap |
+| Jumping | Grand Theft Spacecraft | Jack an NPC ship. | 13 scrap |
+| Jumping | Serial Jacker | Jack 13 ships. | 39 scrap |
+| Refit | Duct Tape | Fit any upgrade. | 13 scrap |
+| Refit | Ship of Theseus | Fit 13 upgrades. | 39 scrap |
+| Refit | Tier XIII | Max out any upgrade route. | 39 scrap |
+| Housing | Home Sweet Hovel | Build a hut. | 13 scrap |
+| Housing | Moving On Up (Slightly) | Upgrade your hut. | 13 scrap |
+| Housing | The Big Bunker | Upgrade your hut to tier XIII. | 39 scrap |
+| Property | One Dollar Landlord | Claim or buy out a lot. | 13 scrap |
+| Property | Your Name in Lights | Brand a lot. | 13 scrap |
+| Property | Market Forces | Get bought out. It happens. | 13 scrap |
+| Residency | Paperwork | Get your first residency stamp. | 13 scrap |
+| Residency | Halfway Processed | Collect 7 stamps. | 26 scrap |
+| Residency | Fully Processed | Collect all 13 stamps. Level 1. | 39 scrap |
+| Exploration | Lower Upper Squalor | Visit the eastern Sprawl. | 13 scrap |
+| Exploration | Upper Lower Squalor | Visit the western Sprawl. | 13 scrap |
+| Exploration | End to End | Visit both Sprawls. | 39 scrap |
+| Civic Duty | No Purchase Necessary | Read the Assessor's ledger (TAB). | 13 scrap |
+| Civic Duty | Know Your Landlords | Read the wiki (L). | 13 scrap |
+| Civic Duty | Papers, Please | Check your residency card (C). | 13 scrap |
+| Shame | _(hidden until earned)_ Impounded | Get busted by Null Sector drones. | cosmetic: Parking-boot decal |
+| Shame | _(hidden until earned)_ Wall Enthusiast | Hit 13 walls with cargo aboard. | cosmetic: Dented hull trim |
+| Shame | _(hidden until earned)_ Has Noted Your Name | Miss a freight deadline. | cosmetic: Snail sticker |
+| Shame | _(hidden until earned)_ Remote-Killed | Let a stolen ship time out on you. | cosmetic: Tow-hook trophy |
+| Shame | _(hidden until earned)_ Cargo Overboard | Bail out with cargo still aboard. | cosmetic: Empty-crate bobblehead |
+
 ## Glossary
 
 - **Scrap:** In-game currency, earned only by playing. Pays for upgrades, huts, rent and bids. Never bought, never cashed out.
@@ -305,3 +354,4 @@ The Collective's most popular attraction: the only place on the Spine where not 
 - **Gentry:** Anyone holding a lot or credits. Lose your lots and hold only credits for 13 days and you rejoin the people.
 - **Death:** Deleting your account. Deaths are counted and announced by skiff number only.
 - **13:** Everything is 13, except the maximum building height. Nobody knows why.
+- **Residency:** Your level before Level 1. Each of the 13 organizations stamps your residency card once (C): 0.01 per stamp, 0.00 → 0.13. The 13th stamp makes you Level 1, “Fully Processed”. Ten stamps come from desks on the Spine (one per block); Kessler, Mercy and the Registry stamp you at the Refit Bay, the Spine Run gate and the Housing Registries.

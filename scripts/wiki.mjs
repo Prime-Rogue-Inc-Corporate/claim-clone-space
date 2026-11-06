@@ -21,6 +21,13 @@ if (w.recreation) {
 }
 out.push('## Places', '');
 for (const p of w.places) out.push(`- **${p.name}:** ${p.text}`);
+let ach = null;
+try { ach = JSON.parse(readFileSync('data/achievements.json', 'utf8')); } catch {}
+if (ach) {
+  const cats = Object.fromEntries(ach.categories.map((c) => [c.id, c.name]));
+  out.push('', '## Achievements (live so far)', '', `> ${ach.note}`, '', '| Category | Achievement | How | Pays |', '|---|---|---|---|');
+  for (const a of ach.achievements) out.push(`| ${cats[a.cat]} | ${a.shame ? '_(hidden until earned)_ ' : ''}${a.name} | ${a.desc} | ${a.shame ? `cosmetic: ${a.cosmetic}` : `${a.reward} scrap`} |`);
+}
 out.push('', '## Glossary', '');
 for (const g of w.glossary) out.push(`- **${g.term}:** ${g.text}`);
 out.push('');

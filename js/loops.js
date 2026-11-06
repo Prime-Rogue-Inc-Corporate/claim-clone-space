@@ -22,7 +22,7 @@ const RING = 70;
 const PAD_RADIUS = 75;
 const PAD_SPEED = 5;
 
-export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites, hullLevel = () => 0 }) {
+export function createLoops({ world, econ, log, rng, player, esc, getSolids, bust, sprites, hullLevel = () => 0, emit = () => {} }) {
   const RACE = raceGates(world);
   const saved = load();
   const persist = { bestLap: null, raceDay: '', jobsDone: 0, escapes: 0, ...saved };
@@ -78,15 +78,18 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     if (!job) return;
     if (player.mode !== 'ship') {
       log(`You bailed out with the cargo still aboard. Job failed.`);
+      emit('bailed');
       return endJob(now);
     }
     if (hit && now > job.hitCooldown) {
       job.damage = Math.min(0.9, job.damage + Math.max(0.03, 0.15 - 0.12 * (hullLevel() / T13)));
       job.hitCooldown = now + 600;
+      emit('scrape');
       log(`Cargo damaged (${Math.round(job.damage * 100)}%).`);
     }
     if (now > job.deadline) {
       log(`Too slow. ${esc(econ.ownerName(econ.plotById(job.to).owner))} has noted your name.`);
+      emit('late');
       return endJob(now);
     }
     const pad = plotPad(world, econ.plotById(job.to));
@@ -96,6 +99,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       save();
       pay(Math.max(1, Math.round((job.reward + timeBonus) * (1 - job.damage))), `delivered ${job.cargo}${job.damage ? `, ${Math.round(job.damage * 100)}% damaged` : ''}`);
       endJob(now);
+      emit('delivery', { damage: job.damage });
     }
   }
 
@@ -181,6 +185,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         persist.escapes++;
         save();
         pay(15 * heat.peak, `shook a ${heat.peak}-star Corp pursuit`);
+        emit('escape', { peak: heat.peak });
         heat.peak = 0;
         heat.drones = [];
       } else log(`Heat dropping: ${'★'.repeat(heat.level)}`);
@@ -191,6 +196,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     const fine = Math.min(econ.state.scrap, 10 * heat.level);
     econ.fine(fine);
     log(`BUSTED. Corp drones impounded your ship${fine ? ` and fined you ${fine} scrap` : ''}. Have a nice EVA.`);
+    emit('busted');
     heat.level = 0;
     heat.peak = 0;
     heat.drones = [];
@@ -229,13 +235,15 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         const today = new Date().toISOString().slice(0, 10);
         let reward = T13;
         let why = `Spine Run ${fmt(lap)}`;
+        let best = false;
         if (!persist.bestLap || lap < persist.bestLap) {
-          if (persist.bestLap) { reward += T13 * 2; why += ` · NEW BEST (was ${fmt(persist.bestLap)})`; }
+          if (persist.bestLap) { reward += T13 * 2; why += ` · NEW BEST (was ${fmt(persist.bestLap)})`; best = true; }
           persist.bestLap = lap;
         }
         if (persist.raceDay !== today) { reward += T13 * 3; why += ' · first lap today'; persist.raceDay = today; }
         save();
         pay(reward, why);
+        emit('lap', { ms: lap, best });
       } else race.next++;
     }
   }
@@ -250,6 +258,10 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     onJack(now) {
       addHeat(2, 'grand theft spacecraft', now);
     },
+    addHeat(n, why) {
+      addHeat(n, why, performance.now());
+    },
+    raceStart: RACE[0],
     onKey(k, now) {
       if (k === 'x' && (freight.job || freight.offer)) {
         log(freight.job ? 'You dumped the cargo. Job abandoned.' : 'Job declined.');

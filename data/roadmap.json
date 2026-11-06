@@ -104,13 +104,13 @@
         },
         {
           "id": "p1-residency",
-          "text": "Residency card: 13 sites run by the 13 orgs, levels 0.01→0.13 → Level 1 ('Fully Processed')",
-          "status": "next"
+          "text": "Residency card: 13 sites run by the 13 orgs, levels 0.01→0.13 → Level 1 ('Fully Processed') — v0.1.4 (stand-in desk actions for systems that don't exist yet)",
+          "status": "done"
         },
         {
           "id": "p1-achievements",
-          "text": "Achievements: 13 categories × 13 known (169) + 169 hidden; shame ones hidden until first earned, pay a cosmetic once; others pay scrap/resources",
-          "status": "next"
+          "text": "Achievements: 13 categories × 13 known (169) + 169 hidden; shame ones hidden until first earned, pay a cosmetic once; others pay scrap/resources — v0.1.4: framework + 42 live; the other 127 known + 169 hidden still to write",
+          "status": "now"
         },
         {
           "id": "p1-register",
@@ -372,10 +372,24 @@
   ],
   "releases": [
     {
+      "version": "0.1.4",
+      "date": "2026-11-06",
+      "name": "Residency card + achievements",
+      "status": "now",
+      "items": [
+        "Residency card (C): 13 stamps, one per organization; Level 0.00 → 0.13 → Level 1 “Fully Processed” (+130 scrap)",
+        "10 org desks on the Spine, one per block (Ministry north of the Spine, in the heat zone: +1 star); Kessler, Mercy, Registry stamp at their real places",
+        "Stand-in desk actions where the system doesn't exist yet (Foundry shift, ration, oath, bid, Meter Office)",
+        "Achievements (J): data/achievements.json, 13 categories × 13 known + 169 hidden; 42 live, the rest 'unannounced'",
+        "Shame achievements hidden until earned, pay a cosmetic once (cosmetics recorded, rendering later); the rest pay scrap",
+        "HUD level shows residency until processed, then your XP level"
+      ]
+    },
+    {
       "version": "0.1.3",
       "date": "2026-11-06",
       "name": "Rule of 13",
-      "status": "now",
+      "status": "done",
       "items": [
         "The Spine: 13 blocks of 13 lots (169, north side), owned by the 13 organizations",
         "12 crossings cut through the Spine between blocks (placeholder until north-south roads + intersections)",
