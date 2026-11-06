@@ -1,0 +1,107 @@
+{
+  "title": "SpaceSquat — tentative roadmap",
+  "updated": "2026-11-05",
+  "note": "Tentative. Edit this file to change what the in-game roadmap (R) shows. Status: done | now | next | later.",
+  "phases": [
+    {
+      "id": "p0",
+      "name": "Phase 0 — Sandbox (Clone 1)",
+      "status": "done",
+      "goal": "Prove the loop is fun on a single machine.",
+      "items": [
+        { "id": "p0-flight", "text": "Flight, ship-jacking, EVA, GTA2-style camera", "status": "done" },
+        { "id": "p0-lots", "text": "48 lots on the Spine: $5/floor, 1.25× buy-out, credits not cash", "status": "done" },
+        { "id": "p0-ledger", "text": "Idiot-proof terminals + full ownership ledger (Tab)", "status": "done" },
+        { "id": "p0-drops", "text": "Seeded drops (the bear turd), sight-radius levelling", "status": "done" },
+        { "id": "p0-loops", "text": "Freight jobs, heat/drones, Spine Run", "status": "done" },
+        { "id": "p0-sprawl", "text": "The Sprawl: scrap-built huts, never branded", "status": "done" },
+        { "id": "p0-art", "text": "Generated sprite art with canvas fallbacks", "status": "done" }
+      ]
+    },
+    {
+      "id": "p1",
+      "name": "Phase 1 — Staging on spacesquat.fun",
+      "status": "now",
+      "goal": "Get it live, play it, write notes in-game, tune.",
+      "items": [
+        { "id": "p1-deploy", "text": "FTP secrets in, first deploy to spacesquat.fun", "status": "now" },
+        { "id": "p1-notes", "text": "In-game notes (N) + roadmap (R), export to Markdown", "status": "done" },
+        { "id": "p1-tuning", "text": "Balance pass: drop rates, heat speeds, hut prices, Sprawl flight time", "status": "now" },
+        { "id": "p1-browsers", "text": "Check Firefox, Safari, a slow laptop", "status": "next" },
+        { "id": "p1-mobile", "text": "Touch controls, or a clear desktop-only notice", "status": "next" },
+        { "id": "p1-feedback", "text": "Feedback button + privacy-friendly analytics before outside testers", "status": "next" },
+        { "id": "p1-art2", "text": "Art round 2: top-down race gate, more rooftops, explosion/busted frames", "status": "later" },
+        { "id": "p1-sound", "text": "Sound: thrusters, drop pings, sirens, ambient hum", "status": "later" }
+      ]
+    },
+    {
+      "id": "p2",
+      "name": "Phase 2 — Multiplayer core",
+      "status": "next",
+      "goal": "Real people fighting over the same lots and the same turds.",
+      "items": [
+        { "id": "p2-server", "text": "Realtime server (Cloudflare Durable Objects, or Node + WebSocket on a Canadian VPS)", "status": "next" },
+        { "id": "p2-accounts", "text": "Accounts: guest session upgradable to email login, minimal PII", "status": "next" },
+        { "id": "p2-authority", "text": "Server-authoritative drops, claims and movement (the real bot defence)", "status": "next" },
+        { "id": "p2-db", "text": "Postgres: lots, ledger, credits, huts", "status": "next" },
+        { "id": "p2-notify", "text": "Buy-out notifications (in-game + transactional email, CASL-safe)", "status": "next" },
+        { "id": "p2-presence", "text": "See other pilots, people-online counter, chat?", "status": "later" }
+      ]
+    },
+    {
+      "id": "p3",
+      "name": "Phase 3 — Real economy",
+      "status": "later",
+      "goal": "Money in, credits out, everything transparent.",
+      "items": [
+        { "id": "p3-payments", "text": "Payments behind one interface, test mode first (Stripe / Paddle / Helcim)", "status": "later" },
+        { "id": "p3-credits", "text": "Credits ledger as a liability: no expiry, no dormancy fees", "status": "later" },
+        { "id": "p3-terms", "text": "Terms: licence not property, buy-out risk acknowledgement, refunds", "status": "later" },
+        { "id": "p3-tax", "text": "GST/HST registration plan, accountant on credit accounting", "status": "later" },
+        { "id": "p3-counters", "text": "Public stats that are actually accurate (Competition Act)", "status": "later" }
+      ]
+    },
+    {
+      "id": "p4",
+      "name": "Phase 4 — Trust, safety & legal",
+      "status": "later",
+      "goal": "A free-speech zone that can't be taken down by the obvious stuff.",
+      "items": [
+        { "id": "p4-report", "text": "In-game reporting; auto-hide on CSAM/violence reports", "status": "later" },
+        { "id": "p4-scan", "text": "Daily automated scan incl. CSAM hash-matching on logos", "status": "later" },
+        { "id": "p4-human", "text": "Biweekly human review; faster track for legal/defamation notices", "status": "later" },
+        { "id": "p4-c3p", "text": "Written C3P / Mandatory Reporting Act procedure", "status": "later" },
+        { "id": "p4-entity", "text": "Separate entity from Prime Rogue; privacy policy (PIPA/PIPEDA); French UI", "status": "later" },
+        { "id": "p4-counsel", "text": "Lawyer pass on payments/securities before cash ever moves", "status": "later" }
+      ]
+    },
+    {
+      "id": "p5",
+      "name": "Phase 5 — Launch on spacesquat.com",
+      "status": "later",
+      "goal": "Public.",
+      "items": [
+        { "id": "p5-index", "text": "Remove noindex + robots block, OG images, landing page", "status": "later" },
+        { "id": "p5-growth", "text": "Launch plan (ads? press? creators?)", "status": "later" }
+      ]
+    },
+    {
+      "id": "p6",
+      "name": "Phase 6 — Variants",
+      "status": "later",
+      "goal": "Same economy core, new worlds.",
+      "items": [
+        { "id": "p6-core", "text": "Lift economy.js into a shared core package", "status": "later" },
+        { "id": "p6-clone2", "text": "Clone 2: new setting, same rules", "status": "later" },
+        { "id": "p6-brand", "text": "Umbrella brand once Clone 2 exists", "status": "later" }
+      ]
+    }
+  ],
+  "parking": [
+    "Drops in the Sprawl too?",
+    "Seasonal bulletin events (strikes, blackouts, Corp audits)",
+    "Leaderboards: best lap, most freight, longest-held lot",
+    "Hut interiors / visiting other players' huts",
+    "Lot history replay: watch a building change hands over time"
+  ]
+}

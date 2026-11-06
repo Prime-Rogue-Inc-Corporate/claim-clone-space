@@ -1,0 +1,49 @@
+{
+  "title": "SpaceSquat — compute & acquisition costs",
+  "currency": "USD",
+  "note": "Excludes server/hosting time. Update at each version checkpoint: add a new entries[] block per version, and flip basis from \"estimate\" to \"actual\" once you have the real figure. Amounts are this project's share, not the whole subscription.",
+  "versions": [
+    {
+      "version": "0.1",
+      "date": "2026-11-05",
+      "label": "Clone 1 sandbox → SpaceSquat staging build",
+      "entries": [
+        {
+          "item": "Claude Ultra plan: 1 day of a $200/mo subscription",
+          "category": "compute",
+          "amount": 6.67,
+          "basis": "estimate",
+          "note": "Calendar share: $200 ÷ 30 days × 1 day of work. Ultra is a flat fee, so heavy use this day didn't cost extra. Replace with your own attribution method if you prefer."
+        },
+        {
+          "item": "ChatGPT image generation (4 sprite sheets × 2 takes)",
+          "category": "compute",
+          "amount": 0.67,
+          "basis": "estimate",
+          "note": "Assumes a $20/mo ChatGPT plan, 1 day's share. Set to your real plan."
+        },
+        {
+          "item": "spacesquat.fun (staging domain, year 1)",
+          "category": "acquisition",
+          "amount": 2.0,
+          "basis": "estimate",
+          "note": "Kevin's figure, about $2. Confirm currency and renewal price (.fun often renews much higher)."
+        },
+        {
+          "item": "spacesquat.com (final domain, year 1)",
+          "category": "acquisition",
+          "amount": 0,
+          "basis": "estimate",
+          "note": "Set this once bought; a .com is usually ~$10–15/yr."
+        },
+        {
+          "item": "GitHub org + Actions (public repo)",
+          "category": "tooling",
+          "amount": 0,
+          "basis": "actual",
+          "note": "Public repos get unlimited standard Actions minutes; org is on Free."
+        }
+      ]
+    }
+  ]
+}

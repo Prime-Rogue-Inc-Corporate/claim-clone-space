@@ -68,6 +68,20 @@ Until the secrets exist, the deploy runs its checks and skips the upload.
 - **spacesquat.fun** is staging and testing. Point it at the folder `FTP_SERVER_DIR` uploads to. `robots.txt` and the `noindex` meta tag keep it out of search engines.
 - **spacesquat.com** is the final site. At launch, remove the `noindex` meta tag in `index.html` and replace `robots.txt`.
 
+## Staging tools (spacesquat.fun, localhost, or `?dev`)
+
+These are hidden on the production domain.
+
+| Key | Does |
+|---|---|
+| N | Pin a note where you're standing. It auto-stamps sector, position, ship, level and build. Tags: idea, bug, balance, art, copy, legal. Can be linked to a roadmap item. Ctrl/⌘+Enter pins it. |
+| R | Roadmap / notes / costs panel. Notes can be waypointed, deleted, copied as Markdown or downloaded as `notes.md`. |
+
+- Notes are stored in your browser. Export them to share or keep them.
+- Roadmap: edit `data/roadmap.json`.
+- Costs: edit `data/costs.json`, adding one block per version checkpoint and flipping `basis` to `actual` once you have real figures.
+- The deploy stamps `data/build.json` with the commit sha and time, so every note records which build it was made on.
+
 ## Art
 
 Sprites are generated sheets in `assets/src/` (four sheets: ships, structures, the Sprawl, and drops/props/UI), sliced by `scripts/slice-assets.py` into `assets/sprites/*.png` plus `assets/sprites.json`:
@@ -90,6 +104,8 @@ js/world.js      geometry, collision, sectors, drop schedule
 js/entities.js   ships, EVA, NPC traffic
 js/economy.js    the rules: build, buy-out, credits, levels, huts (localStorage)
 js/loops.js      freight jobs, heat/drones, Spine Run
+js/devtools.js   staging-only roadmap/notes/costs panel
+data/roadmap.json, data/costs.json   edit these directly
 js/render.js     canvas renderer + minimap (sprites with canvas fallbacks)
 js/sprites.js    sprite loader, roof/ship sprite pickers
 js/main.js       loop, input, UI/terminals

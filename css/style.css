@@ -71,6 +71,9 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #panel label.check { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0; cursor: pointer; }
 #panel input[type=text], #panel input[type=url] { width: 100%; background: #0c0c0d; color: var(--text); border: 1px solid var(--line); padding: 6px; font: inherit; }
 #panel input[type=range] { width: 100%; }
+#panel textarea, #panel select { width: 100%; background: #0c0c0d; color: var(--text); border: 1px solid var(--line); padding: 6px; font: inherit; }
+#panel .chips { display: flex; gap: 12px; flex-wrap: wrap; }
+#panel code { color: var(--green); }
 #panel .field { margin: 8px 0; }
 #panel .field span { display: block; color: var(--dim); font-size: 11px; margin-bottom: 2px; }
 #panel .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }

@@ -3,6 +3,7 @@ import { createEconomy, takeoverPrice, buildPrice, levelFor, xpForLevel, sightRa
 import { solids, collide, plotPad, sectorName, dropsForWindow, decorations, DROP_WINDOW_MS, flyBounds, sprawlSites, hutRect, hutPad, region } from './world.js';
 import { createLoops } from './loops.js';
 import { loadSprites } from './sprites.js';
+import { devEnabled, createDevTools } from './devtools.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -28,11 +29,18 @@ async function boot() {
     document.body.insertAdjacentHTML('beforeend', '<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#e8c547">Could not load data/world.json. Serve this folder over HTTP (npm run serve), not file://</div>');
     return;
   }
-  const [bulletin, sprites] = await Promise.all([loadJSON('data/bulletin.json', DEFAULT_BULLETIN), loadSprites()]);
-  start(world, bulletin, sprites);
+  const DEV = devEnabled();
+  const [bulletin, sprites, roadmap, costs, build] = await Promise.all([
+    loadJSON('data/bulletin.json', DEFAULT_BULLETIN),
+    loadSprites(),
+    DEV ? loadJSON('data/roadmap.json', null) : null,
+    DEV ? loadJSON('data/costs.json', null) : null,
+    DEV ? loadJSON('data/build.json', { sha: 'local', built: '' }) : null,
+  ]);
+  start(world, bulletin, sprites, DEV ? { roadmap, costs, build } : null);
 }
 
-function start(world, bulletin, sprites) {
+function start(world, bulletin, sprites, devData) {
   const econ = createEconomy(world);
   const S = econ.state;
   const rng = mulberry32((Date.now() & 0xffffffff) >>> 0);
@@ -117,6 +125,19 @@ function start(world, bulletin, sprites) {
 
   const loops = createLoops({ world, econ, log, rng, player, esc, getSolids: () => solidCache, bust, sprites });
 
+  // ---- staging tools: roadmap (R) + pinned notes (N); hidden on the production domain ----
+  const dev = devData
+    ? createDevTools({
+        ...devData, esc, log, openModal, closeModal,
+        getContext: () => {
+          const b = me();
+          return { x: b.x, y: b.y, sector: sectorName(world, b.x, b.y), mode: player.mode === 'ship' ? KINDS[b.kind].label : 'EVA', level: levelFor(S.xp) };
+        },
+        setWaypoint: (w) => (waypoint = w),
+      })
+    : null;
+  if (dev) $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>';
+
   // ---- drops ----
   let windowIndex = -1;
   let drops = [];
@@ -144,6 +165,7 @@ function start(world, bulletin, sprites) {
   let boardable = null;
 
   function onPress(k) {
+    if (dev && dev.onKey(k)) return;
     if (k === 'h') return openHelp();
     if (k === 'tab') return openLedger();
     if (k === 'f') return toggleBoard();
@@ -582,8 +604,8 @@ function start(world, bulletin, sprites) {
       holdDrop: hold.drop, holdProgress: hold.progress,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites,
-      extraWorld: (c) => loops.drawWorld(c, body, now),
-      extraMinimap: (m, tx, ty) => loops.drawMinimap(m, tx, ty),
+      extraWorld: (c) => { loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraMinimap: (m, tx, ty) => { loops.drawMinimap(m, tx, ty); dev?.drawMinimap(m, tx, ty); },
     };
     drawScene(ctx, W, H, cam, scene);
     drawMinimap(mctx, 200, 150, scene);

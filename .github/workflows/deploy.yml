@@ -33,6 +33,9 @@ jobs:
           node -e "JSON.parse(require('fs').readFileSync('data/world.json'))"
           node -e "JSON.parse(require('fs').readFileSync('data/bulletin.json'))"
 
+      - name: Stamp build (shown in the in-game staging tools)
+        run: echo "{\"sha\":\"${GITHUB_SHA::7}\",\"built\":\"$(date -u +%Y-%m-%dT%H:%MZ)\"}" > data/build.json
+
       - name: Check FTP secrets
         id: cfg
         env:
