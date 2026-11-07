@@ -17,7 +17,7 @@ const FRIENDLY = ['INSURED CIVILIAN', 'BUREAU CHEER OFFICER', 'ASSESSOR (ON DUTY
 // stages: [name, hostiles, friendlies, up-seconds, movers?]
 const STAGES = [['STAGE 1 · STATIC', 8, 3, 2.4, false], ['STAGE 2 · MOVERS', 8, 3, 2.6, true], ['STAGE 3 · SNAP', 10, 4, 1.05, false]];
 
-export function createMilitia({ world, econ, lore, log = () => {}, esc, openModal, closeModal, emit = () => {}, sprites = null }) {
+export function createMilitia({ world, econ, lore, log = () => {}, esc, openModal, closeModal, emit = () => {}, sprites = null, board = null }) {
   const S = econ.state;
   S.militia ||= { xp: 0, corp: null, last: 0, best: 0, quals: 0 };
   const M = S.militia;
@@ -141,10 +141,12 @@ export function createMilitia({ world, econ, lore, log = () => {}, esc, openModa
        <div class="sub">Range 7 · ${esc(corpName())} company</div>
        <div class="explain" style="font-size:14px">Score <b>${res.score}</b> of ${res.max} (${Math.round(pct * 100)}%) · accuracy ${res.shots ? Math.round((res.hits / res.shots) * 100) : 0}% (${res.hits}/${res.shots})<br/>
        Hostiles down: ${res.down}/${res.hostiles} · heads: ${res.heads}${res.friendly ? ` · <b style="color:#ff7a5c">friendlies hit: ${res.friendly}</b>` : ''}${res.wilco ? ' · <b style="color:#ff7a5c">YOU SHOT THE DOG.</b>' : ''}<br/>
-       ${paid ? `Paid <b style="color:#d6f08a">+${pay} scrap</b> · +${Math.max(0, res.score)} merit · ${esc(RANKS[after][0])}${after > before ? ' <b style="color:#d6f08a">(PROMOTED)</b>' : ''}` : `Practice: no pay, no merit. Paid again in ${fmt(left())}.`}</div>
-       <div class="buttons"><button class="primary" id="again">Again</button><button id="lobby">Range desk</button><button id="x">Dismissed</button></div>`,
+       ${paid ? `Paid <b style="color:#d6f08a">+${pay} scrap</b> · +${Math.max(0, res.score)} merit · ${esc(RANKS[after][0])}${after > before ? ' <b style="color:#d6f08a">(PROMOTED)</b>' : ''}` : `Practice: no pay, no merit. Paid again in ${fmt(left())}.`}
+       ${board ? `<br/>${board.line('militia')}` : ''}</div>
+       <div class="buttons"><button class="primary" id="again">Again</button>${board ? '<button id="lb">Leaderboard</button>' : ''}<button id="lobby">Range desk</button><button id="x">Dismissed</button></div>`,
       (el) => {
         el.querySelector('#again').addEventListener('click', play);
+        el.querySelector('#lb')?.addEventListener('click', () => board.open('militia'));
         el.querySelector('#lobby').addEventListener('click', open);
         el.querySelector('#x').addEventListener('click', closeModal);
       }

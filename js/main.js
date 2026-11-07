@@ -18,6 +18,9 @@ import { createPlot } from './plot.js';
 import { createMinigames } from './minigames.js';
 import { createMilitia } from './militia.js';
 import { createDock } from './dock.js';
+import { createBoards } from './boards.js';
+import { GAMES as SHIFT_GAMES } from './minigames.js';
+import { CIRCUITS } from './circuits.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -179,8 +182,10 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   // ---- residency card (C) + achievements (J) ----
   // Civic Warmth™: the Bureau's friendly score (K)
   const warmth = createWarmth({ econ, log, esc, openModal, closeModal, skiff: myShip.reg });
+  let boards = null; // leaderboards, created once the circuits exist
+  const boardHook = { line: (id) => boards?.line(id) || '', open: (id) => boards?.open(id) };
   // shift work: a minigame at every organization's desk (pays scrap, 13-minute cooldown per org)
-  const minigames = createMinigames({ econ, log, esc, openModal, closeModal, emit: (t, d) => progress.emit(t, d), onBack: (org) => progress.openDeskFor(org) });
+  const minigames = createMinigames({ econ, log, esc, openModal, closeModal, emit: (t, d) => progress.emit(t, d), onBack: (org) => progress.openDeskFor(org), board: boardHook });
   const progress = createProgress({
     world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, warmth, minigames,
     setWaypoint: (w) => (waypoint = w),
@@ -189,12 +194,18 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   });
   const emit = progress.emit;
   // the Non-Volunteer Volunteer Militia: Range 7 (first-person shooting gallery)
-  const militia = createMilitia({ world, econ, lore, log, esc, openModal, closeModal, emit, sprites });
+  const militia = createMilitia({ world, econ, lore, log, esc, openModal, closeModal, emit, sprites, board: boardHook });
   // Last Mile Freight: Loading Dock 3 (pack the hold)
-  const dock = createDock({ world, econ, log, esc, openModal, closeModal, emit });
+  const dock = createDock({ world, econ, log, esc, openModal, closeModal, emit, board: boardHook });
   $('h-warmrow').addEventListener('click', () => warmth.openPanel());
   // ---- racetracks south of the main drag ----
   const circuits = createCircuits({ econ, log, esc, player, emit, openModal, closeModal, sprites });
+  // ---- leaderboards for every game (B, the menu, and the Hall of Records by the Atlas) ----
+  boards = createBoards({ econ, esc, openModal, closeModal, circuits, circuitList: CIRCUITS, games: SHIFT_GAMES, lore, sprites });
+  progress.on((t, d) => {
+    boards.onEvent(t, d);
+    if (t === 'lap') { const l = boards.line('spine'); if (l) log(l.replace(/<\/?b[^>]*>/g, '')); }
+  });
   // ---- Humane Shuttle runs (Humane Transit Directorate, Ministry of the Gentry) ----
   const shuttle = createShuttle({
     world, econ, log, esc, player, emit, openModal, closeModal, sprites, refit: REFIT, passengers, addHeat: (n, why) => loops.addHeat(n, why),
@@ -247,7 +258,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     : null;
   const pilots = createPilots({ log, esc, openModal, closeModal });
   touch = createTouch({ onPress: (k) => (modalOpen ? null : onPress(k)), getBody: () => me(), dev: !!dev, onMenu: () => gigs?.toggle(false) });
-  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; P · pilot &nbsp; G · gigs &nbsp; K · warmth &nbsp; C · card &nbsp; J · achievements &nbsp; B · lap boards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
+  $('hint').innerHTML = 'H · controls &nbsp; TAB · ledger &nbsp; L · wiki &nbsp; P · pilot &nbsp; G · gigs &nbsp; K · warmth &nbsp; C · card &nbsp; J · achievements &nbsp; B · leaderboards' + (dev ? ' &nbsp; <b style="color:#ffd166">N · note &nbsp; R · roadmap</b>' : '');
 
   // ---- drops ----
   let windowIndex = -1;
@@ -287,7 +298,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   let nearHut = null;
   let nearDrop = null;
   let nearRefit = false;
-  let nearArchitect = null, lastArch = null, nearMilitia = false, nearDock = false;
+  let nearArchitect = null, lastArch = null, nearMilitia = false, nearDock = false, nearHall = false;
   let nearRegistry = null; // the Registry kiosk you're parked at, if any
   let nearDesk = null; // an organization's residency desk
   let nearCircuit = null; // a racetrack's timing board
@@ -312,7 +323,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (k === 'l') { emit('wiki'); return openWiki(lore, { openModal, closeModal, esc }); }
     if (k === 'c') return progress.openCard();
     if (k === 'j') return progress.openAchievements();
-    if (k === 'b') return circuits.openBoard();
+    if (k === 'b') return boards.open(nearCircuit ? `circuit:${nearCircuit.id}` : null);
     if (k === 'q') return clearMarkers();
     if (k === 'g') return gigs.toggle();
     if (k === 'tab') return openLedger();
@@ -328,6 +339,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (k === 'e' && !nearDrop && nearArchitect) return openArchitect(nearArchitect);
     if (k === 'e' && !nearDrop && nearMilitia) return militia.open();
     if (k === 'e' && !nearDrop && nearDock) return dock.open();
+    if (k === 'e' && !nearDrop && nearHall) return boards.open();
     if (k === 'e' && !nearDrop && nearRegistry) return openRegistry(null, nearRegistry.sprawl);
     if (k === 'e' && !nearDrop && nearDesk) return progress.openDesk(nearDesk);
     if (k === 'e' && !nearDrop && nearCircuit) return circuits.openBoard(nearCircuit.id);
@@ -975,7 +987,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
          <span class="k"><kbd>B</kbd></span><span>Racetrack leaderboards (The Island Circuit, The Temple Circuit)</span>
          <span class="k"><kbd>H</kbd></span><span>This screen</span>
        </div>
-       ${touch?.active ? `<h3>TOUCH CONTROLS</h3><div><b>Left stick:</b> point where you want to go; the ship turns toward it and pushes harder the further you drag. <b>BRAKE</b> (hold), <b>E</b> (lights up when there's something to use), <b>F</b> jump, <b>X</b> dump/abandon. <b>☰</b> has every menu: gigs, card, achievements, warmth, lap boards, ledger, wiki. Works in portrait and landscape; Full screen is in the menu.</div>` : ''}
+       ${touch?.active ? `<h3>TOUCH CONTROLS</h3><div><b>Left stick:</b> point where you want to go; the ship turns toward it and pushes harder the further you drag. <b>BRAKE</b> (hold), <b>E</b> (lights up when there's something to use), <b>F</b> jump, <b>X</b> dump/abandon. <b>☰</b> has every menu: gigs, card, achievements, warmth, leaderboards, ledger, wiki. Works in portrait and landscape; Full screen is in the menu.</div>` : ''}
        <h3>THE GAME</h3>
        <div>Fly the Spine. Hunt drops: when something craps out a load of scrap, the first pilot to reach it, slow down and press <kbd>E</kbd> gets it.
        Scrap gives XP; levels widen your sight radius. Spend scrap at the Kessler Refit Bay so your skiff stops handling like a shopping cart. Buy lots for $1, brand them, get bought out, buy them back.<br/>
@@ -1149,6 +1161,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (nearMilitia) dockPad = militia.pad;
     nearDock = player.mode === 'ship' && dock.near(body.x, body.y, 50 * REACH);
     if (nearDock) dockPad = dock.pad;
+    nearHall = player.mode === 'ship' && boards.nearHall(body.x, body.y, 45 * REACH);
+    if (nearHall) dockPad = boards.pad;
     nearArchitect = player.mode === 'ship' ? architects(world).find((a) => dist(a.pad) < 50 * REACH) || null : null;
     if (nearArchitect) { dockPad = nearArchitect.pad; if (lastArch !== nearArchitect.id) { lastArch = nearArchitect.id; emit('architect', { id: nearArchitect.id }); } }
     nearDesk = player.mode === 'ship' ? progress.nearDesk(body.x, body.y + -40, 60 * REACH) : null;
@@ -1234,8 +1248,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
-      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); if (S.hut) { const hs = sprawl.sites.find((x) => x.id === S.hut.site); if (hs && Math.abs(cam.x - hs.x) < 2500) plot.draw(c, hs, now); } drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); militia.drawWorld(c, cam, now, nearMilitia); dock.drawWorld(c, cam, now, nearDock); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); militia.drawMinimap(m, tx, ty); dock.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
+      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); if (S.hut) { const hs = sprawl.sites.find((x) => x.id === S.hut.site); if (hs && Math.abs(cam.x - hs.x) < 2500) plot.draw(c, hs, now); } drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); militia.drawWorld(c, cam, now, nearMilitia); dock.drawWorld(c, cam, now, nearDock); boards.drawWorld(c, cam, now, nearHall); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); militia.drawMinimap(m, tx, ty); dock.drawMinimap(m, tx, ty); boards.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
     drawScene(ctx, W, H, cam, scene);
@@ -1250,6 +1264,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
+    else if (nearHall) prompt = 'E · Hall of Records (leaderboards for every game)';
     else if (nearDock) prompt = `E · Last Mile Loading Dock 3 (${dock.grade()})`;
     else if (nearMilitia) prompt = `E · Militia Range 7 (${militia.rank()})`;
     else if (nearArchitect) prompt = `E · ${nearArchitect.name} (Architect · not for sale)`;
@@ -1318,7 +1333,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, minigames, militia, dock, architects: () => architects(world) };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, minigames, militia, dock, boards: () => boards, architects: () => architects(world) };
 }
 
 boot();

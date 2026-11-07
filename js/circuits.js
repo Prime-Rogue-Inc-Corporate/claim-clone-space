@@ -376,5 +376,5 @@ export function createCircuits({ econ, log, esc, player, emit = () => {}, openMo
 
   const bestOf = (id) => { const l = store.laps[id]; return l && l.length ? Math.min(...l.map((x) => x.ms)) : null; };
   const rivalTop = (id) => rivals[id].reduce((a, b) => (a.ms < b.ms ? a : b));
-  return { update, status, drawWorld, drawMinimap, nearBoard, openBoard, active: () => race.track, bestOf, rivalTop, fmt, next: () => (race.track ? race.track.gates[race.next % GATES] : null) };
+  return { update, status, drawWorld, drawMinimap, nearBoard, openBoard, boardOf: board, active: () => race.track, bestOf, rivalTop, fmt, next: () => (race.track ? race.track.gates[race.next % GATES] : null) };
 }

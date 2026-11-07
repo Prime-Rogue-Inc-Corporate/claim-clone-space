@@ -24,7 +24,7 @@ export const GAMES = {
   assessor: { kind: 'sort', title: 'Fair Price', how: 'Lot A was bought at the first price. Is the second price at least 1.13× it? Yes or no.', mode: 'math' },
 };
 
-export function createMinigames({ econ, emit = () => {}, log = () => {}, esc, openModal, closeModal, onBack = null }) {
+export function createMinigames({ econ, emit = () => {}, log = () => {}, esc, openModal, closeModal, onBack = null, board = null }) {
   const S = econ.state;
   S.shifts ||= {}; // org -> last paid timestamp
   const left = (org) => Math.max(0, (S.shifts[org] || 0) + COOLDOWN_MS - Date.now());
@@ -79,9 +79,11 @@ export function createMinigames({ econ, emit = () => {}, log = () => {}, esc, op
        <div class="sub">${esc(g.title)} · ${esc(orgInfo.name || org)}</div>
        <div class="explain" style="font-size:15px">Score: <b>${Math.round(q * 100)}%</b><br/>
        ${paid ? `Paid: <b style="color:#d6f08a">+${pay} scrap</b>` : `Practice: no pay. Next paid shift in ${fmt(left(org))}.`}<br/>
-       <span class="sub">${q >= 0.95 ? 'Exemplary. This has been noted.' : q >= 0.6 ? 'Adequate. This has been noted.' : 'This has been noted.'}</span></div>
-       <div class="buttons"><button class="primary" id="again">Again</button><button id="back">Back</button></div>`,
+       <span class="sub">${q >= 0.95 ? 'Exemplary. This has been noted.' : q >= 0.6 ? 'Adequate. This has been noted.' : 'This has been noted.'}</span>
+       ${board ? `<br/>${board.line(`shift:${org}`)}` : ''}</div>
+       <div class="buttons"><button class="primary" id="again">Again</button>${board ? '<button id="lb">Leaderboard</button>' : ''}<button id="back">Back</button></div>`,
       (el) => {
+        el.querySelector('#lb')?.addEventListener('click', () => board.open(`shift:${org}`));
         el.querySelector('#again').addEventListener('click', () => open(org, orgInfo));
         el.querySelector('#back').addEventListener('click', () => (onBack ? onBack(org) : closeModal()));
       }

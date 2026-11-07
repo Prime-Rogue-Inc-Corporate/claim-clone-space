@@ -27,7 +27,7 @@ const TAGS = {
 };
 const PALETTE = ['#8a6a3a', '#6b5a3a', '#7a5a46', '#5f6b45', '#6a5f52', '#7d6a4a'];
 
-export function createDock({ world, econ, log = () => {}, esc, openModal, closeModal, emit = () => {} }) {
+export function createDock({ world, econ, log = () => {}, esc, openModal, closeModal, emit = () => {}, board = null }) {
   const S = econ.state;
   S.dock ||= { xp: 0, last: 0, best: 0, shifts: 0 };
   const D = S.dock;
@@ -113,10 +113,12 @@ export function createDock({ world, econ, log = () => {}, esc, openModal, closeM
        <div class="sub">Loading Dock 3 · ${esc(GRADES[after][0])}${after > before ? ' <b style="color:#d6f08a">(PROMOTED)</b>' : ''}</div>
        <table>${lines}<tr><td><b>Total</b></td><td style="text-align:right"><b>${res.total}</b></td></tr></table>
        <div class="explain">${paid ? `Paid <b style="color:#d6f08a">+${pay} scrap</b> · +${Math.max(0, res.total)} merit` : `Practice: no pay, no merit. Paid again in ${fmt(left())}.`}<br/>
-       <span class="sub">${res.claims.length ? 'Damage claims have been forwarded to you. Last Mile accepts no liability, and also none of yours.' : 'No claims. Suspicious. This has been noted.'}</span></div>
-       <div class="buttons"><button class="primary" id="again">Again</button><button id="desk">Dock office</button><button id="x">Close</button></div>`,
+       <span class="sub">${res.claims.length ? 'Damage claims have been forwarded to you. Last Mile accepts no liability, and also none of yours.' : 'No claims. Suspicious. This has been noted.'}</span>
+       ${board ? `<br/>${board.line('dock')}` : ''}</div>
+       <div class="buttons"><button class="primary" id="again">Again</button>${board ? '<button id="lb">Leaderboard</button>' : ''}<button id="desk">Dock office</button><button id="x">Close</button></div>`,
       (el) => {
         el.querySelector('#again').addEventListener('click', play);
+        el.querySelector('#lb')?.addEventListener('click', () => board.open('dock'));
         el.querySelector('#desk').addEventListener('click', open);
         el.querySelector('#x').addEventListener('click', closeModal);
       }

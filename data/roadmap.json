@@ -657,12 +657,24 @@
       "version": "0.1.17",
       "date": "2026-11-07",
       "name": "Last Mile Loading Dock 3: pack the hold",
-      "status": "now",
+      "status": "done",
       "items": [
         "Loading Dock 3 south of block 8: parcels ride a belt toward the void; pick them up, rotate, and pack an 8×5 hold before they fall off (subcontracted, −5)",
         "Tags with rules checked at inspection: FRAGILE (crushed if boxed in on 3+ sides), HAZMAT and PERISHABLE (contamination claim if touching), PRIORITY (by the door, or buried)",
         "Depart any time or at the 80 s whistle; an itemized inspection report turns into scrap (13–65, once per 13 min) and merit toward 13 courier grades (Probationary Courier → Every Package Arrives); the belt speeds up as you rank up",
         "Achievements: Clocked In, Not One Cubic Metre (100% full), No Claims Bonus (full + zero claims); shame: Subcontracted (13 parcels off the dock)"
+      ]
+    },
+    {
+      "version": "0.1.18",
+      "date": "2026-11-07",
+      "name": "Leaderboards for every game",
+      "status": "now",
+      "items": [
+        "18 boards: Spine Run, both circuits, Range 7, Dock 3 and all 13 shift games; every run is recorded (practice included), top 13 per board",
+        "UX: B (or ☰ → Leaderboards) opens every board grouped by Races / Range & Dock / Shifts, with your rank on each button; every results screen shows your rank, personal best and P1, with a Leaderboard button",
+        "In the world: the Hall of Records, a big screen by the Atlas (east of the Refit Bay) that cycles through the top 5 of each board; dock and E to open",
+        "Local for now (you vs. the 12 seeded rival pilots); boards go shared with accounts + a server (Phase 2)"
       ]
     }
   ],

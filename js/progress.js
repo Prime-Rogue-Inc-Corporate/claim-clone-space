@@ -106,7 +106,10 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
   }
 
   // Every game event goes through here: stamps first, then achievement progress.
+  const listeners = [];
+  const on = (fn) => listeners.push(fn);
   function emit(type, data = {}) {
+    for (const fn of listeners) { try { fn(type, data); } catch (e) { console.error(e); } }
     const dw = warmth ? warmth.apply(type, data) : 0;
     for (const [id, st] of Object.entries(STAMPS)) if (st.event === type) stamp(id);
     let dirty = false;
@@ -270,5 +273,5 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
   // unstamped orgs that have a place to go (for the gig board)
   const openStamps = () => BLOCK_ORDER.filter((id) => !S.stamps[id] && orgById[id] && placeOf(id)).map((id) => ({ org: id, name: orgById[id].name, site: orgById[id].site, how: STAMPS[id].how, ...placeOf(id), desk: !!desks.find((d) => d.org === id && !d.office) }));
   const openDeskFor = (org) => { const d = desks.find((x) => x.org === org); if (d) openDesk(d); else closeModal(); };
-  return { openStamps, emit, stamp, stampCount, processed, nearDesk, openDesk, openDeskFor, openCard, openAchievements, drawWorld, desks };
+  return { on, openStamps, emit, stamp, stampCount, processed, nearDesk, openDesk, openDeskFor, openCard, openAchievements, drawWorld, desks };
 }
