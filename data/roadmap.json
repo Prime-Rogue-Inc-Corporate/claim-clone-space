@@ -681,13 +681,27 @@
       "version": "0.1.19",
       "date": "2026-11-07",
       "name": "Ministry Allocation Annex: approve or deny",
-      "status": "now",
+      "status": "done",
       "items": [
         "The Allocation Annex north of block 10: process Tenure Heights applications against today's rules (3–5 of 9, chosen by date, so everyone gets the same rules each day)",
         "Papers: resident ID, deed / credit statement / Sprawl registry, Forms 13-B and W, a dog, a smile. Rules include residency level, gentry-only, statement dates, skiff numbers ending in 3, a banned employer of the day, minimum age 26, name matching, the Bureau smile mandate, dogs needing Form W",
         "At 40 s a Bureau Bulletin adds a rule, effective immediately. Right call +10, right citation on a denial +5, wrong call −15 and a citation; three citations and your desk is reassigned. 90 s shifts",
         "Pays 13–65 scrap (once per 13 min), merit toward 13 clerk grades (Temporary Clerk (Permanent) → Undersecretary for Equality); more rules as you rank up; its own leaderboard",
         "Achievements: Rubber Stamp, Equality, Conveniently (13+ applicants, no citations); shame: Reassigned"
+      ]
+    },
+    {
+      "version": "0.1.20",
+      "date": "2026-11-07",
+      "name": "Kessler Salvage Yard 9: cut a derelict apart",
+      "status": "now",
+      "items": [
+        "Salvage Yard 9, south-west of the Central Hub: a 6×4 derelict hull on a jittered grid; drag the torch along a seam to cut it",
+        "A panel floats into the net when every seam around it is open (hull edges and seams next to missing panels count), so you work from the outside in",
+        "Panels: plating 5 ore, Cu wiring 10, Ir alloy 25, occupied compartments (a face at the porthole) +8 ore but −15 liability. Fuel lines (red dashed seams) explode and take the panels either side with them (−10)",
+        "Torch heat: cutting nonstop overheats it and locks you out to cool. Strip the whole wreck early for a time bonus. 75 s",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 cutter grades (Debris Intern → Everything Is Ore); more fuel lines and occupants as you rank up; its own leaderboard",
+        "Achievements: Torch Lit, Stripped to the Frame, Safety Third (whole wreck, no fuel lines); shame: Reclassified as Ore (3 occupied compartments)"
       ]
     }
   ],
@@ -793,8 +807,8 @@
         },
         {
           "id": "lg-kessler",
-          "text": "Kessler: cut a derelict hull apart along its seams for salvage (slice/physics)",
-          "status": "later"
+          "text": "Kessler: Salvage Yard 9, cut a derelict hull apart along its seams (live). Next: real derelicts from the void, ore as a resource, rival cutters",
+          "status": "now"
         },
         {
           "id": "lg-ashiron",

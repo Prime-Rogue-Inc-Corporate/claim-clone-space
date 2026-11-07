@@ -909,6 +909,52 @@
       },
       "shame": true,
       "cosmetic": "A 'Temporary' name badge (permanent)"
+    },
+    {
+      "id": "salvage-first",
+      "cat": "freight",
+      "name": "Torch Lit",
+      "desc": "Finish a paid shift at Salvage Yard 9.",
+      "on": "salvage",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "salvage-strip",
+      "cat": "freight",
+      "name": "Stripped to the Frame",
+      "desc": "Free every panel of a derelict before the whistle.",
+      "on": "salvage",
+      "eq": {
+        "cleared": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "salvage-clean",
+      "cat": "freight",
+      "name": "Safety Third",
+      "desc": "Strip a whole wreck without cutting a fuel line.",
+      "on": "salvage",
+      "eq": {
+        "cleared": true,
+        "booms": 0
+      },
+      "reward": 39
+    },
+    {
+      "id": "salvage-occupied",
+      "cat": "shame",
+      "name": "Reclassified as Ore",
+      "desc": "Salvage 3 occupied compartments in one shift.",
+      "on": "salvage",
+      "min": {
+        "occupants": 3
+      },
+      "shame": true,
+      "cosmetic": "A 'Kessler Thanks You For Your Contribution' plaque"
     }
   ]
 }
