@@ -1004,6 +1004,52 @@
       },
       "shame": true,
       "cosmetic": "A length of ceremonial rope"
+    },
+    {
+      "id": "air-first",
+      "cat": "civic",
+      "name": "Metered",
+      "desc": "Finish a paid shift at Airworks 5.",
+      "on": "airworks",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "air-all",
+      "cat": "civic",
+      "name": "Everybody Breathes (For a Fee)",
+      "desc": "Get air to every hut on the grid.",
+      "on": "airworks",
+      "eq": {
+        "all": true
+      },
+      "reward": 39
+    },
+    {
+      "id": "air-clean",
+      "cat": "civic",
+      "name": "Not a Molecule Wasted",
+      "desc": "Every hut metered, zero leaks.",
+      "on": "airworks",
+      "eq": {
+        "all": true,
+        "leaks": 0
+      },
+      "reward": 65
+    },
+    {
+      "id": "air-vent",
+      "cat": "shame",
+      "name": "Venting",
+      "desc": "Leak air into the void 5 times in one shift.",
+      "on": "airworks",
+      "min": {
+        "leaks": 5
+      },
+      "shame": true,
+      "cosmetic": "An 'I Breathe Irresponsibly' patch"
     }
   ]
 }

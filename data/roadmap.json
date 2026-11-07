@@ -721,12 +721,25 @@
       "version": "0.1.22",
       "date": "2026-11-07",
       "name": "Big screen for lore games + a readable shuttle dashboard",
-      "status": "now",
+      "status": "done",
       "items": [
         "Lore games (Range 7, Dock 3, Annex, Salvage Yard 9, Auction Floor 13) now open as wide as the screen allows at 16:10 (≈1575 px on a 1080p monitor) and render crisp at that size",
         "Shuttle: a proper HUD dashboard (next stop, a big comfort % in green/amber/red with a bar, time vs par turning red when over)",
         "Shuttle label and passenger speech bubbles scale with zoom so they stay readable on desktop and phone",
         "TO CHECK on mobile (Kevin): shuttle dashboard/label text size; Loading Dock 3 layout"
+      ]
+    },
+    {
+      "version": "0.1.23",
+      "date": "2026-11-07",
+      "name": "Cinder Airworks 5: route the metered air",
+      "status": "now",
+      "items": [
+        "Airworks 5 south of block 5: a 10×6 pipe grid between the MAIN and 2–3 customers' huts; tap a pipe to rotate it",
+        "When the main pressurizes (14–22 s, or OPEN THE VALVE early for a bonus), air flows pipe by pipe down whatever you built and speeds up as it goes; tees split the flow to feed more huts, crosses go straight through, rocks block",
+        "An open end vents into the void: a leak (−10) and that line dies. Every hut reached is a metered customer (+30), +2 per pipe section; the early-valve bonus only counts if somebody got air. Every board has at least one solvable line",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Meter Maid → Oxygen Laureate); a third hut and faster air as you rank up; its own leaderboard",
+        "Achievements: Metered, Everybody Breathes (For a Fee), Not a Molecule Wasted (all huts, no leaks); shame: Venting (5 leaks)"
       ]
     }
   ],
@@ -847,8 +860,8 @@
         },
         {
           "id": "lg-cinder",
-          "text": "Cinder: route metered air through valves and pipes before the pressure drops (pipe puzzle)",
-          "status": "later"
+          "text": "Cinder: Airworks 5, route metered air through a pipe grid to the huts (live). Next: real huts in the Sprawls get air from it, outages, meter tampering",
+          "status": "now"
         },
         {
           "id": "lg-gullet",

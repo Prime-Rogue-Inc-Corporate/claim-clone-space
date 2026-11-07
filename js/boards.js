@@ -25,6 +25,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     dock: { name: 'Loading Dock 3', group: 'Lore games', unit: 'pts', range: [55, 205], sub: 'inspection total' },
     salvage: { name: 'Salvage Yard 9', group: 'Lore games', unit: 'pts', range: [45, 230], sub: 'Kessler Mining Co. · ore' },
     auction: { name: 'Auction Floor 13', group: 'Lore games', unit: 'pts', range: [60, 320], sub: 'Gavel & Rope · commission' },
+    airworks: { name: 'Airworks 5', group: 'Lore games', unit: 'pts', range: [40, 170], sub: 'Cinder Collective · air metered' },
     annex: { name: 'Allocation Annex', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Ministry of the Gentry' },
   };
   for (const c of circuitList) DEFS[`circuit:${c.id}`] = { name: c.name.replace(/^THE /, 'The ').replace(/\B\w+/g, (w) => w.toLowerCase()), group: 'Races', unit: 'time', low: true, circuit: c.id, sub: c.after };
@@ -80,6 +81,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     else if (type === 'annex') record('annex', data.score);
     else if (type === 'salvage') record('salvage', data.score);
     else if (type === 'auction') record('auction', data.score);
+    else if (type === 'airworks') record('airworks', data.score);
     else if (type === 'lap') record('spine', data.ms);
   }
   // one line for a results screen
