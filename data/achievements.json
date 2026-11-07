@@ -830,6 +830,51 @@
       "on": "shot-wilco",
       "shame": true,
       "cosmetic": "A muzzle decal (for you)"
+    },
+    {
+      "id": "dock-first",
+      "cat": "freight",
+      "name": "Clocked In",
+      "desc": "Finish a paid shift at Loading Dock 3.",
+      "on": "dock",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "dock-full",
+      "cat": "freight",
+      "name": "Not One Cubic Metre",
+      "desc": "Depart with the hold 100% full.",
+      "on": "dock",
+      "min": {
+        "fill": 1
+      },
+      "reward": 39
+    },
+    {
+      "id": "dock-perfect",
+      "cat": "freight",
+      "name": "No Claims Bonus",
+      "desc": "Full hold, zero damage claims.",
+      "on": "dock",
+      "eq": {
+        "perfect": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "dock-void",
+      "cat": "shame",
+      "name": "Subcontracted",
+      "desc": "Let 13 parcels fall off the dock in one shift.",
+      "on": "dock",
+      "min": {
+        "lost": 13
+      },
+      "shame": true,
+      "cosmetic": "A 'How's my packing?' bumper sticker"
     }
   ]
 }

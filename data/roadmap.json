@@ -644,13 +644,25 @@
       "version": "0.1.16",
       "date": "2026-11-07",
       "name": "Militia Range 7: first-person shooting gallery",
-      "status": "now",
+      "status": "done",
       "items": [
         "Range 7 south of block 4: swear allegiance to one of the corporations' companies, then qualify",
         "First-person gallery: three stages (static, movers, snap pop-ups); hostile cutouts (Agitator, Loiterer, Unlicensed Breather…), no-shoot cutouts (Insured Civilian, Bureau Cheer Officer, Assessor) and, in stage 3, the dog",
         "13-round magazine, reload (R / RELOAD box), aim sway + recoil that worsens when you spray; heads 25, body 10, friendlies −30, Wilco −100",
         "Grades: Unqualified / Marksman / Sharpshooter / Expert → 13 / 26 / 39 / 65 scrap (paid once per 13 min); score becomes merit toward 13 ranks (Conscript-Volunteer → Commandant of Volunteering); weekly qualification tracked (fines later)",
         "Achievements: Voluntold, Qualified (Barely Counts), Expert Volunteer, Clean Sheet, Lieutenant (Unpaid); shame: Bad Dog"
+      ]
+    },
+    {
+      "version": "0.1.17",
+      "date": "2026-11-07",
+      "name": "Last Mile Loading Dock 3: pack the hold",
+      "status": "now",
+      "items": [
+        "Loading Dock 3 south of block 8: parcels ride a belt toward the void; pick them up, rotate, and pack an 8×5 hold before they fall off (subcontracted, −5)",
+        "Tags with rules checked at inspection: FRAGILE (crushed if boxed in on 3+ sides), HAZMAT and PERISHABLE (contamination claim if touching), PRIORITY (by the door, or buried)",
+        "Depart any time or at the 80 s whistle; an itemized inspection report turns into scrap (13–65, once per 13 min) and merit toward 13 courier grades (Probationary Courier → Every Package Arrives); the belt speeds up as you rank up",
+        "Achievements: Clocked In, Not One Cubic Metre (100% full), No Claims Bonus (full + zero claims); shame: Subcontracted (13 parcels off the dock)"
       ]
     }
   ],
@@ -781,8 +793,8 @@
         },
         {
           "id": "lg-lastmile",
-          "text": "Last Mile: pack the cargo hold (spatial packing), then pay for the damage",
-          "status": "later"
+          "text": "Last Mile: Loading Dock 3, pack the hold from a moving belt (live). Next: hold sizes per ship class, real freight jobs loaded from here, insurance upsell",
+          "status": "now"
         },
         {
           "id": "lg-gavel",
