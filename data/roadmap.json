@@ -678,7 +678,7 @@
         },
         {
           "id": "mr-promo",
-          "text": "69-floor promo (Kevin, Nov 7): Spine price fixed (assumed $13). While the 69 sale runs, each newly opened avenue block doubles the promo of the block before it ($13 → $26 → $52 → $104 → $208 …). OPEN: how long the 69 sale runs (publish the end date up front), and what happens when doubling passes the floor-by-floor price (~$228 at the cap), which it does by the 5th new block",
+          "text": "69-floor promo (Kevin, Nov 7): Spine price fixed (assumed $13). The 69 sale covers the first five newly opened avenue blocks, each doubling the one before: $13 → $26 → $52 → $104 → $208. No end date: it ends when the next doubling ($416) would cost more than buying 69 floors one at a time (~$228). From block 6 on, floors sell normally. Published rule: \"the 69 sale covers the first five new blocks\"",
           "status": "later"
         }
       ]
