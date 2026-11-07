@@ -149,7 +149,7 @@
         },
         {
           "id": "p1-arch-art",
-          "text": "Architect art from Kevin: both real logos as transparent PNGs (assets/architects/primerogue.png, wilco.png); two top-down tower roofs (arch_roof_primerogue, arch_roof_wilco); two campus plaza tiles",
+          "text": "REVISIT (Kevin, Nov 7: placeholder looks rough): better Architect imagery. Proper Wilco logo + Prime Rogue roof treatment; two top-down tower roofs (arch_roof_primerogue, arch_roof_wilco); two campus plaza tiles. Drop-in paths: assets/architects/<id>.png (roof) and <id>_card.png (card)",
           "status": "next"
         },
         {
