@@ -93,7 +93,7 @@ export function createMinistry({ world, econ, log = () => {}, esc, openModal, cl
        <div class="buttons"><button id="quit">Leave your post (forfeit)</button></div>`,
       (el) => {
         const cv = el.querySelector('#annex');
-        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        const dpr = Math.min(3, Math.max(1, (cv.getBoundingClientRect().width / W) * (window.devicePixelRatio || 1))); // crisp at any size
         cv.width = W * dpr; cv.height = H * dpr;
         const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
         const game = shift(c, cv, gradeOf(), (res) => finish(res, paid));

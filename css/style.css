@@ -252,3 +252,25 @@ body.touch #panel .grid { grid-template-columns: 110px 1fr; }
 #panel .lb-group > .sub { width: 100%; margin: 2px 0 0; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
 #panel .lb-group button { padding: 4px 8px; font-size: 11px; font-weight: normal; }
 #panel .lb-rank { color: #d6f08a; font-weight: bold; }
+
+/* lore games: as big as the screen allows, keeping 16:10 */
+#panel.game { width: min(96vw, calc((100vh - 96px) * 1.6 + 26px)); max-height: 98vh; padding: 10px 12px; }
+#panel.game .mil-wrap canvas { width: 100%; }
+#panel.game .buttons { margin-top: 6px; }
+body.touch #panel.game { width: min(99vw, calc((100vh - 70px) * 1.6 + 12px)); max-height: 100vh; padding: 5px 6px; }
+body.touch #panel.game .buttons button { min-height: 30px; padding: 4px 10px; }
+
+/* shuttle dashboard in the HUD */
+#hud .loops .runhud { color: #efe6cf; font-size: 13px; margin: 2px 0; }
+#hud .loops .rh-top { font-size: 13px; color: #d6f08a; }
+#hud .loops .rh-top span { color: var(--dim); }
+#hud .loops .rh-row { display: flex; align-items: baseline; gap: 8px; margin-top: 2px; }
+#hud .loops .rh-cf { font-size: 30px; font-weight: bold; line-height: 1; }
+#hud .loops .rh-lbl { font-size: 11px; color: var(--dim); letter-spacing: 0.08em; }
+#hud .loops .rh-time { margin-left: auto; font-size: 17px; font-weight: bold; }
+#hud .loops .rh-time small { font-size: 11px; color: var(--dim); font-weight: normal; }
+#hud .loops .rh-bar { height: 6px; background: #2a2a2a; margin: 4px 0 2px; }
+#hud .loops .rh-bar i { display: block; height: 100%; }
+#hud .loops .rh-hint { font-size: 11px; color: var(--dim); }
+body.touch #hud .loops .rh-cf { font-size: 22px; }
+body.touch #hud .loops .rh-time { font-size: 14px; }

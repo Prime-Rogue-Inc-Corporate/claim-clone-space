@@ -444,6 +444,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   // ---- modal helpers ----
   function openModal(html, bind) {
     $('panel').innerHTML = html;
+    $('panel').classList.toggle('game', !!$('panel').querySelector('.mil-wrap')); // lore games get the big screen
     $('modal').hidden = false;
     modalOpen = true;
     keys.clear();

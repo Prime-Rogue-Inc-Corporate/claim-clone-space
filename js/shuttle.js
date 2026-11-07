@@ -409,7 +409,14 @@ export function createShuttle({ world, econ, log, esc, player, emit, openModal, 
   function status(now) {
     if (!run) return '';
     const secs = (now - run.start) / 1000, r = run.route;
-    return `<span style="color:#d6f08a">SHUTTLE → ${esc(r.stops[run.idx].name)} (${run.idx}/${r.stops.length - 1}) · ${fmt(secs)} / par ${fmt(r.par)} · comfort ${Math.max(0, Math.round(run.comfort))}% · ${run.vehicle.passengers || run.vip ? 'X opens the doors' : 'empty · X abandons'}</span>`;
+    // a proper dashboard: big comfort number + bar, so you can read it while you drive
+    const cf = Math.max(0, Math.round(run.comfort)), col = cf >= 80 ? '#d6f08a' : cf >= 50 ? '#ffd166' : '#ff7a5c';
+    const over = secs > r.par;
+    return `<div class="runhud"><div class="rh-top">SHUTTLE → <b>${esc(r.stops[run.idx].name)}</b> <span>(${run.idx}/${r.stops.length - 1})</span></div>
+      <div class="rh-row"><span class="rh-cf" style="color:${col}">${cf}%</span><span class="rh-lbl">COMFORT${run.vip ? ' · ⭐ VIP' : ''}</span>
+      <span class="rh-time" style="color:${over ? '#ff7a5c' : '#efe6cf'}">${fmt(secs)}<small> / par ${fmt(r.par)}</small></span></div>
+      <div class="rh-bar"><i style="width:${cf}%;background:${col}"></i></div>
+      <div class="rh-hint">${run.vehicle.passengers || run.vip ? 'X opens the doors' : 'empty · X abandons'}</div></div>`;
   }
   function prompt(body) {
     if (run) {

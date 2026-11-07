@@ -108,7 +108,7 @@ export function createMilitia({ world, econ, lore, log = () => {}, esc, openModa
        <div class="buttons"><button id="quit">Cease fire (forfeit)</button></div>`,
       (el) => {
         const cv = el.querySelector('#mil');
-        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        const dpr = Math.min(3, Math.max(1, (cv.getBoundingClientRect().width / W) * (window.devicePixelRatio || 1))); // crisp at any size
         cv.width = W * dpr; cv.height = H * dpr;
         const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
         const game = gallery(c, cv, (res) => finish(res, paid));

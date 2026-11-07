@@ -708,13 +708,25 @@
       "version": "0.1.21",
       "date": "2026-11-07",
       "name": "Gavel & Rope Auction Floor 13: hold the gavel",
-      "status": "now",
+      "status": "done",
       "items": [
         "Auction Floor 13 south of block 9: you're the auctioneer and keep 13% of every hammer price; 16 lore lots (Skiff #013, Wilco's tennis ball, Lot 9 (a person; debts included), half a Tenure Heights pod…)",
         "Five bidders with hidden limits (some sit on their hands, one may be a whale). Read the tells: near their limit they sweat, hesitate, stop smiling, jitter and mutter",
         "ASK +1 / ASK ×5 to speed the room up; going once, going twice, sold; SOLD! to hammer early. CHANDELIER invents a bid to push the top bidder; if nobody beats it the lot is bought in (a strike). Three strikes and the Rope Committee takes your gavel. 100 s",
         "Results show how much of the room's real money you found. Pays 13–65 scrap (once per 13 min), merit toward 13 caller grades (Runner → The Last Word); its own leaderboard",
         "Achievements: Going Once, Found the Price (90%+ over 4+ lots), From the Back of the Room (5 chandeliers, nothing bought in); shame: The Rope Committee Will See You Now"
+      ]
+    },
+    {
+      "version": "0.1.22",
+      "date": "2026-11-07",
+      "name": "Big screen for lore games + a readable shuttle dashboard",
+      "status": "now",
+      "items": [
+        "Lore games (Range 7, Dock 3, Annex, Salvage Yard 9, Auction Floor 13) now open as wide as the screen allows at 16:10 (≈1575 px on a 1080p monitor) and render crisp at that size",
+        "Shuttle: a proper HUD dashboard (next stop, a big comfort % in green/amber/red with a bar, time vs par turning red when over)",
+        "Shuttle label and passenger speech bubbles scale with zoom so they stay readable on desktop and phone",
+        "TO CHECK on mobile (Kevin): shuttle dashboard/label text size; Loading Dock 3 layout"
       ]
     }
   ],

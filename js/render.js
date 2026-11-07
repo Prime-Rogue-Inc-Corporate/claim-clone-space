@@ -63,6 +63,7 @@ export function drawScene(ctx, W, H, cam, scene) {
   }
 
   // world transform
+  scene.zoom = cam.zoom;
   ctx.save();
   ctx.translate(W / 2, H / 2);
   ctx.scale(cam.zoom, cam.zoom);
@@ -663,32 +664,33 @@ function drawShip(ctx, s, scene, time) {
 }
 
 // Passenger speech bubble over the shuttle (who's talking + what they said, wrapped).
-function drawBubble(ctx, s, b, spec) {
-  ctx.font = '12px monospace';
+function drawBubble(ctx, s, b, spec, f = 1) {
+  // f: text scale, so chatter stays readable at any zoom
+  ctx.font = `${Math.round(12 * f)}px monospace`;
   const words = b.text.split(' '), lines = [];
   let cur = '';
   for (const w of words) { if ((cur + ' ' + w).trim().length > 34) { lines.push(cur.trim()); cur = w; } else cur += ' ' + w; }
   if (cur.trim()) lines.push(cur.trim());
-  const w = Math.max(ctx.measureText(b.who).width, ...lines.map((l) => ctx.measureText(l).width)) + 16;
-  const h = 18 + lines.length * 15;
-  const x = s.x - w / 2, y = s.y - spec.radius - 22 - h;
+  const w = Math.max(ctx.measureText(b.who).width * 0.9, ...lines.map((l) => ctx.measureText(l).width)) + 16 * f;
+  const h = (18 + lines.length * 15) * f;
+  const x = s.x - w / 2, y = s.y - spec.radius - 22 * f - h;
   ctx.fillStyle = 'rgba(14,15,17,0.92)';
   ctx.strokeStyle = b.color || '#e8c547';
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = 1.5 * f;
   ctx.beginPath();
   ctx.rect(x, y, w, h);
-  ctx.moveTo(s.x - 6, y + h);
-  ctx.lineTo(s.x, y + h + 9);
-  ctx.lineTo(s.x + 6, y + h);
+  ctx.moveTo(s.x - 6 * f, y + h);
+  ctx.lineTo(s.x, y + h + 9 * f);
+  ctx.lineTo(s.x + 6 * f, y + h);
   ctx.fill();
   ctx.stroke();
   ctx.textAlign = 'left';
   ctx.fillStyle = b.color || '#e8c547';
-  ctx.font = 'bold 10px monospace';
-  ctx.fillText(b.who, x + 8, y + 13);
+  ctx.font = `bold ${Math.round(10 * f)}px monospace`;
+  ctx.fillText(b.who, x + 8 * f, y + 13 * f);
   ctx.fillStyle = '#e6dcc4';
-  ctx.font = '12px monospace';
-  lines.forEach((l, i) => ctx.fillText(l, x + 8, y + 28 + i * 15));
+  ctx.font = `${Math.round(12 * f)}px monospace`;
+  lines.forEach((l, i) => ctx.fillText(l, x + 8 * f, y + (28 + i * 15) * f));
 }
 
 function drawShipMarks(ctx, s, scene, spec) {
@@ -700,13 +702,15 @@ function drawShipMarks(ctx, s, scene, spec) {
     ctx.fillText(s.wrecked ? (s.voidWreck ? 'VOID WRECK' : 'WRECKED') : `${b}%`, s.x, s.y - 14);
   }
   if (s.kind === 'shuttle') {
+    // readable at any zoom: ~14 px on screen whether you're zoomed in (desktop) or out (phone)
+    const f = 1.4 / Math.max(0.55, scene.zoom || 1);
     ctx.fillStyle = '#d6f08a';
-    ctx.font = 'bold 10px monospace';
+    ctx.font = `bold ${Math.round(10 * f)}px monospace`;
     ctx.textAlign = 'center';
     const load = s.load ?? s.passengers ?? 0;
     if (load > 13) ctx.fillStyle = '#ffb347';
-    ctx.fillText(`HUMANE SHUTTLE · ${s.passengers || 0} aboard${s.scooters ? ` + ${s.scooters} 🛴` : ''} · ${load}/13${load > 13 ? ` (${load - 13} STANDING)` : ''}${s.vipAboard ? ' + ⭐ VIP' : ''}`, s.x, s.y + spec.radius + 22);
-    if (s.bubble && scene.time < s.bubble.until) drawBubble(ctx, s, s.bubble, spec);
+    ctx.fillText(`HUMANE SHUTTLE · ${s.passengers || 0} aboard${s.scooters ? ` + ${s.scooters} 🛴` : ''} · ${load}/13${load > 13 ? ` (${load - 13} STANDING)` : ''}${s.vipAboard ? ' + ⭐ VIP' : ''}`, s.x, s.y + spec.radius + 22 * f);
+    if (s.bubble && scene.time < s.bubble.until) drawBubble(ctx, s, s.bubble, spec, f);
   }
   if (s === scene.me && s.kind !== 'eva') {
     ctx.strokeStyle = 'rgba(232,197,71,0.6)';
