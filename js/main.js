@@ -22,6 +22,7 @@ import { createMinistry } from './ministry.js';
 import { createSalvage } from './salvage.js';
 import { createAuction } from './auction.js';
 import { createAirworks } from './airworks.js';
+import { createRation } from './ration.js';
 import { createBoards } from './boards.js';
 import { GAMES as SHIFT_GAMES } from './minigames.js';
 import { CIRCUITS } from './circuits.js';
@@ -209,6 +210,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   const auction = createAuction({ world, econ, log, esc, openModal, closeModal, emit, board: boardHook });
   // Cinder Collective: Airworks 5 (route metered air to the huts)
   const airworks = createAirworks({ world, econ, log, esc, openModal, closeModal, emit, board: boardHook });
+  // Gullet Provisions: Ration Counter 6 (feed the line)
+  const ration = createRation({ world, econ, log, esc, openModal, closeModal, emit, board: boardHook });
   $('h-warmrow').addEventListener('click', () => warmth.openPanel());
   // ---- racetracks south of the main drag ----
   const circuits = createCircuits({ econ, log, esc, player, emit, openModal, closeModal, sprites });
@@ -310,7 +313,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   let nearHut = null;
   let nearDrop = null;
   let nearRefit = false;
-  let nearArchitect = null, lastArch = null, nearMilitia = false, nearDock = false, nearHall = false, nearAnnex = false, nearSalvage = false, nearAuction = false, nearAir = false;
+  let nearArchitect = null, lastArch = null, nearMilitia = false, nearDock = false, nearHall = false, nearAnnex = false, nearSalvage = false, nearAuction = false, nearAir = false, nearRation = false;
   let nearRegistry = null; // the Registry kiosk you're parked at, if any
   let nearDesk = null; // an organization's residency desk
   let nearCircuit = null; // a racetrack's timing board
@@ -355,6 +358,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (k === 'e' && !nearDrop && nearSalvage) return salvage.open();
     if (k === 'e' && !nearDrop && nearAuction) return auction.open();
     if (k === 'e' && !nearDrop && nearAir) return airworks.open();
+    if (k === 'e' && !nearDrop && nearRation) return ration.open();
     if (k === 'e' && !nearDrop && nearHall) return boards.open();
     if (k === 'e' && !nearDrop && nearRegistry) return openRegistry(null, nearRegistry.sprawl);
     if (k === 'e' && !nearDrop && nearDesk) return progress.openDesk(nearDesk);
@@ -1035,7 +1039,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     extraRows: (at) => {
       const hs = homeSiteNow(), pile = hs ? plot.magnetPile(hs) : 0;
       const magnet = pile >= 13 || (pile && plot.magnetRusting()) ? [{ id: 'magnet', type: 'magnet', title: `Scrap magnet: ${pile} waiting${plot.magnetRusting() ? ' (rusting!)' : ''}`, sub: 'collect at your hut before it rusts', pay: `${pile}`, target: { x: hs.x, y: hs.y + 58, label: 'Your hut · scrap magnet' } }] : [];
-      return [...magnet, ...shuttle.gigRows(at), ...scooters.gigRows(at), ...militia.gigRows(at), ...dock.gigRows(at), ...annex.gigRows(at), ...salvage.gigRows(at), ...auction.gigRows(at), ...airworks.gigRows(at)];
+      return [...magnet, ...shuttle.gigRows(at), ...scooters.gigRows(at), ...militia.gigRows(at), ...dock.gigRows(at), ...annex.gigRows(at), ...salvage.gigRows(at), ...auction.gigRows(at), ...airworks.gigRows(at), ...ration.gigRows(at)];
     }, citizen: () => warmth.citizen(), startClosed: !!touch?.active,
   });
   // what the flag + arrow point at: the tracked gig (the mission during onboarding), unless hidden
@@ -1178,6 +1182,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (nearMilitia) dockPad = militia.pad;
     nearDock = player.mode === 'ship' && dock.near(body.x, body.y, 50 * REACH);
     if (nearDock) dockPad = dock.pad;
+    nearRation = player.mode === 'ship' && ration.near(body.x, body.y, 50 * REACH);
+    if (nearRation) dockPad = ration.pad;
     nearAir = player.mode === 'ship' && airworks.near(body.x, body.y, 50 * REACH);
     if (nearAir) dockPad = airworks.pad;
     nearAuction = player.mode === 'ship' && auction.near(body.x, body.y, 50 * REACH);
@@ -1273,8 +1279,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
-      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); if (S.hut) { const hs = sprawl.sites.find((x) => x.id === S.hut.site); if (hs && Math.abs(cam.x - hs.x) < 2500) plot.draw(c, hs, now); } drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); militia.drawWorld(c, cam, now, nearMilitia); dock.drawWorld(c, cam, now, nearDock); annex.drawWorld(c, cam, now, nearAnnex); salvage.drawWorld(c, cam, now, nearSalvage); auction.drawWorld(c, cam, now, nearAuction); airworks.drawWorld(c, cam, now, nearAir); boards.drawWorld(c, cam, now, nearHall); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); militia.drawMinimap(m, tx, ty); dock.drawMinimap(m, tx, ty); annex.drawMinimap(m, tx, ty); salvage.drawMinimap(m, tx, ty); auction.drawMinimap(m, tx, ty); airworks.drawMinimap(m, tx, ty); boards.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
+      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); if (S.hut) { const hs = sprawl.sites.find((x) => x.id === S.hut.site); if (hs && Math.abs(cam.x - hs.x) < 2500) plot.draw(c, hs, now); } drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); militia.drawWorld(c, cam, now, nearMilitia); dock.drawWorld(c, cam, now, nearDock); annex.drawWorld(c, cam, now, nearAnnex); salvage.drawWorld(c, cam, now, nearSalvage); auction.drawWorld(c, cam, now, nearAuction); airworks.drawWorld(c, cam, now, nearAir); ration.drawWorld(c, cam, now, nearRation); boards.drawWorld(c, cam, now, nearHall); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); militia.drawMinimap(m, tx, ty); dock.drawMinimap(m, tx, ty); annex.drawMinimap(m, tx, ty); salvage.drawMinimap(m, tx, ty); auction.drawMinimap(m, tx, ty); airworks.drawMinimap(m, tx, ty); ration.drawMinimap(m, tx, ty); boards.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
     drawScene(ctx, W, H, cam, scene);
@@ -1289,6 +1295,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
+    else if (nearRation) prompt = `E · Gullet Ration Counter 6 (${ration.grade()})`;
     else if (nearAir) prompt = `E · Cinder Airworks 5 (${airworks.grade()})`;
     else if (nearAuction) prompt = `E · Gavel & Rope Auction Floor 13 (${auction.grade()})`;
     else if (nearSalvage) prompt = `E · Kessler Salvage Yard 9 (${salvage.grade()})`;
@@ -1362,7 +1369,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, minigames, militia, dock, annex, salvage, auction, airworks, boards: () => boards, architects: () => architects(world) };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, minigames, militia, dock, annex, salvage, auction, airworks, ration, boards: () => boards, architects: () => architects(world) };
 }
 
 boot();

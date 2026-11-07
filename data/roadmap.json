@@ -733,13 +733,26 @@
       "version": "0.1.23",
       "date": "2026-11-07",
       "name": "Cinder Airworks 5: route the metered air",
-      "status": "now",
+      "status": "done",
       "items": [
         "Airworks 5 south of block 5: a 10×6 pipe grid between the MAIN and 2–3 customers' huts; tap a pipe to rotate it",
         "When the main pressurizes (14–22 s, or OPEN THE VALVE early for a bonus), air flows pipe by pipe down whatever you built and speeds up as it goes; tees split the flow to feed more huts, crosses go straight through, rocks block",
         "An open end vents into the void: a leak (−10) and that line dies. Every hut reached is a metered customer (+30), +2 per pipe section; the early-valve bonus only counts if somebody got air. Every board has at least one solvable line",
         "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Meter Maid → Oxygen Laureate); a third hut and faster air as you rank up; its own leaderboard",
         "Achievements: Metered, Everybody Breathes (For a Fee), Not a Molecule Wasted (all huts, no leaks); shame: Venting (5 leaks)"
+      ]
+    },
+    {
+      "version": "0.1.24",
+      "date": "2026-11-07",
+      "name": "Gullet Ration Counter 6: feed the line",
+      "status": "now",
+      "items": [
+        "Ration Counter 6 south of block 6: three customers at the counter, each with an order ticket of 1–4 items",
+        "Six bins: Original, Original Plus and Thursday bricks (nobody knows what's in Thursday), paste, recycled broth, and Real Bread from the members' oven (a few seconds between loaves). Tap bins to load a tray, tap a customer to serve (order on the tray doesn't matter)",
+        "Right tray: paid by size plus a speed tip; ⭐ members +15. Wrong tray: −5 and a complaint ('I'm telling the Ministry'). Patience runs out: they walk out (−8). Faces sour as patience drops. 80 s; the line speeds up",
+        "Keys on PC: 1–6 bins, A/S/D serve, X bins the tray. Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Tray Hand → The Mouth That Feeds); its own leaderboard",
+        "Achievements: Order Up, Nobody Leaves Hungry (Today) (10+ trays, no complaints or walk-outs), Members Only (4 members); shame: Calories Are a Privilege (6 walk-outs)"
       ]
     }
   ],
@@ -865,8 +878,8 @@
         },
         {
           "id": "lg-gullet",
-          "text": "Gullet: protein-vat counter, fill orders under time pressure (diner-dash)",
-          "status": "later"
+          "text": "Gullet: Ration Counter 6, fill orders at the counter against the clock (live). Next: food as a real resource for jobs/XP, ration debts, the members-only restaurant",
+          "status": "now"
         },
         {
           "id": "lg-lastmile",

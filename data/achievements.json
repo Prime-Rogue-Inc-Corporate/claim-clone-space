@@ -1050,6 +1050,51 @@
       },
       "shame": true,
       "cosmetic": "An 'I Breathe Irresponsibly' patch"
+    },
+    {
+      "id": "ration-first",
+      "cat": "civic",
+      "name": "Order Up",
+      "desc": "Finish a paid shift at Ration Counter 6.",
+      "on": "ration",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "ration-perfect",
+      "cat": "civic",
+      "name": "Nobody Leaves Hungry (Today)",
+      "desc": "Serve 10+ trays with no complaints and no walk-outs.",
+      "on": "ration",
+      "eq": {
+        "perfect": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "ration-members",
+      "cat": "civic",
+      "name": "Members Only",
+      "desc": "Serve 4 members Real Bread in one shift.",
+      "on": "ration",
+      "min": {
+        "members": 4
+      },
+      "reward": 39
+    },
+    {
+      "id": "ration-walk",
+      "cat": "shame",
+      "name": "Calories Are a Privilege",
+      "desc": "Let 6 customers walk out in one shift.",
+      "on": "ration",
+      "min": {
+        "walked": 6
+      },
+      "shame": true,
+      "cosmetic": "A hairnet (worn, previously)"
     }
   ]
 }
