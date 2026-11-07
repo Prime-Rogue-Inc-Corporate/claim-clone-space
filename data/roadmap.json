@@ -146,6 +146,16 @@
           "id": "p1-sound",
           "text": "Sound: thrusters, drop pings, sirens, ambient hum",
           "status": "later"
+        },
+        {
+          "id": "p1-arch-art",
+          "text": "Architect art from Kevin: both real logos as transparent PNGs (assets/architects/primerogue.png, wilco.png); two top-down tower roofs (arch_roof_primerogue, arch_roof_wilco); two campus plaza tiles",
+          "status": "next"
+        },
+        {
+          "id": "p1-wilco-patrol",
+          "text": "Wilco's daily inspection patrol: top-down dog sprite (4-frame walk), patrol route, goodies left behind (scrap/cosmetics only)",
+          "status": "later"
         }
       ]
     },
@@ -590,11 +600,25 @@
       "version": "0.1.13",
       "date": "2026-11-07",
       "name": "The Assessor's number is 1.13",
-      "status": "now",
+      "status": "done",
       "items": [
         "Buy-outs are 1.13× the current value everywhere (was 1.25×); lot cards, rules panel, wiki, lore and passenger jokes updated",
         "Skiff upgrade and hut tier costs keep their own ×1.25 curve, so nothing you build with scrap got cheaper",
         "World regenerated so seeded lot histories use 1.13×"
+      ]
+    },
+    {
+      "version": "0.1.14",
+      "date": "2026-11-07",
+      "name": "The Architects + roof logos",
+      "status": "now",
+      "items": [
+        "Prime Rogue Inc. (north) and Wilco Corporation (south) campuses just off the Atlas, each at the end of its own Nerve from the crossings either side of block 7",
+        "Each tower is a four-lot square (2 × 2), 130 floors, solid, never for sale; dock at the pad for the Architect's card (E)",
+        "Placeholder art until Kevin's sprites land: monogram logos, procedural roofs (Prime Rogue's top-floor lights left on; Wilco's bone-shaped pad)",
+        "Roof logo upload in the branding editor: squared to 256 px and re-encoded (strips metadata); stays on this device until accounts + the automated scan exist; cleared on buy-out",
+        "Architects in the wiki (L → architects), docs/WIKI.md, places (the Atlas, the Nerves) and glossary",
+        "Achievements: Pilgrim (dock at both campuses), Brand Identity (put a logo on your roof)"
       ]
     }
   ],

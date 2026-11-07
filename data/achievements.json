@@ -710,6 +710,24 @@
       },
       "shame": true,
       "cosmetic": "Registry black armband"
+    },
+    {
+      "id": "pilgrim",
+      "cat": "explore",
+      "name": "Pilgrim",
+      "desc": "Dock at both Architects' campuses.",
+      "on": "architect",
+      "distinct": "id",
+      "n": 2,
+      "reward": 26
+    },
+    {
+      "id": "first-logo",
+      "cat": "property",
+      "name": "Brand Identity",
+      "desc": "Put a logo on the roof of a lot you own.",
+      "on": "logo",
+      "reward": 13
     }
   ]
 }

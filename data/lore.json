@@ -167,6 +167,18 @@
       "text": "The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.13× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming."
     },
     {
+      "name": "The Atlas",
+      "text": "Block 7, the centre of the Spine, named for the first vertebra, the one that holds up the head. Every distance in the city is measured from it."
+    },
+    {
+      "name": "The Nerves",
+      "text": "On a real spine, nerves branch out between the vertebrae, never through them. The Prime Rogue Nerve runs north from the crossing between blocks 6 and 7 to Prime Rogue's campus; the Wilco Nerve runs south from the crossing between blocks 7 and 8 to Wilco's. The Spine itself is never cut."
+    },
+    {
+      "name": "The Architects' campuses",
+      "text": "Prime Rogue's (north) and Wilco's (south), each at the end of its Nerve, each with a four-lot, 130-floor tower that can never be bought."
+    },
+    {
       "name": "Lower Upper Squalor & Upper Lower Squalor",
       "text": "The two Sprawls, each about a minute's flight past a city limit: Lower Upper Squalor to the east, Upper Lower Squalor to the west. Near-identical: 39 sites each (13 × 3). Scrap-built huts in 13 tiers, from Lean-to to The Big Bunker, never branded. Each has a Housing Registry on its city-facing edge."
     },
@@ -184,6 +196,18 @@
     }
   ],
   "glossary": [
+    {
+      "term": "Architects",
+      "text": "Prime Rogue Inc. and Wilco Corporation, who built the universe. Their two 130-floor towers can never be bought."
+    },
+    {
+      "term": "Atlas",
+      "text": "Block 7, the centre of the Spine. All distances are measured from it."
+    },
+    {
+      "term": "Nerve",
+      "text": "A north-south road branching off the Spine at a crossing. The first two lead to the Architects' campuses."
+    },
     {
       "term": "Scrap",
       "text": "In-game currency, earned only by playing. Pays for upgrades, huts, rent and bids. Never bought, never cashed out."
@@ -318,6 +342,32 @@
       "status": "suggestion",
       "activity": "Hold your breath for as long as you can. Ties into the oxygen ration.",
       "lore": "The Collective's most popular attraction: the only place on the Spine where not breathing is free."
+    }
+  ],
+  "architects_note": "Out of game: Prime Rogue Inc. is the real company that operates SpaceSquat. The two towers are the operator's own buildings and sit outside the market.",
+  "architects_intro": "The two companies that built the universe. They sit above the 13 organizations, own the only two buildings that can never be bought, and behave more like NPCs than players. Each has a campus just off the Atlas, reached by its own Nerve: Prime Rogue to the north, Wilco to the south. Each tower covers four lots and stands 130 floors (13 × 10). No other building may be taller; everyone else stops at 100.",
+  "architects": [
+    {
+      "id": "primerogue",
+      "name": "Prime Rogue Inc.",
+      "motto": "Everything is on the record.",
+      "color": "#b8962e",
+      "lore": "Co-builder of the universe. Prime Rogue drew the plans for the Spine, the void and the rules, then published all of them, which nobody had ever done before. Its tower stands 130 floors so that there is always someone watching the watchers. The 13 organizations say other things about it, quietly. Prime Rogue is named for Rogue, the first dog. Rogue is not dead, only away.",
+      "rumours": [
+        "Every transaction on the Spine is in Prime Rogue's ledger. The Assessor's ledger is a copy.",
+        "The lights on the top floor are left on for someone who is coming back."
+      ]
+    },
+    {
+      "id": "wilco",
+      "name": "Wilco Corporation",
+      "motto": "Will comply.",
+      "color": "#4f7fa0",
+      "lore": "Prime Rogue's partner. Nobody has ever seen a Wilco employee, and Wilco's only public statement is its motto. Its tower matches Prime Rogue's floor for floor. Wilco is named for Wilco, the living dog, who carries out frequent daily inspections of the Spine and the Sprawls, sniffs everything, and leaves goodies behind for whoever finds them first. Null Sector drones will not engage Wilco. Nobody has asked them why.",
+      "rumours": [
+        "The dog is the CEO.",
+        "Pilots who learn the inspection route eat well. (Inspections: coming.)"
+      ]
     }
   ]
 }

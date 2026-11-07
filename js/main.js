@@ -1,6 +1,7 @@
 import { mulberry32 } from './rng.js';
 import { createEconomy, takeoverPrice, buildPrice, levelFor, xpForLevel, sightRadius, PLAYER, UPGRADES, skiffStats, TAKEOVER_MULT, cents, roman, T13 } from './economy.js';
-import { solids, collide, plotPad, sectorName, sectorCentre, dropsForWindow, decorations, DROP_WINDOW_MS, flyBounds, sprawlSites, hutRect, hutPad, hutArt, region, SPRAWLS, sprawlAt, sprawlById, registryOf, COLS13 } from './world.js';
+import { solids, collide, plotPad, sectorName, sectorCentre, dropsForWindow, decorations, DROP_WINDOW_MS, flyBounds, sprawlSites, hutRect, hutPad, hutArt, region, SPRAWLS, sprawlAt, sprawlById, registryOf, COLS13, architects } from './world.js';
+import { setLotLogo, clearLotLogo, lotLogoSrc } from './logos.js';
 import { createLoops } from './loops.js';
 import { loadSprites } from './sprites.js';
 import { devEnabled, createDevTools } from './devtools.js';
@@ -277,6 +278,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   let nearHut = null;
   let nearDrop = null;
   let nearRefit = false;
+  let nearArchitect = null, lastArch = null;
   let nearRegistry = null; // the Registry kiosk you're parked at, if any
   let nearDesk = null; // an organization's residency desk
   let nearCircuit = null; // a racetrack's timing board
@@ -314,6 +316,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (k === 'e' && !nearDrop && nearPlot) return openPlot(nearPlot);
     if (k === 'e' && !nearDrop && nearHut) return openHut(nearHut);
     if (k === 'e' && !nearDrop && nearRefit) return openRefit();
+    if (k === 'e' && !nearDrop && nearArchitect) return openArchitect(nearArchitect);
     if (k === 'e' && !nearDrop && nearRegistry) return openRegistry(null, nearRegistry.sprawl);
     if (k === 'e' && !nearDrop && nearDesk) return progress.openDesk(nearDesk);
     if (k === 'e' && !nearDrop && nearCircuit) return circuits.openBoard(nearCircuit.id);
@@ -515,6 +518,25 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     );
   }
 
+  function openArchitect(a) {
+    const L = lore?.architects?.find((x) => x.id === a.id);
+    openModal(
+      `<h2>${esc(a.name.toUpperCase())}</h2>
+       <div class="sub">Architect · ${a.floors} floors · <i>“${esc(a.motto)}”</i></div>
+       <div class="explain" style="border-left:4px solid ${esc(a.color)}">
+         <img src="assets/architects/${esc(a.id)}.png" width="72" height="72" alt="" style="float:right;margin:0 0 6px 10px" onerror="this.remove()"/>
+         ${L ? esc(L.lore) : 'One of the two companies that built the universe.'}</div>
+       <div class="explain"><b>Not for sale at any price.</b> The Assessor has never been allowed inside. No other building may be taller; everyone else stops at 100 floors.</div>
+       ${L?.rumours?.length ? `<div class="sub">${L.rumours.map((x) => `<b>Rumour:</b> ${esc(x)}`).join('<br/>')}</div>` : ''}
+       <div class="sub" style="margin-top:6px">${esc(lore?.architects_note || '')}</div>
+       <div class="buttons"><button id="w">Wiki (L)</button><button id="x">Close</button></div>`,
+      (el) => {
+        el.querySelector('#x').addEventListener('click', closeModal);
+        el.querySelector('#w').addEventListener('click', () => openWiki(lore, { openModal, closeModal, esc }, 'architects'));
+      }
+    );
+  }
+
   function openBrand(p) {
     if (!S.brandConsent) {
       openModal(
@@ -545,9 +567,31 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
        <div class="field"><span>Tagline (80)</span><input type="text" id="b-tag" maxlength="80" value="${esc(b.tagline)}" /></div>
        <div class="field"><span>Roof colour</span><input type="color" id="b-color" value="${esc(b.color || '#c9a227')}" /></div>
        <div class="field"><span>Link (https:// only)</span><input type="url" id="b-link" maxlength="200" value="${esc(b.link)}" placeholder="https://" /></div>
+       <div class="field"><span>Roof logo</span><div class="logo-row">
+         <div class="logo-prev" id="b-prev">${lotLogoSrc(p.id) ? `<img src="${lotLogoSrc(p.id)}" alt=""/>` : '<span class="sub">none</span>'}</div>
+         <label class="btn">Upload…<input type="file" id="b-logo" accept="image/png,image/jpeg,image/webp,image/gif" hidden /></label>
+         <button id="b-nologo" ${lotLogoSrc(p.id) ? '' : 'disabled'}>Remove</button></div></div>
+       <div class="sub">PNG with a transparent background works best; it's squared to 256 px. <b>For now your logo stays on this device:</b> other pilots see it once accounts and the automated scan exist.</div>
+       <div class="err" id="b-err" style="display:none"></div>
        <div class="buttons"><button class="primary" id="save">Save</button><button id="clear">Clear everything</button><button id="x">Cancel</button></div>`,
       (el) => {
         const val = (id) => el.querySelector(id).value;
+        const err = (m) => { const e = el.querySelector('#b-err'); e.textContent = m || ''; e.style.display = m ? 'block' : 'none'; };
+        el.querySelector('#b-logo').addEventListener('change', async (ev) => {
+          err('');
+          try {
+            const src = await setLotLogo(p.id, ev.target.files[0]);
+            el.querySelector('#b-prev').innerHTML = `<img src="${src}" alt=""/>`;
+            el.querySelector('#b-nologo').disabled = false;
+            emit('logo');
+          } catch (e) { err(e.message); }
+          ev.target.value = '';
+        });
+        el.querySelector('#b-nologo').addEventListener('click', () => {
+          clearLotLogo(p.id);
+          el.querySelector('#b-prev').innerHTML = '<span class="sub">none</span>';
+          el.querySelector('#b-nologo').disabled = true;
+        });
         el.querySelector('#save').addEventListener('click', () => {
           econ.brand(p, { name: val('#b-name'), tagline: val('#b-tag'), color: val('#b-color'), link: val('#b-link') });
           if (val('#b-name')) emit('brand');
@@ -555,6 +599,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
         });
         el.querySelector('#clear').addEventListener('click', () => {
           econ.brand(p, { name: '', tagline: '', color: '#c9a227', link: '' });
+          clearLotLogo(p.id);
           openPlot(p);
         });
         el.querySelector('#x').addEventListener('click', () => openPlot(p));
@@ -563,6 +608,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   }
 
   function showLost({ plot, price, buyer, buyback, credits }) {
+    clearLotLogo(plot.id); // a buy-out replaces the branding, logo included
     const topUp = Math.max(0, buyback - credits);
     openModal(
       `<h2>BOUGHT OUT</h2>
@@ -1088,6 +1134,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     }
     nearRefit = dist(REFIT) < 45 * REACH;
     if (nearRefit) dockPad = REFIT;
+    nearArchitect = player.mode === 'ship' ? architects(world).find((a) => dist(a.pad) < 50 * REACH) || null : null;
+    if (nearArchitect) { dockPad = nearArchitect.pad; if (lastArch !== nearArchitect.id) { lastArch = nearArchitect.id; emit('architect', { id: nearArchitect.id }); } }
     nearDesk = player.mode === 'ship' ? progress.nearDesk(body.x, body.y + -40, 60 * REACH) : null;
     if (nearDesk) dockPad = { x: nearDesk.x, y: nearDesk.y + 40 };
     // exploration + crossings (achievements)
@@ -1159,7 +1207,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     const sp = speedOf(body);
     // small screens (phones, portrait) see more of the world
     const screenK = Math.max(0.55, Math.min(1, Math.min(W, H) / 760));
-    const targetZoom = (player.mode === 'jump' ? 1.35 : Math.max(0.5, Math.min(1.05, 1.05 - sp * 0.055))) * screenK;
+    const targetZoom = window.__zoom || (player.mode === 'jump' ? 1.35 : Math.max(0.5, Math.min(1.05, 1.05 - sp * 0.055))) * screenK;
     cam.zoom += (targetZoom - cam.zoom) * Math.min(1, dt * 2);
     cam.x += (body.x + body.vx * 18 - cam.x) * Math.min(1, dt * 4);
     cam.y += (body.y + body.vy * 18 - cam.y) * Math.min(1, dt * 4);
@@ -1167,7 +1215,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     const scene = {
       world, time: now, dpr, deco, stars, particles,
       ships, pilot: player.eva, me: body, drops: visible,
-      sight, nearPlot, boardable, featured: bulletin.featuredPlot,
+      sight, nearPlot, boardable, featured: bulletin.featuredPlot, nearArchitect: nearArchitect?.id || null,
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
@@ -1187,6 +1235,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     else if (nearPlot) prompt = `E · open terminal: Lot ${nearPlot.id}`;
     else if (nearHut) prompt = `E · site ${nearHut.id}${hutOf(nearHut) ? '' : ' (vacant)'}`;
     else if (nearRefit) prompt = 'E · Kessler Refit Bay (skiff upgrades)';
+    else if (nearArchitect) prompt = `E · ${nearArchitect.name} (Architect · not for sale)`;
     else if (nearRegistry) prompt = `E · Housing Registry, ${sprawlById(nearRegistry.sprawl).title} (pick a site)`;
     else if (nearCircuit) prompt = `E · ${nearCircuit.name} leaderboard`;
     else if (nearDesk) prompt = `E · ${lore?.organizations?.find((o) => o.id === nearDesk.org)?.site || nearDesk.org} (residency stamp)`;
@@ -1252,7 +1301,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, architects: () => architects(world) };
 }
 
 boot();

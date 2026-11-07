@@ -80,6 +80,12 @@ canvas#game { position: fixed; inset: 0; width: 100vw; height: 100vh; display: b
 #panel button {
   background: #1d1a12; color: var(--amber); border: 1px solid #6b5a26; padding: 8px 14px; font: inherit; font-weight: bold; cursor: pointer;
 }
+#panel .logo-row { display: flex; align-items: center; gap: 8px; }
+#panel .logo-prev { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--line); background: repeating-conic-gradient(#1a1b1e 0 25%, #121315 0 50%) 0 0 / 12px 12px; }
+#panel .logo-prev img { max-width: 52px; max-height: 52px; }
+#panel .logo-prev .sub { display: inline; margin: 0; }
+#panel label.btn { display: inline-block; cursor: pointer; background: #1d1a12; color: var(--amber); border: 1px solid #6b5a26; padding: 8px 14px; font-weight: bold; }
+#panel label.btn:hover { border-color: var(--amber); color: var(--amber); }
 #panel button.primary { background: var(--amber); color: #000; border-color: var(--amber); }
 #panel button:disabled { opacity: 0.35; cursor: not-allowed; }
 #panel table { width: 100%; border-collapse: collapse; font-size: 12px; }

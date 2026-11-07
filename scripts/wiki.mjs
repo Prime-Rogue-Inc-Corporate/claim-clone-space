@@ -2,7 +2,13 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 
 const w = JSON.parse(readFileSync('data/lore.json', 'utf8'));
-const out = [`# ${w.title}`, '', `_${w.subtitle}_`, '', `> ${w.note}`, '', '## The 13 organizations', ''];
+const out = [`# ${w.title}`, '', `_${w.subtitle}_`, '', `> ${w.note}`, ''];
+if (w.architects) {
+  out.push('## The Architects', '', `> ${w.architects_intro}`, '');
+  for (const a of w.architects) out.push(`### ${a.name}`, '', `**Architect** · _“${a.motto}”_`, '', a.lore, '', ...a.rumours.map((r) => `- **Rumour:** ${r}`), '');
+  out.push(`_${w.architects_note}_`, '');
+}
+out.push('## The 13 organizations', '');
 const TYPES = { corp: 'Corporation', government: 'Government', 'quasi-government': 'Quasi-government' };
 out.push('| # | Organization | Type | Runs | Motto |', '|---|---|---|---|---|');
 w.organizations.forEach((o, i) => out.push(`| ${i + 1} | ${o.name} | ${TYPES[o.type] || o.type} | ${o.site} | ${o.motto} |`));

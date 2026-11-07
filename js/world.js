@@ -40,8 +40,36 @@ export function spineRects(world) {
   return world.spine.blocks.map((b) => ({ x: b.x0, y: -hw, w: b.x1 - b.x0, h: hw * 2 }));
 }
 
+// ---- The Architects: Prime Rogue Inc. and Wilco Corporation ----
+// Two campuses just off the Atlas (block 7), each at the end of its own Nerve. Each tower is a
+// four-lot square (2 × 2 slots), 130 floors, and can never be bought.
+export const ARCH_SIZE = SLOT * 2;
+export const ARCH_FLOORS = 130;
+export const ARCHITECT_INFO = {
+  primerogue: { name: 'Prime Rogue Inc.', short: 'PRIME ROGUE', motto: 'Everything is on the record.', color: '#b8962e', nerveName: 'Prime Rogue Nerve' },
+  wilco: { name: 'Wilco Corporation', short: 'WILCO', motto: 'Will comply.', color: '#4f7fa0', nerveName: 'Wilco Nerve' },
+};
+let archCache = null;
+export function architects(world) {
+  if (archCache && archCache.world === world) return archCache.list;
+  const gaps = world.spine.gaps || [];
+  const north = gaps[5] || { x: -1580 }; // the crossing between blocks 6 and 7
+  const south = gaps[6] || { x: 1580 }; // the crossing between blocks 7 and 8
+  const hw = world.spine.halfWidth, H = ARCH_SIZE / 2;
+  const mk = (id, x, y, dir) => {
+    const rect = { x: x - H, y: y - H, w: ARCH_SIZE, h: ARCH_SIZE };
+    const pad = { x, y: dir < 0 ? y + H + 70 : y - H - 70 }; // on the Nerve, facing the Spine
+    const nerve = dir < 0 ? { x, y0: y + H, y1: -hw } : { x, y0: hw, y1: y - H };
+    const plaza = { x: x - H - 170, y: y - H - 170, w: ARCH_SIZE + 340, h: ARCH_SIZE + 340 };
+    return { id, ...ARCHITECT_INFO[id], x, y, dir, rect, pad, nerve, plaza, floors: ARCH_FLOORS };
+  };
+  const list = [mk('primerogue', north.x, -1500, -1), mk('wilco', south.x, 1700, 1)];
+  archCache = { world, list };
+  return list;
+}
+
 export function solids(world) {
-  return [...spineRects(world), ...world.plots.map((p) => plotRect(world, p))];
+  return [...spineRects(world), ...world.plots.map((p) => plotRect(world, p)), ...architects(world).map((a) => a.rect)];
 }
 
 // Circle vs rects: push the body out and kill velocity into the wall.

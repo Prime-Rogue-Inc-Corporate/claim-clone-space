@@ -1,10 +1,11 @@
 // Canvas renderer. Top-down GTA1/2 trick: buildings are footprints whose roofs are
 // pushed away from the camera by their height, so towers lean as you fly past.
 import { KINDS } from './entities.js';
-import { plotRect, plotPad, spineRect, spineRects, SPRAWLS, sprawlAt, flyBounds, region, hutRect, hutPad, hutArt, COLS13, SECTOR_ROWS } from './world.js';
+import { architects, plotRect, plotPad, spineRect, spineRects, SPRAWLS, sprawlAt, flyBounds, region, hutRect, hutPad, hutArt, COLS13, SECTOR_ROWS } from './world.js';
 import { mulberry32 } from './rng.js';
 import { PLAYER } from './economy.js';
 import { roofFor, shipSpriteName } from './sprites.js';
+import { lotLogo, architectLogo } from './logos.js';
 
 // Sprites are optional; every draw below falls back to canvas shapes when one is missing.
 let SPR = null;
@@ -92,6 +93,7 @@ export function drawScene(ctx, W, H, cam, scene) {
   }
 
   scene.underWorld?.(ctx, viewR); // ground-level layers: racetracks
+  drawCampusGround(ctx, world, time, viewR, cam);
   drawSpine(ctx, world, time, view);
   drawCorridor(ctx, world, time, view);
   for (const sp of SPRAWLS) if (inView(sp.x - sp.rx - 2500, sp.x + sp.rx + 2500)) drawSprawl(ctx, scene, time, sp);
@@ -100,6 +102,7 @@ export function drawScene(ctx, W, H, cam, scene) {
   const visible = world.plots.filter((p) => inView(p.x - 400, p.x + 400));
   const plots = [...visible].sort((a, b) => Math.abs(b.x - cam.x) - Math.abs(a.x - cam.x));
   for (const p of plots) drawPlot(ctx, world, p, cam, time, scene);
+  drawArchitects(ctx, world, cam, time, scene, viewR);
 
   for (const p of visible) {
     const pad = plotPad(world, p);
@@ -312,17 +315,28 @@ function drawPlot(ctx, world, p, cam, time, scene) {
     ctx.fillText(`LOT ${p.id} · UNCLAIMED`, p.x, r.y + r.h / 2 + 4);
     return;
   }
-  const k = Math.min(0.22, p.floors * 0.0022);
+  const mine = p.owner === PLAYER;
+  drawTower(ctx, cam, r, {
+    floors: p.floors, color: p.brand?.color || '#666666', flip: p.id % 2 === 1, time,
+    logo: mine ? lotLogo(p.id) : null, mine, featured: scene.featured === p.id,
+    name: p.brand?.name || `Lot ${p.id}`, sub: `LOT ${p.id} · ${p.floors}F · $${p.value.toLocaleString()}`,
+  });
+}
+
+// One tower, seen from above with a little perspective lift. Shared by lots and the Architects.
+function drawTower(ctx, cam, r, o) {
+  const k = Math.min(o.kMax ?? 0.22, o.floors * 0.0022);
   const lift = (px, py) => [cam.x + (px - cam.x) * (1 + k), cam.y + (py - cam.y) * (1 + k)];
   const base = [[r.x, r.y], [r.x + r.w, r.y], [r.x + r.w, r.y + r.h], [r.x, r.y + r.h]];
   const roof = base.map(([x, y]) => lift(x, y));
-  const color = p.brand?.color || '#666666';
+  const color = o.color;
 
   // shadow
   ctx.fillStyle = 'rgba(0,0,0,0.35)';
   ctx.fillRect(r.x + 8, r.y + 8, r.w, r.h);
 
   // walls
+  const rows = Math.min(o.rowsMax ?? 12, Math.floor(o.floors / 8));
   for (let i = 0; i < 4; i++) {
     const j = (i + 1) % 4;
     ctx.fillStyle = shade(color, i % 2 ? 0.45 : 0.32);
@@ -334,9 +348,8 @@ function drawPlot(ctx, world, p, cam, time, scene) {
     ctx.closePath();
     ctx.fill();
     // window rows
-    ctx.strokeStyle = 'rgba(255,200,120,0.18)';
+    ctx.strokeStyle = o.windows || 'rgba(255,200,120,0.18)';
     ctx.lineWidth = 1;
-    const rows = Math.min(12, Math.floor(p.floors / 8));
     for (let f = 1; f <= rows; f++) {
       const t = f / (rows + 1);
       ctx.beginPath();
@@ -350,18 +363,16 @@ function drawPlot(ctx, world, p, cam, time, scene) {
   const [rx, ry] = roof[0];
   const rw = roof[1][0] - roof[0][0];
   const rh = roof[3][1] - roof[0][1];
-  const roofImg = spr(roofFor(color));
+  const roofImg = spr(o.roof || roofFor(color));
   if (roofImg) {
     // mirror every other lot so a corp's towers don't all look identical
-    if (p.id % 2) {
+    if (o.flip) {
       ctx.save();
       ctx.translate(rx + rw, ry);
       ctx.scale(-1, 1);
       ctx.drawImage(roofImg, 0, 0, rw, rh);
       ctx.restore();
     } else ctx.drawImage(roofImg, rx, ry, rw, rh);
-    ctx.fillStyle = 'rgba(8,8,9,0.62)';
-    ctx.fillRect(rx + 10, ry + rh / 2 - 17, rw - 20, 36);
   } else {
     ctx.fillStyle = shade(color, 0.85);
     ctx.fillRect(rx, ry, rw, rh);
@@ -372,15 +383,37 @@ function drawPlot(ctx, world, p, cam, time, scene) {
     ctx.fillRect(rx + rw - 34, ry + 12, 18, 14);
     ctx.fillRect(rx + 14, ry + rh - 26, 24, 12);
   }
+  o.roofExtra?.(ctx, rx, ry, rw, rh);
 
-  const mine = p.owner === PLAYER;
-  if (mine) {
-    ctx.strokeStyle = Math.floor(time / 400) % 2 ? '#e8c547' : '#a8892c';
+  // logo (a player's own, or an Architect's) sits above the name plate
+  const fs = o.nameSize || 15;
+  let ny = ry + rh / 2;
+  const L = o.logo || (o.monogram ? 'mono' : null);
+  if (L) {
+    const sz = Math.min(rw, rh) * (o.logoScale || 0.42);
+    const lx = rx + rw / 2 - sz / 2, ly = ry + rh / 2 - sz / 2 - fs * 0.9;
+    ctx.fillStyle = 'rgba(8,8,9,0.55)';
+    ctx.fillRect(lx - 6, ly - 6, sz + 12, sz + 12);
+    if (L === 'mono') {
+      ctx.fillStyle = color;
+      ctx.font = `bold ${Math.round(sz * 0.42)}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.fillText(o.monogram, lx + sz / 2, ly + sz / 2 + sz * 0.15, sz);
+    } else ctx.drawImage(L, lx, ly, sz, sz);
+    ny = ly + sz + 10 + fs * 0.9;
+  }
+  if (roofImg || L) {
+    ctx.fillStyle = 'rgba(8,8,9,0.62)';
+    ctx.fillRect(rx + 10, ny - fs - 2, rw - 20, fs + 21);
+  }
+
+  if (o.mine) {
+    ctx.strokeStyle = Math.floor(o.time / 400) % 2 ? '#e8c547' : '#a8892c';
     ctx.lineWidth = 4;
     ctx.strokeRect(rx + 2, ry + 2, rw - 4, rh - 4);
   }
-  if (scene.featured === p.id) {
-    ctx.fillStyle = Math.floor(time / 300) % 2 ? '#ff3b1f' : '#ffd166';
+  if (o.featured) {
+    ctx.fillStyle = Math.floor(o.time / 300) % 2 ? '#ff3b1f' : '#ffd166';
     ctx.beginPath();
     ctx.arc(rx + rw / 2, ry + 10, 5, 0, Math.PI * 2);
     ctx.fill();
@@ -388,11 +421,98 @@ function drawPlot(ctx, world, p, cam, time, scene) {
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#efe6cf';
-  ctx.font = 'bold 15px monospace';
-  ctx.fillText((p.brand?.name || `Lot ${p.id}`).toUpperCase(), rx + rw / 2, ry + rh / 2 - 2, rw - 16);
-  ctx.font = '10px monospace';
+  ctx.font = `bold ${fs}px monospace`;
+  ctx.fillText(o.name.toUpperCase(), rx + rw / 2, ny - 2, rw - 16);
+  ctx.font = `${Math.round(fs * 0.67)}px monospace`;
   ctx.fillStyle = 'rgba(239,230,207,0.7)';
-  ctx.fillText(`LOT ${p.id} · ${p.floors}F · $${p.value.toLocaleString()}`, rx + rw / 2, ry + rh / 2 + 14, rw - 16);
+  ctx.fillText(o.sub, rx + rw / 2, ny + 14, rw - 16);
+}
+
+// ---- The Architects' campuses: plaza + Nerve (ground), then the 130-floor towers ----
+function drawCampusGround(ctx, world, time, viewR, cam) {
+  for (const a of architects(world)) {
+    if (Math.abs(a.x - cam.x) > viewR + 1200 || Math.abs(a.y - cam.y) > viewR + 2000) continue;
+    // the Nerve: a road from the Spine crossing to the campus
+    const n = a.nerve, top = Math.min(n.y0, n.y1), len = Math.abs(n.y1 - n.y0);
+    const road = pattern(ctx, 'ground_path');
+    ctx.fillStyle = road || '#1b1c1f';
+    ctx.fillRect(n.x - 70, top, 140, len);
+    ctx.strokeStyle = 'rgba(232,197,71,0.35)';
+    ctx.setLineDash([24, 18]);
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(n.x, top);
+    ctx.lineTo(n.x, top + len);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.save();
+    ctx.translate(n.x, top + len / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = 'rgba(239,230,207,0.55)';
+    ctx.font = 'bold 22px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(a.nerveName.toUpperCase(), 0, -30);
+    ctx.restore();
+    // plaza
+    const pz = a.plaza;
+    const tile = pattern(ctx, 'ground_plate');
+    ctx.fillStyle = tile || '#17181b';
+    ctx.fillRect(pz.x, pz.y, pz.w, pz.h);
+    ctx.strokeStyle = a.color;
+    ctx.globalAlpha = 0.55;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(pz.x + 6, pz.y + 6, pz.w - 12, pz.h - 12);
+    ctx.globalAlpha = 1;
+    // corner beacons
+    const on = Math.floor(time / 700) % 2 === 0;
+    for (const [bx, by] of [[pz.x, pz.y], [pz.x + pz.w, pz.y], [pz.x, pz.y + pz.h], [pz.x + pz.w, pz.y + pz.h]]) {
+      ctx.fillStyle = on ? a.color : shade(a.color, 0.35);
+      ctx.fillRect(bx - 6, by - 6, 12, 12);
+    }
+    ctx.fillStyle = 'rgba(239,230,207,0.6)';
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    const ly = a.dir < 0 ? pz.y - 14 : pz.y + pz.h + 26;
+    ctx.fillText(`${a.name.toUpperCase()} · CAMPUS · NOT FOR SALE`, a.x, ly);
+  }
+}
+
+function drawArchitects(ctx, world, cam, time, scene, viewR) {
+  for (const a of architects(world)) {
+    if (Math.abs(a.x - cam.x) > viewR + 800 || Math.abs(a.y - cam.y) > viewR + 800) continue;
+    const logo = architectLogo(a.id);
+    drawTower(ctx, cam, a.rect, {
+      floors: a.floors, kMax: 0.3, rowsMax: 16, color: a.color, roof: `arch_roof_${a.id}`, time,
+      logo, monogram: logo ? null : a.id === 'wilco' ? 'W' : 'PR', logoScale: 0.5, nameSize: 22,
+      windows: a.id === 'primerogue' ? 'rgba(255,214,120,0.32)' : 'rgba(150,200,255,0.25)',
+      name: a.short, sub: `${a.floors}F · ARCHITECT · “${a.motto}”`,
+      roofExtra: a.id === 'primerogue'
+        ? (c, x, y, w, h) => { // the top-floor lights are left on for someone who is coming back
+            const on = 0.55 + 0.45 * Math.sin(time / 500);
+            c.fillStyle = `rgba(255,214,120,${on.toFixed(2)})`;
+            for (const [px, py] of [[x + 18, y + 18], [x + w - 30, y + 18], [x + 18, y + h - 30], [x + w - 30, y + h - 30]]) c.fillRect(px, py, 12, 12);
+          }
+        : (c, x, y, w, h) => { // a bone-shaped pad, obviously
+            c.fillStyle = 'rgba(230,226,214,0.22)';
+            const cy = y + h - 34, x0 = x + w * 0.3, x1 = x + w * 0.7;
+            c.fillRect(x0, cy - 6, x1 - x0, 12);
+            for (const bx of [x0, x1]) for (const d of [-8, 8]) { c.beginPath(); c.arc(bx, cy + d, 9, 0, Math.PI * 2); c.fill(); }
+          },
+    });
+    // dock pad
+    const near = scene.nearArchitect === a.id;
+    ctx.strokeStyle = near ? '#e8c547' : 'rgba(200,180,120,0.35)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(a.pad.x, a.pad.y, near ? 26 : 20, 0, Math.PI * 2);
+    ctx.stroke();
+    if (near) {
+      ctx.fillStyle = '#e8c547';
+      ctx.font = 'bold 12px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('E', a.pad.x, a.pad.y + 4);
+    }
+  }
 }
 
 function drawDrop(ctx, d, time, progress) {
@@ -1025,6 +1145,12 @@ function drawMinimapCity(mctx, MW, MH, scene) {
     const r = plotRect(world, p);
     mctx.fillStyle = p.owner === PLAYER ? '#e8c547' : p.owner ? '#6b6457' : '#26282b';
     mctx.fillRect(tx(r.x), ty(r.y), Math.max(1, r.w * sx), Math.max(1, r.h * sy));
+  }
+  for (const a of architects(world)) {
+    mctx.fillStyle = 'rgba(120,110,90,0.5)';
+    mctx.fillRect(tx(a.nerve.x) - 1, ty(Math.min(a.nerve.y0, a.nerve.y1)), 2, Math.abs(a.nerve.y1 - a.nerve.y0) * sy);
+    mctx.fillStyle = a.color;
+    mctx.fillRect(tx(a.rect.x), ty(a.rect.y), Math.max(3, a.rect.w * sx), Math.max(3, a.rect.h * sy));
   }
   for (const s of scene.ships) {
     mctx.fillStyle = s.npc ? '#a85a3a' : '#8fb3c4';

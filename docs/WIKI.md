@@ -4,6 +4,30 @@ _Bureau-approved. Inaccuracies are your fault._
 
 > Draft lore. Names and details are placeholders until the gameplay loop for each organization is built. Edit this file; the in-game wiki (L), docs/WIKI.md and the project wiki all come from it.
 
+## The Architects
+
+> The two companies that built the universe. They sit above the 13 organizations, own the only two buildings that can never be bought, and behave more like NPCs than players. Each has a campus just off the Atlas, reached by its own Nerve: Prime Rogue to the north, Wilco to the south. Each tower covers four lots and stands 130 floors (13 × 10). No other building may be taller; everyone else stops at 100.
+
+### Prime Rogue Inc.
+
+**Architect** · _“Everything is on the record.”_
+
+Co-builder of the universe. Prime Rogue drew the plans for the Spine, the void and the rules, then published all of them, which nobody had ever done before. Its tower stands 130 floors so that there is always someone watching the watchers. The 13 organizations say other things about it, quietly. Prime Rogue is named for Rogue, the first dog. Rogue is not dead, only away.
+
+- **Rumour:** Every transaction on the Spine is in Prime Rogue's ledger. The Assessor's ledger is a copy.
+- **Rumour:** The lights on the top floor are left on for someone who is coming back.
+
+### Wilco Corporation
+
+**Architect** · _“Will comply.”_
+
+Prime Rogue's partner. Nobody has ever seen a Wilco employee, and Wilco's only public statement is its motto. Its tower matches Prime Rogue's floor for floor. Wilco is named for Wilco, the living dog, who carries out frequent daily inspections of the Spine and the Sprawls, sniffs everything, and leaves goodies behind for whoever finds them first. Null Sector drones will not engage Wilco. Nobody has asked them why.
+
+- **Rumour:** The dog is the CEO.
+- **Rumour:** Pilots who learn the inspection route eat well. (Inspections: coming.)
+
+_Out of game: Prime Rogue Inc. is the real company that operates SpaceSquat. The two towers are the operator's own buildings and sit outside the market._
+
 ## The 13 organizations
 
 | # | Organization | Type | Runs | Motto |
@@ -293,6 +317,9 @@ The Collective's most popular attraction: the only place on the Spine where not 
 ## Places
 
 - **The Spine (Avenue Zero):** The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.13× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming.
+- **The Atlas:** Block 7, the centre of the Spine, named for the first vertebra, the one that holds up the head. Every distance in the city is measured from it.
+- **The Nerves:** On a real spine, nerves branch out between the vertebrae, never through them. The Prime Rogue Nerve runs north from the crossing between blocks 6 and 7 to Prime Rogue's campus; the Wilco Nerve runs south from the crossing between blocks 7 and 8 to Wilco's. The Spine itself is never cut.
+- **The Architects' campuses:** Prime Rogue's (north) and Wilco's (south), each at the end of its Nerve, each with a four-lot, 130-floor tower that can never be bought.
 - **Lower Upper Squalor & Upper Lower Squalor:** The two Sprawls, each about a minute's flight past a city limit: Lower Upper Squalor to the east, Upper Lower Squalor to the west. Near-identical: 39 sites each (13 × 3). Scrap-built huts in 13 tiers, from Lean-to to The Big Bunker, never branded. Each has a Housing Registry on its city-facing edge.
 - **The Mercy Unlimited Raceway:** Two circuits in the void south of the main drag, built to the shapes of tracks from a planet nobody here remembers: The Island Circuit (after Circuit Gilles-Villeneuve, Montréal) and The Temple Circuit (after Monza). 13 gates a lap. Mercy Unlimited sponsors both, and the crashes.
 - **Tenure Heights:** The gentry's gated, domed deck north of the Spine. Equal access to everything, conveniently. Scrappers may enter. Null Sector will notice. (Coming.)
@@ -371,9 +398,14 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Shame | _(hidden until earned)_ Faceplant | Eat it on a rental scooter. | cosmetic: Road-rash decal |
 | Shame | _(hidden until earned)_ Body Count | 13 souls lost on your watch. | cosmetic: Tally-mark hull scratches |
 | Shame | _(hidden until earned)_ Grim Statistic | 169 souls lost on your watch. | cosmetic: Registry black armband |
+| Exploration | Pilgrim | Dock at both Architects' campuses. | 26 scrap |
+| Property | Brand Identity | Put a logo on the roof of a lot you own. | 13 scrap |
 
 ## Glossary
 
+- **Architects:** Prime Rogue Inc. and Wilco Corporation, who built the universe. Their two 130-floor towers can never be bought.
+- **Atlas:** Block 7, the centre of the Spine. All distances are measured from it.
+- **Nerve:** A north-south road branching off the Spine at a crossing. The first two lead to the Architects' campuses.
 - **Scrap:** In-game currency, earned only by playing. Pays for upgrades, huts, rent and bids. Never bought, never cashed out.
 - **Credits:** What you receive when someone buys your lot. Spend them on other lots. They never expire and never become cash.
 - **Skiff:** Your ship, issued at signup with a number from #001. Handles like a shopping cart full of scrap until you fix it.
