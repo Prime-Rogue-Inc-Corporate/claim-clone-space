@@ -137,9 +137,9 @@ The Ministry exists to guarantee equality: everyone has equal access to everythi
 
 **Quasi-government** · _“Everything has a fair price.”_
 
-Keeps the Land Registry and the public ledger. Enforces the 1.25× rule: any lot, any time, owner can't refuse.
+Keeps the Land Registry and the public ledger. Enforces the 1.13× rule: any lot, any time, owner can't refuse.
 
-The Assessor decides what everything is worth, and the answer is always 1.25 times what you paid. Its ledger is the only honest document on the Spine, because it is the only one nobody can afford to bribe. Anyone may read it. Almost nobody does.
+The Assessor decides what everything is worth, and the answer is always 1.13 times what you paid. Its ledger is the only honest document on the Spine, because it is the only one nobody can afford to bribe. Anyone may read it. Almost nobody does.
 
 - **Residency stamp:** Land Registry: Read the ledger. No purchase necessary.
 - **Rumour:** The Assessor has never assessed itself.
@@ -292,7 +292,7 @@ The Collective's most popular attraction: the only place on the Spine where not 
 
 ## Places
 
-- **The Spine (Avenue Zero):** The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.25× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming.
+- **The Spine (Avenue Zero):** The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.13× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming.
 - **Lower Upper Squalor & Upper Lower Squalor:** The two Sprawls, each about a minute's flight past a city limit: Lower Upper Squalor to the east, Upper Lower Squalor to the west. Near-identical: 39 sites each (13 × 3). Scrap-built huts in 13 tiers, from Lean-to to The Big Bunker, never branded. Each has a Housing Registry on its city-facing edge.
 - **The Mercy Unlimited Raceway:** Two circuits in the void south of the main drag, built to the shapes of tracks from a planet nobody here remembers: The Island Circuit (after Circuit Gilles-Villeneuve, Montréal) and The Temple Circuit (after Monza). 13 gates a lap. Mercy Unlimited sponsors both, and the crashes.
 - **Tenure Heights:** The gentry's gated, domed deck north of the Spine. Equal access to everything, conveniently. Scrappers may enter. Null Sector will notice. (Coming.)

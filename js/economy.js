@@ -1,7 +1,7 @@
 // Economy rules + local persistence. Everything here is SIMULATED (test money,
 // localStorage). The rules are the real design:
 //   - Claim an empty lot: $1. Height comes from value: contested lots become the skyline.
-//   - Any branded lot can be bought at 1.25x its current value. Owner can't refuse.
+//   - Any branded lot can be bought at 1.13x its current value. Owner can't refuse.
 //   - The displaced owner gets the full price as non-cash CREDITS (closed loop).
 //   - Credits are spent first on any purchase; cash tops up the rest.
 //   - Scrap (from drops) and XP are game-only. They never convert to credits/cash.
@@ -12,11 +12,13 @@ export const MAX_FLOORS = 100;
 
 export const PLAYER = 'you';
 export const CLAIM_PRICE = 1;
-export const TAKEOVER_MULT = 1.25;
+export const TAKEOVER_MULT = 1.13; // the Assessor's number (was 1.25 until v0.1.13)
+// Scrap-side tier costs keep their own ×1.25 curve so the buy-out change doesn't rebalance upgrades.
+export const TIER_MULT = 1.25;
 export const START_CASH = T13; // prototype test money
 const KEY = 'claim-clone-space:v3'; // v3: rule-of-13 world (older saves are ignored)
 
-// Everything is in cents. Never round to whole dollars: $1 × 1.25 would round back to $1.
+// Everything is in cents. Never round to whole dollars: $1 × 1.13 would round back to $1.
 export const cents = (n) => Math.round(n * 100) / 100;
 
 export function takeoverPrice(plot) {
@@ -27,8 +29,8 @@ export function buildPrice() {
   return CLAIM_PRICE;
 }
 
-// Skyline: a claimed lot starts at 13 floors and gains 13 floors every 2 buy-outs (×1.25 each).
-// $1 = 13F; ~13 flips (≈$18) caps at 100F, the one number that isn't 13.
+// Skyline: a claimed lot starts at 13 floors and gains 13 floors every 2 buy-outs (×1.13 each).
+// $1 = 13F; ~13 flips (≈$4.90 at ×1.13) caps at 100F, the one number that isn't 13.
 export function floorsFor(value) {
   if (!value || value <= 0) return 0;
   const flips = Math.log(Math.max(1, value) / CLAIM_PRICE) / Math.log(TAKEOVER_MULT);
@@ -36,9 +38,9 @@ export function floorsFor(value) {
 }
 
 // ---- Skiff upgrades: earned scrap only, never cash or credits (no paid edge). ----
-// 13 tiers per route; each tier costs ×1.25 the last (the Assessor's favourite number).
+// 13 tiers per route; each tier costs ×1.25 the last.
 // Tier I is tuned so a new pilot needs ~2–3 minutes of scrounging. Adjust with in-game notes.
-const tiers13 = (base) => Array.from({ length: T13 }, (_, i) => Math.round(base * Math.pow(TAKEOVER_MULT, i)));
+const tiers13 = (base) => Array.from({ length: T13 }, (_, i) => Math.round(base * Math.pow(TIER_MULT, i)));
 export const HULL_TAP_TIER = 7; // from Hull VII, plating shrugs off one drone tap per pursuit
 export const UPGRADES = {
   gyros: { name: 'Gyros', what: 'Turn rate', tiers: tiers13(120) },
@@ -224,7 +226,7 @@ export function createEconomy(world) {
   // 13 hut tiers. Art is shared across groups: tiers 1–4 shack, 5–8 hut, 9–13 bunker.
   const HUT_NAMES = ['Lean-to', 'Scrap shack', 'Tarp shack', 'Patched shack', 'Hab hut', 'Insulated hut', 'Two-room hut', 'Chimney hut',
     'Bunker', 'Sandbagged bunker', 'Antenna bunker', 'Fortified bunker', 'The Big Bunker'];
-  const HUT_TIERS = HUT_NAMES.map((name, i) => ({ name, cost: Math.round(150 * Math.pow(TAKEOVER_MULT, i)) }));
+  const HUT_TIERS = HUT_NAMES.map((name, i) => ({ name, cost: Math.round(150 * Math.pow(TIER_MULT, i)) }));
 
   function buildHut(siteId) {
     if (state.hut) return { ok: false, reason: `You already have a hut (${state.hut.site}). One per pilot.` };

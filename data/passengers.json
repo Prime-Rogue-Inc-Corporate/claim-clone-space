@@ -39,7 +39,7 @@
         "My hut's so small I have to go outside to change my mind.",
         "They call it the Sprawl because nobody can afford to stand up.",
         "I asked the Ministry for a home. They sent a pamphlet. I'm living in it.",
-        "What's the difference between a squatter and a landlord? About 1.25 times.",
+        "What's the difference between a squatter and a landlord? About 1.13 times.",
         "Knock knock. Who's there? Eviction. Eviction who? Exactly.",
         "My neighbour burns tyres for warmth. Cosy. Toxic, but cosy.",
         "I was going to get a job but this shuttle's warmer.",
@@ -382,7 +382,7 @@
       "color": "#6f6450",
       "weight": 1,
       "praise": [
-        "I assess this ride at 1.25 times expectations.",
+        "I assess this ride at 1.13 times expectations.",
         "Valuation: excellent. Rare word for me."
       ],
       "heckle": [
@@ -391,7 +391,7 @@
         "Even I can't put a value on that crash. Negative, probably."
       ],
       "joke": [
-        "Everything is worth 1.25 times what you paid. Even this joke.",
+        "Everything is worth 1.13 times what you paid. Even this joke.",
         "Nobody reads the ledger. That's how we like it."
       ],
       "board": [
@@ -478,7 +478,7 @@
       "joke": [
         "I'm only here because my skiff is being gold-plated.",
         "Rent is a feeling. Mostly mine. Mostly good.",
-        "I bought this shuttle route once. Got bored. Sold it back at 1.25.",
+        "I bought this shuttle route once. Got bored. Sold it back at 1.13.",
         "The Squalor is so authentic. I'm thinking of buying it.",
         "Humane transit. The Ministry's little joke. I wrote it."
       ],

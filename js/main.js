@@ -462,7 +462,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       const q = econ.quote(price);
       action = `
         <div class="explain">
-          <b>Buy it now: ${money(price)}</b> (1.25 × current value ${money(p.value)}).<br/>
+          <b>Buy it now: ${money(price)}</b> (1.13 × current value ${money(p.value)}).<br/>
           ${payLine(q)}<br/>
           ${esc(owner)} gets ${money(price)} in credits. Nobody can refuse.<br/>
           After you buy, anyone can take it from you for <b>${money(cents(price * TAKEOVER_MULT))}</b>, and you'd get that much back in credits.
@@ -876,7 +876,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     openModal(
       `<h2>THE LEDGER</h2>
        <div class="sub">Every lot, every price, every buy-out. Market value ${money(total)} · ${changes} ownership changes · ${world.plots.length - claimed.length} lots unclaimed. Click a row to set a waypoint.</div>
-       <div class="explain"><b>The rules, all of them:</b> empty lots cost $1. Any lot can be bought for 1.25× its current value; the owner can't refuse and gets the full price back as credits. Towers grow every time a lot changes hands.
+       <div class="explain"><b>The rules, all of them:</b> empty lots cost $1. Any lot can be bought for 1.13× its current value; the owner can't refuse and gets the full price back as credits. Towers grow every time a lot changes hands.
        Credits pay first, cash tops up. Credits never expire and never turn into cash. Scrap, levels and skiff upgrades are game-only.</div>
        <table><tr><th>Lot</th><th>Name</th><th>Owner</th><th>Value</th><th>Buy-out</th><th>Flips</th></tr>${rows}</table>
        <h3>WHO OWNS THE SPINE</h3>

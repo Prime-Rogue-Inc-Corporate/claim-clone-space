@@ -130,8 +130,8 @@
       "type": "quasi-government",
       "color": "#3e4a52",
       "motto": "Everything has a fair price.",
-      "does": "Keeps the Land Registry and the public ledger. Enforces the 1.25× rule: any lot, any time, owner can't refuse.",
-      "lore": "The Assessor decides what everything is worth, and the answer is always 1.25 times what you paid. Its ledger is the only honest document on the Spine, because it is the only one nobody can afford to bribe. Anyone may read it. Almost nobody does.",
+      "does": "Keeps the Land Registry and the public ledger. Enforces the 1.13× rule: any lot, any time, owner can't refuse.",
+      "lore": "The Assessor decides what everything is worth, and the answer is always 1.13 times what you paid. Its ledger is the only honest document on the Spine, because it is the only one nobody can afford to bribe. Anyone may read it. Almost nobody does.",
       "site": "Land Registry",
       "stamp": "Read the ledger. No purchase necessary.",
       "rumour": "The Assessor has never assessed itself."
@@ -164,7 +164,7 @@
   "places": [
     {
       "name": "The Spine (Avenue Zero)",
-      "text": "The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.25× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming."
+      "text": "The main drag: 13 blocks of 13 lots (169), all on the north side, 42 km end to end. Any lot can be bought at 1.13× its value; towers start at 13 floors and grow every time one changes hands, to 100 (the one number that isn't 13). The 12 gaps between blocks are crossings you can fly through north-south; proper roads and intersections are coming."
     },
     {
       "name": "Lower Upper Squalor & Upper Lower Squalor",

@@ -1,6 +1,6 @@
 {
   "seed": "spine-thirteen",
-  "generated": "2026-11-06T10:58:04.277Z",
+  "generated": "2026-11-07T07:57:12.388Z",
   "bounds": {
     "minX": -21000,
     "maxX": 21000,
@@ -216,7 +216,7 @@
       "type": "quasi-government",
       "color": "#3e4a52",
       "motto": "Everything has a fair price.",
-      "does": "Keeps the Land Registry and the public ledger. Enforces the 1.25× rule: any lot, any time, owner can't refuse."
+      "does": "Keeps the Land Registry and the public ledger. Enforces the 1.13× rule: any lot, any time, owner can't refuse."
     },
     {
       "id": "registry",
@@ -254,7 +254,7 @@
       "x": -20060,
       "floors": 20,
       "owner": "bureau",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -267,7 +267,7 @@
           "kind": "takeover",
           "from": "vanta",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -304,9 +304,9 @@
       "side": "north",
       "block": 1,
       "x": -19400,
-      "floors": 58,
+      "floors": 59,
       "owner": "bureau",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -319,49 +319,49 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "assessor",
           "to": "kessler",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "kessler",
           "to": "ministry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "ministry",
           "to": "cinder",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "cinder",
           "to": "vanta",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "vanta",
           "to": "bureau",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -378,7 +378,7 @@
       "x": -19180,
       "floors": 26,
       "owner": "mercy",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -391,14 +391,14 @@
           "kind": "takeover",
           "from": "ashiron",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "mercy",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -415,7 +415,7 @@
       "x": -18960,
       "floors": 52,
       "owner": "assessor",
-      "value": 3.81,
+      "value": 2.09,
       "history": [
         {
           "t": 0,
@@ -428,42 +428,42 @@
           "kind": "takeover",
           "from": "ashiron",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "gullet",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gullet",
           "to": "assessor",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "assessor",
           "to": "mercy",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "mercy",
           "to": "assessor",
-          "price": 3.81
+          "price": 2.09
         }
       ],
       "brand": {
@@ -480,7 +480,7 @@
       "x": -18740,
       "floors": 20,
       "owner": "cinder",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -493,7 +493,7 @@
           "kind": "takeover",
           "from": "vanta",
           "to": "cinder",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -510,7 +510,7 @@
       "x": -18520,
       "floors": 39,
       "owner": "ministry",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -523,28 +523,28 @@
           "kind": "takeover",
           "from": "assessor",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gavel",
           "to": "vanta",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "vanta",
           "to": "ministry",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -559,9 +559,9 @@
       "side": "north",
       "block": 1,
       "x": -18300,
-      "floors": 45,
+      "floors": 46,
       "owner": "cinder",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -574,35 +574,35 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "kessler",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "kessler",
           "to": "mercy",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "mercy",
           "to": "cinder",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -619,7 +619,7 @@
       "x": -18080,
       "floors": 65,
       "owner": "mercy",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -632,56 +632,56 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
           "to": "gullet",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gullet",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "kessler",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "kessler",
           "to": "null",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "null",
           "to": "mercy",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "mercy",
           "to": "assessor",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "assessor",
           "to": "mercy",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -698,7 +698,7 @@
       "x": -17860,
       "floors": 20,
       "owner": "ministry",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -711,7 +711,7 @@
           "kind": "takeover",
           "from": "gullet",
           "to": "ministry",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -726,9 +726,9 @@
       "side": "north",
       "block": 1,
       "x": -17640,
-      "floors": 45,
+      "floors": 46,
       "owner": "cinder",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -741,35 +741,35 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "registry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "registry",
           "to": "gavel",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gavel",
           "to": "ministry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "ministry",
           "to": "cinder",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -786,7 +786,7 @@
       "x": -17120,
       "floors": 65,
       "owner": "lastmile",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -799,56 +799,56 @@
           "kind": "takeover",
           "from": "lastmile",
           "to": "cinder",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "cinder",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "gullet",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gullet",
           "to": "registry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "registry",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "kessler",
           "to": "lastmile",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "lastmile",
           "to": "ministry",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "ministry",
           "to": "lastmile",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -865,7 +865,7 @@
       "x": -16900,
       "floors": 65,
       "owner": "kessler",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -878,56 +878,56 @@
           "kind": "takeover",
           "from": "cinder",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "mercy",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "mercy",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "bureau",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "bureau",
           "to": "ministry",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "ministry",
           "to": "ashiron",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "ashiron",
           "to": "null",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "null",
           "to": "kessler",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -955,7 +955,7 @@
       "x": -16460,
       "floors": 39,
       "owner": "bureau",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -968,28 +968,28 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "assessor",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "assessor",
           "to": "bureau",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "bureau",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "bureau",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -1050,7 +1050,7 @@
       "x": -15360,
       "floors": 65,
       "owner": "mercy",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -1063,56 +1063,56 @@
           "kind": "takeover",
           "from": "registry",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "kessler",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "kessler",
           "to": "vanta",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "vanta",
           "to": "mercy",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "mercy",
           "to": "bureau",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "bureau",
           "to": "cinder",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "cinder",
           "to": "gavel",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "gavel",
           "to": "mercy",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -1140,7 +1140,7 @@
       "x": -14920,
       "floors": 26,
       "owner": "gavel",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -1153,14 +1153,14 @@
           "kind": "takeover",
           "from": "kessler",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -1177,7 +1177,7 @@
       "x": -14700,
       "floors": 20,
       "owner": "bureau",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -1190,7 +1190,7 @@
           "kind": "takeover",
           "from": "registry",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -1205,9 +1205,9 @@
       "side": "north",
       "block": 2,
       "x": -14480,
-      "floors": 32,
+      "floors": 33,
       "owner": "cinder",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -1220,21 +1220,21 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "cinder",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -1251,7 +1251,7 @@
       "x": -13960,
       "floors": 65,
       "owner": "assessor",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -1264,56 +1264,56 @@
           "kind": "takeover",
           "from": "registry",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ministry",
           "to": "lastmile",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "lastmile",
           "to": "bureau",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "bureau",
           "to": "null",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "null",
           "to": "mercy",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "mercy",
           "to": "gavel",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "gavel",
           "to": "assessor",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -1341,7 +1341,7 @@
       "x": -13520,
       "floors": 65,
       "owner": "gullet",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -1354,56 +1354,56 @@
           "kind": "takeover",
           "from": "gullet",
           "to": "assessor",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "assessor",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ministry",
           "to": "bureau",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "bureau",
           "to": "mercy",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "mercy",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "kessler",
           "to": "gullet",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "gullet",
           "to": "assessor",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "assessor",
           "to": "gullet",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -1420,7 +1420,7 @@
       "x": -13300,
       "floors": 65,
       "owner": "cinder",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -1433,56 +1433,56 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "cinder",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "cinder",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gavel",
           "to": "assessor",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "assessor",
           "to": "vanta",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "vanta",
           "to": "lastmile",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "lastmile",
           "to": "mercy",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "mercy",
           "to": "vanta",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "vanta",
           "to": "cinder",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -1553,9 +1553,9 @@
       "side": "north",
       "block": 3,
       "x": -12200,
-      "floors": 32,
+      "floors": 33,
       "owner": "null",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -1568,21 +1568,21 @@
           "kind": "takeover",
           "from": "kessler",
           "to": "gavel",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gavel",
           "to": "bureau",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "bureau",
           "to": "null",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -1608,9 +1608,9 @@
       "side": "north",
       "block": 3,
       "x": -11760,
-      "floors": 58,
+      "floors": 59,
       "owner": "gullet",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -1623,49 +1623,49 @@
           "kind": "takeover",
           "from": "vanta",
           "to": "gavel",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gavel",
           "to": "bureau",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "bureau",
           "to": "null",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "null",
           "to": "cinder",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "cinder",
           "to": "mercy",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "mercy",
           "to": "lastmile",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "lastmile",
           "to": "gullet",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -1693,7 +1693,7 @@
       "x": -11320,
       "floors": 26,
       "owner": "ashiron",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -1706,14 +1706,14 @@
           "kind": "takeover",
           "from": "assessor",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "ashiron",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -1764,7 +1764,7 @@
       "x": -10360,
       "floors": 20,
       "owner": "gullet",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -1777,7 +1777,7 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -1805,7 +1805,7 @@
       "x": -9920,
       "floors": 20,
       "owner": "cinder",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -1818,7 +1818,7 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "cinder",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -1844,9 +1844,9 @@
       "side": "north",
       "block": 4,
       "x": -9480,
-      "floors": 45,
+      "floors": 46,
       "owner": "gavel",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -1859,35 +1859,35 @@
           "kind": "takeover",
           "from": "cinder",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "lastmile",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "lastmile",
           "to": "mercy",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "mercy",
           "to": "kessler",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "kessler",
           "to": "gavel",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -1904,7 +1904,7 @@
       "x": -9260,
       "floors": 20,
       "owner": "mercy",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -1917,7 +1917,7 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "mercy",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -1932,9 +1932,9 @@
       "side": "north",
       "block": 4,
       "x": -9040,
-      "floors": 32,
+      "floors": 33,
       "owner": "bureau",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -1947,21 +1947,21 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "assessor",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "assessor",
           "to": "gullet",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gullet",
           "to": "bureau",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -1976,9 +1976,9 @@
       "side": "north",
       "block": 4,
       "x": -8820,
-      "floors": 45,
+      "floors": 46,
       "owner": "kessler",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -1991,35 +1991,35 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "ministry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "ministry",
           "to": "cinder",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "cinder",
           "to": "gavel",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gavel",
           "to": "registry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "registry",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -2034,9 +2034,9 @@
       "side": "north",
       "block": 4,
       "x": -8600,
-      "floors": 45,
+      "floors": 46,
       "owner": "bureau",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -2049,35 +2049,35 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gavel",
           "to": "ministry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ministry",
           "to": "registry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "registry",
           "to": "bureau",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -2092,9 +2092,9 @@
       "side": "north",
       "block": 4,
       "x": -8380,
-      "floors": 58,
+      "floors": 59,
       "owner": "registry",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -2107,49 +2107,49 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "gullet",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gullet",
           "to": "null",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "null",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "kessler",
           "to": "bureau",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "bureau",
           "to": "registry",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -2188,7 +2188,7 @@
       "x": -7420,
       "floors": 52,
       "owner": "bureau",
-      "value": 3.81,
+      "value": 2.09,
       "history": [
         {
           "t": 0,
@@ -2201,42 +2201,42 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "registry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "registry",
           "to": "kessler",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "kessler",
           "to": "lastmile",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "lastmile",
           "to": "mercy",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "mercy",
           "to": "bureau",
-          "price": 3.81
+          "price": 2.09
         }
       ],
       "brand": {
@@ -2253,7 +2253,7 @@
       "x": -7200,
       "floors": 65,
       "owner": "registry",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -2266,56 +2266,56 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "ministry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "ministry",
           "to": "ashiron",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ashiron",
           "to": "cinder",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "cinder",
           "to": "gullet",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "gullet",
           "to": "null",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "null",
           "to": "mercy",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "mercy",
           "to": "bureau",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "bureau",
           "to": "registry",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -2330,9 +2330,9 @@
       "side": "north",
       "block": 5,
       "x": -6980,
-      "floors": 32,
+      "floors": 33,
       "owner": "ashiron",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -2345,21 +2345,21 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "ashiron",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -2455,7 +2455,7 @@
       "x": -5660,
       "floors": 26,
       "owner": "lastmile",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -2468,14 +2468,14 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
           "to": "lastmile",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -2492,7 +2492,7 @@
       "x": -5440,
       "floors": 20,
       "owner": "null",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -2505,7 +2505,7 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -2522,7 +2522,7 @@
       "x": -5220,
       "floors": 26,
       "owner": "registry",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -2535,14 +2535,14 @@
           "kind": "takeover",
           "from": "ashiron",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "registry",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -2580,9 +2580,9 @@
       "side": "north",
       "block": 6,
       "x": -4480,
-      "floors": 32,
+      "floors": 33,
       "owner": "bureau",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -2595,21 +2595,21 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "null",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "null",
           "to": "bureau",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -2647,9 +2647,9 @@
       "side": "north",
       "block": 6,
       "x": -4040,
-      "floors": 58,
+      "floors": 59,
       "owner": "ministry",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -2662,49 +2662,49 @@
           "kind": "takeover",
           "from": "kessler",
           "to": "lastmile",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "lastmile",
           "to": "registry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "registry",
           "to": "kessler",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "kessler",
           "to": "ministry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "ministry",
           "to": "registry",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "registry",
           "to": "gullet",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "gullet",
           "to": "ministry",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -2732,7 +2732,7 @@
       "x": -3600,
       "floors": 65,
       "owner": "ministry",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -2745,56 +2745,56 @@
           "kind": "takeover",
           "from": "gullet",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "bureau",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "bureau",
           "to": "gullet",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "gullet",
           "to": "gavel",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "gavel",
           "to": "null",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "null",
           "to": "kessler",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "kessler",
           "to": "ministry",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -2809,9 +2809,9 @@
       "side": "north",
       "block": 6,
       "x": -3380,
-      "floors": 58,
+      "floors": 59,
       "owner": "ministry",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -2824,49 +2824,49 @@
           "kind": "takeover",
           "from": "vanta",
           "to": "ashiron",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "ashiron",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "assessor",
           "to": "lastmile",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "lastmile",
           "to": "assessor",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "assessor",
           "to": "gavel",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "gavel",
           "to": "null",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "null",
           "to": "ministry",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -2894,7 +2894,7 @@
       "x": -2940,
       "floors": 20,
       "owner": "kessler",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -2907,7 +2907,7 @@
           "kind": "takeover",
           "from": "cinder",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -2935,7 +2935,7 @@
       "x": -2500,
       "floors": 26,
       "owner": "gavel",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -2948,14 +2948,14 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "mercy",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "mercy",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -2993,9 +2993,9 @@
       "side": "north",
       "block": 6,
       "x": -2060,
-      "floors": 58,
+      "floors": 59,
       "owner": "registry",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -3008,49 +3008,49 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "gullet",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gullet",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "bureau",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "bureau",
           "to": "gavel",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "gavel",
           "to": "lastmile",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "lastmile",
           "to": "registry",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -3067,7 +3067,7 @@
       "x": -1840,
       "floors": 39,
       "owner": "bureau",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -3080,28 +3080,28 @@
           "kind": "takeover",
           "from": "null",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "null",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "null",
           "to": "vanta",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "vanta",
           "to": "bureau",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -3118,7 +3118,7 @@
       "x": -1320,
       "floors": 52,
       "owner": "gullet",
-      "value": 3.81,
+      "value": 2.09,
       "history": [
         {
           "t": 0,
@@ -3131,42 +3131,42 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "ashiron",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "ashiron",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "assessor",
           "to": "lastmile",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "lastmile",
           "to": "gavel",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "gavel",
           "to": "assessor",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "assessor",
           "to": "gullet",
-          "price": 3.81
+          "price": 2.09
         }
       ],
       "brand": {
@@ -3183,7 +3183,7 @@
       "x": -1100,
       "floors": 65,
       "owner": "null",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -3196,56 +3196,56 @@
           "kind": "takeover",
           "from": "gullet",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ministry",
           "to": "gullet",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gullet",
           "to": "null",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "null",
           "to": "gavel",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "gavel",
           "to": "registry",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "registry",
           "to": "gavel",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "gavel",
           "to": "null",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -3260,9 +3260,9 @@
       "side": "north",
       "block": 7,
       "x": -880,
-      "floors": 45,
+      "floors": 46,
       "owner": "gullet",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -3275,35 +3275,35 @@
           "kind": "takeover",
           "from": "gullet",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "lastmile",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "lastmile",
           "to": "vanta",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "vanta",
           "to": "ashiron",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "ashiron",
           "to": "gullet",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -3318,9 +3318,9 @@
       "side": "north",
       "block": 7,
       "x": -660,
-      "floors": 58,
+      "floors": 59,
       "owner": "registry",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -3333,49 +3333,49 @@
           "kind": "takeover",
           "from": "cinder",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ministry",
           "to": "kessler",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "kessler",
           "to": "cinder",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "cinder",
           "to": "gullet",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "gullet",
           "to": "bureau",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "bureau",
           "to": "registry",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -3392,7 +3392,7 @@
       "x": -440,
       "floors": 26,
       "owner": "vanta",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -3405,14 +3405,14 @@
           "kind": "takeover",
           "from": "assessor",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -3429,7 +3429,7 @@
       "x": -220,
       "floors": 20,
       "owner": "mercy",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -3442,7 +3442,7 @@
           "kind": "takeover",
           "from": "assessor",
           "to": "mercy",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -3457,9 +3457,9 @@
       "side": "north",
       "block": 7,
       "x": 0,
-      "floors": 45,
+      "floors": 46,
       "owner": "kessler",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -3472,35 +3472,35 @@
           "kind": "takeover",
           "from": "ashiron",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "gullet",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gullet",
           "to": "kessler",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "kessler",
           "to": "mercy",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "mercy",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -3539,7 +3539,7 @@
       "x": 660,
       "floors": 20,
       "owner": "assessor",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -3552,7 +3552,7 @@
           "kind": "takeover",
           "from": "gullet",
           "to": "assessor",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -3569,7 +3569,7 @@
       "x": 880,
       "floors": 26,
       "owner": "ministry",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -3582,14 +3582,14 @@
           "kind": "takeover",
           "from": "registry",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -3606,7 +3606,7 @@
       "x": 1100,
       "floors": 39,
       "owner": "cinder",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -3619,28 +3619,28 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "cinder",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "cinder",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "ashiron",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ashiron",
           "to": "cinder",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -3657,7 +3657,7 @@
       "x": 1320,
       "floors": 20,
       "owner": "registry",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -3670,7 +3670,7 @@
           "kind": "takeover",
           "from": "ashiron",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -3787,7 +3787,7 @@
       "x": 3600,
       "floors": 20,
       "owner": "vanta",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -3800,7 +3800,7 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -3815,9 +3815,9 @@
       "side": "north",
       "block": 8,
       "x": 3820,
-      "floors": 58,
+      "floors": 59,
       "owner": "mercy",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -3830,49 +3830,49 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "assessor",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "assessor",
           "to": "mercy",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "mercy",
           "to": "gullet",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gullet",
           "to": "null",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "null",
           "to": "mercy",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "mercy",
           "to": "gavel",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "gavel",
           "to": "mercy",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -3911,7 +3911,7 @@
       "x": 4480,
       "floors": 52,
       "owner": "assessor",
-      "value": 3.81,
+      "value": 2.09,
       "history": [
         {
           "t": 0,
@@ -3924,42 +3924,42 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "mercy",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "mercy",
           "to": "ashiron",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ashiron",
           "to": "mercy",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "mercy",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "kessler",
           "to": "assessor",
-          "price": 3.81
+          "price": 2.09
         }
       ],
       "brand": {
@@ -3996,9 +3996,9 @@
       "side": "north",
       "block": 9,
       "x": 5440,
-      "floors": 32,
+      "floors": 33,
       "owner": "cinder",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -4011,21 +4011,21 @@
           "kind": "takeover",
           "from": "vanta",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "cinder",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -4042,7 +4042,7 @@
       "x": 5660,
       "floors": 20,
       "owner": "mercy",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -4055,7 +4055,7 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "mercy",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -4083,7 +4083,7 @@
       "x": 6100,
       "floors": 52,
       "owner": "kessler",
-      "value": 3.81,
+      "value": 2.09,
       "history": [
         {
           "t": 0,
@@ -4096,42 +4096,42 @@
           "kind": "takeover",
           "from": "vanta",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "kessler",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "kessler",
           "to": "lastmile",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "lastmile",
           "to": "gullet",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "gullet",
           "to": "ashiron",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "ashiron",
           "to": "kessler",
-          "price": 3.81
+          "price": 2.09
         }
       ],
       "brand": {
@@ -4148,7 +4148,7 @@
       "x": 6320,
       "floors": 65,
       "owner": "cinder",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -4161,56 +4161,56 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "bureau",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "bureau",
           "to": "assessor",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "assessor",
           "to": "ministry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "ministry",
           "to": "registry",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "registry",
           "to": "lastmile",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "lastmile",
           "to": "mercy",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "mercy",
           "to": "cinder",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -4248,9 +4248,9 @@
       "side": "north",
       "block": 9,
       "x": 6760,
-      "floors": 45,
+      "floors": 46,
       "owner": "vanta",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -4263,35 +4263,35 @@
           "kind": "takeover",
           "from": "registry",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gavel",
           "to": "assessor",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "assessor",
           "to": "mercy",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "mercy",
           "to": "vanta",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -4364,7 +4364,7 @@
       "x": 8160,
       "floors": 39,
       "owner": "gavel",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -4377,28 +4377,28 @@
           "kind": "takeover",
           "from": "null",
           "to": "cinder",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "cinder",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ministry",
           "to": "lastmile",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "lastmile",
           "to": "gavel",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -4413,9 +4413,9 @@
       "side": "north",
       "block": 10,
       "x": 8380,
-      "floors": 45,
+      "floors": 46,
       "owner": "kessler",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -4428,35 +4428,35 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "ashiron",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "ashiron",
           "to": "gullet",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gullet",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "vanta",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "vanta",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -4473,7 +4473,7 @@
       "x": 8600,
       "floors": 39,
       "owner": "assessor",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -4486,28 +4486,28 @@
           "kind": "takeover",
           "from": "registry",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "assessor",
           "to": "ministry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ministry",
           "to": "assessor",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -4524,7 +4524,7 @@
       "x": 8820,
       "floors": 26,
       "owner": "assessor",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -4537,14 +4537,14 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -4561,7 +4561,7 @@
       "x": 9040,
       "floors": 20,
       "owner": "cinder",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -4574,7 +4574,7 @@
           "kind": "takeover",
           "from": "kessler",
           "to": "cinder",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -4589,9 +4589,9 @@
       "side": "north",
       "block": 10,
       "x": 9260,
-      "floors": 32,
+      "floors": 33,
       "owner": "bureau",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -4604,21 +4604,21 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "null",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "null",
           "to": "bureau",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -4635,7 +4635,7 @@
       "x": 9480,
       "floors": 52,
       "owner": "mercy",
-      "value": 3.81,
+      "value": 2.09,
       "history": [
         {
           "t": 0,
@@ -4648,42 +4648,42 @@
           "kind": "takeover",
           "from": "kessler",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "kessler",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "kessler",
           "to": "mercy",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "mercy",
           "to": "lastmile",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "lastmile",
           "to": "mercy",
-          "price": 3.81
+          "price": 2.09
         }
       ],
       "brand": {
@@ -4698,9 +4698,9 @@
       "side": "north",
       "block": 10,
       "x": 9700,
-      "floors": 32,
+      "floors": 33,
       "owner": "vanta",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -4713,21 +4713,21 @@
           "kind": "takeover",
           "from": "cinder",
           "to": "gavel",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gavel",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ministry",
           "to": "vanta",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -4742,9 +4742,9 @@
       "side": "north",
       "block": 10,
       "x": 9920,
-      "floors": 45,
+      "floors": 46,
       "owner": "vanta",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -4757,35 +4757,35 @@
           "kind": "takeover",
           "from": "kessler",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gavel",
           "to": "bureau",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "bureau",
           "to": "ministry",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "ministry",
           "to": "vanta",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -4825,7 +4825,7 @@
       "x": 10360,
       "floors": 65,
       "owner": "gullet",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -4838,56 +4838,56 @@
           "kind": "takeover",
           "from": "assessor",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "bureau",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "bureau",
           "to": "assessor",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "assessor",
           "to": "bureau",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "bureau",
           "to": "cinder",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "cinder",
           "to": "gavel",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "gavel",
           "to": "ministry",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "ministry",
           "to": "gullet",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -4913,9 +4913,9 @@
       "side": "north",
       "block": 10,
       "x": 10800,
-      "floors": 58,
+      "floors": 59,
       "owner": "lastmile",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -4928,49 +4928,49 @@
           "kind": "takeover",
           "from": "lastmile",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "ashiron",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ashiron",
           "to": "ministry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ministry",
           "to": "vanta",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "vanta",
           "to": "assessor",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "assessor",
           "to": "bureau",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "bureau",
           "to": "lastmile",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -5031,7 +5031,7 @@
       "x": 12200,
       "floors": 65,
       "owner": "null",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -5044,56 +5044,56 @@
           "kind": "takeover",
           "from": "ashiron",
           "to": "gullet",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gullet",
           "to": "mercy",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "mercy",
           "to": "gavel",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gavel",
           "to": "kessler",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "kessler",
           "to": "gullet",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "gullet",
           "to": "kessler",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "kessler",
           "to": "registry",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "registry",
           "to": "null",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -5110,7 +5110,7 @@
       "x": 12420,
       "floors": 65,
       "owner": "gavel",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -5123,56 +5123,56 @@
           "kind": "takeover",
           "from": "null",
           "to": "ministry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "ministry",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gavel",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "lastmile",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "lastmile",
           "to": "gavel",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "gavel",
           "to": "assessor",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "assessor",
           "to": "gullet",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "gullet",
           "to": "gavel",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -5200,7 +5200,7 @@
       "x": 12860,
       "floors": 65,
       "owner": "cinder",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -5213,56 +5213,56 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "lastmile",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "lastmile",
           "to": "ashiron",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ashiron",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "vanta",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "vanta",
           "to": "ministry",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "ministry",
           "to": "lastmile",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "lastmile",
           "to": "mercy",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "mercy",
           "to": "cinder",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -5288,9 +5288,9 @@
       "side": "north",
       "block": 11,
       "x": 13300,
-      "floors": 45,
+      "floors": 46,
       "owner": "null",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -5303,35 +5303,35 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "null",
           "to": "bureau",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "bureau",
           "to": "ministry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ministry",
           "to": "kessler",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "kessler",
           "to": "null",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -5348,7 +5348,7 @@
       "x": 13520,
       "floors": 65,
       "owner": "mercy",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -5361,56 +5361,56 @@
           "kind": "takeover",
           "from": "ministry",
           "to": "gavel",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "gavel",
           "to": "cinder",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "cinder",
           "to": "ashiron",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ashiron",
           "to": "gullet",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "gullet",
           "to": "vanta",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "vanta",
           "to": "registry",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "registry",
           "to": "vanta",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "vanta",
           "to": "mercy",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -5427,7 +5427,7 @@
       "x": 13740,
       "floors": 39,
       "owner": "kessler",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -5440,28 +5440,28 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "assessor",
           "to": "vanta",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "vanta",
           "to": "kessler",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -5476,9 +5476,9 @@
       "side": "north",
       "block": 11,
       "x": 13960,
-      "floors": 45,
+      "floors": 46,
       "owner": "kessler",
-      "value": 3.05,
+      "value": 1.85,
       "history": [
         {
           "t": 0,
@@ -5491,35 +5491,35 @@
           "kind": "takeover",
           "from": "gullet",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "assessor",
           "to": "gullet",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "gullet",
           "to": "cinder",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "cinder",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         }
       ],
       "brand": {
@@ -5582,7 +5582,7 @@
       "x": 14920,
       "floors": 26,
       "owner": "lastmile",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -5595,14 +5595,14 @@
           "kind": "takeover",
           "from": "bureau",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
           "to": "lastmile",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -5642,7 +5642,7 @@
       "x": 15360,
       "floors": 26,
       "owner": "null",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -5655,14 +5655,14 @@
           "kind": "takeover",
           "from": "assessor",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
           "to": "null",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -5679,7 +5679,7 @@
       "x": 15580,
       "floors": 39,
       "owner": "assessor",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -5692,28 +5692,28 @@
           "kind": "takeover",
           "from": "lastmile",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "null",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "null",
           "to": "registry",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "registry",
           "to": "assessor",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -5730,7 +5730,7 @@
       "x": 15800,
       "floors": 20,
       "owner": "null",
-      "value": 1.25,
+      "value": 1.13,
       "history": [
         {
           "t": 0,
@@ -5743,7 +5743,7 @@
           "kind": "takeover",
           "from": "registry",
           "to": "null",
-          "price": 1.25
+          "price": 1.13
         }
       ],
       "brand": {
@@ -5816,7 +5816,7 @@
       "x": 16900,
       "floors": 39,
       "owner": "assessor",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -5829,28 +5829,28 @@
           "kind": "takeover",
           "from": "ashiron",
           "to": "lastmile",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "lastmile",
           "to": "gullet",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gullet",
           "to": "cinder",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "cinder",
           "to": "assessor",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -5878,7 +5878,7 @@
       "x": 17640,
       "floors": 26,
       "owner": "ministry",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -5891,14 +5891,14 @@
           "kind": "takeover",
           "from": "cinder",
           "to": "vanta",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "vanta",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -5947,9 +5947,9 @@
       "side": "north",
       "block": 13,
       "x": 18300,
-      "floors": 32,
+      "floors": 33,
       "owner": "assessor",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -5962,21 +5962,21 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "kessler",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "kessler",
           "to": "lastmile",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "lastmile",
           "to": "assessor",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -5993,7 +5993,7 @@
       "x": 18520,
       "floors": 39,
       "owner": "cinder",
-      "value": 2.44,
+      "value": 1.64,
       "history": [
         {
           "t": 0,
@@ -6006,28 +6006,28 @@
           "kind": "takeover",
           "from": "gavel",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "gavel",
           "to": "ashiron",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "ashiron",
           "to": "cinder",
-          "price": 2.44
+          "price": 1.64
         }
       ],
       "brand": {
@@ -6042,9 +6042,9 @@
       "side": "north",
       "block": 13,
       "x": 18740,
-      "floors": 58,
+      "floors": 59,
       "owner": "registry",
-      "value": 4.76,
+      "value": 2.36,
       "history": [
         {
           "t": 0,
@@ -6057,49 +6057,49 @@
           "kind": "takeover",
           "from": "null",
           "to": "registry",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "registry",
           "to": "ministry",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "ministry",
           "to": "null",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "null",
           "to": "bureau",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "bureau",
           "to": "kessler",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "kessler",
           "to": "null",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "null",
           "to": "registry",
-          "price": 4.76
+          "price": 2.36
         }
       ],
       "brand": {
@@ -6149,7 +6149,7 @@
       "x": 19620,
       "floors": 26,
       "owner": "gavel",
-      "value": 1.56,
+      "value": 1.28,
       "history": [
         {
           "t": 0,
@@ -6162,14 +6162,14 @@
           "kind": "takeover",
           "from": "assessor",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "gavel",
-          "price": 1.56
+          "price": 1.28
         }
       ],
       "brand": {
@@ -6186,7 +6186,7 @@
       "x": 19840,
       "floors": 65,
       "owner": "bureau",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -6199,56 +6199,56 @@
           "kind": "takeover",
           "from": "mercy",
           "to": "lastmile",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "lastmile",
           "to": "vanta",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "vanta",
           "to": "mercy",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "mercy",
           "to": "gavel",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "gavel",
           "to": "ministry",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "ministry",
           "to": "registry",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "registry",
           "to": "gavel",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "gavel",
           "to": "bureau",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {
@@ -6263,9 +6263,9 @@
       "side": "north",
       "block": 13,
       "x": 20060,
-      "floors": 32,
+      "floors": 33,
       "owner": "mercy",
-      "value": 1.95,
+      "value": 1.45,
       "history": [
         {
           "t": 0,
@@ -6278,21 +6278,21 @@
           "kind": "takeover",
           "from": "lastmile",
           "to": "bureau",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "bureau",
           "to": "assessor",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "assessor",
           "to": "mercy",
-          "price": 1.95
+          "price": 1.45
         }
       ],
       "brand": {
@@ -6309,7 +6309,7 @@
       "x": 20280,
       "floors": 65,
       "owner": "ministry",
-      "value": 5.95,
+      "value": 2.67,
       "history": [
         {
           "t": 0,
@@ -6322,56 +6322,56 @@
           "kind": "takeover",
           "from": "vanta",
           "to": "mercy",
-          "price": 1.25
+          "price": 1.13
         },
         {
           "t": 2,
           "kind": "takeover",
           "from": "mercy",
           "to": "bureau",
-          "price": 1.56
+          "price": 1.28
         },
         {
           "t": 3,
           "kind": "takeover",
           "from": "bureau",
           "to": "assessor",
-          "price": 1.95
+          "price": 1.45
         },
         {
           "t": 4,
           "kind": "takeover",
           "from": "assessor",
           "to": "ashiron",
-          "price": 2.44
+          "price": 1.64
         },
         {
           "t": 5,
           "kind": "takeover",
           "from": "ashiron",
           "to": "ministry",
-          "price": 3.05
+          "price": 1.85
         },
         {
           "t": 6,
           "kind": "takeover",
           "from": "ministry",
           "to": "assessor",
-          "price": 3.81
+          "price": 2.09
         },
         {
           "t": 7,
           "kind": "takeover",
           "from": "assessor",
           "to": "lastmile",
-          "price": 4.76
+          "price": 2.36
         },
         {
           "t": 8,
           "kind": "takeover",
           "from": "lastmile",
           "to": "ministry",
-          "price": 5.95
+          "price": 2.67
         }
       ],
       "brand": {

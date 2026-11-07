@@ -16,7 +16,7 @@
         },
         {
           "id": "p0-lots",
-          "text": "48 lots on the Spine: 1.25× buy-out, credits not cash",
+          "text": "48 lots on the Spine: 1.13× buy-out, credits not cash",
           "status": "done"
         },
         {
@@ -577,13 +577,24 @@
       "version": "0.1.12",
       "date": "2026-11-06",
       "name": "Gig board that behaves on phones",
-      "status": "now",
+      "status": "done",
       "items": [
         "Swiping the gig list scrolls it; only a clean tap tracks a gig",
         "Board no longer rebuilds every quarter second: distances and timers update in place, scroll position kept (also lighter on PC)",
         "Phones: picking a gig closes the board; tapping the world closes it too",
         "Phones: one-line rows, half-screen max height, no citizen banner or sub-lines in the board",
         "New-gig badge only counts gigs worth a look (not churning freight, drops, scooters, races)"
+      ]
+    },
+    {
+      "version": "0.1.13",
+      "date": "2026-11-07",
+      "name": "The Assessor's number is 1.13",
+      "status": "now",
+      "items": [
+        "Buy-outs are 1.13× the current value everywhere (was 1.25×); lot cards, rules panel, wiki, lore and passenger jokes updated",
+        "Skiff upgrade and hut tier costs keep their own ×1.25 curve, so nothing you build with scrap got cheaper",
+        "World regenerated so seeded lot histories use 1.13×"
       ]
     }
   ],
@@ -631,11 +642,6 @@
           "status": "later"
         },
         {
-          "id": "mr-fix",
-          "text": "Switch TAKEOVER_MULT from 1.25 to 1.13 in js/economy.js (step 1 depends on it)",
-          "status": "later"
-        },
-        {
           "id": "mr-2",
           "text": "Step 2 · Stripe test mode: server-side checkout + webhooks, sign-in before checkout, purchase limits, auto credit freeze on dispute. Gate: dispute freezes credits, refund takes the lot back, a burst of cheap test charges is blocked",
           "status": "later"
@@ -672,7 +678,7 @@
         },
         {
           "id": "mr-promo",
-          "text": "OPEN: Kevin's 13/26/52/102/204 read as wave lot counts (now 13/26/52/104). Confirm the 69-floor promo stays $13/$26/$39/$52/$65 or doubles ($13/$26/$52/$104/$208)",
+          "text": "69-floor promo (Kevin, Nov 7): fixed on the Spine; scales only on newly opened avenue plots. Assumed ladder for avenues doubles per wave ($13 → $26 → $52 → $104 → $208); Spine fixed price assumed $13. Confirm both numbers before step 1",
           "status": "later"
         }
       ]
