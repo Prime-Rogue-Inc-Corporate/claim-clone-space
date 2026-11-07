@@ -202,7 +202,7 @@ The Bureau writes the Corp Bulletin, schedules the weather, and measures public 
 | 4 | The Collective Fauna & Flora Regeneration Center | Cinder Collective (catering by Gullet Provisions) | idea |
 | 5 | Black Site Number 13 | Null Sector Trust (officially does not exist) | idea |
 | 6 | The AstroTurf Center for Community Formation | Ministry of the Gentry | tbd |
-| 7 | The Non-Volunteer Volunteer Militia | Chartered by the corps (you swear allegiance to one) | idea |
+| 7 | The Non-Volunteer Volunteer Militia | Chartered by the corps (you swear allegiance to one) | live: Range 7 (south of block 4) |
 | 8 | The Innocuous Center for Imaging Research | Vantablack Holdings × Mercy Unlimited (medical) / Null Sector Trust (military) | idea |
 | 9 | Kessler Demolition Pit | Kessler Mining Co. | suggestion |
 | 10 | Ash & Iron Hall of Hymns | Ash & Iron | suggestion |
@@ -260,7 +260,7 @@ Where communities are formed, professionally. All spontaneity is scheduled in ad
 
 ### 7. The Non-Volunteer Volunteer Militia
 
-_Chartered by the corps (you swear allegiance to one) · idea_
+_Chartered by the corps (you swear allegiance to one) · live: Range 7 (south of block 4)_
 
 **Do:** Weekly shooting qualification. Skip it and you're fined scrap. Go as often as you like. Has its own rank progression (separate roadmap track).
 
@@ -404,6 +404,12 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Civic Duty | Full Roster | Work a shift for all 13 organizations. | 130 scrap |
 | Civic Duty | Exemplary. This Has Been Noted. | Score 95% or better on any shift. | 39 scrap |
 | Shame | _(hidden until earned)_ This Has Been Noted | Score zero on a shift. | cosmetic: A permanent note on your file |
+| Civic Duty | Voluntold | Swear allegiance to a corporation's Militia company. | 13 scrap |
+| Civic Duty | Qualified (Barely Counts) | Finish a paid qualification at Range 7. | 13 scrap |
+| Civic Duty | Expert Volunteer | Score EXPERT at Range 7. | 39 scrap |
+| Civic Duty | Clean Sheet | Qualify without hitting a single friendly. | 26 scrap |
+| Civic Duty | Lieutenant (Unpaid) | Reach the 9th Militia rank. | 130 scrap |
+| Shame | _(hidden until earned)_ Bad Dog | Shoot the Wilco cutout at Range 7. | cosmetic: A muzzle decal (for you) |
 
 ## Glossary
 

@@ -630,7 +630,7 @@
       "version": "0.1.15",
       "date": "2026-11-07",
       "name": "Shift work: a minigame at every organization",
-      "status": "now",
+      "status": "done",
       "items": [
         "Every org has a desk on its block with a ~30-second shift minigame (E at the desk → Work a shift). Kessler, Mercy and the Registry get field offices on their blocks (shift work only; their stamps stay where they were)",
         "13 games on 6 mechanics: Exposure Test (Vantablack), Meter Reading (Cinder), Assay Sorting (Kessler), Triage (Mercy), Smelt a Batch (Ash & Iron), Going, Going… (Gavel & Rope), Mandatory Smile (Bureau), Ration Line (Gullet), The Queue (Ministry), Processing (Null Sector), Number, Please (Registry), Parcel Sort (Last Mile), Fair Price (Assessor)",
@@ -638,6 +638,19 @@
         "Achievements: Gainfully Occupied, Full Roster (all 13), Exemplary. This Has Been Noted. (95%+); shame: This Has Been Noted (0%). A good paid shift warms your Civic Warmth by 1",
         "Spine Run fix: the 13th gate (last crossing) is now the finish. It used to send you all the way back to the start ring at the west end, so it looked like it never ended",
         "Spine Run + circuits: starting a run auto-tracks it, so the arrow points at the next gate; tracking clears when you finish"
+      ]
+    },
+    {
+      "version": "0.1.16",
+      "date": "2026-11-07",
+      "name": "Militia Range 7: first-person shooting gallery",
+      "status": "now",
+      "items": [
+        "Range 7 south of block 4: swear allegiance to one of the corporations' companies, then qualify",
+        "First-person gallery: three stages (static, movers, snap pop-ups); hostile cutouts (Agitator, Loiterer, Unlicensed Breather…), no-shoot cutouts (Insured Civilian, Bureau Cheer Officer, Assessor) and, in stage 3, the dog",
+        "13-round magazine, reload (R / RELOAD box), aim sway + recoil that worsens when you spray; heads 25, body 10, friendlies −30, Wilco −100",
+        "Grades: Unqualified / Marksman / Sharpshooter / Expert → 13 / 26 / 39 / 65 scrap (paid once per 13 min); score becomes merit toward 13 ranks (Conscript-Volunteer → Commandant of Volunteering); weekly qualification tracked (fines later)",
+        "Achievements: Voluntold, Qualified (Barely Counts), Expert Volunteer, Clean Sheet, Lieutenant (Unpaid); shame: Bad Dog"
       ]
     }
   ],
@@ -722,6 +735,83 @@
         {
           "id": "mr-promo",
           "text": "69-floor promo (Kevin, Nov 7): Spine price fixed (assumed $13). The 69 sale covers the first five newly opened avenue blocks, each doubling the one before: $13 → $26 → $52 → $104 → $208. No end date: it ends when the next doubling ($416) would cost more than buying 69 floors one at a time (~$228). From block 6 on, floors sell normally. Published rule: \"the 69 sale covers the first five new blocks\"",
+          "status": "later"
+        }
+      ]
+    },
+    {
+      "id": "lore-games",
+      "name": "Track: Lore minigames (the real ones)",
+      "note": "Kevin, Nov 7: the 30-second shifts stay as quick jobs; each org also gets a proper lore game with its own progression. Militia Range 7 is the first. Proposals below are drafts.",
+      "items": [
+        {
+          "id": "lg-militia",
+          "text": "Non-Volunteer Volunteer Militia: Range 7 first-person shooting gallery (live). Next: weekly fines, corp rivalry cutouts, rank cosmetics, changing sides",
+          "status": "now"
+        },
+        {
+          "id": "lg-ministry",
+          "text": "Ministry of the Gentry: Papers, Please-style Tenure Heights applications against rules that change daily",
+          "status": "later"
+        },
+        {
+          "id": "lg-kessler",
+          "text": "Kessler: cut a derelict hull apart along its seams for salvage (slice/physics)",
+          "status": "later"
+        },
+        {
+          "id": "lg-ashiron",
+          "text": "Ash & Iron: foundry line, pour molten metal into moulds on a moving conveyor",
+          "status": "later"
+        },
+        {
+          "id": "lg-null",
+          "text": "Null Sector: impound tow-claw, hook skiffs out of a crowded yard without denting the insured ones",
+          "status": "later"
+        },
+        {
+          "id": "lg-cinder",
+          "text": "Cinder: route metered air through valves and pipes before the pressure drops (pipe puzzle)",
+          "status": "later"
+        },
+        {
+          "id": "lg-gullet",
+          "text": "Gullet: protein-vat counter, fill orders under time pressure (diner-dash)",
+          "status": "later"
+        },
+        {
+          "id": "lg-lastmile",
+          "text": "Last Mile: pack the cargo hold (spatial packing), then pay for the damage",
+          "status": "later"
+        },
+        {
+          "id": "lg-gavel",
+          "text": "Gavel & Rope: run an auction, read bidders' tells, drop the hammer at the peak",
+          "status": "later"
+        },
+        {
+          "id": "lg-mercy",
+          "text": "Mercy Unlimited: steady-hand surgery or hearse-dispatch routing",
+          "status": "later"
+        },
+        {
+          "id": "lg-assessor",
+          "text": "Assessor: spot the forged entries in a ledger page (spot the difference)",
+          "status": "later"
+        },
+        {
+          "id": "lg-registry",
+          "text": "Registry: process the dead and the newly numbered (sorting under rules)",
+          "status": "later"
+        },
+        {
+          "id": "lg-bureau",
+          "text": "Bureau of Public Cheer: propaganda rhythm game / smile checkpoint",
+          "status": "later"
+        },
+        {
+          "id": "lg-vanta",
+          "text": "Vantablack Science Centre: zero-g EVA tether course before the 2.9-second exposure limit",
           "status": "later"
         }
       ]

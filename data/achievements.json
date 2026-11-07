@@ -769,6 +769,67 @@
       },
       "shame": true,
       "cosmetic": "A permanent note on your file"
+    },
+    {
+      "id": "militia-oath",
+      "cat": "civic",
+      "name": "Voluntold",
+      "desc": "Swear allegiance to a corporation's Militia company.",
+      "on": "militia-oath",
+      "reward": 13
+    },
+    {
+      "id": "militia-qual",
+      "cat": "civic",
+      "name": "Qualified (Barely Counts)",
+      "desc": "Finish a paid qualification at Range 7.",
+      "on": "militia",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "militia-expert",
+      "cat": "civic",
+      "name": "Expert Volunteer",
+      "desc": "Score EXPERT at Range 7.",
+      "on": "militia",
+      "eq": {
+        "grade": "EXPERT"
+      },
+      "reward": 39
+    },
+    {
+      "id": "militia-clean",
+      "cat": "civic",
+      "name": "Clean Sheet",
+      "desc": "Qualify without hitting a single friendly.",
+      "on": "militia",
+      "eq": {
+        "friendly": 0
+      },
+      "reward": 26
+    },
+    {
+      "id": "militia-lt",
+      "cat": "civic",
+      "name": "Lieutenant (Unpaid)",
+      "desc": "Reach the 9th Militia rank.",
+      "on": "militia",
+      "min": {
+        "rank": 8
+      },
+      "reward": 130
+    },
+    {
+      "id": "bad-dog",
+      "cat": "shame",
+      "name": "Bad Dog",
+      "desc": "Shoot the Wilco cutout at Range 7.",
+      "on": "shot-wilco",
+      "shame": true,
+      "cosmetic": "A muzzle decal (for you)"
     }
   ]
 }

@@ -243,3 +243,6 @@ body.touch #panel .grid { grid-template-columns: 110px 1fr; }
 /* shift minigames */
 #panel .mg-wrap { display: flex; justify-content: center; margin: 8px 0; }
 #panel #mg { width: min(320px, 82vw); height: auto; aspect-ratio: 1; border: 1px solid var(--line); touch-action: none; user-select: none; -webkit-user-select: none; }
+/* militia range */
+#panel .mil-wrap { display: flex; justify-content: center; }
+#panel #mil { width: 100%; height: auto; aspect-ratio: 16 / 10; border: 1px solid #5a6b3a; touch-action: none; user-select: none; -webkit-user-select: none; }
