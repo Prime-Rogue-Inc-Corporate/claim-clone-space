@@ -955,6 +955,55 @@
       },
       "shame": true,
       "cosmetic": "A 'Kessler Thanks You For Your Contribution' plaque"
+    },
+    {
+      "id": "gavel-first",
+      "cat": "civic",
+      "name": "Going Once",
+      "desc": "Finish a paid shift on Auction Floor 13.",
+      "on": "auction",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "gavel-eff",
+      "cat": "civic",
+      "name": "Found the Price",
+      "desc": "Average 90%+ of what the room would pay over 4+ lots.",
+      "on": "auction",
+      "min": {
+        "efficiency": 0.9,
+        "sold": 4
+      },
+      "reward": 65
+    },
+    {
+      "id": "gavel-chandelier",
+      "cat": "civic",
+      "name": "From the Back of the Room",
+      "desc": "Use 5 chandelier bids in a shift without a single lot bought in.",
+      "on": "auction",
+      "min": {
+        "chandeliers": 5
+      },
+      "max": {
+        "boughtIn": 0
+      },
+      "reward": 39
+    },
+    {
+      "id": "gavel-roped",
+      "cat": "shame",
+      "name": "The Rope Committee Will See You Now",
+      "desc": "Get three lots bought in and lose the gavel.",
+      "on": "auction",
+      "eq": {
+        "roped": true
+      },
+      "shame": true,
+      "cosmetic": "A length of ceremonial rope"
     }
   ]
 }
