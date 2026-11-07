@@ -31,7 +31,7 @@ export function openWiki(lore, { openModal, closeModal, esc }, tab = 'orgs', foc
     body = `${detail}<table>${list}</table>`;
   } else if (tab === 'architects') {
     body = `<div class="sub">${esc(lore.architects_intro || '')}</div>` + (lore.architects || []).map((a) => `<div class="explain" style="border-left:4px solid ${esc(a.color)}">
-        <img src="assets/architects/${esc(a.id)}.png" width="64" height="64" alt="" style="float:right;margin:0 0 6px 10px" onerror="this.remove()"/>
+        <img src="assets/architects/${esc(a.id)}_card.png" width="64" height="64" alt="" style="float:right;margin:0 0 6px 10px" onerror="this.onerror=()=>this.remove();this.src='assets/architects/${esc(a.id)}.png'"/>
         <b style="font-size:15px">${esc(a.name)}</b> · ARCHITECT<br/><i>“${esc(a.motto)}”</i><br/><br/>${esc(a.lore)}<br/><br/>
         ${a.rumours.map((r) => `<b>Rumour:</b> ${esc(r)}`).join('<br/>')}</div>`).join('') + `<div class="sub">${esc(lore.architects_note || '')}</div>`;
   } else if (tab === 'rec') {

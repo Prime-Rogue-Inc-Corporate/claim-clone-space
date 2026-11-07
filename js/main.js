@@ -524,7 +524,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       `<h2>${esc(a.name.toUpperCase())}</h2>
        <div class="sub">Architect · ${a.floors} floors · <i>“${esc(a.motto)}”</i></div>
        <div class="explain" style="border-left:4px solid ${esc(a.color)}">
-         <img src="assets/architects/${esc(a.id)}.png" width="72" height="72" alt="" style="float:right;margin:0 0 6px 10px" onerror="this.remove()"/>
+         <img src="assets/architects/${esc(a.id)}_card.png" width="96" height="96" alt="" style="float:right;margin:0 0 6px 10px" onerror="this.onerror=()=>this.remove();this.src='assets/architects/${esc(a.id)}.png'"/>
          ${L ? esc(L.lore) : 'One of the two companies that built the universe.'}</div>
        <div class="explain"><b>Not for sale at any price.</b> The Assessor has never been allowed inside. No other building may be taller; everyone else stops at 100 floors.</div>
        ${L?.rumours?.length ? `<div class="sub">${L.rumours.map((x) => `<b>Rumour:</b> ${esc(x)}`).join('<br/>')}</div>` : ''}
