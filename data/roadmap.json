@@ -156,6 +156,11 @@
           "id": "p1-wilco-patrol",
           "text": "Wilco's daily inspection patrol: top-down dog sprite (4-frame walk), patrol route, goodies left behind (scrap/cosmetics only)",
           "status": "later"
+        },
+        {
+          "id": "p1-shift-balance",
+          "text": "Rebalance shift pay per org against future resources (air, water, food, allotment resource); per-org difficulty tuning; real art per game",
+          "status": "later"
         }
       ]
     },
@@ -611,7 +616,7 @@
       "version": "0.1.14",
       "date": "2026-11-07",
       "name": "The Architects + roof logos",
-      "status": "now",
+      "status": "done",
       "items": [
         "Prime Rogue Inc. (north) and Wilco Corporation (south) campuses just off the Atlas, each at the end of its own Nerve from the crossings either side of block 7",
         "Each tower is a four-lot square (2 × 2), 130 floors, solid, never for sale; dock at the pad for the Architect's card (E)",
@@ -619,6 +624,20 @@
         "Roof logo upload in the branding editor: squared to 256 px and re-encoded (strips metadata); stays on this device until accounts + the automated scan exist; cleared on buy-out",
         "Architects in the wiki (L → architects), docs/WIKI.md, places (the Atlas, the Nerves) and glossary",
         "Achievements: Pilgrim (dock at both campuses), Brand Identity (put a logo on your roof)"
+      ]
+    },
+    {
+      "version": "0.1.15",
+      "date": "2026-11-07",
+      "name": "Shift work: a minigame at every organization",
+      "status": "now",
+      "items": [
+        "Every org has a desk on its block with a ~30-second shift minigame (E at the desk → Work a shift). Kessler, Mercy and the Registry get field offices on their blocks (shift work only; their stamps stay where they were)",
+        "13 games on 6 mechanics: Exposure Test (Vantablack), Meter Reading (Cinder), Assay Sorting (Kessler), Triage (Mercy), Smelt a Batch (Ash & Iron), Going, Going… (Gavel & Rope), Mandatory Smile (Bureau), Ration Line (Gullet), The Queue (Ministry), Processing (Null Sector), Number, Please (Registry), Parcel Sort (Last Mile), Fair Price (Assessor)",
+        "Pays 13–39 scrap by score, once per org every 13 minutes; replays are practice. Placeholder economy: to be rebalanced against future resources",
+        "Achievements: Gainfully Occupied, Full Roster (all 13), Exemplary. This Has Been Noted. (95%+); shame: This Has Been Noted (0%). A good paid shift warms your Civic Warmth by 1",
+        "Spine Run fix: the 13th gate (last crossing) is now the finish. It used to send you all the way back to the start ring at the west end, so it looked like it never ended",
+        "Spine Run + circuits: starting a run auto-tracks it, so the arrow points at the next gate; tracking clears when you finish"
       ]
     }
   ],

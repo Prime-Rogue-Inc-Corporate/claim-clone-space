@@ -30,16 +30,17 @@ const STAMPS = {
   bureau: { desk: 'oath', how: 'Swear the Compliance Oath at the Bulletin Tower.' },
 };
 
-// Desk positions: one org per block (block 1 = west end). Kessler, Mercy and the Registry already
-// have real places (Refit Bay, Spine Run gate, Housing Registries), so their blocks have no desk.
+// Desk positions: one org per block (block 1 = west end). Every desk has a shift minigame.
+// Kessler, Mercy and the Registry stamp at their real places (Refit Bay, Spine Run gate, Housing
+// Registries); their desks are field offices: shift work only, no stamp action.
 const BLOCK_ORDER = ['mercy', 'vanta', 'ashiron', 'null', 'cinder', 'gullet', 'kessler', 'lastmile', 'gavel', 'ministry', 'assessor', 'bureau', 'registry'];
-const NO_DESK = new Set(['mercy', 'kessler', 'registry']);
+const FIELD_OFFICE = { mercy: 'Mercy Unlimited Field Clinic', kessler: 'Kessler Assay Office', registry: 'Registry Branch Office' };
 
 export function residencyLevel(n) {
   return n >= T13 ? '1' : `0.${String(n).padStart(2, '0')}`;
 }
 
-export function createProgress({ world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, warmth = null, setWaypoint, addHeat, raceStart, refit, registries }) {
+export function createProgress({ world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, warmth = null, minigames = null, setWaypoint, addHeat, raceStart, refit, registries }) {
   const S = econ.state;
   S.stamps ||= {};
   S.ach ||= {};
@@ -53,12 +54,12 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
   const blocks = world.spine.blocks || [];
   const desks = BLOCK_ORDER.map((id, k) => {
     const b = blocks[k];
-    if (!b || NO_DESK.has(id) || !orgById[id]) return null;
+    if (!b || !orgById[id]) return null;
     const north = id === 'ministry';
-    return { org: id, x: (b.x0 + b.x1) / 2 + 300, y: north ? -900 : 420, north };
+    return { org: id, x: (b.x0 + b.x1) / 2 + 300, y: north ? -900 : 420, north, office: FIELD_OFFICE[id] || null };
   }).filter(Boolean);
   const placeOf = (id) => {
-    const d = desks.find((d) => d.org === id);
+    const d = desks.find((d) => d.org === id && !d.office);
     if (d) return { x: d.x, y: d.y };
     if (id === 'kessler') return refit;
     if (id === 'mercy') return { x: raceStart[0], y: raceStart[1] };
@@ -144,17 +145,19 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
     const canDesk = st.desk && !done;
     const cost = st.cost || 0;
     const label = { smelt: `Work a shift (${cost} scrap)`, fine: `Pay the fine (${cost} scrap)`, register: 'Register', ration: 'Collect ration', bid: `Bid ${cost} scrap`, ministry: 'Get stamped', oath: 'I swear' }[st.desk];
+    const title = desk.office || org.site || org.name;
     openModal(
-      `<h2>${esc(org.site || org.name)}</h2>
+      `<h2>${esc(title)}</h2>
        <div class="sub">${esc(org.name)} · ${esc(org.type || '')} · “${esc(org.motto || '')}”</div>
        <div class="explain">${esc(org.does || '')}<br/><br/>
        <b>Residency stamp:</b> ${esc(st.how)}<br/>
-       ${done ? '<b style="color:#d6f08a">STAMPED.</b>' : st.event && !st.desk ? '<i>Stamped automatically when you do it.</i>' : ''}</div>
-       <div class="buttons">${canDesk ? `<button class="primary" id="act" ${S.scrap >= cost ? '' : 'disabled'}>${esc(label)}</button>` : ''}<button id="card">Residency card (C)</button><button id="x">Close</button></div>
+       ${done ? '<b style="color:#d6f08a">STAMPED.</b>' : st.event && !st.desk ? `<i>Stamped automatically when you do it${desk.office ? ` (at ${esc(org.site)}, not here)` : ''}.</i>` : ''}</div>
+       <div class="buttons">${canDesk ? `<button class="primary" id="act" ${S.scrap >= cost ? '' : 'disabled'}>${esc(label)}</button>` : ''}${minigames ? minigames.button(desk.org) : ''}<button id="card">Residency card (C)</button><button id="x">Close</button></div>
        <div class="err" id="err">${canDesk && S.scrap < cost ? `Need ${cost} scrap.` : ''}</div>`,
       (el) => {
         el.querySelector('#x').addEventListener('click', closeModal);
         el.querySelector('#card').addEventListener('click', openCard);
+        el.querySelector('#mg-play')?.addEventListener('click', () => minigames.open(desk.org, { ...org, site: title }));
         el.querySelector('#act')?.addEventListener('click', () => {
           if (cost) econ.fine(cost);
           if (st.gift) econ.reward(st.gift);
@@ -189,10 +192,10 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
       c.fillStyle = done ? '#d6f08a' : '#e8c547';
       c.font = 'bold 12px monospace';
       c.textAlign = 'center';
-      c.fillText(done ? '✓ STAMPED' : 'STAMP', d.x, d.y + 26);
+      c.fillText(d.office ? 'SHIFT WORK' : done ? '✓ STAMPED · SHIFT' : 'STAMP · SHIFT', d.x, d.y + 26);
       c.fillStyle = 'rgba(232,220,190,0.8)';
       c.font = 'bold 12px monospace';
-      c.fillText((org.site || org.name).toUpperCase(), d.x, d.y - 54);
+      c.fillText((d.office || org.site || org.name).toUpperCase(), d.x, d.y - 54);
       c.font = '10px monospace';
       c.fillStyle = 'rgba(232,220,190,0.55)';
       c.fillText(`${org.name} · E at the pad`, d.x, d.y + 70);
@@ -259,11 +262,13 @@ export function createProgress({ world, econ, lore, achievements, log, esc, open
       (el) => {
         el.querySelector('#x').addEventListener('click', closeModal);
         el.querySelector('#card').addEventListener('click', openCard);
+        el.querySelector('#mg-play')?.addEventListener('click', () => minigames.open(desk.org, { ...org, site: title }));
       }
     );
   }
 
   // unstamped orgs that have a place to go (for the gig board)
-  const openStamps = () => BLOCK_ORDER.filter((id) => !S.stamps[id] && orgById[id] && placeOf(id)).map((id) => ({ org: id, name: orgById[id].name, site: orgById[id].site, how: STAMPS[id].how, ...placeOf(id), desk: !!desks.find((d) => d.org === id) }));
-  return { openStamps, emit, stamp, stampCount, processed, nearDesk, openDesk, openCard, openAchievements, drawWorld, desks };
+  const openStamps = () => BLOCK_ORDER.filter((id) => !S.stamps[id] && orgById[id] && placeOf(id)).map((id) => ({ org: id, name: orgById[id].name, site: orgById[id].site, how: STAMPS[id].how, ...placeOf(id), desk: !!desks.find((d) => d.org === id && !d.office) }));
+  const openDeskFor = (org) => { const d = desks.find((x) => x.org === org); if (d) openDesk(d); else closeModal(); };
+  return { openStamps, emit, stamp, stampCount, processed, nearDesk, openDesk, openDeskFor, openCard, openAchievements, drawWorld, desks };
 }

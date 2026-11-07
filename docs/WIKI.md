@@ -400,6 +400,10 @@ The Collective's most popular attraction: the only place on the Spine where not 
 | Shame | _(hidden until earned)_ Grim Statistic | 169 souls lost on your watch. | cosmetic: Registry black armband |
 | Exploration | Pilgrim | Dock at both Architects' campuses. | 26 scrap |
 | Property | Brand Identity | Put a logo on the roof of a lot you own. | 13 scrap |
+| Civic Duty | Gainfully Occupied | Work a shift at any organization's desk. | 13 scrap |
+| Civic Duty | Full Roster | Work a shift for all 13 organizations. | 130 scrap |
+| Civic Duty | Exemplary. This Has Been Noted. | Score 95% or better on any shift. | 39 scrap |
+| Shame | _(hidden until earned)_ This Has Been Noted | Score zero on a shift. | cosmetic: A permanent note on your file |
 
 ## Glossary
 
@@ -412,4 +416,4 @@ The Collective's most popular attraction: the only place on the Spine where not 
 - **Gentry:** Anyone holding a lot or credits. Lose your lots and hold only credits for 13 days and you rejoin the people.
 - **Death:** Deleting your account. Deaths are counted and announced by skiff number only.
 - **13:** Everything is 13, except the maximum building height. Nobody knows why.
-- **Residency:** Your level before Level 1. Each of the 13 organizations stamps your residency card once (C): 0.01 per stamp, 0.00 → 0.13. The 13th stamp makes you Level 1, “Fully Processed”. Ten stamps come from desks on the Spine (one per block); Kessler, Mercy and the Registry stamp you at the Refit Bay, the Spine Run gate and the Housing Registries.
+- **Residency:** Your level before Level 1. Each of the 13 organizations stamps your residency card once (C): 0.01 per stamp, 0.00 → 0.13. The 13th stamp makes you Level 1, “Fully Processed”. Every organization has a desk on its block where you can work a shift (a short minigame that pays scrap). Ten stamps come from those desks; Kessler, Mercy and the Registry stamp you at the Refit Bay, the Spine Run gate and the Housing Registries.

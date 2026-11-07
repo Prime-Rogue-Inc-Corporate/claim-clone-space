@@ -728,6 +728,47 @@
       "desc": "Put a logo on the roof of a lot you own.",
       "on": "logo",
       "reward": 13
+    },
+    {
+      "id": "first-shift",
+      "cat": "civic",
+      "name": "Gainfully Occupied",
+      "desc": "Work a shift at any organization's desk.",
+      "on": "shift",
+      "reward": 13
+    },
+    {
+      "id": "full-roster",
+      "cat": "civic",
+      "name": "Full Roster",
+      "desc": "Work a shift for all 13 organizations.",
+      "on": "shift",
+      "distinct": "org",
+      "n": 13,
+      "reward": 130
+    },
+    {
+      "id": "exemplary",
+      "cat": "civic",
+      "name": "Exemplary. This Has Been Noted.",
+      "desc": "Score 95% or better on any shift.",
+      "on": "shift",
+      "min": {
+        "q": 0.95
+      },
+      "reward": 39
+    },
+    {
+      "id": "noted",
+      "cat": "shame",
+      "name": "This Has Been Noted",
+      "desc": "Score zero on a shift.",
+      "on": "shift",
+      "max": {
+        "q": 0
+      },
+      "shame": true,
+      "cosmetic": "A permanent note on your file"
     }
   ]
 }

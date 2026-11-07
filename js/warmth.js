@@ -4,7 +4,7 @@
 import { WARMTH_START, WARMTH_MAX, WARMTH_RULES, warmthTier, citizenOfDay, today } from './citizen.js';
 
 const LABELS = {
-  delivery: 'freight delivered', shuttle: 'Humane Shuttle run', stamp: 'residency stamp', processed: 'fully processed',
+  delivery: 'freight delivered', shift: 'worked a good shift', shuttle: 'Humane Shuttle run', stamp: 'residency stamp', processed: 'fully processed',
   'track-lap': 'clean lap', lap: 'Spine Run lap', hut: 'home built', scrape: 'scraped a wall with cargo or passengers',
   late: 'late delivery', 'wrong-way': 'drove a circuit backwards', bailed: 'abandoned cargo', jack: 'jacked a ship',
   escape: 'evaded the authorities', expired: 'stolen ship remote-killed', busted: 'busted by Null Sector',

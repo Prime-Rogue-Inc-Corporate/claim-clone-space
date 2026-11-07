@@ -71,7 +71,7 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
     }
     // 4. races
     const sr = loops.spineRun();
-    rows.push({ id: 'race:spine', type: 'race', title: 'Spine Run', sub: `13 gates through the crossings${sr.best ? ` · your best ${(sr.best / 1000).toFixed(2)}s` : ''}`, pay: '13+', target: sr.active && sr.next ? { x: sr.next[0], y: sr.next[1], label: 'Spine Run · next gate' } : { x: sr.start[0], y: sr.start[1], label: 'Spine Run start' } });
+    rows.push({ id: 'race:spine', type: 'race', title: 'Spine Run', sub: `13 gates: start ring, then the 12 crossings; the last is the finish${sr.best ? ` · your best ${(sr.best / 1000).toFixed(2)}s` : ''}`, pay: '13+', target: sr.active && sr.next ? { x: sr.next[0], y: sr.next[1], label: 'Spine Run · next gate' } : { x: sr.start[0], y: sr.start[1], label: 'Spine Run start' } });
     for (const c of CIRCUITS) {
       const best = circuits.bestOf(c.id), top = circuits.rivalTop(c.id);
       const next = circuits.active() === c ? circuits.next() : null;
@@ -90,8 +90,16 @@ export function createGigs({ world, econ, loops, circuits, progress, registries,
   let rows = [];
   let rowsAt = -1e9;
   const refresh = (body, now = performance.now()) => { rows = rowsFor(body, now); rowsAt = now; };
+  let lastRace = null;
   function trackedRow(body) {
     if (body && performance.now() - rowsAt > 250) refresh(body);
+    // a race just started: point the arrow at its next gate (unless you're mid-job)
+    const liveRace = loops.spineRun().active ? 'race:spine' : circuits.active() ? `race:${circuits.active().id}` : null;
+    if (liveRace !== lastRace) {
+      if (liveRace && !loops.freightJob() && !(tracked || '').startsWith('shuttle:')) { tracked = liveRace; lastHtml = ''; }
+      else if (!liveRace && tracked === lastRace) { tracked = null; lastHtml = ''; } // finished: stop pointing at the start ring
+      lastRace = liveRace;
+    }
     // a tracked offer turns into the job when you load it
     const job = loops.freightJob();
     if (job && job.offerId !== lastJobOffer) {

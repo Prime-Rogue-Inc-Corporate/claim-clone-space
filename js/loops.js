@@ -9,8 +9,8 @@ import { speedOf } from './entities.js';
 const KEY = 'claim-clone-space:loops:v1';
 const CARGO = ['coolant cells', 'unmarked crates', 'ration bricks', 'reactor slag', 'a sealed casket', 'contraband prayer beads', 'fifty litres of recycled water'];
 
-// Spine Run: 13 gates. Gate 1 (start/finish) sits south of the Spine's west end; gates 2–13
-// are the 12 crossings, so the lap weaves north-south-north through the city, then home.
+// Spine Run: 13 gates. Gate 1 (start) sits south of the Spine's west end; gates 2–13 are the 12
+// crossings, so the run slaloms north-south through the city. Gate 13 (the last crossing) is the finish.
 function raceGates(world) {
   const gaps = world.spine.gaps || [];
   if (gaps.length < 2) return [[-2900, 700], [0, -700], [2900, 700]];
@@ -223,7 +223,8 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
         race.active = true;
         race.next = 1;
         race.start = now;
-        log(`SPINE RUN started. ${RACE.length - 1} crossings, slalom north-south, then back here.${persist.bestLap ? ` Best: ${fmt(persist.bestLap)}` : ''}`);
+        log(`SPINE RUN started. ${RACE.length - 1} crossings, slalom north-south; the last crossing is the finish.${persist.bestLap ? ` Best: ${fmt(persist.bestLap)}` : ''}`);
+        emit('run-start', { id: 'spine' });
       }
       return;
     }
@@ -232,10 +233,10 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       race.armedAt = now + 3000;
       return log('Spine Run abandoned.');
     }
-    const idx = race.next % RACE.length;
+    const idx = race.next;
     const [cx, cy] = RACE[idx];
     if (Math.hypot(cx - body.x, cy - body.y) < RING) {
-      if (idx === 0) {
+      if (idx === RACE.length - 1) {
         const lap = now - race.start;
         race.active = false;
         race.armedAt = now + 3000;
@@ -272,7 +273,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
     // for the gig board
     freightOffers: () => freight.offers.map((o) => ({ ...o, pickup: plotPad(world, econ.plotById(o.from)), dropoff: plotPad(world, econ.plotById(o.to)) })),
     freightJob: () => (freight.job ? { ...freight.job, dropoff: plotPad(world, econ.plotById(freight.job.to)) } : null),
-    spineRun: () => ({ active: race.active, best: persist.bestLap, start: RACE[0], next: race.active ? RACE[race.next % RACE.length] : null }),
+    spineRun: () => ({ active: race.active, best: persist.bestLap, start: RACE[0], next: race.active ? RACE[race.next] : null }),
     onKey(k, now) {
       if (k === 'x' && freight.job) {
         log('You dumped the cargo. Job abandoned.');
@@ -298,7 +299,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       const parts = [];
       if (heat.level) parts.push(`<span style="color:#ff5a3a">HEAT ${'★'.repeat(heat.level)}${'☆'.repeat(5 - heat.level)}</span>`);
       if (freight.job) parts.push(`JOB → Lot ${freight.job.to} · ${Math.max(0, Math.ceil((freight.job.deadline - now) / 1000))}s${freight.job.damage ? ` · ${Math.round(freight.job.damage * 100)}% dmg` : ''} · X to dump`);
-      if (race.active) parts.push(`RUN ${fmt(now - race.start)} · gate ${race.next % RACE.length || RACE.length}/${RACE.length}`);
+      if (race.active) parts.push(`RUN ${fmt(now - race.start)} · ${race.next === RACE.length - 1 ? 'FINISH' : 'gate'} ${race.next + 1}/${RACE.length}`);
       else if (persist.bestLap) parts.push(`best lap ${fmt(persist.bestLap)}`);
       return parts.join('<br/>');
     },
@@ -340,7 +341,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       }
       // race gates
       RACE.forEach(([x, y], i) => {
-        const isNext = race.active && i === race.next % RACE.length;
+        const isNext = race.active && i === race.next;
         const isStart = i === 0;
         if (!race.active && !isStart) return;
         ctx.strokeStyle = isNext ? '#d6f08a' : isStart ? '#e8c547' : 'rgba(214,240,138,0.25)';
@@ -360,7 +361,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
           ctx.fillStyle = '#d6f08a';
           ctx.font = 'bold 14px monospace';
           ctx.textAlign = 'center';
-          ctx.fillText(i === 0 ? 'FINISH' : `GATE ${i}`, x, y + 5);
+          ctx.fillText(i === RACE.length - 1 ? 'FINISH · 13' : `GATE ${i + 1}`, x, y + 5);
         }
       });
       // drones
@@ -390,7 +391,7 @@ export function createLoops({ world, econ, log, rng, player, esc, getSolids, bus
       const v = view();
       if (freight.job) { const p = plotPad(world, econ.plotById(freight.job.to)); dot(p.x, p.y, '#ffd166', 5); }
       else for (const o of freight.offers) if (v.freight || o.id === v.trackedOffer) { const p = plotPad(world, econ.plotById(o.from)); dot(p.x, p.y, '#4fc3f7', o.id === v.trackedOffer ? 6 : 4); }
-      if (race.active) { const [x, y] = RACE[race.next % RACE.length]; dot(x, y, '#d6f08a', 5); }
+      if (race.active) { const [x, y] = RACE[race.next]; dot(x, y, '#d6f08a', 5); }
       else if (v.races) dot(RACE[0][0], RACE[0][1], '#e8c547', 4);
       for (const d of heat.drones) dot(d.x, d.y, '#ff3b1f', 3);
     },

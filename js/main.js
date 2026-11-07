@@ -15,6 +15,7 @@ import { createTouch } from './touch.js';
 import { ensurePilots, createPilots } from './pilots.js';
 import { createScooters } from './scooters.js';
 import { createPlot } from './plot.js';
+import { createMinigames } from './minigames.js';
 import { KINDS, makeShip, fly, speedOf, makeTraffic, steerNpc } from './entities.js';
 import { drawScene, drawMinimap, makeStars } from './render.js';
 
@@ -176,8 +177,10 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   // ---- residency card (C) + achievements (J) ----
   // Civic Warmth™: the Bureau's friendly score (K)
   const warmth = createWarmth({ econ, log, esc, openModal, closeModal, skiff: myShip.reg });
+  // shift work: a minigame at every organization's desk (pays scrap, 13-minute cooldown per org)
+  const minigames = createMinigames({ econ, log, esc, openModal, closeModal, emit: (t, d) => progress.emit(t, d), onBack: (org) => progress.openDeskFor(org) });
   const progress = createProgress({
-    world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, warmth,
+    world, econ, lore, achievements, log, esc, openModal, closeModal, sprites, warmth, minigames,
     setWaypoint: (w) => (waypoint = w),
     addHeat: (n, why) => loops.addHeat(n, why),
     raceStart: loops.raceStart, refit: REFIT, registries: REGISTRIES,
@@ -955,7 +958,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
          <span class="k"><kbd>X</kbd></span><span>Dump the cargo (abandon your freight job)</span>
          <span class="k"><kbd>TAB</kbd></span><span>The ledger: every lot and price</span>
          <span class="k"><kbd>L</kbd></span><span>The wiki: who runs this place, and why everything is 13</span>
-         <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”</span>
+         <span class="k"><kbd>C</kbd></span><span>Residency card: 13 stamps from the 13 organizations. Level 0.00 → 0.13 → Level 1, “Fully Processed”. Every org desk also has a shift minigame that pays scrap (once per 13 min per org)</span>
          <span class="k"><kbd>J</kbd></span><span>Achievements: 13 categories × 13. Shame ones are hidden until you earn them</span>
          <span class="k"><kbd>G</kbd></span><span>Gig board: every open gig (freight offers, reported drops, races, stamps). Click one to track it: the tracked gig gets the flag and arrow. Toggle which gig types show on the map</span>
          <span class="k"><kbd>P</kbd></span><span>Pilots (sign in on this device): switch pilots, start a fresh one, wipe (with a backup), export/import a pilot code to move or protect it</span>
@@ -972,7 +975,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
        <h3>SIDE HUSTLES (scrap + XP only)</h3>
        <div><b>Freight jobs:</b> pick an offer from the gig board (G; offers expire), fly to its blue pickup pad, slow down to load, deliver to the yellow beacon before the clock runs out. Every wall you hit damages the cargo.<br/>
        <b>Heat:</b> jacking ships or speeding in the Spine zone brings Corp drones after you. Lose them for 10s to drop a star; shake them all for a payout. Get caught and your ship is impounded.<br/>
-       <b>Spine Run:</b> fly through the gold ring south of the Spine's west end, then slalom through all 12 crossings (13 gates) and back. Best time is saved.</div>
+       <b>Spine Run:</b> fly through the gold ring south of the Spine's west end, then slalom through all 12 crossings (13 gates). The last crossing is the finish; the arrow points at the next gate. Best time is saved.</div>
        <h3>THE CITY</h3>
        <div>The Spine runs 13 blocks of 13 lots (169), all on the north side. The gaps between blocks are crossings: fly through them north-south. Real roads and intersections come later.</div>
        <h3>HUMANE SHUTTLE RUNS</h3>
@@ -1238,7 +1241,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     else if (nearArchitect) prompt = `E · ${nearArchitect.name} (Architect · not for sale)`;
     else if (nearRegistry) prompt = `E · Housing Registry, ${sprawlById(nearRegistry.sprawl).title} (pick a site)`;
     else if (nearCircuit) prompt = `E · ${nearCircuit.name} leaderboard`;
-    else if (nearDesk) prompt = `E · ${lore?.organizations?.find((o) => o.id === nearDesk.org)?.site || nearDesk.org} (residency stamp)`;
+    else if (nearDesk) prompt = `E · ${nearDesk.office || lore?.organizations?.find((o) => o.id === nearDesk.org)?.site || nearDesk.org} (${nearDesk.office ? 'shift work' : 'stamp · shift work'})`;
     else if (boardable) prompt = boardable === player.home ? `F · jump back into your skiff ${player.home.reg}` : `F · jump ${boardable.npc ? 'and jack the ' : 'into the '}${KINDS[boardable.kind].label.toLowerCase()}`;
     else if (waypoint) prompt = `Waypoint: ${Math.round(Math.hypot(waypoint.x - body.x, waypoint.y - body.y) / 6)} m · Q to clear`;
     const pe = $('prompt');
@@ -1301,7 +1304,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, architects: () => architects(world) };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, minigames, architects: () => architects(world) };
 }
 
 boot();

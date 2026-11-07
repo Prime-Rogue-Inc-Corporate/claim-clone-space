@@ -234,7 +234,7 @@
     },
     {
       "term": "Residency",
-      "text": "Your level before Level 1. Each of the 13 organizations stamps your residency card once (C): 0.01 per stamp, 0.00 → 0.13. The 13th stamp makes you Level 1, “Fully Processed”. Ten stamps come from desks on the Spine (one per block); Kessler, Mercy and the Registry stamp you at the Refit Bay, the Spine Run gate and the Housing Registries."
+      "text": "Your level before Level 1. Each of the 13 organizations stamps your residency card once (C): 0.01 per stamp, 0.00 → 0.13. The 13th stamp makes you Level 1, “Fully Processed”. Every organization has a desk on its block where you can work a shift (a short minigame that pays scrap). Ten stamps come from those desks; Kessler, Mercy and the Registry stamp you at the Refit Bay, the Spine Run gate and the Housing Registries."
     }
   ],
   "recreation_note": "13 designated recreation zones. Zones 1–8 are Kevin's; 9–13 are suggestions until confirmed. Every zone gets a record board (local bests now, global leaderboards with the server).",

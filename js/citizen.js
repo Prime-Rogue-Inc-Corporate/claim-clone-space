@@ -13,6 +13,7 @@ export const WARMTH_RULES = {
   delivery: (d) => (d.damage === 0 ? 10 : 5),
   shuttle: (d) => 13 + (d.rating >= 90 ? 13 : 0) + (d.onTime ? 13 : 0),
   stamp: () => 3,
+  shift: (d) => (d.paid && d.q >= 0.6 ? 1 : 0),
   processed: () => 26,
   'track-lap': () => 1,
   lap: () => 1,

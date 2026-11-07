@@ -240,3 +240,6 @@ body.touch #panel .grid { grid-template-columns: 110px 1fr; }
   body:not(.touch) #log { width: 60vw; }
   body:not(.touch) #gigs { width: min(330px, 46vw); }
 }
+/* shift minigames */
+#panel .mg-wrap { display: flex; justify-content: center; margin: 8px 0; }
+#panel #mg { width: min(320px, 82vw); height: auto; aspect-ratio: 1; border: 1px solid var(--line); touch-action: none; user-select: none; -webkit-user-select: none; }
