@@ -669,12 +669,25 @@
       "version": "0.1.18",
       "date": "2026-11-07",
       "name": "Leaderboards for every game",
-      "status": "now",
+      "status": "done",
       "items": [
         "18 boards: Spine Run, both circuits, Range 7, Dock 3 and all 13 shift games; every run is recorded (practice included), top 13 per board",
         "UX: B (or ☰ → Leaderboards) opens every board grouped by Races / Range & Dock / Shifts, with your rank on each button; every results screen shows your rank, personal best and P1, with a Leaderboard button",
         "In the world: the Hall of Records, a big screen by the Atlas (east of the Refit Bay) that cycles through the top 5 of each board; dock and E to open",
         "Local for now (you vs. the 12 seeded rival pilots); boards go shared with accounts + a server (Phase 2)"
+      ]
+    },
+    {
+      "version": "0.1.19",
+      "date": "2026-11-07",
+      "name": "Ministry Allocation Annex: approve or deny",
+      "status": "now",
+      "items": [
+        "The Allocation Annex north of block 10: process Tenure Heights applications against today's rules (3–5 of 9, chosen by date, so everyone gets the same rules each day)",
+        "Papers: resident ID, deed / credit statement / Sprawl registry, Forms 13-B and W, a dog, a smile. Rules include residency level, gentry-only, statement dates, skiff numbers ending in 3, a banned employer of the day, minimum age 26, name matching, the Bureau smile mandate, dogs needing Form W",
+        "At 40 s a Bureau Bulletin adds a rule, effective immediately. Right call +10, right citation on a denial +5, wrong call −15 and a citation; three citations and your desk is reassigned. 90 s shifts",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 clerk grades (Temporary Clerk (Permanent) → Undersecretary for Equality); more rules as you rank up; its own leaderboard",
+        "Achievements: Rubber Stamp, Equality, Conveniently (13+ applicants, no citations); shame: Reassigned"
       ]
     }
   ],
@@ -775,8 +788,8 @@
         },
         {
           "id": "lg-ministry",
-          "text": "Ministry of the Gentry: Papers, Please-style Tenure Heights applications against rules that change daily",
-          "status": "later"
+          "text": "Ministry of the Gentry: Allocation Annex, Papers, Please-style Tenure Heights applications (live). Next: approved applicants actually move into Tenure Heights; bribes; forged papers; your own application",
+          "status": "now"
         },
         {
           "id": "lg-kessler",

@@ -21,8 +21,9 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
   // board definitions: id -> { name, group, unit, low (lower is better), range for rivals }
   const DEFS = {
     spine: { name: 'Spine Run', group: 'Races', unit: 'time', low: true, range: [85000, 210000], sub: '13 gates through the crossings' },
-    militia: { name: 'Range 7 · Militia qualification', group: 'Range & Dock', unit: 'pts', range: [140, 560], sub: 'max 650' },
-    dock: { name: 'Loading Dock 3', group: 'Range & Dock', unit: 'pts', range: [55, 205], sub: 'inspection total' },
+    militia: { name: 'Range 7 · Militia qualification', group: 'Lore games', unit: 'pts', range: [140, 560], sub: 'max 650' },
+    dock: { name: 'Loading Dock 3', group: 'Lore games', unit: 'pts', range: [55, 205], sub: 'inspection total' },
+    annex: { name: 'Allocation Annex', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Ministry of the Gentry' },
   };
   for (const c of circuitList) DEFS[`circuit:${c.id}`] = { name: c.name.replace(/^THE /, 'The ').replace(/\B\w+/g, (w) => w.toLowerCase()), group: 'Races', unit: 'time', low: true, circuit: c.id, sub: c.after };
   for (const [org, g] of Object.entries(games)) DEFS[`shift:${org}`] = { name: g.title, group: 'Shifts', unit: '%', range: [38, 97], sub: orgName(org), org };
@@ -74,6 +75,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     if (type === 'shift') record(`shift:${data.org}`, Math.round(Math.max(0, data.q) * 100));
     else if (type === 'militia') record('militia', data.score);
     else if (type === 'dock') record('dock', data.total);
+    else if (type === 'annex') record('annex', data.score);
     else if (type === 'lap') record('spine', data.ms);
   }
   // one line for a results screen
@@ -86,7 +88,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
   function myBest(id) { const b = board(id); const i = b.findIndex((e) => e.you); return i < 0 ? null : { rank: i + 1, v: b[i].v }; }
 
   // ---- the board UI (B, the menu, and the Hall of Records) ----
-  const GROUPS = ['Races', 'Range & Dock', 'Shifts'];
+  const GROUPS = ['Races', 'Lore games', 'Shifts'];
   function open(focus = null) {
     const ids = Object.keys(DEFS);
     if (!focus || !DEFS[focus]) focus = ids.find((i) => DEFS[i].group === 'Races');

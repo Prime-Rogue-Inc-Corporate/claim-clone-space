@@ -875,6 +875,40 @@
       },
       "shame": true,
       "cosmetic": "A 'How's my packing?' bumper sticker"
+    },
+    {
+      "id": "annex-first",
+      "cat": "civic",
+      "name": "Rubber Stamp",
+      "desc": "Finish a paid shift at the Allocation Annex.",
+      "on": "annex",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "annex-perfect",
+      "cat": "civic",
+      "name": "Equality, Conveniently",
+      "desc": "Process 13+ applicants in one shift without a single citation.",
+      "on": "annex",
+      "eq": {
+        "perfect": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "annex-reassigned",
+      "cat": "shame",
+      "name": "Reassigned",
+      "desc": "Collect three citations and lose your desk.",
+      "on": "annex",
+      "eq": {
+        "reassigned": true
+      },
+      "shame": true,
+      "cosmetic": "A 'Temporary' name badge (permanent)"
     }
   ]
 }
