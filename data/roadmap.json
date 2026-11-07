@@ -619,6 +619,63 @@
           "status": "later"
         }
       ]
+    },
+    {
+      "id": "money",
+      "name": "Track: Money rollout (after the world is built out)",
+      "note": "Nothing is sold until the world is worth buying into. Each step has a gate; don't move on until it passes.",
+      "items": [
+        {
+          "id": "mr-1",
+          "text": "Step 1 · Fake money on staging: wave board, live lot counter (\"17 of 26 left\"), 1.13× buy-outs, Launch Parity, all on test cash. Gate: numbers hold under real play, incl. a two-account farming attempt",
+          "status": "later"
+        },
+        {
+          "id": "mr-fix",
+          "text": "Switch TAKEOVER_MULT from 1.25 to 1.13 in js/economy.js (step 1 depends on it)",
+          "status": "later"
+        },
+        {
+          "id": "mr-2",
+          "text": "Step 2 · Stripe test mode: server-side checkout + webhooks, sign-in before checkout, purchase limits, auto credit freeze on dispute. Gate: dispute freezes credits, refund takes the lot back, a burst of cheap test charges is blocked",
+          "status": "later"
+        },
+        {
+          "id": "mr-3",
+          "text": "Step 3 · Live smoke test: a few real charges on Kevin's own cards in the separate SpaceSquat Stripe account, then refund. Gate: USD lands in the payout account, fees match",
+          "status": "later"
+        },
+        {
+          "id": "mr-4",
+          "text": "Step 4 · Public launch, founders' wave: terms, Launch Parity rules and the full wave schedule published the same day; counter starts",
+          "status": "later"
+        },
+        {
+          "id": "mr-5",
+          "text": "Step 5 · Watch weekly: credits outstanding, buy-outs/week, fee share of revenue, dispute rate (well under 1%), Parity vouchers claimed of 468",
+          "status": "later"
+        },
+        {
+          "id": "mr-min",
+          "text": "Minimum card charge $4.13; smaller buy-outs paid from credits or the remainder goes to the buyer's credits (a $1.28 buy-out loses ~¼ to Stripe)",
+          "status": "later"
+        },
+        {
+          "id": "mr-avenues",
+          "text": "Gate for launch: real-time avenue opening (fewer than 13 Spine lots left → next parallels) must work on day 1; 195 launch lots > 169 Spine lots",
+          "status": "later"
+        },
+        {
+          "id": "mr-credits",
+          "text": "Don't sell credit packs (buy-out credits are store credit; purchased credits may fall under provincial gift-card rules). Ask accountant/lawyer, plus GST/HST ($30k small-supplier threshold)",
+          "status": "later"
+        },
+        {
+          "id": "mr-promo",
+          "text": "OPEN: Kevin's 13/26/52/102/204 read as wave lot counts (now 13/26/52/104). Confirm the 69-floor promo stays $13/$26/$39/$52/$65 or doubles ($13/$26/$52/$104/$208)",
+          "status": "later"
+        }
+      ]
     }
   ]
 }
