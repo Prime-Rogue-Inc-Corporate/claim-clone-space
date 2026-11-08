@@ -759,13 +759,26 @@
       "version": "0.1.25",
       "date": "2026-11-07",
       "name": "Ash & Iron Foundry Line 3: pour the iron",
-      "status": "now",
+      "status": "done",
       "items": [
         "Foundry Line 3 south of block 3: moulds ride a conveyor under an overhead ladle; drag to aim, hold to pour; the iron takes a moment to fall, so lead the mould",
         "Moulds: ingot, gear, bell and, now and then, a bust of the Foreman. Fill to the dashed line for a full cast (a true cast right at the line pays extra); short pours pay a little, blanks cost, overflow spills and burns the belt",
         "The ladle drains while you pour and refills while you don't. The belt keeps time with the foundry hymn and speeds up at every chorus. Touch: the strip under the belt moves the ladle without pouring; PC: mouse or ←/→ + SPACE. 75 s",
         "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Ash Sweeper → Production Is Prayer); faster belt and more Foremen as you rank up; its own leaderboard",
         "Achievements: First Pour, Quota Blessed (8+ full casts, no blanks, almost no spill), In His Image (2 Foremen cast true); shame: Molten Incident"
+      ]
+    },
+    {
+      "version": "0.1.26",
+      "date": "2026-11-07",
+      "name": "Null Sector Impound Yard 4: run the tow claw",
+      "status": "now",
+      "items": [
+        "Impound Yard 4 south-east of block 4: a gantry claw over 7 stacks of skiffs (side view); citations come in over the radio (parked on the Spine, unlicensed smiling, flight while Sprawl…)",
+        "Hook the cited skiff and drop it in the IMPOUND BAY (+20, +5 if the load isn't swinging). Only the top skiff can be hooked, so dig cited ones out by restacking the skiffs on top (stacks max 3)",
+        "The load swings as the gantry moves; its corners dip into 3-high stacks: a dent (−3), or −12 if the skiff is insured (blue, I badge). Impound the wrong skiff: −10 and an appeal 'heard in 13 to 130 business days'. 80 s",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Tow Trainee → Compliance Is Safety); more simultaneous citations as you rank up; its own leaderboard",
+        "Achievements: Towed, Not a Scratch (4+ seized, no dents or wrong impounds), Compliance Is Safety (8 seized); shame: Act of God (Uninsured)"
       ]
     }
   ],
@@ -881,8 +894,8 @@
         },
         {
           "id": "lg-null",
-          "text": "Null Sector: impound tow-claw, hook skiffs out of a crowded yard without denting the insured ones",
-          "status": "later"
+          "text": "Null Sector: Impound Yard 4, a tow claw digging cited skiffs out of stacked yards (live). Next: your own skiff gets impounded when Spine Security catches you; pay to get it back",
+          "status": "now"
         },
         {
           "id": "lg-cinder",

@@ -1140,6 +1140,51 @@
       },
       "shame": true,
       "cosmetic": "A scorched apron"
+    },
+    {
+      "id": "impound-first",
+      "cat": "civic",
+      "name": "Towed",
+      "desc": "Finish a paid shift at Impound Yard 4.",
+      "on": "impound",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "impound-clean",
+      "cat": "civic",
+      "name": "Not a Scratch",
+      "desc": "Seize 4+ skiffs with no dents and no wrong impounds.",
+      "on": "impound",
+      "eq": {
+        "clean": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "impound-many",
+      "cat": "civic",
+      "name": "Compliance Is Safety",
+      "desc": "Seize 8 skiffs in one shift.",
+      "on": "impound",
+      "min": {
+        "seized": 8
+      },
+      "reward": 39
+    },
+    {
+      "id": "impound-insured",
+      "cat": "shame",
+      "name": "Act of God (Uninsured)",
+      "desc": "Dent 4 insured skiffs in one shift.",
+      "on": "impound",
+      "min": {
+        "insuredDents": 4
+      },
+      "shame": true,
+      "cosmetic": "A 'How's My Towing?' decal"
     }
   ]
 }
