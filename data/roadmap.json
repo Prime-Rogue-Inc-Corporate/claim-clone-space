@@ -798,7 +798,7 @@
       "version": "0.1.28",
       "date": "2026-11-07",
       "name": "The Assessor's Ledger Room 11: spot the forgery",
-      "status": "now",
+      "status": "done",
       "items": [
         "Ledger Room 11 south of block 11: the Assessor's honest copy on the left, an owner's submitted ledger page on the right. Tap every cell that was altered, then CERTIFY",
         "Forgers' tricks: swapped lot digits, wrong block, letters swapped in an owner's name, someone else's name, a digit changed in the price or the assessment, and assessments at 1.25× (the Claim Avenue rate)",
@@ -806,6 +806,20 @@
         "From the second grade on, smudges hide cells of the honest copy, so you check the rule yourself: ×1.13 must be paid × 1.13 to the cent. Higher grades bring more forgeries and forgers who hide behind the smudges",
         "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Filing Clerk → The Assessor (Acting)); its own leaderboard",
         "Achievements: Fair Copy, The Assessor Is Always Right (3+ pages, no misses or false accusations), Forensic Accounting (13 caught); shame: Everyone's a Forger (6 false accusations)"
+      ]
+    },
+    {
+      "version": "0.1.29",
+      "date": "2026-11-07",
+      "name": "Registry Intake 12: sort the souls",
+      "status": "now",
+      "items": [
+        "Intake 12 south of block 12: intake forms arrive faster and faster; read each and file it in one of five trays (tap, or keys 1–5)",
+        "The rulebook stays on screen, first match wins: Skiff #000 or a death certificate signed by the deceased → SHRED; Mercy death certificate → MORGUE; last seen 13+ days → AUCTION (the number goes to Gavel & Rope); no skiff number → NUMBER; everyone else → HOUSING",
+        "Right +6 (streaks add up to +5), wrong −5 with the rule you missed shown, and when 6 forms are waiting the oldest is lost in the paperwork (−8). 70 s",
+        "Higher grades bring the 12-vs-13-day edge cases, the dead who were also silent (death wins), and the living faking their own deaths",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Intake Temp → Skiff #001); its own leaderboard",
+        "Achievements: You Are a Number, Clean Books (20+ souls, no misfiles or losses), Soul Counter (39 in a shift); shame: Premature Paperwork (3 living souls filed in the morgue)"
       ]
     }
   ],
@@ -956,8 +970,8 @@
         },
         {
           "id": "lg-registry",
-          "text": "Registry: process the dead and the newly numbered (sorting under rules)",
-          "status": "later"
+          "text": "Registry: Intake 12, sort the souls into five trays by the rulebook (live). Next: Mercy's dead and the Spine Run's casualties feed the queue; dormant numbers flow to Gavel & Rope's auctions once there's a server",
+          "status": "now"
         },
         {
           "id": "lg-bureau",

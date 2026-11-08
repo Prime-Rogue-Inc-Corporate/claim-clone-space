@@ -1275,6 +1275,51 @@
       },
       "shame": true,
       "cosmetic": "A red pen, uncapped"
+    },
+    {
+      "id": "registry-first",
+      "cat": "civic",
+      "name": "You Are a Number",
+      "desc": "Finish a paid shift at Registry Intake 12.",
+      "on": "registry",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "registry-clean",
+      "cat": "civic",
+      "name": "Clean Books",
+      "desc": "Process 20+ souls without a misfile or anything lost in the paperwork.",
+      "on": "registry",
+      "eq": {
+        "clean": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "registry-many",
+      "cat": "civic",
+      "name": "Soul Counter",
+      "desc": "Process 39 souls in one shift.",
+      "on": "registry",
+      "min": {
+        "processed": 39
+      },
+      "reward": 39
+    },
+    {
+      "id": "registry-buried",
+      "cat": "shame",
+      "name": "Premature Paperwork",
+      "desc": "File 3 living souls in the morgue in one shift.",
+      "on": "registry",
+      "min": {
+        "buried": 3
+      },
+      "shame": true,
+      "cosmetic": "A Registry toe tag (blank)"
     }
   ]
 }
