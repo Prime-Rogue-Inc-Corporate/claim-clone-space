@@ -1320,6 +1320,51 @@
       },
       "shame": true,
       "cosmetic": "A Registry toe tag (blank)"
+    },
+    {
+      "id": "bureau-first",
+      "cat": "civic",
+      "name": "On Air",
+      "desc": "Finish a paid Bulletin Broadcast.",
+      "on": "bureau",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "bureau-fc",
+      "cat": "civic",
+      "name": "Full Compliance",
+      "desc": "A whole broadcast with no misses and no frowns.",
+      "on": "bureau",
+      "eq": {
+        "fc": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "bureau-combo",
+      "cat": "civic",
+      "name": "Sustained Enthusiasm",
+      "desc": "Reach a 69 combo.",
+      "on": "bureau",
+      "min": {
+        "combo": 69
+      },
+      "reward": 39
+    },
+    {
+      "id": "bureau-cut",
+      "cat": "shame",
+      "name": "Technical Difficulties",
+      "desc": "Get the broadcast cut (Public Cheer 0.00%).",
+      "on": "bureau",
+      "eq": {
+        "cut": true
+      },
+      "shame": true,
+      "cosmetic": "A smiling-dog test card"
     }
   ]
 }

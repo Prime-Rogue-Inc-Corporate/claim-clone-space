@@ -28,6 +28,7 @@ import { createImpound } from './impound.js';
 import { createTheatre } from './theatre.js';
 import { createAssessor } from './assessor.js';
 import { createRegistry } from './registry.js';
+import { createBureau } from './bureau.js';
 import { createBoards } from './boards.js';
 import { GAMES as SHIFT_GAMES } from './minigames.js';
 import { CIRCUITS } from './circuits.js';
@@ -227,6 +228,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   const assessor = createAssessor({ world, econ, log, esc, openModal, closeModal, emit, board: boardHook });
   // Registry of Skiffs & Souls: Intake 12 (sort the souls)
   const registry = createRegistry({ world, econ, log, esc, openModal, closeModal, emit, board: boardHook });
+  // Bureau of Public Cheer: the Bulletin Broadcast (rhythm)
+  const bureau = createBureau({ world, econ, log, esc, openModal, closeModal, emit, board: boardHook });
   $('h-warmrow').addEventListener('click', () => warmth.openPanel());
   // ---- racetracks south of the main drag ----
   const circuits = createCircuits({ econ, log, esc, player, emit, openModal, closeModal, sprites });
@@ -328,7 +331,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
   let nearHut = null;
   let nearDrop = null;
   let nearRefit = false;
-  let nearArchitect = null, lastArch = null, nearMilitia = false, nearDock = false, nearHall = false, nearAnnex = false, nearSalvage = false, nearAuction = false, nearAir = false, nearRation = false, nearFoundry = false, nearImpound = false, nearTheatre = false, nearAssessor = false, nearIntake = false;
+  let nearArchitect = null, lastArch = null, nearMilitia = false, nearDock = false, nearHall = false, nearAnnex = false, nearSalvage = false, nearAuction = false, nearAir = false, nearRation = false, nearFoundry = false, nearImpound = false, nearTheatre = false, nearAssessor = false, nearIntake = false, nearBureau = false;
   let nearRegistry = null; // the Registry kiosk you're parked at, if any
   let nearDesk = null; // an organization's residency desk
   let nearCircuit = null; // a racetrack's timing board
@@ -379,6 +382,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (k === 'e' && !nearDrop && nearTheatre) return theatre.open();
     if (k === 'e' && !nearDrop && nearAssessor) return assessor.open();
     if (k === 'e' && !nearDrop && nearIntake) return registry.open();
+    if (k === 'e' && !nearDrop && nearBureau) return bureau.open();
     if (k === 'e' && !nearDrop && nearHall) return boards.open();
     if (k === 'e' && !nearDrop && nearRegistry) return openRegistry(null, nearRegistry.sprawl);
     if (k === 'e' && !nearDrop && nearDesk) return progress.openDesk(nearDesk);
@@ -1059,7 +1063,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     extraRows: (at) => {
       const hs = homeSiteNow(), pile = hs ? plot.magnetPile(hs) : 0;
       const magnet = pile >= 13 || (pile && plot.magnetRusting()) ? [{ id: 'magnet', type: 'magnet', title: `Scrap magnet: ${pile} waiting${plot.magnetRusting() ? ' (rusting!)' : ''}`, sub: 'collect at your hut before it rusts', pay: `${pile}`, target: { x: hs.x, y: hs.y + 58, label: 'Your hut · scrap magnet' } }] : [];
-      return [...magnet, ...shuttle.gigRows(at), ...scooters.gigRows(at), ...militia.gigRows(at), ...dock.gigRows(at), ...annex.gigRows(at), ...salvage.gigRows(at), ...auction.gigRows(at), ...airworks.gigRows(at), ...ration.gigRows(at), ...foundry.gigRows(at), ...impound.gigRows(at), ...theatre.gigRows(at), ...assessor.gigRows(at), ...registry.gigRows(at)];
+      return [...magnet, ...shuttle.gigRows(at), ...scooters.gigRows(at), ...militia.gigRows(at), ...dock.gigRows(at), ...annex.gigRows(at), ...salvage.gigRows(at), ...auction.gigRows(at), ...airworks.gigRows(at), ...ration.gigRows(at), ...foundry.gigRows(at), ...impound.gigRows(at), ...theatre.gigRows(at), ...assessor.gigRows(at), ...registry.gigRows(at), ...bureau.gigRows(at)];
     }, citizen: () => warmth.citizen(), startClosed: !!touch?.active,
   });
   // what the flag + arrow point at: the tracked gig (the mission during onboarding), unless hidden
@@ -1208,6 +1212,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     if (nearAssessor) dockPad = assessor.pad;
     nearIntake = player.mode === 'ship' && registry.near(body.x, body.y, 50 * REACH);
     if (nearIntake) dockPad = registry.pad;
+    nearBureau = player.mode === 'ship' && bureau.near(body.x, body.y, 50 * REACH);
+    if (nearBureau) dockPad = bureau.pad;
     nearImpound = player.mode === 'ship' && impound.near(body.x, body.y, 50 * REACH);
     if (nearImpound) dockPad = impound.pad;
     nearFoundry = player.mode === 'ship' && foundry.near(body.x, body.y, 50 * REACH);
@@ -1309,8 +1315,8 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
       holdDrop: null, holdProgress: 0,
       corpsById: econ.corpsById, waypoint,
       sprawl, hutOf, nearHut, sprites, objective: currentTarget(body), ownsLot: world.plots.some((p) => p.owner === PLAYER),
-      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); if (S.hut) { const hs = sprawl.sites.find((x) => x.id === S.hut.site); if (hs && Math.abs(cam.x - hs.x) < 2500) plot.draw(c, hs, now); } drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); militia.drawWorld(c, cam, now, nearMilitia); dock.drawWorld(c, cam, now, nearDock); annex.drawWorld(c, cam, now, nearAnnex); salvage.drawWorld(c, cam, now, nearSalvage); auction.drawWorld(c, cam, now, nearAuction); airworks.drawWorld(c, cam, now, nearAir); ration.drawWorld(c, cam, now, nearRation); foundry.drawWorld(c, cam, now, nearFoundry); impound.drawWorld(c, cam, now, nearImpound); theatre.drawWorld(c, cam, now, nearTheatre); assessor.drawWorld(c, cam, now, nearAssessor); registry.drawWorld(c, cam, now, nearIntake); boards.drawWorld(c, cam, now, nearHall); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
-      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); militia.drawMinimap(m, tx, ty); dock.drawMinimap(m, tx, ty); annex.drawMinimap(m, tx, ty); salvage.drawMinimap(m, tx, ty); auction.drawMinimap(m, tx, ty); airworks.drawMinimap(m, tx, ty); ration.drawMinimap(m, tx, ty); foundry.drawMinimap(m, tx, ty); impound.drawMinimap(m, tx, ty); theatre.drawMinimap(m, tx, ty); assessor.drawMinimap(m, tx, ty); registry.drawMinimap(m, tx, ty); boards.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
+      extraWorld: (c) => { drawRefit(c, now); shuttle.drawWorld(c, cam, now); scooters.drawWorld(c, cam); if (S.hut) { const hs = sprawl.sites.find((x) => x.id === S.hut.site); if (hs && Math.abs(cam.x - hs.x) < 2500) plot.draw(c, hs, now); } drawRegistry(c, now); progress.drawWorld(c, cam, now, nearDesk); militia.drawWorld(c, cam, now, nearMilitia); dock.drawWorld(c, cam, now, nearDock); annex.drawWorld(c, cam, now, nearAnnex); salvage.drawWorld(c, cam, now, nearSalvage); auction.drawWorld(c, cam, now, nearAuction); airworks.drawWorld(c, cam, now, nearAir); ration.drawWorld(c, cam, now, nearRation); foundry.drawWorld(c, cam, now, nearFoundry); impound.drawWorld(c, cam, now, nearImpound); theatre.drawWorld(c, cam, now, nearTheatre); assessor.drawWorld(c, cam, now, nearAssessor); registry.drawWorld(c, cam, now, nearIntake); bureau.drawWorld(c, cam, now, nearBureau); boards.drawWorld(c, cam, now, nearHall); loops.drawWorld(c, body, now); dev?.drawWorld(c, now); },
+      extraMinimap: (m, tx, ty) => { m.fillStyle = '#e8c547'; m.fillRect(tx(REFIT.x) - 2, ty(REFIT.y) - 2, 4, 4); loops.drawMinimap(m, tx, ty); circuits.drawMinimap(m, tx, ty, gigs.mapView().races); drawGigMinimap(m, tx, ty); shuttle.drawMinimap(m, tx, ty); militia.drawMinimap(m, tx, ty); dock.drawMinimap(m, tx, ty); annex.drawMinimap(m, tx, ty); salvage.drawMinimap(m, tx, ty); auction.drawMinimap(m, tx, ty); airworks.drawMinimap(m, tx, ty); ration.drawMinimap(m, tx, ty); foundry.drawMinimap(m, tx, ty); impound.drawMinimap(m, tx, ty); theatre.drawMinimap(m, tx, ty); assessor.drawMinimap(m, tx, ty); registry.drawMinimap(m, tx, ty); bureau.drawMinimap(m, tx, ty); boards.drawMinimap(m, tx, ty); scooters.drawMinimap(m, tx, ty, gigs.mapView().scooters); dev?.drawMinimap(m, tx, ty); },
       underWorld: (c, viewR) => circuits.drawWorld(c, cam, viewR, now),
     };
     drawScene(ctx, W, H, cam, scene);
@@ -1328,6 +1334,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     else if (nearTheatre) prompt = `E · Mercy Unlimited Theatre 1 (${theatre.grade()})`;
     else if (nearAssessor) prompt = `E · Assessor’s Ledger Room 11 (${assessor.grade()})`;
     else if (nearIntake) prompt = `E · Registry Intake 12 (${registry.grade()})`;
+    else if (nearBureau) prompt = `E · Bureau Bulletin Broadcast (${bureau.grade()})`;
     else if (nearImpound) prompt = `E · Null Sector Impound Yard 4 (${impound.grade()})`;
     else if (nearFoundry) prompt = `E · Ash & Iron Foundry Line 3 (${foundry.grade()})`;
     else if (nearRation) prompt = `E · Gullet Ration Counter 6 (${ration.grade()})`;
@@ -1404,7 +1411,7 @@ function start(world, bulletin, sprites, devData, lore, achievements, passengers
     openIntro();
   }
   requestAnimationFrame(frame);
-  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, minigames, militia, dock, annex, salvage, auction, airworks, ration, foundry, impound, theatre, assessor, registry, boards: () => boards, architects: () => architects(world) };
+  window.__game = { world, econ, ships, player, cam, drops: () => drops, loops, sprawl, progress, gigs, shuttle, warmth, scooters, minigames, militia, dock, annex, salvage, auction, airworks, ration, foundry, impound, theatre, assessor, registry, bureau, boards: () => boards, architects: () => architects(world) };
 }
 
 boot();

@@ -812,7 +812,7 @@
       "version": "0.1.29",
       "date": "2026-11-07",
       "name": "Registry Intake 12: sort the souls",
-      "status": "now",
+      "status": "done",
       "items": [
         "Intake 12 south of block 12: intake forms arrive faster and faster; read each and file it in one of five trays (tap, or keys 1–5)",
         "The rulebook stays on screen, first match wins: Skiff #000 or a death certificate signed by the deceased → SHRED; Mercy death certificate → MORGUE; last seen 13+ days → AUCTION (the number goes to Gavel & Rope); no skiff number → NUMBER; everyone else → HOUSING",
@@ -820,6 +820,20 @@
         "Higher grades bring the 12-vs-13-day edge cases, the dead who were also silent (death wins), and the living faking their own deaths",
         "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Intake Temp → Skiff #001); its own leaderboard",
         "Achievements: You Are a Number, Clean Books (20+ souls, no misfiles or losses), Soul Counter (39 in a shift); shame: Premature Paperwork (3 living souls filed in the morgue)"
+      ]
+    },
+    {
+      "version": "0.1.30",
+      "date": "2026-11-07",
+      "name": "Bureau of Public Cheer: the Bulletin Broadcast (rhythm)",
+      "status": "now",
+      "items": [
+        "The Bulletin Tower south of block 13: a rhythm game. A synthesized anthem plays (a cheerful, slightly sinister march); smiling cues fall in three lanes, SMILE · WAVE · CHEER",
+        "Tap the lane (the whole width splits into three for thumbs) or keys 1 2 3 / ← ↓ → as each cue crosses the line: PERFECT +10, GOOD +5, miss −3, off-beat tap −2; combos add up to +5 per hit",
+        "Public Cheer, to two decimal places, rises and falls with your play, is added to your score at the end, and at 0.00% the broadcast is cut (replaced with footage of a smiling dog). The crowd on screen smiles or frowns with it",
+        "From Crowd Warmer on, red FROWN cues: don't press (−10). Higher grades: faster tempo (100 → 140 BPM), denser charts, off-beat pickups and two-lane chords. Sound on/off at the desk; audio is timed against the device's output latency",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Smile Trainee → The Bulletin); its own leaderboard",
+        "Achievements: On Air, Full Compliance (no misses, no frowns), Sustained Enthusiasm (69 combo); shame: Technical Difficulties (broadcast cut)"
       ]
     }
   ],
@@ -975,8 +989,8 @@
         },
         {
           "id": "lg-bureau",
-          "text": "Bureau of Public Cheer: propaganda rhythm game / smile checkpoint",
-          "status": "later"
+          "text": "Bureau of Public Cheer: the Bulletin Broadcast, a three-lane rhythm game with a synthesized anthem and FROWN cues (live). Next: the Compliance Oath (13 lines; nobody remembers line nine) as a memory round; real music",
+          "status": "now"
         },
         {
           "id": "lg-vanta",
