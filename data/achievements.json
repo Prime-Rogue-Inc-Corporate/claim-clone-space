@@ -1185,6 +1185,51 @@
       },
       "shame": true,
       "cosmetic": "A 'How's My Towing?' decal"
+    },
+    {
+      "id": "theatre-first",
+      "cat": "civic",
+      "name": "Scrubbed In",
+      "desc": "Finish a paid shift in Theatre 1.",
+      "on": "theatre",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "theatre-clean",
+      "cat": "civic",
+      "name": "Steady Hands",
+      "desc": "Discharge 2+ patients without a single slip or loss.",
+      "on": "theatre",
+      "eq": {
+        "clean": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "theatre-many",
+      "cat": "civic",
+      "name": "Billable Hours",
+      "desc": "Discharge 4 patients in one shift.",
+      "on": "theatre",
+      "min": {
+        "discharged": 4
+      },
+      "reward": 39
+    },
+    {
+      "id": "theatre-lost",
+      "cat": "shame",
+      "name": "Cross-Selling",
+      "desc": "Transfer 2 patients to the funerary department in one shift.",
+      "on": "theatre",
+      "min": {
+        "lost": 2
+      },
+      "shame": true,
+      "cosmetic": "A Mercy Unlimited loyalty card (one stamp)"
     }
   ]
 }

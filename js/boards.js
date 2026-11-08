@@ -29,6 +29,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     ration: { name: 'Ration Counter 6', group: 'Lore games', unit: 'pts', range: [80, 340], sub: 'Gullet Provisions · trays served' },
     foundry: { name: 'Foundry Line 3', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Ash & Iron · casts' },
     impound: { name: 'Impound Yard 4', group: 'Lore games', unit: 'pts', range: [40, 190], sub: 'Null Sector Trust · seizures' },
+    theatre: { name: 'Theatre 1', group: 'Lore games', unit: 'pts', range: [40, 200], sub: 'Mercy Unlimited · steady hands' },
     annex: { name: 'Allocation Annex', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Ministry of the Gentry' },
   };
   for (const c of circuitList) DEFS[`circuit:${c.id}`] = { name: c.name.replace(/^THE /, 'The ').replace(/\B\w+/g, (w) => w.toLowerCase()), group: 'Races', unit: 'time', low: true, circuit: c.id, sub: c.after };
@@ -88,6 +89,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     else if (type === 'ration') record('ration', data.score);
     else if (type === 'foundry') record('foundry', data.score);
     else if (type === 'impound') record('impound', data.score);
+    else if (type === 'theatre') record('theatre', data.score);
     else if (type === 'lap') record('spine', data.ms);
   }
   // one line for a results screen
