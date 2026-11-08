@@ -1365,6 +1365,51 @@
       },
       "shame": true,
       "cosmetic": "A smiling-dog test card"
+    },
+    {
+      "id": "vanta-first",
+      "cat": "civic",
+      "name": "Promising",
+      "desc": "Finish a paid test in the EVA Chamber.",
+      "on": "vanta",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "vanta-clean",
+      "cat": "civic",
+      "name": "We Hold",
+      "desc": "Pass 2+ tests without a single blackout.",
+      "on": "vanta",
+      "eq": {
+        "clean": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "vanta-many",
+      "cat": "civic",
+      "name": "Year Twelve",
+      "desc": "Pass 5 tests in one shift.",
+      "on": "vanta",
+      "min": {
+        "tests": 5
+      },
+      "reward": 39
+    },
+    {
+      "id": "vanta-black",
+      "cat": "shame",
+      "name": "You Hold On",
+      "desc": "Black out 4 times in one shift.",
+      "on": "vanta",
+      "min": {
+        "blackouts": 4
+      },
+      "shame": true,
+      "cosmetic": "A visor sticker: 'Results: promising'"
     }
   ]
 }

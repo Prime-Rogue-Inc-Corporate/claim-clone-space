@@ -33,6 +33,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     assessor: { name: 'Ledger Room 11', group: 'Lore games', unit: 'pts', range: [40, 220], sub: 'The Assessor · spot the forgery' },
     registry: { name: 'Intake 12', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Registry of Skiffs & Souls · sort the souls' },
     bureau: { name: 'Bulletin Broadcast', group: 'Lore games', unit: 'pts', range: [200, 650], sub: 'Bureau of Public Cheer · on the beat' },
+    vanta: { name: 'EVA Chamber', group: 'Lore games', unit: 'pts', range: [60, 300], sub: 'Vantablack Science Centre · 2.9 seconds' },
     annex: { name: 'Allocation Annex', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Ministry of the Gentry' },
   };
   for (const c of circuitList) DEFS[`circuit:${c.id}`] = { name: c.name.replace(/^THE /, 'The ').replace(/\B\w+/g, (w) => w.toLowerCase()), group: 'Races', unit: 'time', low: true, circuit: c.id, sub: c.after };
@@ -96,6 +97,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     else if (type === 'assessor') record('assessor', data.score);
     else if (type === 'registry') record('registry', data.score);
     else if (type === 'bureau') record('bureau', data.score);
+    else if (type === 'vanta') record('vanta', data.score);
     else if (type === 'lap') record('spine', data.ms);
   }
   // one line for a results screen

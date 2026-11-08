@@ -826,7 +826,7 @@
       "version": "0.1.30",
       "date": "2026-11-07",
       "name": "Bureau of Public Cheer: the Bulletin Broadcast (rhythm)",
-      "status": "now",
+      "status": "done",
       "items": [
         "The Bulletin Tower south of block 13: a rhythm game. A synthesized anthem plays (a cheerful, slightly sinister march); smiling cues fall in three lanes, SMILE · WAVE · CHEER",
         "Tap the lane (the whole width splits into three for thumbs) or keys 1 2 3 / ← ↓ → as each cue crosses the line: PERFECT +10, GOOD +5, miss −3, off-beat tap −2; combos add up to +5 per hit",
@@ -834,6 +834,21 @@
         "From Crowd Warmer on, red FROWN cues: don't press (−10). Higher grades: faster tempo (100 → 140 BPM), denser charts, off-beat pickups and two-lane chords. Sound on/off at the desk; audio is timed against the device's output latency",
         "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Smile Trainee → The Bulletin); its own leaderboard",
         "Achievements: On Air, Full Compliance (no misses, no frowns), Sustained Enthusiasm (69 combo); shame: Technical Difficulties (broadcast cut)"
+      ]
+    },
+    {
+      "version": "0.1.31",
+      "date": "2026-11-07",
+      "name": "Vantablack Science Centre: the EVA Chamber (all 14 lore games live)",
+      "status": "now",
+      "items": [
+        "The Science Centre north of block 1: year eleven of testing whether EVA is survivable. You are the test",
+        "Zero-g: drag back and release to push off from an air pocket (slingshot, with an aim line and power %); you coast straight until you hit something; padded walls bounce you. Tap mid-flight for a thruster puff toward the tap (3 per leg, fewer at high grades)",
+        "Between pockets you are exposed: 2.9 seconds, shown as a ring that drains around the suit while the room darkens. Run out and you black out (−10) and are reeled back to the last pocket",
+        "New pocket +8, sample +5, airlock +25 then the next, harder test: more pockets, longer gaps, drifting pockets and tumbling debris (−3, knocks you off course). 75 s",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Volunteer → Unseen Executive); its own leaderboard",
+        "Achievements: Promising, We Hold (2+ tests without a blackout), Year Twelve (5 tests); shame: You Hold On (4 blackouts)",
+        "With this, every organization has a lore game (14 with the Ministry). Next per Kevin's plan: sprites for the lore games, then sprites for the rest, then iterate"
       ]
     }
   ],
@@ -994,8 +1009,8 @@
         },
         {
           "id": "lg-vanta",
-          "text": "Vantablack Science Centre: zero-g EVA tether course before the 2.9-second exposure limit",
-          "status": "later"
+          "text": "Vantablack Science Centre: the EVA Chamber, zero-g slingshot between air pockets under the 2.9-second exposure limit (live). Next: tie it to the new-pilot EVA rule (can't leave your skiff until you've passed a test)",
+          "status": "now"
         }
       ]
     }
