@@ -1095,6 +1095,51 @@
       },
       "shame": true,
       "cosmetic": "A hairnet (worn, previously)"
+    },
+    {
+      "id": "foundry-first",
+      "cat": "freight",
+      "name": "First Pour",
+      "desc": "Finish a paid shift at Foundry Line 3.",
+      "on": "foundry",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "foundry-perfect",
+      "cat": "freight",
+      "name": "Quota Blessed",
+      "desc": "8+ full casts, no blanks, barely a drop spilled.",
+      "on": "foundry",
+      "eq": {
+        "perfect": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "foundry-foreman",
+      "cat": "freight",
+      "name": "In His Image",
+      "desc": "Cast 2 busts of the Foreman true in one shift.",
+      "on": "foundry",
+      "min": {
+        "foremen": 2
+      },
+      "reward": 39
+    },
+    {
+      "id": "foundry-spill",
+      "cat": "shame",
+      "name": "Molten Incident",
+      "desc": "Spill 200 units of iron on the belt in one shift.",
+      "on": "foundry",
+      "min": {
+        "spilled": 200
+      },
+      "shame": true,
+      "cosmetic": "A scorched apron"
     }
   ]
 }

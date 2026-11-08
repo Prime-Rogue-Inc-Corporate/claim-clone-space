@@ -746,13 +746,26 @@
       "version": "0.1.24",
       "date": "2026-11-07",
       "name": "Gullet Ration Counter 6: feed the line",
-      "status": "now",
+      "status": "done",
       "items": [
         "Ration Counter 6 south of block 6: three customers at the counter, each with an order ticket of 1–4 items",
         "Six bins: Original, Original Plus and Thursday bricks (nobody knows what's in Thursday), paste, recycled broth, and Real Bread from the members' oven (a few seconds between loaves). Tap bins to load a tray, tap a customer to serve (order on the tray doesn't matter)",
         "Right tray: paid by size plus a speed tip; ⭐ members +15. Wrong tray: −5 and a complaint ('I'm telling the Ministry'). Patience runs out: they walk out (−8). Faces sour as patience drops. 80 s; the line speeds up",
         "Keys on PC: 1–6 bins, A/S/D serve, X bins the tray. Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Tray Hand → The Mouth That Feeds); its own leaderboard",
         "Achievements: Order Up, Nobody Leaves Hungry (Today) (10+ trays, no complaints or walk-outs), Members Only (4 members); shame: Calories Are a Privilege (6 walk-outs)"
+      ]
+    },
+    {
+      "version": "0.1.25",
+      "date": "2026-11-07",
+      "name": "Ash & Iron Foundry Line 3: pour the iron",
+      "status": "now",
+      "items": [
+        "Foundry Line 3 south of block 3: moulds ride a conveyor under an overhead ladle; drag to aim, hold to pour; the iron takes a moment to fall, so lead the mould",
+        "Moulds: ingot, gear, bell and, now and then, a bust of the Foreman. Fill to the dashed line for a full cast (a true cast right at the line pays extra); short pours pay a little, blanks cost, overflow spills and burns the belt",
+        "The ladle drains while you pour and refills while you don't. The belt keeps time with the foundry hymn and speeds up at every chorus. Touch: the strip under the belt moves the ladle without pouring; PC: mouse or ←/→ + SPACE. 75 s",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Ash Sweeper → Production Is Prayer); faster belt and more Foremen as you rank up; its own leaderboard",
+        "Achievements: First Pour, Quota Blessed (8+ full casts, no blanks, almost no spill), In His Image (2 Foremen cast true); shame: Molten Incident"
       ]
     }
   ],
@@ -863,8 +876,8 @@
         },
         {
           "id": "lg-ashiron",
-          "text": "Ash & Iron: foundry line, pour molten metal into moulds on a moving conveyor",
-          "status": "later"
+          "text": "Ash & Iron: Foundry Line 3, pour molten iron into moulds on a moving conveyor (live). Next: casts become parts for skiff upgrades, hymn sing-along, smog days",
+          "status": "now"
         },
         {
           "id": "lg-null",

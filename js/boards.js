@@ -27,6 +27,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     auction: { name: 'Auction Floor 13', group: 'Lore games', unit: 'pts', range: [60, 320], sub: 'Gavel & Rope · commission' },
     airworks: { name: 'Airworks 5', group: 'Lore games', unit: 'pts', range: [40, 170], sub: 'Cinder Collective · air metered' },
     ration: { name: 'Ration Counter 6', group: 'Lore games', unit: 'pts', range: [80, 340], sub: 'Gullet Provisions · trays served' },
+    foundry: { name: 'Foundry Line 3', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Ash & Iron · casts' },
     annex: { name: 'Allocation Annex', group: 'Lore games', unit: 'pts', range: [60, 260], sub: 'Ministry of the Gentry' },
   };
   for (const c of circuitList) DEFS[`circuit:${c.id}`] = { name: c.name.replace(/^THE /, 'The ').replace(/\B\w+/g, (w) => w.toLowerCase()), group: 'Races', unit: 'time', low: true, circuit: c.id, sub: c.after };
@@ -84,6 +85,7 @@ export function createBoards({ econ, esc, openModal, closeModal, circuits, circu
     else if (type === 'auction') record('auction', data.score);
     else if (type === 'airworks') record('airworks', data.score);
     else if (type === 'ration') record('ration', data.score);
+    else if (type === 'foundry') record('foundry', data.score);
     else if (type === 'lap') record('spine', data.ms);
   }
   // one line for a results screen
