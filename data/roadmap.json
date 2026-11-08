@@ -785,13 +785,27 @@
       "version": "0.1.27",
       "date": "2026-11-07",
       "name": "Mercy Unlimited Theatre 1: steady hands",
-      "status": "now",
+      "status": "done",
       "items": [
         "Theatre 1 south of block 1: Operation-style surgery; things are inside patients that shouldn't be (Wilco's tennis ball, a Thursday ration brick, a Null Sector citation, someone else's dentures…)",
         "Press on an object and drag it out along its winding incision to the skin without touching the sides; touch them and it drops back, the patient bucks and vitals drop. Vitals also fall on their own",
         "Clear a patient: discharged (and billed), bonus by remaining vitals, next patient wheeled in. Vitals at zero: transferred to Mercy's other department (−20). On phones the tweezers sit above your fingertip so you can see. 80 s",
         "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Orderly → Mercy Unlimited); narrower incisions and more objects as you rank up; its own leaderboard",
         "Achievements: Scrubbed In, Steady Hands (2+ patients, no slips or losses), Billable Hours (4 discharged); shame: Cross-Selling (2 transferred)"
+      ]
+    },
+    {
+      "version": "0.1.28",
+      "date": "2026-11-07",
+      "name": "The Assessor's Ledger Room 11: spot the forgery",
+      "status": "now",
+      "items": [
+        "Ledger Room 11 south of block 11: the Assessor's honest copy on the left, an owner's submitted ledger page on the right. Tap every cell that was altered, then CERTIFY",
+        "Forgers' tricks: swapped lot digits, wrong block, letters swapped in an owner's name, someone else's name, a digit changed in the price or the assessment, and assessments at 1.25× (the Claim Avenue rate)",
+        "Caught +10, false accusation −6, missed −8, perfect page +15; some pages are honest. After each page the stamp lands and any missed forgery is shown with the trick used. 75 s",
+        "From the second grade on, smudges hide cells of the honest copy, so you check the rule yourself: ×1.13 must be paid × 1.13 to the cent. Higher grades bring more forgeries and forgers who hide behind the smudges",
+        "Pays 13–65 scrap (once per 13 min), merit toward 13 grades (Filing Clerk → The Assessor (Acting)); its own leaderboard",
+        "Achievements: Fair Copy, The Assessor Is Always Right (3+ pages, no misses or false accusations), Forensic Accounting (13 caught); shame: Everyone's a Forger (6 false accusations)"
       ]
     }
   ],
@@ -937,8 +951,8 @@
         },
         {
           "id": "lg-assessor",
-          "text": "Assessor: spot the forged entries in a ledger page (spot the difference)",
-          "status": "later"
+          "text": "Assessor: Ledger Room 11, spot the forged entries against the honest copy, with smudges you check by the 1.13 rule (live). Next: forgeries tied to real buy-outs once there's a server",
+          "status": "now"
         },
         {
           "id": "lg-registry",

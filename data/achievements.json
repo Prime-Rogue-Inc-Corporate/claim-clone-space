@@ -1230,6 +1230,51 @@
       },
       "shame": true,
       "cosmetic": "A Mercy Unlimited loyalty card (one stamp)"
+    },
+    {
+      "id": "assessor-first",
+      "cat": "civic",
+      "name": "Fair Copy",
+      "desc": "Finish a paid shift in Ledger Room 11.",
+      "on": "assessor",
+      "eq": {
+        "paid": true
+      },
+      "reward": 13
+    },
+    {
+      "id": "assessor-clean",
+      "cat": "civic",
+      "name": "The Assessor Is Always Right",
+      "desc": "Certify 3+ pages without a single missed forgery or false accusation.",
+      "on": "assessor",
+      "eq": {
+        "clean": true
+      },
+      "reward": 65
+    },
+    {
+      "id": "assessor-many",
+      "cat": "civic",
+      "name": "Forensic Accounting",
+      "desc": "Catch 13 forgeries in one shift.",
+      "on": "assessor",
+      "min": {
+        "caught": 13
+      },
+      "reward": 39
+    },
+    {
+      "id": "assessor-wrong",
+      "cat": "shame",
+      "name": "Everyone's a Forger",
+      "desc": "Make 6 false accusations in one shift.",
+      "on": "assessor",
+      "min": {
+        "wrong": 6
+      },
+      "shame": true,
+      "cosmetic": "A red pen, uncapped"
     }
   ]
 }
