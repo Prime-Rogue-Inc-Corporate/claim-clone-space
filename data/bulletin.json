@@ -1,11 +1,11 @@
 {
-  "day": "2026-11-09",
-  "generated": "2026-11-09T19:53:40.075Z",
+  "day": "2026-11-10",
+  "generated": "2026-11-10T17:07:22.814Z",
   "event": {
-    "id": "calm",
-    "label": "Dead calm on the spine",
-    "dropMultiplier": 1,
-    "headline": "Corp Weather: nothing moves. Productivity expected."
+    "id": "scrapstorm",
+    "label": "Scrap storm",
+    "dropMultiplier": 3,
+    "headline": "Ion storm shredding derelicts. Scrap everywhere. Helmets mandatory."
   },
-  "featuredPlot": 66
+  "featuredPlot": 26
 }
