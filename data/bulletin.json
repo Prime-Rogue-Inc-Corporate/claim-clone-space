@@ -1,11 +1,11 @@
 {
-  "day": "2026-11-14",
-  "generated": "2026-11-14T15:52:06.051Z",
+  "day": "2026-11-15",
+  "generated": "2026-11-15T16:26:17.797Z",
   "event": {
     "id": "migration",
     "label": "Void whale migration",
     "dropMultiplier": 2,
     "headline": "Void whales migrating through the lanes. Expect excrement."
   },
-  "featuredPlot": 37
+  "featuredPlot": 15
 }
