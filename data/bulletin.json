@@ -1,11 +1,11 @@
 {
-  "day": "2026-11-16",
-  "generated": "2026-11-16T19:40:51.976Z",
+  "day": "2026-11-17",
+  "generated": "2026-11-17T18:39:09.935Z",
   "event": {
-    "id": "lockdown",
-    "label": "Corp lockdown",
-    "dropMultiplier": 0.5,
-    "headline": "Lockdown in effect. Drops reduced. Remain productive."
+    "id": "migration",
+    "label": "Void whale migration",
+    "dropMultiplier": 2,
+    "headline": "Void whales migrating through the lanes. Expect excrement."
   },
-  "featuredPlot": 54
+  "featuredPlot": 84
 }
