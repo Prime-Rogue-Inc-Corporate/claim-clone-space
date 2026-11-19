@@ -1,11 +1,11 @@
 {
-  "day": "2026-11-18",
-  "generated": "2026-11-18T18:10:19.556Z",
+  "day": "2026-11-19",
+  "generated": "2026-11-19T18:22:40.772Z",
   "event": {
-    "id": "migration",
-    "label": "Void whale migration",
-    "dropMultiplier": 2,
-    "headline": "Void whales migrating through the lanes. Expect excrement."
+    "id": "calm",
+    "label": "Dead calm on the spine",
+    "dropMultiplier": 1,
+    "headline": "Corp Weather: nothing moves. Productivity expected."
   },
-  "featuredPlot": 11
+  "featuredPlot": 126
 }
