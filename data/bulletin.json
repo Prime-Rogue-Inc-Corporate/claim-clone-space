@@ -1,11 +1,11 @@
 {
-  "day": "2026-11-19",
-  "generated": "2026-11-19T18:22:40.772Z",
+  "day": "2026-11-20",
+  "generated": "2026-11-20T17:52:32.806Z",
   "event": {
-    "id": "calm",
-    "label": "Dead calm on the spine",
-    "dropMultiplier": 1,
-    "headline": "Corp Weather: nothing moves. Productivity expected."
+    "id": "lockdown",
+    "label": "Corp lockdown",
+    "dropMultiplier": 0.5,
+    "headline": "Lockdown in effect. Drops reduced. Remain productive."
   },
-  "featuredPlot": 126
+  "featuredPlot": 120
 }
