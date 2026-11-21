@@ -1,11 +1,11 @@
 {
-  "day": "2026-11-20",
-  "generated": "2026-11-20T17:52:32.806Z",
+  "day": "2026-11-21",
+  "generated": "2026-11-21T16:50:55.948Z",
   "event": {
     "id": "lockdown",
     "label": "Corp lockdown",
     "dropMultiplier": 0.5,
     "headline": "Lockdown in effect. Drops reduced. Remain productive."
   },
-  "featuredPlot": 120
+  "featuredPlot": 158
 }
