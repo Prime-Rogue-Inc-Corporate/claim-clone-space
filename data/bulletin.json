@@ -1,11 +1,11 @@
 {
-  "day": "2026-11-24",
-  "generated": "2026-11-24T20:13:38.239Z",
+  "day": "2026-11-25",
+  "generated": "2026-11-25T19:24:02.574Z",
   "event": {
-    "id": "migration",
-    "label": "Void whale migration",
-    "dropMultiplier": 2,
-    "headline": "Void whales migrating through the lanes. Expect excrement."
+    "id": "scrapstorm",
+    "label": "Scrap storm",
+    "dropMultiplier": 3,
+    "headline": "Ion storm shredding derelicts. Scrap everywhere. Helmets mandatory."
   },
-  "featuredPlot": 144
+  "featuredPlot": 27
 }
